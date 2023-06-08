@@ -156,9 +156,9 @@ public class UIManager : MonoBehaviour
             #endregion
 
             #region Add Button Event
-            //switchSceneSignIn.onClick.AddListener(() => TurnOnSignInScene());
             switchSceneSignUp.onClick.AddListener(() => TurnOnSignUpScene());
             switchSceneRecovery.onClick.AddListener(() => TurnOnRecoveryScene());
+            switchSceneSignIn.onClick.AddListener(() => TurnOnSignInScene());
 
 
             //home.onClick.AddListener(() => TurnOnHomeScene());
