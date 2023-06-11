@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public enum SceneType
 {
-    SignIn, SignUp, Recovery, Home, Loading, Play, Store, Collection, CollectionDecks, CollectionCards, CreateDeck
+    SignIn, SignUp, Recovery, Home, Loading, Play, Store, Collection, CollectionDecks, CollectionCards, CreateDeck, ChooseDeck
 }
 public class UIManager : MonoBehaviour
 {
@@ -31,6 +31,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> Collection_CardsScene;
     [SerializeField] private List<GameObject> StoreScene;
     [SerializeField] private List<GameObject> CreateDeckScene;
+    [SerializeField] private List<GameObject> ChooseDeckScene;
+
     [Space(10)]
 
     /// <summary>
@@ -81,6 +83,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button switchSceneCollectionCards;
     [SerializeField] Button switchSceneCreateDeck;
     [SerializeField] Button switchSceneBack;
+    [SerializeField] Button switchSceneChooseDeck;
+
 
     //Action Button
     [SerializeField] Button ACT_SaveDeck;
@@ -116,6 +120,7 @@ public class UIManager : MonoBehaviour
     public bool isCollection_Cards;
     public bool isStore;
     public bool isCreateDeck;
+    public bool isChooseDeck;
 
 
     //[Space(10)]
@@ -159,37 +164,53 @@ public class UIManager : MonoBehaviour
             switchSceneSignUp.onClick.AddListener(() => TurnOnSignUpScene());
             switchSceneRecovery.onClick.AddListener(() => TurnOnRecoveryScene());
             switchSceneSignIn.onClick.AddListener(() => TurnOnSignInScene());
+            switchScenePlay.onClick.AddListener(() => TurnOnPlayScene());
+            switchSceneCollection.onClick.AddListener(() => TurnOnCollectionCardScene());
+            switchSceneStore.onClick.AddListener(() => TurnOnStoreScene());
+            switchSceneCollectionDecks.onClick.AddListener(() => TurnOnCollectionDeckScene());
+
+            switchSceneChooseDeck.onClick.AddListener(() => TurnOnChooseDeckScene());
+
+        //home.onClick.AddListener(() => TurnOnHomeScene());
+        //play.onClick.AddListener(() => TurnOnPlayScene());
+        //collection.onClick.AddListener(() => TurnOnCollectionScene());
+        //store.onClick.AddListener(() => TurnOnStoreScene());
+        //collectionDecks.onClick.AddListener(() => TurnOnCollectionDeckScene());
+        //collectionCards.onClick.AddListener(() => TurnOnCollectionCardScene());
+        //createDeck.onClick.AddListener(() => TurnOnCreateDeckScene());
+        //back.onClick.AddListener(() => TurnOnBackScene());
+        //ACT_DeleteDeck.onClick.AddListener(() => StartCoroutine(CollectionManager.instance.DeleteDeck()));
+        //ACT_Buy.onClick.AddListener(() =>
+        //{
+        //    print("click to buy");
+        //    StartCoroutine(PlayFabAuth.instance.BuyPacks("Card", "BS1", GameData.instance.itemPurchaseRequests, "MC"));
+        //    PopupPackDetailed.SetActive(false);
+        //});
+        //ACT_Cancel.onClick.AddListener(() => PopupPackDetailed.SetActive(false));
 
 
-            //home.onClick.AddListener(() => TurnOnHomeScene());
-            //play.onClick.AddListener(() => TurnOnPlayScene());
-            //collection.onClick.AddListener(() => TurnOnCollectionScene());
-            //store.onClick.AddListener(() => TurnOnStoreScene());
-            //collectionDecks.onClick.AddListener(() => TurnOnCollectionDeckScene());
-            //collectionCards.onClick.AddListener(() => TurnOnCollectionCardScene());
-            //createDeck.onClick.AddListener(() => TurnOnCreateDeckScene());
-            //back.onClick.AddListener(() => TurnOnBackScene());
-            //ACT_DeleteDeck.onClick.AddListener(() => StartCoroutine(CollectionManager.instance.DeleteDeck()));
-            //ACT_Buy.onClick.AddListener(() =>
-            //{
-            //    print("click to buy");
-            //    StartCoroutine(PlayFabAuth.instance.BuyPacks("Card", "BS1", GameData.instance.itemPurchaseRequests, "MC"));
-            //    PopupPackDetailed.SetActive(false);
-            //});
-            //ACT_Cancel.onClick.AddListener(() => PopupPackDetailed.SetActive(false));
+        //ACT_NormalMode.onClick.AddListener(() => OnClickNormalMode());
+        //ACT_RankedMode.onClick.AddListener(() => OnClickRankedMode());
+        //ACT_FindMatch.onClick.AddListener(() => OnClickFindMatch());
+        //ACT_AcceptMatch.onClick.AddListener(() => OnClickAcceptMatch());
+        //ACT_DeclinetMatch.onClick.AddListener(() => OnClickDeclineMatch());
+        //ACT_StopFind.onClick.AddListener(() => OnClickDeclineMatch());
+
+        //OnClickNormalMode();
+        //EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(buttonNormalMode.gameObject);
+
+        TurnOn(SceneType.Home, true); //Default
+        #endregion
+    }
 
 
-            //ACT_NormalMode.onClick.AddListener(() => OnClickNormalMode());
-            //ACT_RankedMode.onClick.AddListener(() => OnClickRankedMode());
-            //ACT_FindMatch.onClick.AddListener(() => OnClickFindMatch());
-            //ACT_AcceptMatch.onClick.AddListener(() => OnClickAcceptMatch());
-            //ACT_DeclinetMatch.onClick.AddListener(() => OnClickDeclineMatch());
-            //ACT_StopFind.onClick.AddListener(() => OnClickDeclineMatch());
-
-            //OnClickNormalMode();
-            //EventSystem.current.SetSelectedGameObject(null);
-            //EventSystem.current.SetSelectedGameObject(buttonNormalMode.gameObject);
-            #endregion
+    //test
+    public void LoadHomeScene()
+    {
+        print("load home scene");
+        TurnOffSceneAlreadyShow();
+        TurnOn(SceneType.Home, true);
     }
 
     // Update is called once per frame
@@ -213,7 +234,7 @@ public class UIManager : MonoBehaviour
                         // LOAD MONEY VIRTUAL
 
                     }
-                    isHome = turn;
+                    isSignIn = turn;
 
                     foreach (GameObject obj in SignInScene)
                     {
@@ -235,9 +256,8 @@ public class UIManager : MonoBehaviour
                     {
                         TurnOffSceneAlreadyShow();
                         // LOAD MONEY VIRTUAL
-
                     }
-                    isHome = turn;
+                    isSignUp = turn;
 
                     foreach (GameObject obj in SignUpScene)
                     {
@@ -261,7 +281,7 @@ public class UIManager : MonoBehaviour
                         // LOAD MONEY VIRTUAL
 
                     }
-                    isHome = turn;
+                    isRecovery = turn;
 
                     foreach (GameObject obj in RecoveryScene)
                     {
@@ -455,6 +475,34 @@ public class UIManager : MonoBehaviour
                 }
 
                 break;
+            case SceneType.ChooseDeck:
+
+                if (isChooseDeck ^ turn)
+                {
+                    if (turn)
+                    {
+                        //reset deck name
+                        //LoadDeckName();
+                        //StartCoroutine(GameData.instance.LoadCardInDeckPack(DeckPack));
+
+                        //StartCoroutine(GameData.instance.LoadCardInInventoryUser(CardInventory));
+                        //LoadNumberCardInDeck(GameData.instance.getNumberCardInDeck());
+                        TurnOffSceneAlreadyShow();
+                    }
+                    isChooseDeck = turn;
+                    foreach (GameObject obj in ChooseDeckScene)
+                    {
+                        obj.SetActive(turn);
+                    }
+                }
+
+                if (isCreateDeck)
+                {
+                    lastScence = presentScene;
+                    presentScene = SceneType.ChooseDeck;
+                }
+
+                break;
             default:
                 Debug.LogError("Can't find Scene");
                 break;
@@ -521,6 +569,11 @@ public class UIManager : MonoBehaviour
         {
             TurnOn(SceneType.CollectionDecks, false);
         }
+
+        if(isChooseDeck)
+        {
+            TurnOn(SceneType.ChooseDeck, false);
+        }
     }
     #endregion
 
@@ -542,6 +595,7 @@ public class UIManager : MonoBehaviour
     }
     public void TurnOnSignUpScene()
     {
+        print("Turn on sign up");
         TurnOn(SceneType.SignUp, true);
     }
 
@@ -590,6 +644,11 @@ public class UIManager : MonoBehaviour
     public void TurnOnStoreScene()
     {
         TurnOn(SceneType.Store, true);
+    }
+
+    public void TurnOnChooseDeckScene()
+    {
+        TurnOn(SceneType.ChooseDeck, true);
     }
 
     #endregion
