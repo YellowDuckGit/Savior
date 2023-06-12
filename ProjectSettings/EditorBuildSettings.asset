@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Plugins/Feel/MMTools/Tools/MMSceneLoading/LoadingScreens/MMAdditiveLoadingScreenSimple.unity
     guid: 945e5b97212e8e74ebcd35bddde3970c
+  - enabled: 1
+    path: Assets/GameResource/UI/Scene/LoadingScene/LoadingGame.unity
+    guid: 48b9b9947c80e36418f6c36f7c915bd3
   m_configObjects: {}

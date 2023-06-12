@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public enum SceneType
 {
-    SignIn, SignUp, Recovery, Home, Loading, Play, Store, Collection, CollectionDecks, CollectionCards, CreateDeck
+    SignIn, SignUp, Recovery, Home, LoadingProcessAPI, Play, Store, Collection, CollectionDecks, CollectionCards, CreateDeck
 }
 public class UIManager : MonoBehaviour
 {
@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> SignUpScene;
     [SerializeField] private List<GameObject> RecoveryScene;
     [SerializeField] private List<GameObject> HomeScene;
-    [SerializeField] private List<GameObject> LoadingScene;
+    [SerializeField] private List<GameObject> LoadingProcessAPI;
     [SerializeField] private List<GameObject> PlayScene;
     [SerializeField] private List<GameObject> CollectionScene;
     [SerializeField] private List<GameObject> Collection_DecksScene;
@@ -109,7 +109,7 @@ public class UIManager : MonoBehaviour
     public bool isSignUp;
     public bool isRecovery;
     public bool isHome;
-    public bool isLoading;
+    public bool isLoadingProcessAPI;
     public bool isPlay;
     public bool isCollection;
     public bool isCollection_Decks;
@@ -299,23 +299,23 @@ public class UIManager : MonoBehaviour
                     presentScene = SceneType.Home;
                 }
                 break;
-            case SceneType.Loading:
-                if (isLoading ^ turn)
+            case SceneType.LoadingProcessAPI:
+                if (isLoadingProcessAPI ^ turn)
                 {
                     if (turn) TurnOffSceneAlreadyShow();
                     print("loading :" + turn);
 
-                    isLoading = turn;
-                    foreach (GameObject obj in LoadingScene)
+                    isLoadingProcessAPI = turn;
+                    foreach (GameObject obj in LoadingProcessAPI)
                     {
                         obj.SetActive(turn);
                     }
                 }
 
-                if (isLoading)
+                if (isLoadingProcessAPI)
                 {
                     lastScence = presentScene;
-                    presentScene = SceneType.Loading;
+                    presentScene = SceneType.LoadingProcessAPI;
                 }
                 break;
             case SceneType.Play:
@@ -467,9 +467,9 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void TurnOffSceneAlreadyShow()
     {
-        if (isLoading)
+        if (isLoadingProcessAPI)
         {
-            TurnOn(SceneType.Loading, false);
+            TurnOn(SceneType.LoadingProcessAPI, false);
         }
 
         if (isSignIn)
@@ -552,7 +552,7 @@ public class UIManager : MonoBehaviour
 
     public void TurnOnLoadingScene()
     {
-        TurnOn(SceneType.Loading, true);
+        TurnOn(SceneType.LoadingProcessAPI, true);
     }
 
     public void TurnOnPlayScene()
