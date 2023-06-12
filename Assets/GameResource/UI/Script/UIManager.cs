@@ -165,11 +165,11 @@ public class UIManager : MonoBehaviour
             switchSceneRecovery.onClick.AddListener(() => TurnOnRecoveryScene());
             switchSceneSignIn.onClick.AddListener(() => TurnOnSignInScene());
             switchScenePlay.onClick.AddListener(() => TurnOnPlayScene());
-            switchSceneCollection.onClick.AddListener(() => TurnOnCollectionCardScene());
+            //switchSceneCollection.onClick.AddListener(() => TurnOnCollectionCardScene());
             switchSceneStore.onClick.AddListener(() => TurnOnStoreScene());
             switchSceneCollectionDecks.onClick.AddListener(() => TurnOnCollectionDeckScene());
-
-            switchSceneChooseDeck.onClick.AddListener(() => TurnOnChooseDeckScene());
+        switchSceneCollectionCards.onClick.AddListener(() => TurnOnCollectionCardScene());
+        switchSceneChooseDeck.onClick.AddListener(() => TurnOnChooseDeckScene());
 
         //home.onClick.AddListener(() => TurnOnHomeScene());
         //play.onClick.AddListener(() => TurnOnPlayScene());
