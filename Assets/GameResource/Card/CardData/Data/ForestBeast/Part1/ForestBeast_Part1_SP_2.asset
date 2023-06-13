@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1959dc42b5e6749418a6c8671b7b6440, type: 3}
+  m_Name: ForestBeast_Part1_SP_2
+  m_EditorClassIdentifier: 
+  <id>k__BackingField: ForestBeast_Part1_SP_2
+  <name>k__BackingField: Ancient Sword's Power
+  <description>k__BackingField: Grant Dominate to an ally
+  <cost>k__BackingField: 2
+  spellType: 0
+  material: {fileID: 0}
+  rarityCard: 0
