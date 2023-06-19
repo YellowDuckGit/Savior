@@ -1,0 +1,269 @@
+﻿using Assets.GameComponent.Card.CardComponents.Script.UI;
+using Assets.GameComponent.Card.Logic.ConditionTrigger.Round;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Video;
+using static UnityEngine.Rendering.DebugUI;
+
+public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardBase
+{
+    #region UI
+
+    /*For debug*/
+    [SerializeField] protected TextMeshProUGUI _name;
+    /*For debug*/
+    [SerializeField] protected TextMeshProUGUI _cost;
+    /*For debug*/
+    [SerializeField] protected TextMeshProUGUI _description;
+    /*For debug*/
+    [SerializeField] protected MeshRenderer _avatar;
+    /*For debug*/
+    [SerializeField] protected T _cardTarget;
+    protected GameObject _outline;
+
+    public abstract TextMeshProUGUI UIName { get; set; }
+    public abstract TextMeshProUGUI UICost { get; set; }
+    public abstract TextMeshProUGUI UIDescription { get; set; }
+    public abstract MeshRenderer UIAvatar { get; set; }
+    public abstract GameObject UIOutline { get; set; }
+
+    public abstract T CardTarget { get; set; }
+
+    private void Awake()
+    {
+        print(this.debug($"UI for {CardTarget} Awake"));
+        GetCardComponents();
+        this.RegisterListener(EventID.OnCardUpdate, (CardTarget) => OnCardUpdate(CardTarget as T));
+        this.RegisterListener(EventID.OnClickCard, (cardTarget) => OnClickOnCard(cardTarget as UICardBase<T>));
+        this.RegisterListener(EventID.OnEnterCard, (cardTarget) => OnEnterCard(cardTarget as UICardBase<T>));
+        this.RegisterListener(EventID.OnExitCard, (cardTarget) => OnExitCard(cardTarget as UICardBase<T>));
+        RegisLocalListener();
+    }
+
+    private void Start()
+    {
+        //print(this.debug($"UI for {CardTarget} Start"));
+        //this.RegisterListener(EventID.OnClickCard, (cardTarget) => OnClickOnCard(cardTarget as UICardBase<T>));
+        //this.RegisterListener(EventID.OnEnterCard, (cardTarget) => OnEnterCard(cardTarget as UICardBase<T>));
+        //this.RegisterListener(EventID.OnExitCard, (cardTarget) => OnExitCard(cardTarget as UICardBase<T>));
+    }
+
+    public abstract void RegisLocalListener();
+
+    public abstract void GetCardComponents();
+    public abstract void OnCardUpdate(T cardTarget);
+
+    //public abstract void updateName(string Name);/* => this.Name.text = name;*/
+    //public abstract void updateDescription(string Description);/* => this.Description.text = Description;*/
+    //public abstract void updateCost(int Cost);/* => this.Cost.text = Cost.ToString();*/
+    //public abstract void updateAvatar(Material Avatar);/* => this.Avatar.material = Avatar;*/
+    #endregion
+    #region Logic
+
+    private bool _isSelected;
+    private bool _isEnter;
+    private bool _isForcus;
+
+    public bool IsSelected
+    {
+        get { return _isSelected; }
+        set { _isSelected = value; }
+    }
+
+    public bool IsEnter
+    {
+        get { return _isEnter; }
+        set
+        {
+            if (value)
+            {
+                EnterCard();
+            }
+            else
+            {
+                UnEnterCard();
+            }
+            _isEnter = value;
+        }
+    }
+
+    public bool IsForcus
+    {
+        get { return _isForcus; }
+        set
+        {
+            if (value)
+            {
+                FocusCard();
+            }
+            else
+            {
+                UnFocusCard();
+            }
+            _isForcus = value;
+        }
+    }
+
+
+    public Vector3 OriginPostion;
+    public Vector3 OriginRotation;
+
+
+    //public MonsterCard card;
+    //private CardBase _card;
+
+
+    [Header("Effect")]
+    [SerializeField] Vector3 offsetPostionEnter;
+
+    [SerializeField] Vector3 RotationEnter;
+
+    #region Set Get
+
+
+    #endregion
+    public void OnMouseEnter()
+    {
+        this.PostEvent(EventID.OnEnterCard, this);
+    }
+
+    private void OnMouseExit()
+    {
+        this.PostEvent(EventID.OnExitCard, this);
+    }
+
+    private void OnMouseDown()
+    {
+        this.PostEvent(EventID.OnClickCard, this);
+    }
+
+    private void OnClickOnCard(UICardBase<T> cardTarget)
+    {
+        if (cardTarget == this)
+        {
+            this.IsForcus = true;
+        }
+        else
+        {
+            if (this.IsForcus)
+            {
+                this.IsForcus = false;
+            }
+        }
+    }
+    private void OnEnterCard(UICardBase<T> cardUITarget)
+    {
+        if (cardUITarget == this)
+        {
+            if (this.CardTarget.Position == CardPosition.InHand)
+            {
+                if (!IsEnter)
+                {
+                    IsEnter = true;
+                }
+            }
+        }
+        else
+        {
+            if (this.CardTarget.Position == CardPosition.InHand)
+            {
+                if (IsEnter)
+                {
+                    IsEnter = false;
+                }
+            }
+        }
+    }
+
+    private void OnExitCard(UICardBase<T> cardTarget)
+    {
+        if (cardTarget == this)
+        {
+            if (this.CardTarget.Position == CardPosition.InHand)
+            {
+                if (IsEnter)
+                {
+                    IsEnter = false;
+                }
+            }
+        }
+
+    }
+    public void EnterCard()
+    {
+        //turn on effect
+
+        this.OriginPostion = _cardTarget.gameObject.transform.localPosition;
+        this.OriginRotation = _cardTarget.gameObject.transform.localRotation.ToEulerAngles();
+
+        _cardTarget.gameObject.transform.localPosition = new Vector3(this.OriginPostion.x + offsetPostionEnter.x,
+                                                this.OriginPostion.y + offsetPostionEnter.y,
+                                                offsetPostionEnter.z);
+        _cardTarget.gameObject.transform.localRotation = Quaternion.EulerAngles(RotationEnter);
+
+    }
+
+    public void UnEnterCard()
+    {
+        //turn off effect
+        _cardTarget.gameObject.transform.localPosition = this.OriginPostion;
+        _cardTarget.gameObject.transform.localRotation = Quaternion.EulerAngles(this.OriginRotation);
+    }
+
+    public bool FocusCard()
+    {
+        print($"FocusCard card {_cardTarget.Name}");
+        if (this._outline != null)
+        {
+            this._isForcus = true;
+            this._outline.SetActive(true);
+        }
+        return this._outline.activeSelf;
+    }
+    public bool UnFocusCard()
+    {
+        print($"UnFocusCard card {_cardTarget.Name}");
+        if (this._outline != null)
+        {
+            this._isForcus = false;
+            if (!_cardTarget.IsSelected) this._outline.SetActive(false);
+        }
+        return this._outline.activeSelf;
+    }
+
+    Color originalColor;
+    public bool SelectCard()
+    {
+        print($"select card {_cardTarget.Name}");
+        if (this._outline != null)
+        {
+            this._isSelected = true;
+            //_card.IsSelected = true;
+            Renderer rend = this._outline.GetComponent<Renderer>();
+            originalColor = rend.material.color;
+            rend.material.color = new Color(0.5f, 1, 1);
+            this._outline.SetActive(true);
+        }
+        return this._outline.activeSelf;
+    }
+
+    public bool UnSelectCard()
+    {
+        print($"unselect card {_cardTarget.Name}");
+        if (this._outline != null)
+        {
+            this._isSelected = false;
+            //_card.IsSelected = false;
+            Renderer rend = this._outline.GetComponent<Renderer>();
+            rend.material.color = originalColor;
+            this._outline.SetActive(false);
+        }
+        return this._outline.activeSelf;
+    }
+    #endregion
+}
+

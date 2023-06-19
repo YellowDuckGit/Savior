@@ -4,6 +4,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using PlayFab.ServerModels;
 
 public class PlayfabManager : MonoBehaviour
 {
@@ -241,311 +243,311 @@ public class PlayfabManager : MonoBehaviour
     }
     #endregion
 
-    //#region Set-Get Data In Inventory
-    //public IEnumerator GetCards()
-    //{
-    //    bool IsApiExecuting = true;
+    #region Set-Get Data In Inventory
+    public IEnumerator GetCards()
+    {
+        bool IsApiExecuting = true;
 
-    //    PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest();
-    //    List<string> listCard = new List<string>();
-    //    PlayFabClientAPI.GetUserInventory(request, result =>
-    //    {
-    //        foreach (var item in result.Inventory)
-    //        {
-    //            if (item.CatalogVersion == "Card" && item.ItemClass == "Card")
-    //            {
-    //                int numberCard = (int)item.RemainingUses;
-    //                listCard.Add(item.ItemId + ":" + numberCard);
-    //            }
-    //        }
-    //        GameData.instance.listCard = listCard;
-    //        IsApiExecuting = false;
+        PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest();
+        List<string> listCard = new List<string>();
+        PlayFabClientAPI.GetUserInventory(request, result =>
+        {
+            foreach (var item in result.Inventory)
+            {
+                if (item.CatalogVersion == "Card" && item.ItemClass == "Card")
+                {
+                    int numberCard = (int)item.RemainingUses;
+                    listCard.Add(item.ItemId + ":" + numberCard);
+                }
+            }
+            GameData.instance.listCard = listCard;
+            IsApiExecuting = false;
 
-    //    }, (error) =>
-    //    {
-    //        Debug.Log("Got error retrieving user data:");
-    //        Debug.Log(error.GenerateErrorReport());
-    //    });
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
 
-    //    yield return new WaitUntil(() => !IsApiExecuting);
-    //}
+        yield return new WaitUntil(() => !IsApiExecuting);
+    }
 
-    //public IEnumerator GetElo()
-    //{
-    //    bool IsApiExecuting = true;
-    //    PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest() { };
-    //    PlayFabClientAPI.GetUserInventory(request, result =>
-    //    {
-    //        PlayFab.ClientModels.ItemInstance item = result.Inventory.Single(a => a.CatalogVersion == "Reward" && a.ItemClass == "Elo");
-    //        int elo = (int)item.RemainingUses;
-    //        PlayerHomeScene.instance.Elo = elo;
-    //        IsApiExecuting = false;
-    //    }, (error) =>
-    //    {
-    //        Debug.Log("Got error retrieving user data:");
-    //        Debug.Log(error.GenerateErrorReport());
-    //    });
+    public IEnumerator GetElo()
+    {
+        bool IsApiExecuting = true;
+        PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest() { };
+        PlayFabClientAPI.GetUserInventory(request, result =>
+        {
+            PlayFab.ClientModels.ItemInstance item = result.Inventory.Single(a => a.CatalogVersion == "Reward" && a.ItemClass == "Elo");
+            int elo = (int)item.RemainingUses;
+            PlayerHomeScene.instance.Elo = elo;
+            IsApiExecuting = false;
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
 
-    //    yield return new WaitUntil(() => !IsApiExecuting);
-    //}
+        yield return new WaitUntil(() => !IsApiExecuting);
+    }
 
-    //public IEnumerator GetVirtualCurrency()
-    //{
-    //    bool IsApiExecuting = true;
-    //    PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest();
-    //    PlayFabClientAPI.GetUserInventory(request, result =>
-    //    {
-    //        print("INVENTORY MONEY: " + result.VirtualCurrency["MC"]);
-    //        PlayerHomeScene.instance.Coin = result.VirtualCurrency["MC"];
-    //        IsApiExecuting = false;
-    //    }, (error) =>
-    //    {
-    //        Debug.Log("Got error retrieving user data:");
-    //        Debug.Log(error.GenerateErrorReport());
-    //    });
-    //    yield return new WaitUntil(() => !IsApiExecuting);
-    //}
+    public IEnumerator GetVirtualCurrency()
+    {
+        bool IsApiExecuting = true;
+        PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest();
+        PlayFabClientAPI.GetUserInventory(request, result =>
+        {
+            print("INVENTORY MONEY: " + result.VirtualCurrency["MC"]);
+            PlayerHomeScene.instance.Coin = result.VirtualCurrency["MC"];
+            IsApiExecuting = false;
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
+        yield return new WaitUntil(() => !IsApiExecuting);
+    }
 
-    //#endregion
+    #endregion
 
-    //#region Cloud Script
+    #region Cloud Script
 
-    //public void AddItemsForNewPlayer(string playfabId)
-    //{
-    //    var request = new ExecuteCloudScriptRequest
-    //    {
-    //        FunctionName = "Hello",
-    //        FunctionParameter = new
-    //        {
-    //        }
-    //    };
-    //    PlayFabClientAPI.ExecuteCloudScript(request, OnExecuteSuccess, OnError);
-    //}
+    public void AddItemsForNewPlayer(string playfabId)
+    {
+        var request = new ExecuteCloudScriptRequest
+        {
+            FunctionName = "Hello",
+            FunctionParameter = new
+            {
+            }
+        };
+        PlayFabClientAPI.ExecuteCloudScript(request, OnExecuteSuccess, OnError);
+    }
 
-    //void OnExecuteSuccess(PlayFab.ClientModels.ExecuteCloudScriptResult result)
-    //{
-    //    string str = result.FunctionResult.ToString();
-    //}
+    void OnExecuteSuccess(PlayFab.ClientModels.ExecuteCloudScriptResult result)
+    {
+        string str = result.FunctionResult.ToString();
+    }
 
-    //void OnError(PlayFabError error)
-    //{
-    //    Debug.LogError(error.Error);
-    //}
+    void OnError(PlayFabError error)
+    {
+        Debug.LogError(error.Error);
+    }
 
-    //#endregion
+    #endregion
 
-    //public IEnumerator GetStores(string cataLog, string storeId)
-    //{
-    //    bool IsApiExecuting = true;
-    //    Debug.Log("START GET STORE");
-    //    List<PlayFab.ClientModels.StoreItem> storeItems = new();
-    //    List<Data_Pack> packs = new List<Data_Pack>();
+    public IEnumerator GetStores(string cataLog, string storeId)
+    {
+        bool IsApiExecuting = true;
+        Debug.Log("START GET STORE");
+        List<PlayFab.ClientModels.StoreItem> storeItems = new();
+        List<Data_Pack> packs = new List<Data_Pack>();
 
-    //    List<(string id, string name)> cards = new List<(string id, string name)>();
+        List<(string id, string name)> cards = new List<(string id, string name)>();
 
-    //    //GetStoreItemsRequest request = new GetStoreItemsRequest()
-    //    // {
-    //    //    CatalogVersion = "Card",
-    //    //    StoreId = "BS1"
-    //    //};
-    //    //test
-    //    PlayFabClientAPI.GetCatalogItems(new PlayFab.ClientModels.GetCatalogItemsRequest() { CatalogVersion = "Card" }, result =>
-    //    {
-    //        var catalogItem = result.Catalog;
-    //        foreach (var item in catalogItem)
-    //        {
+        //GetStoreItemsRequest request = new GetStoreItemsRequest()
+        // {
+        //    CatalogVersion = "Card",
+        //    StoreId = "BS1"
+        //};
+        //test
+        PlayFabClientAPI.GetCatalogItems(new PlayFab.ClientModels.GetCatalogItemsRequest() { CatalogVersion = "Card" }, result =>
+        {
+            var catalogItem = result.Catalog;
+            foreach (var item in catalogItem)
+            {
 
-    //            if (item.ItemClass == "Card")
-    //            {
-    //                cards.Add((item.ItemId, item.DisplayName));
-    //            }
-    //            else if (item.ItemClass == "Bundle")
-    //            {
-    //                //debug
-    //                //if (item.Bundle != null)
-    //                //{
-    //                //    print(string.Join("=", new string[30]));
-    //                //    item.Bundle.BundledItems.ForEach((x) => print($"BundledItems({item.Bundle.BundledItems.IndexOf(x)}): {x}"));
-    //                //    item.Bundle.BundledResultTables.ForEach((x) => print($"BundledResultTables({item.Bundle.BundledResultTables.IndexOf(x)}): {x}"));
-    //                //    print(string.Join("=", new string[30]));
-    //                //}
+                if (item.ItemClass == "Card")
+                {
+                    cards.Add((item.ItemId, item.DisplayName));
+                }
+                else if (item.ItemClass == "Bundle")
+                {
+                    //debug
+                    //if (item.Bundle != null)
+                    //{
+                    //    print(string.Join("=", new string[30]));
+                    //    item.Bundle.BundledItems.ForEach((x) => print($"BundledItems({item.Bundle.BundledItems.IndexOf(x)}): {x}"));
+                    //    item.Bundle.BundledResultTables.ForEach((x) => print($"BundledResultTables({item.Bundle.BundledResultTables.IndexOf(x)}): {x}"));
+                    //    print(string.Join("=", new string[30]));
+                    //}
 
-    //                var pack = new Data_Pack(item.ItemId);
-    //                //bundles.Add(new Data_Pack(item.ItemId));
-    //                if (item.Bundle != null)
-    //                {
-    //                    print($"Bundle name: {item.DisplayName}");
-    //                    //sell pack (random card) -> droptables
-    //                    if (item.Bundle.BundledResultTables != null)
-    //                    {
-    //                        foreach (var x in item.Bundle.BundledResultTables)
-    //                        {
-    //                            pack.dropTableId.Add(x);
-    //                            var dropTable = result.Catalog.FirstOrDefault(item => item.ItemId == x);
-    //                            //catalogItem.ForEach((x) => print($"catalogItem({catalogItem.IndexOf(x)}): {x.DisplayName ?? "null"}, id: {x.ItemId ?? "null"}, {x.Container.ItemContents.Count}"));
-    //                            print("bundle result table data: " + x);
-    //                        }
-    //                    }
-    //                    // sell card item
-    //                    foreach (var x in item.Bundle.BundledItems)
-    //                    {
-    //                        pack.cardItemsId.Add(x);
-    //                        print($"bundle({item.DisplayName}) add item data id : " + x);
-    //                    }
-    //                }
-    //                packs.Add(pack);
-    //            }
-    //            // Check if the item is a bundle
-    //        }
-    //        print("number List<Data_Pack>:" + packs.Count);
-    //        GameData.instance.listPackData = packs;
-    //        IsApiExecuting = false;
-    //    }, (error) =>
-    //    {
-    //        Debug.Log("Got error retrieving user data:");
-    //        Debug.Log(error.GenerateErrorReport());
-    //    });
+                    var pack = new Data_Pack(item.ItemId);
+                    //bundles.Add(new Data_Pack(item.ItemId));
+                    if (item.Bundle != null)
+                    {
+                        print($"Bundle name: {item.DisplayName}");
+                        //sell pack (random card) -> droptables
+                        if (item.Bundle.BundledResultTables != null)
+                        {
+                            foreach (var x in item.Bundle.BundledResultTables)
+                            {
+                                pack.dropTableId.Add(x);
+                                var dropTable = result.Catalog.FirstOrDefault(item => item.ItemId == x);
+                                //catalogItem.ForEach((x) => print($"catalogItem({catalogItem.IndexOf(x)}): {x.DisplayName ?? "null"}, id: {x.ItemId ?? "null"}, {x.Container.ItemContents.Count}"));
+                                print("bundle result table data: " + x);
+                            }
+                        }
+                        // sell card item
+                        foreach (var x in item.Bundle.BundledItems)
+                        {
+                            pack.cardItemsId.Add(x);
+                            print($"bundle({item.DisplayName}) add item data id : " + x);
+                        }
+                    }
+                    packs.Add(pack);
+                }
+                // Check if the item is a bundle
+            }
+            print("number List<Data_Pack>:" + packs.Count);
+            GameData.instance.listPackData = packs;
+            IsApiExecuting = false;
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
 
-    //    //PlayFabClientAPI.GetStoreItems(request, result =>
-    //    //{
-    //    //    result.Store.ForEach(i =>
-    //    //    {
-    //    //        pack.Add(new Data_Pack(i.ItemId));
-    //    //    });
-    //    //    GameData.instance.listPackData = pack;
-    //    //    IsApiExecuting = false;
-    //    //}, (error) =>
-    //    //{
-    //    //    Debug.Log("Got error retrieving user data:");
-    //    //    Debug.Log(error.GenerateErrorReport());
-    //    //});
+        //PlayFabClientAPI.GetStoreItems(request, result =>
+        //{
+        //    result.Store.ForEach(i =>
+        //    {
+        //        pack.Add(new Data_Pack(i.ItemId));
+        //    });
+        //    GameData.instance.listPackData = pack;
+        //    IsApiExecuting = false;
+        //}, (error) =>
+        //{
+        //    Debug.Log("Got error retrieving user data:");
+        //    Debug.Log(error.GenerateErrorReport());
+        //});
 
-    //    yield return new WaitUntil(() => !IsApiExecuting);
+        yield return new WaitUntil(() => !IsApiExecuting);
 
-    //}
+    }
 
-    //private IEnumerator StartPurchases(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
-    //{
-    //    print("start purchase");
-    //    bool IsApiExecuting = true;
-    //    string orderID = default;
-    //    string providerName = default;
-    //    var request = new StartPurchaseRequest()
-    //    {
-    //        CatalogVersion = catalog,
-    //        StoreId = storeId,
-    //        Items = itemPurchases
-    //    };
-    //    PlayFabClientAPI.StartPurchase(request, result =>
-    //    {
-    //        orderID = result.OrderId;
-    //        providerName = result.PaymentOptions[0].ProviderName;
-    //        Debug.Log("PURCHASE PACK: " + orderID);
-    //        IsApiExecuting = false;
-    //    }, (error) =>
-    //    {
-    //        Debug.Log("Got error retrieving user data:");
-    //        Debug.Log(error.GenerateErrorReport());
-    //    });
-    //    yield return new WaitUntil(() => !IsApiExecuting);
-    //    yield return StartCoroutine(DefinePayment(orderID, currency, providerName));
+    private IEnumerator StartPurchases(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
+    {
+        print("start purchase");
+        bool IsApiExecuting = true;
+        string orderID = default;
+        string providerName = default;
+        var request = new StartPurchaseRequest()
+        {
+            CatalogVersion = catalog,
+            StoreId = storeId,
+            Items = itemPurchases
+        };
+        PlayFabClientAPI.StartPurchase(request, result =>
+        {
+            orderID = result.OrderId;
+            providerName = result.PaymentOptions[0].ProviderName;
+            Debug.Log("PURCHASE PACK: " + orderID);
+            IsApiExecuting = false;
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
+        yield return new WaitUntil(() => !IsApiExecuting);
+        yield return StartCoroutine(DefinePayment(orderID, currency, providerName));
 
-    //}
+    }
 
-    //private IEnumerator DefinePayment(string orderID, string currency, string providerName)
-    //{
-    //    print("start define");
-    //    bool IsApiExecuting = true;
-    //    var request2 = new PayForPurchaseRequest()
-    //    {
-    //        OrderId = orderID,
-    //        Currency = currency,
-    //        ProviderName = providerName
-    //    };
-    //    PlayFabClientAPI.PayForPurchase(request2, result =>
-    //    {
-    //        Debug.Log("PURCHASE STATUS: " + result.Status);
-    //        IsApiExecuting = false;
-    //    }, (error) =>
-    //    {
-    //        Debug.Log("Got error retrieving user data:");
-    //        Debug.Log(error.GenerateErrorReport());
-    //    });
+    private IEnumerator DefinePayment(string orderID, string currency, string providerName)
+    {
+        print("start define");
+        bool IsApiExecuting = true;
+        var request2 = new PayForPurchaseRequest()
+        {
+            OrderId = orderID,
+            Currency = currency,
+            ProviderName = providerName
+        };
+        PlayFabClientAPI.PayForPurchase(request2, result =>
+        {
+            Debug.Log("PURCHASE STATUS: " + result.Status);
+            IsApiExecuting = false;
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
 
-    //    yield return new WaitUntil(() => !IsApiExecuting);
+        yield return new WaitUntil(() => !IsApiExecuting);
 
-    //    yield return StartCoroutine(FinishPurchase(orderID));
+        yield return StartCoroutine(FinishPurchase(orderID));
 
-    //}
+    }
 
-    //private IEnumerator FinishPurchase(string orderID)
-    //{
-    //    print("start finish");
-    //    bool IsApiExecuting = true;
-    //    var request3 = new ConfirmPurchaseRequest() { OrderId = orderID };
-    //    PlayFabClientAPI.ConfirmPurchase(request3, result =>
-    //    {
-    //        result.Items.ForEach(x => Debug.Log("item name:  " + x.DisplayName));
-    //        //get pack item id
+    private IEnumerator FinishPurchase(string orderID)
+    {
+        print("start finish");
+        bool IsApiExecuting = true;
+        var request3 = new ConfirmPurchaseRequest() { OrderId = orderID };
+        PlayFabClientAPI.ConfirmPurchase(request3, result =>
+        {
+            result.Items.ForEach(x => Debug.Log("item name:  " + x.DisplayName));
+            //get pack item id
 
-    //        StartCoroutine(UIManager.instance.LoadVirtualMoney());
-    //        IsApiExecuting = false;
-    //    }, (error) =>
-    //    {
-    //        Debug.Log("Got error retrieving user data:");
-    //        Debug.Log(error.GenerateErrorReport());
-    //    });
+            //StartCoroutine(UIManager.instance.LoadVirtualMoney());
+            IsApiExecuting = false;
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
 
-    //    yield return new WaitUntil(() => !IsApiExecuting);
-    //    yield return new WaitForSeconds(2f);
-    //    yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
-    //}
-    //public IEnumerator BuyPacks(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
-    //{
-    //    print("start buy pack");
-    //    yield return StartPurchases(catalog, storeId, itemPurchases, currency);
-    //    yield return null;
+        yield return new WaitUntil(() => !IsApiExecuting);
+        yield return new WaitForSeconds(2f);
+        yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
+    }
+    public IEnumerator BuyPacks(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
+    {
+        print("start buy pack");
+        yield return StartPurchases(catalog, storeId, itemPurchases, currency);
+        yield return null;
 
-    //}
+    }
 
 
-    //public IEnumerator GetDropTable(List<string> listTableId)
-    //{
-    //    GameData.instance.dropTableInforList.Clear();
-    //    bool IsApiExecuting = true;
-    //    var request = new GetRandomResultTablesRequest
-    //    {
-    //        TableIDs = listTableId.Distinct().ToList()
-    //    };
+    public IEnumerator GetDropTable(List<string> listTableId)
+    {
+        GameData.instance.dropTableInforList.Clear();
+        bool IsApiExecuting = true;
+        var request = new GetRandomResultTablesRequest
+        {
+            TableIDs = listTableId.Distinct().ToList()
+        };
 
-    //    // Call the method asynchronously and handle the result or error
-    //    PlayFabServerAPI.GetRandomResultTables(request, result =>
-    //    {
-    //        var tables = result.Tables;
-    //        foreach (var table in tables)
-    //        {
-    //            Console.WriteLine($"Table name: {table.Key}");
-    //            Console.WriteLine($"Table nodes: {table.Value.Nodes.Count}"); // node = item
-    //            var id = table.Key;
-    //            var items = table.Value.Nodes.ToDictionary(item => item.ResultItem, item => item.Weight);
+        // Call the method asynchronously and handle the result or error
+        PlayFabServerAPI.GetRandomResultTables(request, result =>
+        {
+            var tables = result.Tables;
+            foreach (var table in tables)
+            {
+                Console.WriteLine($"Table name: {table.Key}");
+                Console.WriteLine($"Table nodes: {table.Value.Nodes.Count}"); // node = item
+                var id = table.Key;
+                var items = table.Value.Nodes.ToDictionary(item => item.ResultItem, item => item.Weight);
 
-    //            GameData.instance.dropTableInforList.Add(new DropTableInfor()
-    //            {
-    //                id = id,
-    //                items = items
-    //            });
-    //        }
-    //        IsApiExecuting = false;
-    //        print("GameData.instance.dropTableInforList: " + GameData.instance.dropTableInforList.Count);
-    //        print("GetRandomResultTables Finished");
-    //    }, (error) =>
-    //    {
-    //        Debug.Log("Got error retrieving user data:");
-    //        Debug.Log(error.GenerateErrorReport());
-    //    });
-    //    print("End GetDropTable()");
-    //    yield return new WaitUntil(() => !IsApiExecuting);
-    //}
+                GameData.instance.dropTableInforList.Add(new DropTableInfor()
+                {
+                    id = id,
+                    items = items
+                });
+            }
+            IsApiExecuting = false;
+            print("GameData.instance.dropTableInforList: " + GameData.instance.dropTableInforList.Count);
+            print("GetRandomResultTables Finished");
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
+        print("End GetDropTable()");
+        yield return new WaitUntil(() => !IsApiExecuting);
+    }
 
     public string DeviceUniqueIdentifier
     {

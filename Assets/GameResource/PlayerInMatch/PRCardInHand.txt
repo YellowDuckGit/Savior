@@ -1,0 +1,6 @@
+Dependent Sacle of Object "AvatarCard"
+Height 1.9 
+Wide 1.7 
+
+=====================
+Canvas Size ==> Height x 0.9 , Wide x 0.7
