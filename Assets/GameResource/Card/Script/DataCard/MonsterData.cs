@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using static EnumDefine;
 
+
 [System.Serializable]
 [CreateAssetMenu(fileName = "MC", menuName = "Scriptable Objects/MonsterCard", order = 1)]
 public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
@@ -22,13 +23,13 @@ public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
 
     [field: SerializeField]
     public int Cost { get; set; }
-    
+
     [field: SerializeField]
     public int Attack { get; set; }
 
     [field: SerializeField]
     public int Hp { get; set; }
-    
+
     [field: SerializeField]
     public string Description { get; set; }
 

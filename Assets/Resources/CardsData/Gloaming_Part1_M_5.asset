@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d83ba4770872246a4979a83b2197df, type: 3}
+  m_Name: Gloaming_Part1_M_5
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: Gloaming_Part1_M_5
+  <Name>k__BackingField: Astrayer
+  <Cost>k__BackingField: 2
+  <Attack>k__BackingField: 2
+  <Hp>k__BackingField: 1
+  <Description>k__BackingField: Grant me +2|0 when Charming an enemy
+  <CardType>k__BackingField: 0
+  <Avatar>k__BackingField: {fileID: 2100000, guid: 6821d39b377d71745a53ed8f6022c999,
+    type: 2}
+  <RarityCard>k__BackingField: 0
+  <RegionCard>k__BackingField: 2
+  <IsCharming>k__BackingField: 0
+  <IsTreating>k__BackingField: 0
+  CardEffect: []
+  references:
+    version: 2
+    RefIds: []

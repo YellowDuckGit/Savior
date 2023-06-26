@@ -30,17 +30,14 @@ public class GameData : MonoBehaviour
     public List<DeckItem> listDeckItem = new List<DeckItem>();
     public List<PackItem> listPackItem = new List<PackItem>(); //list object
     public List<Data_Pack> listPackData = new List<Data_Pack>(); //list instance
+    public List<FriendInfo> listFriendData = new List<FriendInfo>();
+    public List<FriendItem> listFriendItem = new List<FriendItem>();
     public List<ItemPurchaseRequest> itemPurchaseRequests = new List<ItemPurchaseRequest>();
     public List<DropTableInfor> dropTableInforList = new List<DropTableInfor>();
 
 
     public List<CardInInventory> listCardInInventory = new List<CardInInventory>();
     public List<CardInDeckPack> listCardInDeckPack = new List<CardInDeckPack>();
-
-    public DeckItem selectDeck;
-
-    private bool triggerLoadingGameProcess = false;
-    public string packName;
 
     [Header("Prefab")]
     [SerializeField] GameObject MonsterCardPrefFab;
@@ -52,6 +49,17 @@ public class GameData : MonoBehaviour
     [SerializeField] GameObject CardInInventoryPrefab_SP;
     [SerializeField] GameObject cardInDeckPackPrefab;
     [SerializeField] GameObject packPrefab;
+    [SerializeField] GameObject FriendPrefab;
+
+
+    [Header("Choose Deck")]
+    public DeckItem selectDeck;
+    private bool triggerLoadingGameProcess = false;
+    public string packName;
+
+    //player information
+    private int _elo;
+    private int _coin;
 
     private void Awake()
     {
@@ -78,7 +86,7 @@ public class GameData : MonoBehaviour
         print("Loading Game Process");
         print("=====================================================================");
 
-        UIManager.instance.TurnOnLoadingScene();
+        //UIManager.instance.TurnOnLoadingScene();
 
         #region Init GameObject
         yield return StartCoroutine(LoadCardItemInGame());
@@ -90,13 +98,15 @@ public class GameData : MonoBehaviour
         yield return StartCoroutine(LoadDeckItems());
 
         yield return StartCoroutine(LoadPack());
+
+        yield return StartCoroutine(LoadFriendItem());
         #endregion
 
-        //yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
+        yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
 
         //yield return StartCoroutine(UIManager.instance.LoadElo());
 
-        UIManager.instance.TurnOnLoadingScene();
+        //UIManager.instance.TurnOnLoadingScene();
         UIManager.instance.TurnOnHomeScene();
 
         print("=====================================================================");
@@ -107,7 +117,6 @@ public class GameData : MonoBehaviour
     {
         //MonsterData[] cardDatas = Resources.FindObjectsOfTypeAll(typeof(MonsterData)) as MonsterData[];
         Debug.Log("LoadMonsterDatas");
-
         var cardDatas = Resources.LoadAll<ScriptableObject>("CardsData");
         while (true)
         {
@@ -263,6 +272,23 @@ public class GameData : MonoBehaviour
 
         yield return null;
     }
+
+    private IEnumerator InitFriendItem()
+    {
+        UnLoadListFriendItem();
+        foreach (FriendInfo data in GameData.instance.listFriendData)
+        {
+            Debug.Log("Friend ITEMS");
+            FriendItem friend = GameObject.Instantiate(FriendPrefab, Vector3.zero, Quaternion.identity).GetComponent<FriendItem>();
+            friend.Name.text = data.Username;
+            friend.gameObject.SetActive(false);
+            listFriendItem.Add(friend);
+            Debug.Log("END Friend ITEMS");
+        }
+        Debug.Log("END Friend PACK");
+
+        yield return null;
+    }
     #endregion
 
     #region UnLoad Data 
@@ -357,6 +383,26 @@ public class GameData : MonoBehaviour
             }
         }
     }
+
+    public void UnLoadListFriendItem()
+    {
+        if (listFriendItem.Count > 0)
+        {
+
+            if (listFriendItem[0] == null)
+            {
+                listFriendItem.Clear();
+            }
+            else
+            {
+                foreach (FriendItem data in listFriendItem)
+                {
+                    Destroy(data.gameObject);
+                }
+                listFriendItem.Clear();
+            }
+        }
+    }
     #endregion
 
     #region Scene Manager
@@ -411,6 +457,8 @@ public class GameData : MonoBehaviour
                     deckItem.gameObject.SetActive(true);
                     deckItem.transform.parent = parent.transform;
                     deckItem.transform.localScale = new Vector3(1f, 1f, 1f);
+                    deckItem.transform.localPosition = new Vector3(0f, 0f, 0f);
+
                 }
             }
         }
@@ -460,13 +508,15 @@ public class GameData : MonoBehaviour
 
     public IEnumerator LoadCardInDeckPack(GameObject parent)
     {
-        if (listCardInDeckPack[0].transform.parent != parent.transform)  
+        if (listCardInDeckPack.Count > 0 && listCardInDeckPack[0].transform.parent != parent.transform)  
         {
             foreach (CardInDeckPack card in listCardInDeckPack)
             {
                 card.gameObject.SetActive(true);
                 card.transform.parent = parent.transform;
                 card.transform.localScale = new Vector3(1f, 1f, 1f);
+                card.transform.localPosition = new Vector3(0f, 0f, 0f);
+
             }
         }
         yield return null;
@@ -481,6 +531,8 @@ public class GameData : MonoBehaviour
                 card.gameObject.SetActive(true);
                 card.transform.parent = parent.transform;
                 card.transform.localScale = new Vector3(1f, 1f, 1f);
+
+                card.transform.localPosition = Vector3.zero;
                 //numer card
                 card.NumberCard = card.CardItem.amount;
             }
@@ -507,6 +559,7 @@ public class GameData : MonoBehaviour
                 item.gameObject.SetActive(true);
                 item.transform.parent = parent.transform;
                 item.transform.localScale = new Vector3(1f, 1f, 1f);
+                item.transform.localPosition = new Vector3(0f, 0f, 0f);
                 item.text_packName.text = item.ID.ToString();
             }
             Debug.Log("END LOAD PACK");
@@ -524,4 +577,46 @@ public class GameData : MonoBehaviour
     {
         yield return StartCoroutine(InitCardInInventory());
     }
+
+    public IEnumerator LoadFriendItem()
+    {
+        yield return StartCoroutine(PlayfabManager.instance.GetFriends());
+        yield return StartCoroutine(InitFriendItem());
+        print("aaaaaaaa");
+        yield return StartCoroutine(LoadFriendItem(UIManager.instance.CollectionFriend));
+        print("bbbbb");
+
+    }
+
+    public IEnumerator LoadFriendItem(GameObject parent)
+    {
+        print("LoadFriendItem");
+        if (listFriendItem[0].transform.parent != parent.transform)
+        {
+            Debug.Log("START LOAD Friend");
+            foreach (FriendItem item in listFriendItem)
+            {
+                item.gameObject.SetActive(true);
+                item.transform.parent = parent.transform;
+                item.transform.localScale = new Vector3(1f, 1f, 1f);
+                item.transform.localPosition = new Vector3(0f, 0f, 0f);
+            }
+            Debug.Log("END LOAD Friend");
+        }
+        yield return null;
+    }
+
+    #region Get Set
+    public int Elo
+    {
+        get { return _elo; }
+        set { _elo = value; }
+    }
+
+    public int Coin
+    {
+        get { return _coin; }
+        set { _coin = value; }
+    }
+    #endregion
 }

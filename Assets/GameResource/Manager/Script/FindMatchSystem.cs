@@ -11,7 +11,7 @@ using static K_Room;
 
 public enum GameMode
 {
-    Normal = 1, Rank = 2
+    Normal = 1, Rank = 2, Tutorial, PlayWithFriend
 }
 public class FindMatchSystem : MonoBehaviourPunCallbacks
 {
@@ -32,12 +32,14 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     public static GameMode gameMode;
 
     [Header("Matching Setting")]
-    public int limitTimeout;
+    //public int limitTimeout;
     public int eloRangesuitable;
 
 
     ExitGames.Client.Photon.Hashtable _myPlayerCustomProperties = new ExitGames.Client.Photon.Hashtable();
     ExitGames.Client.Photon.Hashtable _myRoomCustomProperties = new ExitGames.Client.Photon.Hashtable();
+
+    private Coroutine coroutine;
 
     private void Start()
     {
@@ -53,10 +55,10 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
         //PhotonNetwork.JoinLobby();
 
-        //UIManager.instance.Button_NormalMode.onClick.AddListener(() => OnClickNormalMode());
-        //UIManager.instance.Button_RankedMode.onClick.AddListener(() => OnClickRankedMode());
-        //UIManager.instance.Button_FindMatch.onClick.AddListener(() => OnClickFindMatch());
-        //UIManager.instance.Button_AcceptMatch.onClick.AddListener(() => OnClickAcceptMatch());
+        UIManager.instance.Button_NormalMode.onClick.AddListener(() => OnClickNormalMode());
+        UIManager.instance.Button_RankedMode.onClick.AddListener(() => OnClickRankedMode());
+        UIManager.instance.Button_FindMatch.onClick.AddListener(() => OnClickFindMatch());
+        UIManager.instance.Button_AcceptMatch.onClick.AddListener(() => OnClickAcceptMatch());
         //UIManager.instance.Button_DelineMatch.onClick.AddListener(() => OnClickDeclineMatch());
         //UIManager.instance.Button_StopFind.onClick.AddListener(() => OnClickStopFindMatch());
 
@@ -97,6 +99,17 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         gameMode = GameMode.Normal;
     }
 
+    void OnClickTutorialMode()
+    {
+        gameMode = GameMode.Tutorial;
+    }
+
+    //button find call this function
+    void OnClickPlayWithFriendMode()
+    {
+        gameMode = GameMode.PlayWithFriend;
+    }
+
 
     void OnClickFindMatch()
     {
@@ -123,23 +136,32 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            //sysn to current room,because _myroomCustomProperties is local variable
-            _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-            _myRoomCustomProperties[K_Player.K_PlayerSide.Blue] = K_Player.K_ConfirmState.AcceptMatch;
-            _myRoomCustomProperties[K_Player.DeckBlue] = GameData.instance.selectDeck.Data.deckCode;
+            if(_myRoomCustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.Waiting))
+            {
+                //sysn to current room,because _myroomCustomProperties is local variable
+                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                _myRoomCustomProperties[K_Player.K_PlayerSide.Blue] = K_Player.K_ConfirmState.AcceptMatch;
+                _myRoomCustomProperties[K_Player.DeckBlue] = GameData.instance.selectDeck.Data.deckCode;
 
-            PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-            PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Blue;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+                PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Blue;
+
+                StopCoroutine(coroutine);
+                print("Stop Coroutine");
+            }
         }
         else
         {
-            //sysn to current room,because _myroomCustomProperties is local variable
-            _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-            _myRoomCustomProperties[K_Player.K_PlayerSide.Red] = K_Player.K_ConfirmState.AcceptMatch;
-            _myRoomCustomProperties[K_Player.DeckRed] = GameData.instance.selectDeck.Data.deckCode;
+            if(_myRoomCustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.Waiting))
+            {
+                //sysn to current room,because _myroomCustomProperties is local variable
+                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                _myRoomCustomProperties[K_Player.K_PlayerSide.Red] = K_Player.K_ConfirmState.AcceptMatch;
+                _myRoomCustomProperties[K_Player.DeckRed] = GameData.instance.selectDeck.Data.deckCode;
 
-            PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-            PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Red;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+                PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Red;
+            }
         }
     }
 
@@ -150,22 +172,25 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            //sysn to current room,because _myroomCustomProperties is local variable
-            _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-            _myRoomCustomProperties[K_Player.K_PlayerSide.Blue] = K_Player.K_ConfirmState.DeclineMatch;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-            PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Blue;
-
-            //PhotonNetwork.LeaveRoom();
+            if (_myRoomCustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.Waiting))
+            {
+                //sysn to current room,because _myroomCustomProperties is local variable
+                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                _myRoomCustomProperties[K_Player.K_PlayerSide.Blue] = K_Player.K_ConfirmState.DeclineMatch;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+                PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Blue;
+            }
         }
         else
         {
-            //sysn to current room,because _myroomCustomProperties is local variable
-            _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-            _myRoomCustomProperties[K_Player.K_PlayerSide.Red] = K_Player.K_ConfirmState.DeclineMatch;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-            PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Red;
-
+            if (_myRoomCustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.Waiting))
+            {
+                //sysn to current room,because _myroomCustomProperties is local variable
+                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                _myRoomCustomProperties[K_Player.K_PlayerSide.Red] = K_Player.K_ConfirmState.DeclineMatch;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+                PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Red;
+            }
         }
     }
 
@@ -192,7 +217,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     private void SetDataPlayerFindMatch()
     {
         Debug.Log("GetDataPlayerFindMatch()");
-        _myPlayerCustomProperties[K_Player.Elo] = PlayerHomeScene.instance.Elo;
+        _myPlayerCustomProperties[K_Player.Elo] = GameData.instance.Elo;
         _myPlayerCustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Unknow;
         PhotonNetwork.LocalPlayer.SetCustomProperties(_myPlayerCustomProperties);
     }
@@ -262,6 +287,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
     IEnumerator FindRoom()
     {
+        UIManager.instance.CounterTimeWating.ResumeTimer();
+
         print("Find room");
         print("Elo befor: " + PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo]);
         yield return new WaitUntil(() => PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo] != null); //wait to get elo score
@@ -346,26 +373,30 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         }
     }
 
-    void UIConfirmMatch()
+    public void UIConfirm()
     {
         if (PhotonNetwork.InRoom)
         {
             if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Waiting)
             {
                 Debug.Log("UI Waiting");
-                //UIManager.instance.UI_WaitingOppenent(true);
             }
             else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Ready)
             {
                 Debug.Log("UI READY");
+
                 //UIManager.instance.UI_FindMatch(false);
                 //UIManager.instance.UI_ConfirmMatchmaking(true);
                 //UIManager.instance.UI_WaitingOppenent(false);
+
+                UIManager.instance.WatingAcceptMatch(true);
+                coroutine = StartCoroutine(TimeoutWaitingAccess());
 
             }
             else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.StartMatch)
             {
                 Debug.Log("UI START");
+                UIManager.instance.TurnOnMatchingScene();
                 //UIManager.instance.UI_StartMatch(true);
                 //UIManager.instance.UI_ConfirmMatchmaking(false);
 
@@ -373,9 +404,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.CancelMatch)
             {
                 Debug.Log("UI CANCLE");
-                //UIManager.instance.UI_ConfirmMatchmaking(false);
-                //UIManager.instance.UI_WaitingOppenent(false);
-
+                UIManager.instance.WatingAcceptMatch(false);
             }
         }
     }
@@ -544,8 +573,10 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.StartMatch))
         {
             if (PhotonNetwork.IsMasterClient)
-                PhotonNetwork.LoadLevel("Match");
-            //SceneManager.LoadScene("Match");
+            {
+                print("TwoPLayerReady");
+                //PhotonNetwork.LoadLevel("Match");
+            }
         }
         //Debug.Log("RoomID: " + PhotonNetwork.CurrentRoom.Name + "\n Openn: " + PhotonNetwork.CurrentRoom.IsOpen + "\n Isvisiable: " + PhotonNetwork.CurrentRoom.IsVisible);
 
@@ -593,7 +624,20 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         return roomInfos[indexRoom];
     }
 
-
+    public IEnumerator TimeoutWaitingAccess()
+    {
+        while (true)
+        {
+            float timeWait = UIManager.instance.CountdownTimer.GetCurrentTime();
+            if (timeWait <= 0)
+            {
+                OnClickDeclineMatch();
+                break;
+            }
+            yield return new WaitForSeconds(1f);
+        }
+        yield return  null;
+    }
     #endregion
 
     #region CallBack
@@ -680,7 +724,6 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         //UI_roomID.text = "";
-
         Debug.Log("LeftRoom");
 
     }
@@ -701,7 +744,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     {
         Debug.Log("OnRoomPropertiesUpdate()");
 
-        UIConfirmMatch();
+        UIConfirm();
         ConfirmState();
     }
 
@@ -719,9 +762,12 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("Player logged out: " + cause.ToString());
-        StartCoroutine(PlayfabManager.instance.SetUserData("DeviceUniqueIdentifier", "Notyet"));
+        //StartCoroutine(PlayfabManager.instance.SetUserData("DeviceUniqueIdentifier", "Notyet"));
         // Th?c hi?n các tác v? khác t?i ?ây
     }
+
+
+
     #endregion
 }
 public static class K_Room

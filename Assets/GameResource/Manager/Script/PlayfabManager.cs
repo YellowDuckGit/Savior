@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using PlayFab.ServerModels;
+using Photon.Pun;
+using Unity.VisualScripting;
 
 public class PlayfabManager : MonoBehaviour
 {
     public static PlayfabManager instance;
 
-
+    private bool isAuthented = false; 
     //public Button loginButton;
     //public Button registerButton;
     //public Button Recovery;
@@ -19,6 +21,9 @@ public class PlayfabManager : MonoBehaviour
 
     private void Awake()
     {
+        Application.wantsToQuit += waitExitApplication;
+
+
         DontDestroyOnLoad(gameObject);
 
         if (instance != null && instance != this)
@@ -59,22 +64,30 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
-                Debug.Log(error.GenerateErrorReport());
+                if (!UIManager.instance.LoginMessage.transform.parent.gameObject.activeSelf)
+                    UIManager.instance.LoginMessage.transform.parent.gameObject.SetActive(true);
+                UIManager.instance.LoginMessage.text = "";
+                UIManager.instance.LoginMessage.text += "<align=center><b><size=200%>Login Failed</b><align=left><size=100%>\n";
 
-                if (error.ErrorDetails.ContainsKey("Username"))
-                    error.ErrorDetails["Username"].ForEach(a => print(a));
-                if (error.ErrorDetails.ContainsKey("Password"))
-                    error.ErrorDetails["Password"].ForEach(a => print(a));
+                if (error.ErrorDetails != null)
+                {
+                    if (error.ErrorDetails.ContainsKey("Username"))
+                        error.ErrorDetails["Username"].ForEach(a => UIManager.instance.LoginMessage.text += "- " + a + "\n");
+                    if (error.ErrorDetails.ContainsKey("Password"))
+                        error.ErrorDetails["Password"].ForEach(a => UIManager.instance.LoginMessage.text += "- " + a + "\n");
+                }
+                else
+                {
+                    UIManager.instance.LoginMessage.text += "- " + error.ErrorMessage + "\n";
+                }
 
-
-                UIManager.instance.LoginMessage = error.ErrorMessage;
             }, null);
 
     }
 
 
 
-    public void Register(string email, string username, string password)
+    public void Register(string email, string username, string password, string RePasssword)
     {
         RegisterPlayFabUserRequest registerRequest = new RegisterPlayFabUserRequest();
 
@@ -84,28 +97,45 @@ public class PlayfabManager : MonoBehaviour
         registerRequest.Username = username;
         registerRequest.Password = password;
 
-        Debug.Log(registerRequest.Username);
-        Debug.Log(registerRequest.Password);
-        Debug.Log(registerRequest.Email);
+        if (RePasssword.Equals(password))
+        {
+            PlayFabClientAPI.RegisterPlayFabUser(registerRequest,
+                result =>
+                {
+                    UIManager.instance.RegisterMessage.text = "Register Success";
+                    Login(username, password);
+                },
+                error =>
+                {
+                    if (!UIManager.instance.RegisterMessage.transform.parent.gameObject.activeSelf)
+                        UIManager.instance.RegisterMessage.transform.parent.gameObject.SetActive(true);
+                    UIManager.instance.RegisterMessage.text = "";
+                    UIManager.instance.RegisterMessage.text += "<align=center><b><size=200%>SignUp Failed</b><align=left><size=100%> \n";
 
-        PlayFabClientAPI.RegisterPlayFabUser(registerRequest,
-            result =>
-            {
-                UIManager.instance.RegisterMessage = "Register Success";
-            },
-            error =>
-            {
-                Debug.Log(error.GenerateErrorReport());
-                UIManager.instance.RegisterMessage = error.ErrorMessage;
-                Debug.Log(error.GenerateErrorReport());
-                if (error.ErrorDetails.ContainsKey("Username"))
-                    error.ErrorDetails["Username"].ForEach(a => print(a));
-                if (error.ErrorDetails.ContainsKey("Password"))
-                    error.ErrorDetails["Password"].ForEach(a => print(a));
-                if (error.ErrorDetails.ContainsKey("Email"))
-                    error.ErrorDetails["Email"].ForEach(a => print(a));
+                    if (error.ErrorDetails != null)
+                    {
+                        if (error.ErrorDetails.ContainsKey("Username"))
+                            error.ErrorDetails["Username"].ForEach(a => UIManager.instance.RegisterMessage.text += "- " + a + "\n");
+                        if (error.ErrorDetails.ContainsKey("Password"))
+                            error.ErrorDetails["Password"].ForEach(a => UIManager.instance.RegisterMessage.text += "- " + a + "\n");
+                        if (error.ErrorDetails.ContainsKey("Email"))
+                            error.ErrorDetails["Email"].ForEach(a => UIManager.instance.RegisterMessage.text += "- " + a + "\n");
+                    }
+                    else
+                    {
+                        UIManager.instance.RegisterMessage.text += "- " + error.ErrorMessage + "\n";
+                    }
+                });
+        }
+        else
+        {
+            if (!UIManager.instance.RegisterMessage.transform.parent.gameObject.activeSelf)
+                UIManager.instance.RegisterMessage.transform.parent.gameObject.SetActive(true);
+            UIManager.instance.RegisterMessage.text = "";
+            UIManager.instance.RegisterMessage.text += "<align=center><b><size=200%>SignUp Failed</b><align=left><size=100%> \n";
+            UIManager.instance.RegisterMessage.text += "- " + "Password and re-password do not match" + "\n";
 
-            });
+        }
 
     }
 
@@ -125,16 +155,24 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.SendAccountRecoveryEmail(request,
             result =>
             {
-                UIManager.instance.RecoverMessage = "Send mail success";
+                UIManager.instance.RecoverMessage.text = "Send mail success";
             },
             error =>
             {
-                Debug.Log(error.GenerateErrorReport());
-                UIManager.instance.RecoverMessage = error.ErrorMessage;
-                Debug.Log(error.ErrorDetails);
+                if (!UIManager.instance.RecoverMessage.transform.parent.gameObject.activeSelf)
+                    UIManager.instance.RecoverMessage.transform.parent.gameObject.SetActive(true);
+                UIManager.instance.RecoverMessage.text = "";
+                UIManager.instance.RecoverMessage.text += "<align=center><b><size=200%>Recovery Failed</b><align=left><size=100%> \n";
 
-                if (error.ErrorDetails.ContainsKey("Email") && error.ErrorDetails["Email"].Count > 0)
-                    error.ErrorDetails["Email"].ForEach(a => print(a));
+                if (error.ErrorDetails != null)
+                {
+                    if (error.ErrorDetails.ContainsKey("Email") && error.ErrorDetails["Email"].Count > 0)
+                        error.ErrorDetails["Email"].ForEach(a => UIManager.instance.RecoverMessage.text += "- " + a + "\n");
+                }
+                else
+                {
+                    UIManager.instance.RecoverMessage.text += "- " + error.ErrorMessage + "\n";
+                }
             });
     }
 
@@ -151,9 +189,10 @@ public class PlayfabManager : MonoBehaviour
                 //true
                 StartCoroutine(SetUserData("DeviceUniqueIdentifier", DeviceUniqueIdentifier));
 
-                UIManager.instance.LoginMessage = "Login Success";
+                UIManager.instance.LoginMessage.text = "Login Success";
                 //connect
                 PhotonManager.instance.ConnectToMaster();
+                isAuthented = true;
             }
             else
             {
@@ -163,13 +202,19 @@ public class PlayfabManager : MonoBehaviour
                     //true
                     StartCoroutine(SetUserData("DeviceUniqueIdentifier", DeviceUniqueIdentifier));
 
-                    UIManager.instance.LoginMessage = "Login Success";
+                    UIManager.instance.LoginMessage.text = "Login Success";
 
                     //connect
                     PhotonManager.instance.ConnectToMaster();
+                    isAuthented = true;
                 }
                 else
                 {
+
+                    if (!UIManager.instance.LoginMessage.transform.parent.gameObject.activeSelf)
+                        UIManager.instance.LoginMessage.transform.parent.gameObject.SetActive(true);
+
+                    UIManager.instance.LoginMessage.text += "This account is logged in on other computer" + "\n";
                     //false
                 }
             }
@@ -280,7 +325,7 @@ public class PlayfabManager : MonoBehaviour
         {
             PlayFab.ClientModels.ItemInstance item = result.Inventory.Single(a => a.CatalogVersion == "Reward" && a.ItemClass == "Elo");
             int elo = (int)item.RemainingUses;
-            PlayerHomeScene.instance.Elo = elo;
+            GameData.instance.Elo = elo;
             IsApiExecuting = false;
         }, (error) =>
         {
@@ -298,7 +343,7 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.GetUserInventory(request, result =>
         {
             print("INVENTORY MONEY: " + result.VirtualCurrency["MC"]);
-            PlayerHomeScene.instance.Coin = result.VirtualCurrency["MC"];
+            GameData.instance.Coin = result.VirtualCurrency["MC"];
             IsApiExecuting = false;
         }, (error) =>
         {
@@ -560,5 +605,111 @@ public class PlayfabManager : MonoBehaviour
 
     }
 
+    bool waitExitApplication()
+    {
+        print("wait");
+        if (isAuthented)
+        {
+            StartCoroutine(SetUserData("DeviceUniqueIdentifier", "Notyet"));
+            print("SetUserData");
+        }
+        return true;
+    }
+
+    #region Friend
+    public IEnumerator GetFriends()
+    {
+        bool IsApiExecuting = true;
+        PlayFabClientAPI.GetFriendsList(new PlayFab.ClientModels.GetFriendsListRequest
+        {
+            XboxToken = null
+        }, result => {
+            GameData.instance.listFriendData = result.Friends;
+            IsApiExecuting = false;
+            /*DisplayFriends(_friends);*/ // triggers your UI
+        }, DisplayPlayFabError);
+        yield return new WaitUntil(() => !IsApiExecuting);
+    }
+
+    public enum FriendIdType { PlayFabId, Username, DisplayName };
+
+    public void AddFriend(FriendIdType idType, string friendId)
+    {
+        var request = new PlayFab.ClientModels.AddFriendRequest();
+        switch (idType)
+        {
+            case FriendIdType.PlayFabId:
+                request.FriendPlayFabId = friendId;
+                break;
+            case FriendIdType.Username:
+                request.FriendUsername = friendId;
+                break;
+            case FriendIdType.DisplayName:
+                request.FriendTitleDisplayName = friendId;
+                break;
+        }
+        // Execute request and update friends when we are done
+        PlayFabClientAPI.AddFriend(request, result => {
+            Debug.Log("Friend added successfully!");
+            UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.SetActive(false);
+            UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
+            StartCoroutine(GameData.instance.LoadFriendItem());
+
+        }, (error) =>
+        {
+            UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.SetActive(true);
+            UIManager.instance.AddFriendMessage.text = error.ErrorMessage;
+        });
+    }
+
+    public IEnumerator RemoveFriend(string Username)
+    {
+        bool IsApiExecuting = true;
+        PlayFab.ClientModels.FriendInfo friendInfo = GameData.instance.listFriendData.Find(friend => friend.Username.Equals(Username));
+        
+        if(friendInfo != null)
+        {
+            Debug.Log("remove" + friendInfo.FriendPlayFabId);
+            PlayFabClientAPI.RemoveFriend(new PlayFab.ClientModels.RemoveFriendRequest
+            {
+                FriendPlayFabId = friendInfo.FriendPlayFabId
+            }, result =>
+            {
+                GameData.instance.listFriendData.Remove(friendInfo);
+                IsApiExecuting = false;
+                Debug.Log("Friend remove successfully!");
+            }, DisplayPlayFabError);
+        }
+
+        yield return new WaitUntil(() => !IsApiExecuting);
+    }
+
+    //IEnumerator RemoveFriends()
+    //{
+    //    yield return StartCoroutine(WaitForFriend());
+    //    string playFabId = "783226D757A49054";
+    //    FriendInfo selectedFriend = _friends.Find(friend => friend.FriendPlayFabId == playFabId);
+    //    Debug.Log("remove void" + selectedFriend.Username);
+    //    RemoveFriend(selectedFriend);
+    //}
+
+    //hàm delete friends
+    //public void DeleteFriend()
+    //{
+    //    StartCoroutine(RemoveFriends());
+    //}
+
+    void DisplayPlayFabError(PlayFabError error) { Debug.Log(error.GenerateErrorReport()); }
+    void DisplayError(string error) { Debug.LogError(error); }
+
+    #endregion
+
+    //IEnumerator waitToTurnOff()
+    //{
+    //    print("Cancel Quit");
+    //    yield return 
+    //    print("Quit");
+
+    //}
 
 }

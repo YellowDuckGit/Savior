@@ -33,7 +33,7 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         //deckitem in Playscene
-        if (transform.parent.gameObject.name.Equals("DeckCollection")) //DeckItem in collection
+        if (UIManager.instance.isCollection_Decks) //DeckItem in collection
         {
             //clear and destroy odd list card in deck pack
             foreach (CardInDeckPack cardInDeckPack in GameData.instance.listCardInDeckPack)
@@ -51,9 +51,9 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
                 StartCoroutine(CreateDeck());
             }
         }
-        else
+        else if(UIManager.instance.isChooseDeck)
         {
-            //UIManager.instance.LoadSeletedDeck(this.transform);
+            UIManager.instance.LoadSeletedDeck(this.transform);
         }
     }
 

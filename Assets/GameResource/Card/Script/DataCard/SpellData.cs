@@ -7,8 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.GameComponent.Card.CardComponents.Script
-{
+
     [System.Serializable]
     [CreateAssetMenu(fileName = "MC", menuName = "Scriptable Objects/SpellCard", order = 2)]
     public class SpellData : ScriptableObject, ISpellData
@@ -43,4 +42,3 @@ namespace Assets.GameComponent.Card.CardComponents.Script
         [SRLogicCard(typeof(AbstractCondition))]
         public AbstractCondition[] CardEffect;
     }
-}

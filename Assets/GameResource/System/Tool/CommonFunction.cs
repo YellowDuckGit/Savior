@@ -89,6 +89,16 @@ public static class CommonFunction
 
         return closest;
     }
+    public static List<string> GetEnumValuesAsString<T>() where T : Enum
+    {
+        List<string> values = new List<string>();
+        foreach (T enumValue in Enum.GetValues(typeof(T)))
+        {
+            values.Add(enumValue.ToString());
+        }
+        return values;
+    }
+
 }
 public static class ListExtensions
 {
@@ -283,3 +293,4 @@ public static class DataExtension
         }
     }
 }
+

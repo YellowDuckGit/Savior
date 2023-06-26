@@ -18,11 +18,11 @@ public class CountdownTimer : MonoBehaviour
     public Transform parentEffect;
     public Transform childrenEffect;
 
-    void Start()
+    private void OnEnable()
     {
-        ResetTimer();
         StartTimer();
     }
+   
 
     void Update()
     {
@@ -41,6 +41,7 @@ public class CountdownTimer : MonoBehaviour
 
     public void StartTimer()
     {
+        ResetTimer();
         isTimerRunning = true;
     }
 
@@ -51,6 +52,7 @@ public class CountdownTimer : MonoBehaviour
 
     public void ResetTimer()
     {
+        circle.fillAmount = 1;
         currentTime = totalTime;
         UpdateTimerText();
         isTimerRunning = false;
@@ -64,7 +66,6 @@ public class CountdownTimer : MonoBehaviour
 
     private void UpdateTimerText()
     {
-        Debug.Log("Updatetime");
         int minutes = Mathf.FloorToInt(currentTime / 60f);
         int seconds = Mathf.FloorToInt(currentTime % 60f);
         string timerString = string.Format("{0:00}:{1:00}", minutes, seconds);

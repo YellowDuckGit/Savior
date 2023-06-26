@@ -20,7 +20,7 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
 
     CardItem cardItem;
 
-    [SerializeField] private int numberCard;
+    private int numberCard;
 
     private void Start()
     {
@@ -72,7 +72,7 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         print("Click");
-        if (gameObject.transform.parent.name.Equals("Inventory"))
+        if (UIManager.instance.isCreateDeck)
         {
             if (PutInDeck())
             {

@@ -46,7 +46,7 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
             if(data != null && data.dropTableId.Count() > 0) 
             {
                 yield return StartCoroutine(PlayfabManager.instance.GetDropTable(data.dropTableId));
-                //UIManager.instance.ShowPopupPackDetailed(this);
+                UIManager.instance.ShowPopupPackDetailed(this);
             } else
             {
                 print("LOAD DATA DROP TABLE EMPTY");

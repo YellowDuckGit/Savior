@@ -45,8 +45,16 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        //SceneManager.LoadScene("Home");
-        UIManager.instance.TurnOnHomeScene();
         Debug.Log("OnConnectedToServer");
+        //SceneManager.LoadScene("Home");
+
+        if (UIManager.instance.isSignIn || UIManager.instance.isSignUp)
+        {
+            StartCoroutine(GameData.instance.LoadingGameProcess());
+        }
+        else if (UIManager.instance.isWatingMatch)
+        {
+            UIManager.instance.TurnOnChooseDeckScene();
+        }
     }
 }

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c373e1bef27a91041bb6e326d560b325, type: 3}
+  m_Name: FrostClaw_Part2_SP_1
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: FrostClaw_Part2_SP_1
+  <Name>k__BackingField: Resilience Shield
+  <Cost>k__BackingField: 3
+  <SpellType>k__BackingField: 1
+  <Description>k__BackingField: Grant +2|+2 for an ally
+  <CardType>k__BackingField: 1
+  <Avatar>k__BackingField: {fileID: 2100000, guid: 105db2386de7529408af13f40c78712a,
+    type: 2}
+  <RarityCard>k__BackingField: 0
+  <RegionCard>k__BackingField: 0
+  CardEffect:
+  - rid: 2363595294456414208
+  references:
+    version: 2
+    RefIds:
+    - rid: 2363595294456414208
+      type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
+        asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Action:
+        - rid: 2363595294456414209
+    - rid: 2363595294456414209
+      type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject,
+        asm: Assembly-CSharp}
+      data:
+        SelectTargetObjects:
+        - SelectTargetObject:
+            rid: 2363595294456414210
+          Effect:
+          - rid: 2363595294456414212
+    - rid: 2363595294456414210
+      type: {class: SelectTargetCard, ns: Assets.GameComponent.Card.Logic.TargetObject.Select,
+        asm: Assembly-CSharp}
+      data:
+        owner: 0
+        cardPosition: 3
+        cardType: 0
+        isDamed: 0
+    - rid: 2363595294456414212
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
+        asm: Assembly-CSharp}
+      data:
+        number: 2
+        InTurn: 0

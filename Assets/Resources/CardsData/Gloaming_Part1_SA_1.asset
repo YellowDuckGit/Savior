@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d83ba4770872246a4979a83b2197df, type: 3}
+  m_Name: Gloaming_Part1_SA_1
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: Gloaming_Part1_SA_1
+  <Name>k__BackingField: Ciara
+  <Cost>k__BackingField: 1
+  <Attack>k__BackingField: 2
+  <Hp>k__BackingField: 4
+  <Description>k__BackingField: 'Default: Ability: 1. When Charming 6+ enemies in
+    this game. Round Start: Kill Strongest Enemy with 3- Health. 2. Round End: Next
+    round, grant 0|+1 for each  Charming enemies for weakest ally 3. Each 2 rounds,
+    Charming strongest enemy'
+  <CardType>k__BackingField: 0
+  <Avatar>k__BackingField: {fileID: 2100000, guid: 9a28c1392cafb3e47a39e097f7c98ba0,
+    type: 2}
+  <RarityCard>k__BackingField: 3
+  <RegionCard>k__BackingField: 2
+  <IsCharming>k__BackingField: 0
+  <IsTreating>k__BackingField: 0
+  CardEffect: []
+  references:
+    version: 2
+    RefIds: []
