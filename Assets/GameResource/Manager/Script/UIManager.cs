@@ -43,14 +43,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button ACT_RecoverPassword;
 
     [Space(5)]
-    [Header("Recover")]
+    [Header("Friend")]
     [SerializeField] private TMP_InputField friendUserName;
     [SerializeField] Button ACT_ShowFriend;
     [SerializeField] Button ACT_AddFriend;
-    [SerializeField] Button ACT_DeleteFriend;
+    [SerializeField] Button ACT_AcceptRequest;
+    [SerializeField] Button ACT_DeclineRequest;
+
     [SerializeField] TextMeshProUGUI addFriendMessage;
-
-
+    [SerializeField] GameObject friendContainer;
+    [SerializeField] GameObject requestPanelContainer;
+     
     /// <summary>
     /// Each Variable bellow is present to one scene in game.
     /// Data type is List<GameObject> support to store list GameObject in that scene.
@@ -113,7 +116,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject PopupPackDetailed;
     [SerializeField] CountdownTimer WaitingAcceptMatch;
     [SerializeField] CounterTime counterTimeWating;
-    [SerializeField] GameObject FriendContainer;
+
 
 
 
@@ -278,16 +281,19 @@ public class UIManager : MonoBehaviour
             PopupPackDetailed.SetActive(false);
         });
         ACT_Store_Cancel.onClick.AddListener(() => PopupPackDetailed.SetActive(false));
-        ACT_NormalMode.onClick.AddListener(() => { FindMatchSystem.gameMode = global::GameMode.Normal; GameMode = "Normal"; });
-        ACT_RankedMode.onClick.AddListener(() => { FindMatchSystem.gameMode = global::GameMode.Rank; GameMode = "Rank"; });
-        ACT_PlayWithFriendMode.onClick.AddListener(() => { FindMatchSystem.gameMode = global::GameMode.PlayWithFriend; GameMode = "PlayWithFriend"; });
-        ACT_TutorialMode.onClick.AddListener(() => { FindMatchSystem.gameMode = global::GameMode.Tutorial; GameMode = "Tutorial"; });
+        ACT_NormalMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Normal; GameMode = "Normal"; });
+        ACT_RankedMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Rank; GameMode = "Rank"; });
+        ACT_PlayWithFriendMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.PlayWithFriend; GameMode = "PlayWithFriend"; });
+        ACT_TutorialMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Tutorial; GameMode = "Tutorial"; });
 
         //ACT_ShowFriend.onClick.AddListener(() => StartCoroutine(GameData.instance.LoadFriendItem(CollectionFriend)));
-        ACT_ShowFriend.onClick.AddListener(() => { FriendContainer.SetActive(!FriendContainer.activeSelf); });
+        ACT_ShowFriend.onClick.AddListener(() => { friendContainer.SetActive(!friendContainer.activeSelf); });
         ACT_AddFriend.onClick.AddListener(() => { PlayfabManager.instance.AddFriend(PlayfabManager.FriendIdType.Username, friendUserName.text); 
             });
-        //ACT_DeleteDeck.onClick.AddListener(() => { PlayfabManager.instance.RemoveFriend("vanphu02"); });
+
+        ACT_AcceptRequest.onClick.AddListener(() => { ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.AcceptRequest) + "|" + "null"); }); 
+        ACT_DeclineRequest.onClick.AddListener(() => { ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.DeclineRequest) + "|" + "null"); });
+
         #endregion
 
         TurnOn(SceneType.SignIn, true); //Default
@@ -1030,6 +1036,7 @@ public class UIManager : MonoBehaviour
         private set { this.gameMode.ForEach(a => a.text = value); }
     }
 
+
     //ACT_NormalMode.onClick.AddListener(() => OnClickNormalMode());
     //        ACT_RankedMode.onClick.AddListener(() => OnClickRankedMode());
     //        ACT_FindMatch.onClick.AddListener(() => OnClickFindMatch());
@@ -1083,6 +1090,17 @@ public class UIManager : MonoBehaviour
     public GameObject CollectionFriend
     {
         get { return this.collectionFriend; }
+
+    }
+
+    public TMP_InputField LoginUsername
+    {
+        get { return this.loginUsername; }
+    }
+
+    public GameObject RequestPanelContainer
+    {
+        get { return this.requestPanelContainer; }
 
     }
     #endregion

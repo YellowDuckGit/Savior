@@ -187,26 +187,14 @@ public class PlayfabManager : MonoBehaviour
             if (result.Data == null || !result.Data.ContainsKey("DeviceUniqueIdentifier"))
             {
                 //true
-                StartCoroutine(SetUserData("DeviceUniqueIdentifier", DeviceUniqueIdentifier));
-
-                UIManager.instance.LoginMessage.text = "Login Success";
-                //connect
-                PhotonManager.instance.ConnectToMaster();
-                isAuthented = true;
+                AuthencatonSuccess();
             }
             else
             {
                 string data = result.Data["DeviceUniqueIdentifier"].Value;
                 if (data.Equals("Notyet") || data.Equals(ID))
                 {
-                    //true
-                    StartCoroutine(SetUserData("DeviceUniqueIdentifier", DeviceUniqueIdentifier));
-
-                    UIManager.instance.LoginMessage.text = "Login Success";
-
-                    //connect
-                    PhotonManager.instance.ConnectToMaster();
-                    isAuthented = true;
+                    AuthencatonSuccess();
                 }
                 else
                 {
@@ -702,6 +690,20 @@ public class PlayfabManager : MonoBehaviour
     void DisplayPlayFabError(PlayFabError error) { Debug.Log(error.GenerateErrorReport()); }
     void DisplayError(string error) { Debug.LogError(error); }
 
+
+    void AuthencatonSuccess()
+    {
+        PlayerPrefs.SetString("USERNAME",UIManager.instance.LoginUsername.text);
+
+        StartCoroutine(SetUserData("DeviceUniqueIdentifier", DeviceUniqueIdentifier));
+        UIManager.instance.LoginMessage.text = "Login Success";
+        //connect
+        PhotonManager.instance.ConnectToMaster();
+        isAuthented = true;
+
+        //connect to chat
+        ChatManager.instance.ConnectoToPhotonChat();
+    }
     #endregion
 
     //IEnumerator waitToTurnOff()

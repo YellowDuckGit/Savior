@@ -15,9 +15,11 @@ public class FriendItem : MonoBehaviour
     private TextMeshProUGUI name;
     [SerializeField]
     private GameObject options;
+    [SerializeField]
+    private Button Options;
     private void Start()
     {
-        GetComponent<BoxCollider>().size = gameObject.GetComponent<RectTransform>().sizeDelta;
+        Options.onClick.AddListener(() => CreateDrogdownOptions());
 
     }
     public Image Avatar
@@ -32,7 +34,7 @@ public class FriendItem : MonoBehaviour
         set { name = value; }
     }
 
-    private void OnMouseDown()
+    public void CreateDrogdownOptions()
     {
         Transform x = gameObject.transform.parent.Find("DropdownButton(Clone)");
         int index = 0;
@@ -43,7 +45,7 @@ public class FriendItem : MonoBehaviour
             Destroy(x.gameObject);
         }
 
-        if ( !(index - 1 == gameObject.transform.GetSiblingIndex()))
+        if (!(index - 1 == gameObject.transform.GetSiblingIndex()))
         {
             GameObject a = GameObject.Instantiate(options);
             a.gameObject.transform.parent = gameObject.transform.parent;
@@ -51,12 +53,13 @@ public class FriendItem : MonoBehaviour
             a.transform.localPosition = Vector3.one;
             a.transform.SetSiblingIndex(gameObject.transform.GetSiblingIndex() + 1);
 
-            FriendItemDropdown friendItemDropdown = a.GetComponent<FriendItemDropdown>();   
-            a.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => { 
-               friendItemDropdown.RemoveFriendInList(name.text);
+            FriendItemDropdown friendItemDropdown = a.GetComponent<FriendItemDropdown>();
+             a.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => {
+                 ChatManager.instance.SendDirectMessage(name.text, nameof(MessageType.RequestPlay) +"|"+ "null");
+             });
+            a.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => {
+                friendItemDropdown.RemoveFriendInList(name.text);
             });
-
-
         }
     }
 

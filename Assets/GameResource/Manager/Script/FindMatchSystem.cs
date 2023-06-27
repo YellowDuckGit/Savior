@@ -11,10 +11,12 @@ using static K_Room;
 
 public enum GameMode
 {
-    Normal = 1, Rank = 2, Tutorial, PlayWithFriend
+    Normal = 1, Rank = 2, Tutorial = 3, PlayWithFriend = 4
 }
 public class FindMatchSystem : MonoBehaviourPunCallbacks
 {
+    public static FindMatchSystem instance;
+
     public string gameVersion;
 
     //List<PlayerFindMatch> listPlayerFindMatch = new List<PlayerFindMatch>();
@@ -29,7 +31,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     private bool ConfirmStateBlue = false;
 
     //gamemode
-    public static GameMode gameMode;
+    public GameMode gameMode;
 
     [Header("Matching Setting")]
     //public int limitTimeout;
@@ -43,6 +45,16 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        if (instance != null && instance != this)
+        {
+            Debug.LogError("ChatManager have 2");
+        }
+        else
+        {
+            instance = this;
+        }
+
+
         if (PhotonNetwork.IsConnected)
         {
             print("ISCONNECT");
@@ -258,7 +270,43 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             PlayerTtl = 30, //time player disconnect, can connect again
             EmptyRoomTtl = 1, //time room empty life
         };
-        PhotonNetwork.CreateRoom(CommonFunction.getNewId(), roomOptions, null);
+        
+    }
+
+    public string CreatePlayWithFriendRoom()
+    {
+        string RoomName = CommonFunction.getNewId();
+
+        _myRoomCustomProperties[K_RoomState.key] = K_Room.K_RoomState.Waiting;
+        _myRoomCustomProperties[K_PlayerSide.Red] = K_ConfirmState.Waiting;
+        _myRoomCustomProperties[K_PlayerSide.Blue] = K_ConfirmState.Waiting;
+        _myRoomCustomProperties[K_Player.DeckBlue] = "";
+        _myRoomCustomProperties[K_Player.DeckRed] = "";
+        _myRoomCustomProperties["GameMode"] = ((int)GameMode.PlayWithFriend).ToString();
+
+        string[] listProperties = {
+            K_RoomState.key,
+            K_PlayerSide.Red,
+            K_PlayerSide.Blue,
+            K_Player.DeckBlue,
+            K_Player.DeckRed,
+            "GameMode"
+        };
+
+        RoomOptions roomOptions = new RoomOptions
+        {
+            MaxPlayers = 2,
+            IsVisible = true,
+            BroadcastPropsChangeToAll = true,
+            CustomRoomPropertiesForLobby = listProperties,
+            CustomRoomProperties = _myRoomCustomProperties,
+            PlayerTtl = 30, //time player disconnect, can connect again
+            EmptyRoomTtl = 1, //time room empty life
+        };
+        PhotonNetwork.CreateRoom(RoomName, roomOptions, null);
+
+        ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.RoomPVFCreated) + "|" + RoomName);
+        return RoomName;
     }
 
     void resetPropertiesRoom()

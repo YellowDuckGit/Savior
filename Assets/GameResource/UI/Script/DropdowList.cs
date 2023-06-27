@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
-using static SerializableCallback.Arg;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class DropdowList : MonoBehaviour
 {

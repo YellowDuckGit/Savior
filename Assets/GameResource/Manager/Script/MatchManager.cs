@@ -349,7 +349,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     IEnumerator EndMatch()
     {
         print(this.debug("End Match"));
-        switch (FindMatchSystem.gameMode)
+        switch (FindMatchSystem.instance.gameMode)
         {
             case GameMode.Normal:
                 yield return StartCoroutine(ProvideReward(false));
@@ -673,7 +673,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         {
             if (localPlayerSide.Equals(K_PlayerSide.Blue))
             {
-                switch (FindMatchSystem.gameMode)
+                switch (FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
                         rewardID = rewardNormalID;
@@ -696,7 +696,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             }
             else if (localPlayerSide.Equals(K_PlayerSide.Red))
             {
-                switch (FindMatchSystem.gameMode)
+                switch (FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
                         rewardID = rewardNormalID;

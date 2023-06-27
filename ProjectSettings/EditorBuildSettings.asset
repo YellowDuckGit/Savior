@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GameResource/UI/Scene/GameScene.unity
     guid: f738cc6997f221847b77485ea6e34fbc
-  - enabled: 1
+  - enabled: 0
     path: Assets/GameResource/UI/Scene/MatchScene.unity
     guid: b83b0cc3ccfaea44d964800dfa49199a
   - enabled: 0

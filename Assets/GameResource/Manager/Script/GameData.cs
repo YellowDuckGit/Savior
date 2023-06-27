@@ -400,6 +400,9 @@ public class GameData : MonoBehaviour
                     Destroy(data.gameObject);
                 }
                 listFriendItem.Clear();
+
+                //delete  optionDropdown
+                Destroy(UIManager.instance.CollectionFriend.transform.GetChild(0).gameObject);
             }
         }
     }
@@ -582,16 +585,14 @@ public class GameData : MonoBehaviour
     {
         yield return StartCoroutine(PlayfabManager.instance.GetFriends());
         yield return StartCoroutine(InitFriendItem());
-        print("aaaaaaaa");
         yield return StartCoroutine(LoadFriendItem(UIManager.instance.CollectionFriend));
-        print("bbbbb");
 
     }
 
     public IEnumerator LoadFriendItem(GameObject parent)
     {
         print("LoadFriendItem");
-        if (listFriendItem[0].transform.parent != parent.transform)
+        if (listFriendItem.Count > 0 && listFriendItem[0].transform.parent != parent.transform)
         {
             Debug.Log("START LOAD Friend");
             foreach (FriendItem item in listFriendItem)
