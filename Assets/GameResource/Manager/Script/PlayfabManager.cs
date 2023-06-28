@@ -617,6 +617,7 @@ public class PlayfabManager : MonoBehaviour
             /*DisplayFriends(_friends);*/ // triggers your UI
         }, DisplayPlayFabError);
         yield return new WaitUntil(() => !IsApiExecuting);
+
     }
 
     public enum FriendIdType { PlayFabId, Username, DisplayName };
@@ -672,6 +673,7 @@ public class PlayfabManager : MonoBehaviour
         yield return StartCoroutine(GameData.instance.LoadFriendItem());
     }
 
+   
 
     //IEnumerator RemoveFriends()
     //{

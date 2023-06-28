@@ -13,6 +13,7 @@ public class FriendItem : MonoBehaviour
     private Image avatar;
     [SerializeField]
     private Image statusImage;
+    [SerializeField] private TextMeshProUGUI statusDescription;
     [SerializeField]
     public TextMeshProUGUI userName;
     [SerializeField]
@@ -20,22 +21,53 @@ public class FriendItem : MonoBehaviour
     [SerializeField]
     private Button Options;
 
-    private bool status = false;
+    private int status = 0;
     private void Start()
     {
         Options.onClick.AddListener(() => CreateDrogdownOptions());
 
     }
 
-    public bool Status
+    public int Status
     {
         get { return status; }
         set 
         { 
             status = value;
-            if (status)
-                statusImage.color = Color.green;
-            else statusImage.color = Color.red;
+
+            switch (status)
+            {
+                case 0: //offline 
+                    statusImage.color = Color.white;
+                    statusDescription.text = "Offline";
+                    break;
+                case 1: //invisible : Be invisible to everyone
+                    break;
+                case 2: //online 
+                    statusImage.color = Color.green;
+                    statusDescription.text = "Online";
+
+                    break;
+                case 3: //away: Online but not available
+                    statusImage.color = Color.yellow;
+                    statusDescription.text = "Away";
+
+                    break;
+                case 4: //DND: Do not disturb.
+                    statusImage.color = Color.yellow;
+                    statusDescription.text = "DND";
+
+                    break;
+                case 5: //LFS:  Looking For Game/Group. Could be used when you want to be invited or do matchmaking. More...
+                    statusImage.color = Color.blue;
+                    statusDescription.text = "LFS";
+
+                    break;
+                case 6: //Playing:
+                    statusImage.color = Color.blue;
+                    statusDescription.text = "Playing";
+                    break;
+            }
         }
     }
     public Image Avatar

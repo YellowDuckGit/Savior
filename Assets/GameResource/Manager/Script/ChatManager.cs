@@ -7,6 +7,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -17,6 +19,12 @@ public enum MessageType
 {
     RequestPlay, AcceptRequest, DeclineRequest, RoomPVFCreated, JoinedRoom, AddFriend, DeleteFriend
 }
+
+public enum PlayerStatus
+{
+    offline, invisible, online, away, dnd, lfs, playing
+}
+
 public class ChatManager  : MonoBehaviour, IChatClientListener
     {
     public static ChatManager instance;
@@ -24,7 +32,7 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
     [SerializeField] public string nickName = "";
     [SerializeField] public string nickNameFriendinvite = "";
 
-    private ChatClient chatClient;
+    public ChatClient chatClient;
 
     string FriendRoomName;
 
@@ -219,17 +227,44 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
         Debug.Log($"Photon Chat OnStatusUpdate: {user} changed to {status}: {message}");
         //PhotonStatus newStatus = new PhotonStatus(user, status, (string)message);
         Debug.Log($"Status Update for {user} and its now {status}.");
-        FriendItem friendItem =  GameData.instance.listFriendItem.Find(f => f.userName.Equals(user));
+
+        foreach(FriendItem a in GameData.instance.listFriendItem)
+        {
+            print(a.userName.text);
+        }
+        FriendItem friendItem =  GameData.instance.listFriendItem.SingleOrDefault(f => f.userName.text.Equals(user));
         if (friendItem != null)
         {
-            if (status.Equals("Online") && !friendItem.Status)
+            Debug.Log("Find");
+
+            switch (status)
             {
-                friendItem.Status = true;
+                case 0: //offline 
+                    friendItem.Status = 0;
+                    break;
+                case 1: //invisible : Be invisible to everyone
+                    friendItem.Status = 1;
+                    break;
+                case 2: //online 
+                    friendItem.Status = 2;
+                    break;
+                case 3: //away: Online but not available
+                    friendItem.Status = 3;
+                    break;
+                case 4: //DND: Do not disturb.
+                    friendItem.Status = 4;
+                    break;
+                case 5: //LFS:  Looking For Game/Group. Could be used when you want to be invited or do matchmaking. More...
+                    friendItem.Status = 5;
+                    break;
+                case 6: //Playing:
+                    friendItem.Status = 6;
+                    break;
             }
-            else if (status.Equals("Ofline") && friendItem.Status)
-            {
-                friendItem.Status = false;
-            }
+        }
+        else
+        {
+            Debug.Log("Can't Find");
         }
     
         //OnStatusUpdated?.Invoke(newStatus);

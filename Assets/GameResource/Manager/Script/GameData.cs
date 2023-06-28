@@ -584,6 +584,7 @@ public class GameData : MonoBehaviour
     public IEnumerator LoadFriendItem()
     {
         yield return StartCoroutine(PlayfabManager.instance.GetFriends());
+        PhotonManager.instance.HandlerFriendUpdate(GameData.instance.listFriendData);
         yield return StartCoroutine(InitFriendItem());
         yield return StartCoroutine(LoadFriendItem(UIManager.instance.CollectionFriend));
 
