@@ -14,7 +14,7 @@ using UnityEngine.UI;
 public enum SceneType
 {
     SignIn, SignUp, Recovery, Home, Loading, Play, PVP, PVE, StorePacks, StoreDecks, StoreSkins
-        , CollectionDecks, CollectionCards, CollectionSkins, CreateDeck, ChooseDeck, WaitingMatch, Matching
+        , CollectionDecks, CollectionCards, CollectionSkins, CreateDeck, ChooseDeck, ChooseDeckPVF, WaitingMatch, Matching
 }
 public class UIManager : MonoBehaviour
 {
@@ -49,6 +49,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button ACT_AddFriend;
     [SerializeField] Button ACT_AcceptRequest;
     [SerializeField] Button ACT_DeclineRequest;
+    [SerializeField] Button ACT_LeftRoom;
+    [SerializeField] Button ACT_Confirm;
 
     [SerializeField] TextMeshProUGUI addFriendMessage;
     [SerializeField] GameObject friendContainer;
@@ -79,6 +81,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private List<GameObject> CreateDeckScene;
     [SerializeField] private List<GameObject> ChooseDeckScene;
+    [SerializeField] private List<GameObject> ChooseDeckScenePVF;
+
 
     [SerializeField] private List<GameObject> WatingMatchScene;
     [SerializeField] private List<GameObject> MatchingScene;
@@ -104,8 +108,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject collectionFriend;
 
     //Play scene
-    [SerializeField] GameObject CollectionDeck_PlayScene;
-    [SerializeField] GameObject SelectFrame;
+    [SerializeField] GameObject collectionDeck_PlayScene;
+    [SerializeField] GameObject collectionDeckPVF_PlayScene;
+    [SerializeField] GameObject selectFrame;
+    [SerializeField] GameObject selectFramePVF;
+
 
     [Space(10)]
 
@@ -154,6 +161,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] List<Button> switchSceneCollectionSkin;
     [SerializeField] List<Button> switchSceneCreateDeck;
     [SerializeField] List<Button> switchSceneChooseDeck;
+    [SerializeField] List<Button> switchSceneChooseDeckPVF;
+
 
     [SerializeField] List<Button> switchSceneWaitingMatch;
     [SerializeField] List<Button> switchSceneMatching;
@@ -209,6 +218,7 @@ public class UIManager : MonoBehaviour
 
     public bool isCreateDeck;
     public bool isChooseDeck;
+    public bool isChooseDeckPVF;
 
     public bool isWatingMatch;
     public bool isMatchingMatch;
@@ -264,6 +274,8 @@ public class UIManager : MonoBehaviour
         switchSceneCollectionCards.ForEach(a => a.onClick.AddListener(() => TurnOnCollectionCardScene()));
         switchSceneCollectionSkin.ForEach(a => a.onClick.AddListener(() => TurnOnCollectionSkinScene()));
         switchSceneChooseDeck.ForEach(a => a.onClick.AddListener(() => TurnOnChooseDeckScene()));
+        switchSceneChooseDeckPVF.ForEach(a => a.onClick.AddListener(() => TurnOnChooseDeckPVFScene()));
+
         switchSceneCreateDeck.ForEach(a=> a.onClick.AddListener(() => TurnOnCreateDeckScene()));
         switchSceneWaitingMatch.ForEach(a => a.onClick.AddListener(() => TurnOnWatingMatchScene()));
         
@@ -288,12 +300,18 @@ public class UIManager : MonoBehaviour
 
         //ACT_ShowFriend.onClick.AddListener(() => StartCoroutine(GameData.instance.LoadFriendItem(CollectionFriend)));
         ACT_ShowFriend.onClick.AddListener(() => { friendContainer.SetActive(!friendContainer.activeSelf); });
-        ACT_AddFriend.onClick.AddListener(() => { PlayfabManager.instance.AddFriend(PlayfabManager.FriendIdType.Username, friendUserName.text); 
-            });
+        ACT_AddFriend.onClick.AddListener(() => { PlayfabManager.instance.AddFriend(PlayfabManager.FriendIdType.Username, friendUserName.text);
+            ChatManager.instance.SendDirectMessage(friendUserName.text, nameof(MessageType.AddFriend) + "|" + ChatManager.instance.nickName);
+        });
 
-        ACT_AcceptRequest.onClick.AddListener(() => { ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.AcceptRequest) + "|" + "null"); }); 
+        ACT_AcceptRequest.onClick.AddListener(() => {
+            PhotonNetwork.JoinLobby(FindMatchSystem.instance.sqlLobby_N);
+            ChatManager.instance.SendDirectMessage( ChatManager.instance.nickNameFriendinvite, nameof(MessageType.AcceptRequest) + "|" + "null");; }); 
         ACT_DeclineRequest.onClick.AddListener(() => { ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.DeclineRequest) + "|" + "null"); });
 
+
+        ACT_FindMatch.onClick.AddListener(() => { if (GameData.instance.selectDeck != null) TurnOnWatingMatchScene(); });
+        ACT_Confirm.onClick.AddListener(() => { if (GameData.instance.selectDeck != null) TurnOnMatchingScene(); });
         #endregion
 
         TurnOn(SceneType.SignIn, true); //Default
@@ -683,10 +701,35 @@ public class UIManager : MonoBehaviour
                     }
                 }
 
-                if (isCreateDeck)
+                if (isChooseDeck)
                 {
                     lastScence = presentScene;
                     presentScene = SceneType.ChooseDeck;
+                }
+
+                break;
+            case SceneType.ChooseDeckPVF:
+
+                if (isChooseDeckPVF ^ turn)
+                {
+                    if (turn)
+                    {
+                        //reset deck name
+
+                        StartCoroutine(GameData.instance.LoadDeckItems(CollectionDeckPVF_PlayScene));
+                        TurnOffSceneAlreadyShow();
+                    }
+                    isChooseDeckPVF = turn;
+                    foreach (GameObject obj in ChooseDeckScenePVF)
+                    {
+                        obj.SetActive(turn);
+                    }
+                }
+
+                if (isChooseDeckPVF)
+                {
+                    lastScence = presentScene;
+                    presentScene = SceneType.ChooseDeckPVF;
                 }
 
                 break;
@@ -828,6 +871,11 @@ public class UIManager : MonoBehaviour
             TurnOn(SceneType.ChooseDeck, false);
         }
 
+        if (isChooseDeckPVF)
+        {
+            TurnOn(SceneType.ChooseDeckPVF, false);
+        }
+
         if (isWatingMatch)
         {
             TurnOn(SceneType.WaitingMatch, false);
@@ -932,7 +980,10 @@ public class UIManager : MonoBehaviour
     {
         TurnOn(SceneType.ChooseDeck, true);
     }
-
+    public void TurnOnChooseDeckPVFScene()
+    {
+        TurnOn(SceneType.ChooseDeckPVF, true);
+    }
     public void TurnOnWatingMatchScene()
     {
         TurnOn(SceneType.WaitingMatch, true);
@@ -976,28 +1027,28 @@ public class UIManager : MonoBehaviour
             deckName.ForEach(a=>a.text = GameData.instance.selectDeck.Data.deckName);
     }
 
-    public void LoadSeletedDeck(Transform deck)
+    public void LoadSeletedDeck(Transform deck, GameObject oldParent, GameObject newParent)
     {
-        if (SelectFrame.transform.childCount == 0)
+        if (newParent.transform.childCount == 0)
         {
-            deck.parent = SelectFrame.transform;
+            deck.parent = newParent.transform;
             GameData.instance.selectDeck = deck.gameObject.GetComponent<DeckItem>();
         }
-        else if (SelectFrame.transform.childCount == 1)
+        else if (newParent.transform.childCount == 1)
         {
             //get children form select frame
-            DeckItem deckItemChildren = SelectFrame.GetComponentInChildren<DeckItem>();
+            DeckItem deckItemChildren = newParent.GetComponentInChildren<DeckItem>();
 
             //click deckItem in select frame
             if (deckItemChildren.transform == deck.transform)
             {
-                deck.parent = CollectionDeck_PlayScene.transform;
+                deck.parent = newParent.transform;
                 GameData.instance.selectDeck = null;
             }
             else
             {
-                deckItemChildren.transform.parent = CollectionDeck_PlayScene.transform;
-                deck.parent = SelectFrame.transform;
+                deckItemChildren.transform.parent = newParent.transform;
+                deck.parent = newParent.transform;
                 GameData.instance.selectDeck = deck.gameObject.GetComponent<DeckItem>();
             }
         }
@@ -1101,8 +1152,31 @@ public class UIManager : MonoBehaviour
     public GameObject RequestPanelContainer
     {
         get { return this.requestPanelContainer; }
-
     }
+
+    public GameObject CollectionDeck_PlayScene
+    {
+        get { return this.collectionDeck_PlayScene; }
+    }
+
+    public GameObject CollectionDeckPVF_PlayScene
+    {
+        get { return this.collectionDeckPVF_PlayScene; }
+    }
+    public GameObject SelectFrame
+    {
+        get { return this.selectFrame; }
+    }
+
+    public GameObject SelectFramePVF
+    {
+        get { return this.selectFramePVF; }
+    }
+
+    //[SerializeField] GameObject collectionDeck_PlayScene;
+    //[SerializeField] GameObject collectionDeckPVF_PlayScene;
+    //[SerializeField] GameObject selectFrame;
+    //[SerializeField] GameObject selectFramePVF;
     #endregion
 
     #region Notification UI Function

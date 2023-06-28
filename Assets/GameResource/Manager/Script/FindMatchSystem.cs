@@ -23,8 +23,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     List<RoomInfo> roomRankedInfos = new List<RoomInfo>();
     List<RoomInfo> roomNormalInfos = new List<RoomInfo>();
 
-    private TypedLobby sqlLobby_N = new TypedLobby("Normal", LobbyType.SqlLobby);
-    private TypedLobby sqlLobby_R = new TypedLobby("Rank", LobbyType.SqlLobby);
+    public TypedLobby sqlLobby_N = new TypedLobby("Normal", LobbyType.SqlLobby);
+    public TypedLobby sqlLobby_R = new TypedLobby("Rank", LobbyType.SqlLobby);
 
     //state properties
     private bool ConfirmStateRed = false;
@@ -272,10 +272,12 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         };
         
     }
-
+    #region PVF
     public string CreatePlayWithFriendRoom()
     {
-        string RoomName = CommonFunction.getNewId();
+
+        //string RoomName = CommonFunction.getNewId();
+        string RoomName = "Room";
 
         _myRoomCustomProperties[K_RoomState.key] = K_Room.K_RoomState.Waiting;
         _myRoomCustomProperties[K_PlayerSide.Red] = K_ConfirmState.Waiting;
@@ -303,12 +305,29 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             PlayerTtl = 30, //time player disconnect, can connect again
             EmptyRoomTtl = 1, //time room empty life
         };
-        PhotonNetwork.CreateRoom(RoomName, roomOptions, null);
+        string[] expectedUser = new string[] {ChatManager.instance.nickNameFriendinvite, ChatManager.instance.nickName};
+
+        print("CreateRoom");
+        PhotonNetwork.CreateRoom(RoomName, roomOptions, sqlLobby_N, null);
 
         ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.RoomPVFCreated) + "|" + RoomName);
         return RoomName;
     }
 
+    public void Confirm()
+    {
+        if (PhotonNetwork.IsMasterClient) //blue
+        {
+            PhotonNetwork.CurrentRoom.CustomProperties[K_Player.DeckBlue] = GameData.instance.selectDeck.Data.deckCode;
+            PhotonNetwork.CurrentRoom.CustomProperties[K_PlayerSide.Blue] = K_ConfirmState.AcceptMatch;
+        }
+        else //red
+        {
+            PhotonNetwork.CurrentRoom.CustomProperties[K_Player.DeckRed] = GameData.instance.selectDeck.Data.deckCode;
+            PhotonNetwork.CurrentRoom.CustomProperties[K_PlayerSide.Red] = K_ConfirmState.AcceptMatch;
+        }
+    }
+    #endregion
     void resetPropertiesRoom()
     {
         string elo = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo].ToString();
@@ -410,12 +429,30 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.InRoom)
             {
-                //sysn to current room,because _myroomCustomProperties is local variable
-                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-                _myRoomCustomProperties[K_Room.K_RoomState.key] = K_Room.K_RoomState.Ready;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-                Debug.Log("Player Join Room -> Ready");
-                break;
+                string RoomGameMode = PhotonNetwork.CurrentRoom.CustomProperties["GameMode"].ToString();
+                print("ROOMGAMEMODE: " + RoomGameMode);
+                if (RoomGameMode ==  ((int)GameMode.Rank).ToString() || RoomGameMode == ((int)GameMode.Normal).ToString())
+                {
+                    //sysn to current room,because _myroomCustomProperties is local variable
+                    _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                    _myRoomCustomProperties[K_Room.K_RoomState.key] = K_Room.K_RoomState.Ready;
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+                    Debug.Log("Player Join Room -> Ready");
+                    break;
+                }
+                else if (RoomGameMode == ((int)GameMode.PlayWithFriend).ToString())
+                {
+                    Debug.Log("GameMode PlayWithFriend");
+                    UIManager.instance.TurnOnChooseDeckPVFScene();
+                    ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.JoinedRoom) + "|null");
+                    break;
+                }
+                else
+                {
+                    Debug.LogError("GameMode Undifine");
+                    break;
+                }
+
             }
             yield return null;
         }
@@ -758,6 +795,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
+        print(message);
         Debug.Log("OnJoinRoomFailed");
         string elo = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo].ToString();
         CreateRoomMatch(elo);
@@ -801,7 +839,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     {
         Debug.Log("OnPlayerPropertiesUpdate()");
     }
-
+        
     public void OnClickLogoutButton()
     {
         PhotonNetwork.Disconnect();

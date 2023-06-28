@@ -280,7 +280,7 @@ public class GameData : MonoBehaviour
         {
             Debug.Log("Friend ITEMS");
             FriendItem friend = GameObject.Instantiate(FriendPrefab, Vector3.zero, Quaternion.identity).GetComponent<FriendItem>();
-            friend.Name.text = data.Username;
+            friend.userName.text = data.Username;
             friend.gameObject.SetActive(false);
             listFriendItem.Add(friend);
             Debug.Log("END Friend ITEMS");

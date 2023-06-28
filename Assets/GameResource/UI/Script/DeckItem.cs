@@ -50,10 +50,13 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
             {
                 StartCoroutine(CreateDeck());
             }
+        }else if (UIManager.instance.isChooseDeckPVF)
+        {
+            UIManager.instance.LoadSeletedDeck(this.transform,UIManager.instance.CollectionDeckPVF_PlayScene,UIManager.instance.SelectFramePVF);
         }
         else if(UIManager.instance.isChooseDeck)
         {
-            UIManager.instance.LoadSeletedDeck(this.transform);
+            UIManager.instance.LoadSeletedDeck(this.transform,UIManager.instance.CollectionDeck_PlayScene,UIManager.instance.SelectFrame);
         }
     }
 

@@ -15,14 +15,14 @@ using static UnityEngine.Rendering.PostProcessing.HistogramMonitor;
 
 public enum MessageType
 {
-    RequestPlay, AcceptRequest, DeclineRequest, RoomPVFCreated
+    RequestPlay, AcceptRequest, DeclineRequest, RoomPVFCreated, JoinedRoom, AddFriend, DeleteFriend
 }
 public class ChatManager  : MonoBehaviour, IChatClientListener
     {
     public static ChatManager instance;
 
-    [SerializeField] private string nickName;
-    [SerializeField] public string nickNameFriendinvite;
+    [SerializeField] public string nickName = "";
+    [SerializeField] public string nickNameFriendinvite = "";
 
     private ChatClient chatClient;
 
@@ -45,7 +45,7 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
 
     private void Awake()
     {
-        nickName = PlayerPrefs.GetString("USERNAME");
+     
     }
     private void OnDestroy()
     {
@@ -65,6 +65,8 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
 
     public void ConnectoToPhotonChat()
     {
+        nickName = PlayerPrefs.GetString("USERNAME");
+
         chatClient = new ChatClient(this);
         Debug.Log("Connecting to Photon Chat");
         chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion,
@@ -141,28 +143,51 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
                     string[] decodeMessage = message.ToString().Split('|');
                     if(decodeMessage.Length > 0)
                     {
-                        string typeMessage = decodeMessage[0];
-                        string content = decodeMessage[1]; //nane rooom
+                        string typeMessage = decodeMessage[0].Trim();
+                        string content = decodeMessage[1].Trim(); //nane rooom
                         switch (typeMessage)
                         {
                             case nameof(MessageType.RequestPlay):
                                 print("RequestPlay");
-                                nickNameFriendinvite = sender;
-                                //popup
-                                UIManager.instance.RequestPanelContainer.SetActive(true);   
+                                if (nickNameFriendinvite.Equals(""))
+                                {
+                                    nickNameFriendinvite = sender;
+                                    //popup
+                                    UIManager.instance.RequestPanelContainer.SetActive(true);
+                                }else
+                                {
+                                    Debug.LogError("Friend On Request Invite: "+nickNameFriendinvite);
+                                    
+                                }
                                 break;
 
                             case nameof(MessageType.AcceptRequest):
                                 print("AcceptRequest");
                                 nickNameFriendinvite = sender;
+                                //PhotonNetwork.JoinLobby(FindMatchSystem.instance.sqlLobby_N);
                                 FriendRoomName = FindMatchSystem.instance.CreatePlayWithFriendRoom();
                                 break;
                             case nameof(MessageType.DeclineRequest):
+                                nickNameFriendinvite = null;
                                 print("DeclineRequest");
                                 break;
                             case nameof(MessageType.RoomPVFCreated):
+                                print(content);
                                 PhotonNetwork.JoinRoom(content);
                                 print("RoomPVFCreated");
+                                break;
+                            case nameof(MessageType.JoinedRoom):
+                                UIManager.instance.TurnOnChooseDeckPVFScene();
+                                print("RoomPVFCreated");
+                                break;
+                        ////////////////////////////////////////////////////////
+                            case nameof(MessageType.AddFriend):
+                                PlayfabManager.instance.AddFriend(PlayfabManager.FriendIdType.Username, content);
+                                print("AddFriend");
+                                break;
+                            case nameof(MessageType.DeleteFriend):
+                                StartCoroutine(PlayfabManager.instance.RemoveFriend(content));
+                                print("Delete");
                                 break;
                         }
                     }
@@ -194,6 +219,19 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
         Debug.Log($"Photon Chat OnStatusUpdate: {user} changed to {status}: {message}");
         //PhotonStatus newStatus = new PhotonStatus(user, status, (string)message);
         Debug.Log($"Status Update for {user} and its now {status}.");
+        FriendItem friendItem =  GameData.instance.listFriendItem.Find(f => f.userName.Equals(user));
+        if (friendItem != null)
+        {
+            if (status.Equals("Online") && !friendItem.Status)
+            {
+                friendItem.Status = true;
+            }
+            else if (status.Equals("Ofline") && friendItem.Status)
+            {
+                friendItem.Status = false;
+            }
+        }
+    
         //OnStatusUpdated?.Invoke(newStatus);
     }
 

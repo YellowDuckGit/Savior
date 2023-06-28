@@ -121,7 +121,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatar: {fileID: 5834612400164416929}
-  name: {fileID: 4755790982048834606}
+  statusImage: {fileID: 1282455557634070623}
+  userName: {fileID: 4755790982048834606}
   options: {fileID: 9102082641850957692, guid: 9e0eca7b0f08a4e4a828617c8d75fe1d, type: 3}
   Options: {fileID: 425390804787548958}
 --- !u!1 &285196038403374510

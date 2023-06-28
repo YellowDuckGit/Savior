@@ -668,9 +668,10 @@ public class PlayfabManager : MonoBehaviour
                 Debug.Log("Friend remove successfully!");
             }, DisplayPlayFabError);
         }
-
         yield return new WaitUntil(() => !IsApiExecuting);
+        yield return StartCoroutine(GameData.instance.LoadFriendItem());
     }
+
 
     //IEnumerator RemoveFriends()
     //{
