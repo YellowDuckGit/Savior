@@ -1,4 +1,6 @@
 using Assets.GameComponent.UI.CreateDeck.UI.Script;
+using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public enum SceneType
 {
@@ -73,11 +76,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> PlayPVEScene;
     [SerializeField] private List<GameObject> Collection_DecksScene;
     [SerializeField] private List<GameObject> Collection_CardsScene;
-    [SerializeField] private List<GameObject> Collection_SkinScene;
 
     [SerializeField] private List<GameObject> StorePacksScene;
     [SerializeField] private List<GameObject> StoreDecksScene;
-    [SerializeField] private List<GameObject> StoreSkinsScene;
 
     [SerializeField] private List<GameObject> CreateDeckScene;
     [SerializeField] private List<GameObject> ChooseDeckScene;
@@ -103,7 +104,6 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] GameObject StorePacks;
     [SerializeField] GameObject StoreDecks;
-    [SerializeField] GameObject StoreSkins;
 
     [SerializeField] GameObject collectionFriend;
 
@@ -119,10 +119,12 @@ public class UIManager : MonoBehaviour
 
     [Header("Panel")]
     [Space(5)]
+    [SerializeField] GameObject SettingPanel;
     [SerializeField] GameObject LoadingAPIPanel;
     [SerializeField] GameObject PopupPackDetailed;
     [SerializeField] CountdownTimer WaitingAcceptMatch;
     [SerializeField] CounterTime counterTimeWating;
+    [SerializeField] GameObject PanelErrorMessage;
 
 
 
@@ -134,10 +136,13 @@ public class UIManager : MonoBehaviour
     [Space(5)]
     //Create Card Scene
     [SerializeField] List<TextMeshProUGUI> numberCardInDeck;
-    [SerializeField] List<TextMeshProUGUI> deckName;    
+   // [SerializeField] List<TMP_InputField> deckNameCraeteDeck;
+    [SerializeField] List<TMP_InputField> deckName;    
     [SerializeField] List<TextMeshProUGUI> gameMode;
     [SerializeField] List<TextMeshProUGUI> elo;
     [SerializeField] List<TextMeshProUGUI> virtualMoney;
+    [SerializeField] List<TextMeshProUGUI> username;
+    [SerializeField] List<TextMeshProUGUI> usernameOpponent;
 
 
     [Space(10)]
@@ -149,16 +154,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] List<Button> switchSceneRecovery;
     [SerializeField] List<Button> switchSceneHome;
     [SerializeField] List<Button> switchScenePlay;
-    [SerializeField] List<Button> switchScenePlayPVP;
-    [SerializeField] List<Button> switchScenePlayPVE;
 
     [SerializeField] List<Button> switchSceneStorePacks;
     [SerializeField] List<Button> switchSceneStoreDecks;
-    [SerializeField] List<Button> switchSceneStoreSkins;
 
     [SerializeField] List<Button> switchSceneCollectionDecks;
     [SerializeField] List<Button> switchSceneCollectionCards;
-    [SerializeField] List<Button> switchSceneCollectionSkin;
     [SerializeField] List<Button> switchSceneCreateDeck;
     [SerializeField] List<Button> switchSceneChooseDeck;
     [SerializeField] List<Button> switchSceneChooseDeckPVF;
@@ -205,8 +206,6 @@ public class UIManager : MonoBehaviour
     public bool isHome;
     public bool isLoading;
     public bool isPlay;
-    public bool isPlayPVP;
-    public bool isPlayPVE;
 
     public bool isCollection_Decks;
     public bool isCollection_Cards;
@@ -228,7 +227,24 @@ public class UIManager : MonoBehaviour
     //[Space(5)]
     //[SerializeField] Outline selectCardOutLine;
 
+    #region Feedback
+    [Space(10)]
+    [Header("Feedback")]
+    [Space(5)]
+    [SerializeField]
+    private MMFeedbacks FaderRound;
+    [SerializeField]
+    private MMFeedbacks Fader;
+    [SerializeField]
+    private MMFeedbacks FaderDirectional;
 
+    #endregion
+
+    [Space(10)]
+    [Header("VFX")]
+    [Space(5)]
+    [SerializeField]
+    private VisualEffect VFXTimer;
 
     /// <summary>
     /// Store Last Scene Name and Present Scene Name
@@ -261,18 +277,15 @@ public class UIManager : MonoBehaviour
         #endregion
 
         #region Add Button Event
+        switchSceneHome.ForEach(a=> a.onClick.AddListener(() => TurnOnHomeScene()));
         switchSceneSignUp.ForEach(a=>a.onClick.AddListener(() => TurnOnSignUpScene()));
         switchSceneRecovery.ForEach(a => a.onClick.AddListener(() => TurnOnRecoveryScene()));
         switchSceneSignIn.ForEach(a => a.onClick.AddListener(() => TurnOnSignInScene()));
         switchScenePlay.ForEach(a => a.onClick.AddListener(() => TurnOnPlayScene()));
-        switchScenePlayPVP.ForEach(a => a.onClick.AddListener(() => TurnOnPlayPVPScene()));
-        switchScenePlayPVE.ForEach(a => a.onClick.AddListener(() => TurnOnPlayPVEScene()));
         switchSceneStorePacks.ForEach(a => a.onClick.AddListener(() => TurnOnStorePacksScene()));
         switchSceneStoreDecks.ForEach(a => a.onClick.AddListener(() => TurnOnStoreDecksScene()));
-        switchSceneStoreSkins.ForEach(a => a.onClick.AddListener(() => TurnOnStoreSkinsScene()));
         switchSceneCollectionDecks.ForEach(a => a.onClick.AddListener(() => TurnOnCollectionDeckScene()));
         switchSceneCollectionCards.ForEach(a => a.onClick.AddListener(() => TurnOnCollectionCardScene()));
-        switchSceneCollectionSkin.ForEach(a => a.onClick.AddListener(() => TurnOnCollectionSkinScene()));
         switchSceneChooseDeck.ForEach(a => a.onClick.AddListener(() => TurnOnChooseDeckScene()));
         switchSceneChooseDeckPVF.ForEach(a => a.onClick.AddListener(() => TurnOnChooseDeckPVFScene()));
 
@@ -295,8 +308,8 @@ public class UIManager : MonoBehaviour
         ACT_Store_Cancel.onClick.AddListener(() => PopupPackDetailed.SetActive(false));
         ACT_NormalMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Normal; GameMode = "Normal"; });
         ACT_RankedMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Rank; GameMode = "Rank"; });
-        ACT_PlayWithFriendMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.PlayWithFriend; GameMode = "PlayWithFriend"; });
-        ACT_TutorialMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Tutorial; GameMode = "Tutorial"; });
+        //ACT_PlayWithFriendMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.PlayWithFriend; GameMode = "PlayWithFriend"; });
+        //ACT_TutorialMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Tutorial; GameMode = "Tutorial"; });
 
         //ACT_ShowFriend.onClick.AddListener(() => StartCoroutine(GameData.instance.LoadFriendItem(CollectionFriend)));
         ACT_ShowFriend.onClick.AddListener(() => { friendContainer.SetActive(!friendContainer.activeSelf); });
@@ -335,6 +348,12 @@ public class UIManager : MonoBehaviour
     #region TurnOn, TurnOff Scene
     private void TurnOn(SceneType type, bool turn)
     {
+        if (type != SceneType.Home && turn) 
+        {
+            Fader.PlayFeedbacks();
+            //FaderDirectional.PlayFeedbacks();
+        }
+         
         print("Type: "+type+" Turn: "+turn);
         switch (type)
         {
@@ -414,6 +433,7 @@ public class UIManager : MonoBehaviour
                 {
                     if (turn)
                     {
+                        FaderRound.PlayFeedbacks();
                         TurnOffSceneAlreadyShow();
                         // LOAD MONEY VIRTUAL
 
@@ -474,53 +494,6 @@ public class UIManager : MonoBehaviour
                 }
                 break;
 
-            case SceneType.PVP:
-                if (isPlayPVP ^ turn)
-                {
-                    if (turn)
-                    {
-                        //StartCoroutine(GameData.instance.LoadDeckItems(CollectionDeck_PlayScene));
-                        //GameData.instance.UnLoadCardInDeckPack();
-                        TurnOffSceneAlreadyShow();
-
-                    }
-                    isPlayPVP = turn;
-                    foreach (GameObject obj in PlayPVPScene)
-                    {
-                        obj.SetActive(turn);
-                    }
-                }
-
-                if (isPlayPVP)
-                {
-                    lastScence = presentScene;
-                    presentScene = SceneType.PVP;
-                }
-                break;
-
-            case SceneType.PVE:
-                if (isPlayPVE ^ turn)
-                {
-                    if (turn)
-                    {
-                        //StartCoroutine(GameData.instance.LoadDeckItems(CollectionDeck_PlayScene));
-                        //GameData.instance.UnLoadCardInDeckPack();
-                        TurnOffSceneAlreadyShow();
-                    }
-                    isPlayPVE = turn;
-                    foreach (GameObject obj in PlayPVEScene)
-                    {
-                        obj.SetActive(turn);
-                    }
-                }
-
-                if (isPlayPVE)
-                {
-                    lastScence = presentScene;
-                    presentScene = SceneType.PVE;
-                }
-                break;
-
             case SceneType.CollectionDecks:
                 if (isCollection_Decks ^ turn)
                 {
@@ -565,28 +538,7 @@ public class UIManager : MonoBehaviour
                     presentScene = SceneType.CollectionCards;
                 }
                 break;
-            case SceneType.CollectionSkins:
-
-                if (isCollection_Skins ^ turn)
-                {
-                    if (turn)
-                    {
-                        //StartCoroutine(GameData.instance.LoadCardCollection(CollectionCard));
-                        TurnOffSceneAlreadyShow();
-                    }
-                    isCollection_Skins = turn;
-                    foreach (GameObject obj in Collection_SkinScene)
-                    {
-                        obj.SetActive(turn);
-                    }
-                }
-
-                if (isCollection_Skins)
-                {
-                    lastScence = presentScene;
-                    presentScene = SceneType.CollectionSkins;
-                }
-                break;
+           
             case SceneType.StorePacks:
 
                 if (isStorePacks ^ turn)
@@ -631,28 +583,7 @@ public class UIManager : MonoBehaviour
                     presentScene = SceneType.StoreDecks;
                 }
                 break;
-            case SceneType.StoreSkins:
-
-                if (isStoreSkins ^ turn)
-                {
-                    if (turn)
-                    {
-                        //StartCoroutine(GameData.instance.LoadPack(StoreSkins));
-                        TurnOffSceneAlreadyShow();
-                    }
-                    isStoreSkins = turn;
-                    foreach (GameObject obj in StoreSkinsScene)
-                    {
-                        obj.SetActive(turn);
-                    }
-                }
-
-                if (isStoreSkins)
-                {
-                    lastScence = presentScene;
-                    presentScene = SceneType.StoreSkins;
-                }
-                break;
+           
             case SceneType.CreateDeck:
 
                 Debug.Log("CreateDeck: " + turn);
@@ -661,12 +592,11 @@ public class UIManager : MonoBehaviour
                     if (turn)
                     {
                         StartCoroutine(GameData.instance.LoadCardCollection(CreateDeck_CollectionCard));
-                        //reset deck name
-                        LoadDeckName();
                         StartCoroutine(GameData.instance.LoadCardInDeckPack(CreateDeck_CardInDeck));
-
                         //StartCoroutine(GameData.instance.LoadCardInInventoryUser(CardInventory));
-                        //LoadNumberCardInDeck(GameData.instance.getNumberCardInDeck());
+                        LoadDeckName();
+                        LoadNumberCardInDeck(GameData.instance.getNumberCardInDeck());
+
                         TurnOffSceneAlreadyShow();
                     }
                     isCreateDeck = turn;
@@ -821,15 +751,6 @@ public class UIManager : MonoBehaviour
             TurnOn(SceneType.Play, false);
         }
 
-        if (isPlayPVP)
-        {
-            TurnOn(SceneType.PVP, false);
-        }
-
-        if (isPlayPVE)
-        {
-            TurnOn(SceneType.PVE, false);
-        }
 
         if (isStorePacks)
         {
@@ -879,6 +800,7 @@ public class UIManager : MonoBehaviour
         if (isWatingMatch)
         {
             TurnOn(SceneType.WaitingMatch, false);
+            FindMatchSystem.instance.OnClickDeclineMatch();
         }
 
         if (isMatchingMatch)
@@ -953,6 +875,7 @@ public class UIManager : MonoBehaviour
     {
         TurnOn(SceneType.CreateDeck, true);
         ACT_SaveDeck.onClick.RemoveAllListeners();
+        GameData.instance.selectDeck = null;
         ACT_SaveDeck.onClick.AddListener(() => StartCoroutine(CollectionManager.instance.CreateDeck()));
     }
     public void TurnOnUpdateDeckScene()
@@ -1018,36 +941,42 @@ public class UIManager : MonoBehaviour
 
     public void LoadNumberCardInDeck(int amount)
     {
-        numberCardInDeck[0].text = "Deck: " + amount + "/" + CollectionManager.instance.LimitNumberCardInDeck;
+        numberCardInDeck[0].text = amount + "/" + CollectionManager.instance.LimitNumberCardInDeck;
     }
 
     public void LoadDeckName()
     {
         if (GameData.instance.selectDeck != null)
             deckName.ForEach(a=>a.text = GameData.instance.selectDeck.Data.deckName);
+        else
+        {
+            deckName.ForEach(a => a.text = "");
+        }
     }
 
     public void LoadSeletedDeck(Transform deck, GameObject oldParent, GameObject newParent)
     {
-        if (newParent.transform.childCount == 0)
+
+        DeckItem deckItemChildren = newParent.GetComponentInChildren<DeckItem>();
+
+        if (deckItemChildren == null)
         {
             deck.parent = newParent.transform;
             GameData.instance.selectDeck = deck.gameObject.GetComponent<DeckItem>();
         }
-        else if (newParent.transform.childCount == 1)
+        else 
         {
             //get children form select frame
-            DeckItem deckItemChildren = newParent.GetComponentInChildren<DeckItem>();
 
             //click deckItem in select frame
             if (deckItemChildren.transform == deck.transform)
             {
-                deck.parent = newParent.transform;
+                deck.parent = oldParent.transform;
                 GameData.instance.selectDeck = null;
             }
             else
             {
-                deckItemChildren.transform.parent = newParent.transform;
+                deckItemChildren.transform.parent = oldParent.transform;
                 deck.parent = newParent.transform;
                 GameData.instance.selectDeck = deck.gameObject.GetComponent<DeckItem>();
             }
@@ -1056,16 +985,19 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region Get Set
+
+
     public string DeckName
     {
         get { return deckName[0].text; }
-        private set { this.deckName.ForEach(a=>a.text = value); }
+        set { this.deckName.ForEach(a=>a.text = value);
+        }
     }
 
     string Elo
     {
         get { return elo[0].text; }
-        set { this.elo.ForEach(a => a.text = "Elo: " + value); }
+        set { this.elo.ForEach(a => a.text = "Ranking Score: " + value); }
     }
 
     public string NumberCardInDeck
@@ -1080,6 +1012,13 @@ public class UIManager : MonoBehaviour
         get { return virtualMoney[0].text; }
         private set { virtualMoney.ForEach(a=>a.text = value); }
     }
+
+    public string UserName
+    {
+        get { return username[0].text; }
+       set { username.ForEach(a => a.text = value); }
+    }
+
 
     public string GameMode
     {
@@ -1235,19 +1174,26 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI LoginMessage
     {
         get { return loginMessage; }
-        private set { loginMessage = value; }
+        private set { loginMessage = value; 
+        EnableLoadingAPI(false);
+
+        }
     }
 
     public TextMeshProUGUI RegisterMessage
     {
         get { return regMessage; }
-        private set { regMessage = value; }
+        private set { regMessage = value;
+            EnableLoadingAPI(false);
+        }
     }
 
     public TextMeshProUGUI RecoverMessage
     {
         get { return recoverMessage; }
-        private set { recoverMessage = value; }
+        private set { recoverMessage = value;
+        EnableLoadingAPI(false);
+        }
     }
     #endregion
 
@@ -1259,6 +1205,24 @@ public class UIManager : MonoBehaviour
     public void EnableLoadingAPI(bool enable)
     {
         LoadingAPIPanel.SetActive(enable);
+    }
+
+    public void EnablePanelErrorMessage(bool enable, string mess = null)
+    {
+        TextMeshProUGUI text = PanelErrorMessage.GetComponentInChildren<TextMeshProUGUI>();
+        if (enable)
+        {
+            text.text = mess;
+            PanelErrorMessage.gameObject.SetActive(true);   
+            PanelErrorMessage.transform.parent.gameObject.SetActive(true);
+        }
+        else
+        {
+            text.text = mess;
+            PanelErrorMessage.gameObject.SetActive(false);
+            PanelErrorMessage.transform.parent.gameObject.SetActive(false);
+        }
+
     }
 
     public void ShowPopupPackDetailed(PackItem item)
@@ -1301,7 +1265,25 @@ public class UIManager : MonoBehaviour
 
     public void WatingAcceptMatch(bool enable)
     {
-        WaitingAcceptMatch.transform.parent.gameObject.SetActive(enable);
+        if(ACT_AcceptMatch.gameObject.activeSelf != enable) 
+        ACT_AcceptMatch.gameObject.SetActive(enable);
+
+        if (enable)
+        {
+            if (!WaitingAcceptMatch.isTimerRunning)
+            {
+                WaitingAcceptMatch.StartTimer();
+                VFXTimer.SendEvent("OnPlay");
+            }
+        }
+        else 
+        {
+            {
+                WaitingAcceptMatch.PauseTimer();
+                VFXTimer.SendEvent("OnStop");
+            }
+        }
+
     }
     #endregion
 }

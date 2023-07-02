@@ -48,9 +48,21 @@ public class PlayfabManager : MonoBehaviour
     #endregion
 
     #region Account
+    public void TurnOffApllication()
+    {
+        Application.Quit();
+    }
+
+    public void Logout()
+    {
+        PlayFabClientAPI.ForgetAllCredentials();
+        PhotonNetwork.Disconnect();
+        ChatManager.instance.chatClient.Disconnect();
+    }
+
     public void Login(string username, string password)
     {
-
+        UIManager.instance.EnableLoadingAPI(true);
 
         Debug.Log("Click LOGIn");
         LoginWithPlayFabRequest loginRequest = new LoginWithPlayFabRequest();
@@ -80,6 +92,7 @@ public class PlayfabManager : MonoBehaviour
                 {
                     UIManager.instance.LoginMessage.text += "- " + error.ErrorMessage + "\n";
                 }
+                UIManager.instance.EnableLoadingAPI(false);
 
             }, null);
 
@@ -89,6 +102,7 @@ public class PlayfabManager : MonoBehaviour
 
     public void Register(string email, string username, string password, string RePasssword)
     {
+        UIManager.instance.EnableLoadingAPI(true);
         RegisterPlayFabUserRequest registerRequest = new RegisterPlayFabUserRequest();
 
         registerRequest.RequireBothUsernameAndEmail = true;
@@ -102,7 +116,6 @@ public class PlayfabManager : MonoBehaviour
             PlayFabClientAPI.RegisterPlayFabUser(registerRequest,
                 result =>
                 {
-                    UIManager.instance.RegisterMessage.text = "Register Success";
                     Login(username, password);
                 },
                 error =>
@@ -125,6 +138,9 @@ public class PlayfabManager : MonoBehaviour
                     {
                         UIManager.instance.RegisterMessage.text += "- " + error.ErrorMessage + "\n";
                     }
+
+                    UIManager.instance.EnableLoadingAPI(false);
+
                 });
         }
         else
@@ -141,7 +157,7 @@ public class PlayfabManager : MonoBehaviour
 
     public void RecoverUser(string email)
     {
-
+        UIManager.instance.EnableLoadingAPI(true);
         //print(email);
         SendAccountRecoveryEmailRequest request = new SendAccountRecoveryEmailRequest
         {
@@ -156,6 +172,8 @@ public class PlayfabManager : MonoBehaviour
             result =>
             {
                 UIManager.instance.RecoverMessage.text = "Send mail success";
+                UIManager.instance.EnableLoadingAPI(false);
+
             },
             error =>
             {
@@ -173,6 +191,7 @@ public class PlayfabManager : MonoBehaviour
                 {
                     UIManager.instance.RecoverMessage.text += "- " + error.ErrorMessage + "\n";
                 }
+                UIManager.instance.EnableLoadingAPI(false);
             });
     }
 
@@ -203,6 +222,8 @@ public class PlayfabManager : MonoBehaviour
                         UIManager.instance.LoginMessage.transform.parent.gameObject.SetActive(true);
 
                     UIManager.instance.LoginMessage.text += "This account is logged in on other computer" + "\n";
+                    UIManager.instance.EnableLoadingAPI(false);
+
                     //false
                 }
             }
@@ -338,6 +359,8 @@ public class PlayfabManager : MonoBehaviour
             Debug.Log("Got error retrieving user data:");
             Debug.Log(error.GenerateErrorReport());
         });
+
+        UIManager.instance.EnableLoadingAPI(false);
         yield return new WaitUntil(() => !IsApiExecuting);
     }
 
@@ -461,6 +484,7 @@ public class PlayfabManager : MonoBehaviour
 
     private IEnumerator StartPurchases(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
     {
+        UIManager.instance.EnableLoadingAPI(true);
         print("start purchase");
         bool IsApiExecuting = true;
         string orderID = default;
@@ -523,7 +547,7 @@ public class PlayfabManager : MonoBehaviour
             result.Items.ForEach(x => Debug.Log("item name:  " + x.DisplayName));
             //get pack item id
 
-            //StartCoroutine(UIManager.instance.LoadVirtualMoney());
+            StartCoroutine(UIManager.instance.LoadVirtualMoney());
             IsApiExecuting = false;
         }, (error) =>
         {
@@ -699,13 +723,12 @@ public class PlayfabManager : MonoBehaviour
         PlayerPrefs.SetString("USERNAME",UIManager.instance.LoginUsername.text);
 
         StartCoroutine(SetUserData("DeviceUniqueIdentifier", DeviceUniqueIdentifier));
-        UIManager.instance.LoginMessage.text = "Login Success";
         //connect
-        PhotonManager.instance.ConnectToMaster();
-        isAuthented = true;
 
         //connect to chat
         ChatManager.instance.ConnectoToPhotonChat();
+        PhotonManager.instance.ConnectToMaster();
+        isAuthented = true;
     }
     #endregion
 

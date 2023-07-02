@@ -20,7 +20,6 @@ public class CountdownTimer : MonoBehaviour
 
     private void OnEnable()
     {
-        StartTimer();
     }
    
 
@@ -41,6 +40,7 @@ public class CountdownTimer : MonoBehaviour
 
     public void StartTimer()
     {
+        print("Start Timer");
         ResetTimer();
         isTimerRunning = true;
     }

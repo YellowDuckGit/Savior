@@ -80,4 +80,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             print(a.UserId +"Status: "+a.IsOnline);
         }
     }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        print(cause.ToString());
+        UIManager.instance.TurnOnSignInScene();
+    }
 }

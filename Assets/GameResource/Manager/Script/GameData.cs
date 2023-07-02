@@ -102,13 +102,18 @@ public class GameData : MonoBehaviour
         yield return StartCoroutine(LoadFriendItem());
         #endregion
 
+        UIManager.instance.UserName = ChatManager.instance.nickName;
+
         yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
+
+        yield return StartCoroutine(UIManager.instance.LoadElo());
+
 
         //yield return StartCoroutine(UIManager.instance.LoadElo());
 
         //UIManager.instance.TurnOnLoadingScene();
         UIManager.instance.TurnOnHomeScene();
-
+        UIManager.instance.EnableLoadingAPI(false);
         print("=====================================================================");
     }
 
@@ -281,6 +286,7 @@ public class GameData : MonoBehaviour
             Debug.Log("Friend ITEMS");
             FriendItem friend = GameObject.Instantiate(FriendPrefab, Vector3.zero, Quaternion.identity).GetComponent<FriendItem>();
             friend.userName.text = data.Username;
+            friend.Status = 0; //offline
             friend.gameObject.SetActive(false);
             listFriendItem.Add(friend);
             Debug.Log("END Friend ITEMS");
@@ -584,8 +590,8 @@ public class GameData : MonoBehaviour
     public IEnumerator LoadFriendItem()
     {
         yield return StartCoroutine(PlayfabManager.instance.GetFriends());
-        PhotonManager.instance.HandlerFriendUpdate(GameData.instance.listFriendData);
         yield return StartCoroutine(InitFriendItem());
+        PhotonManager.instance.HandlerFriendUpdate(GameData.instance.listFriendData);
         yield return StartCoroutine(LoadFriendItem(UIManager.instance.CollectionFriend));
 
     }

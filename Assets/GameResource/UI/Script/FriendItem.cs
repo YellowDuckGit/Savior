@@ -25,7 +25,6 @@ public class FriendItem : MonoBehaviour
     private void Start()
     {
         Options.onClick.AddListener(() => CreateDrogdownOptions());
-
     }
 
     public int Status

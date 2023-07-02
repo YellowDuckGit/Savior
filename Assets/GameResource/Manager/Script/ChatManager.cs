@@ -236,31 +236,31 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
         if (friendItem != null)
         {
             Debug.Log("Find");
-
-            switch (status)
-            {
-                case 0: //offline 
-                    friendItem.Status = 0;
-                    break;
-                case 1: //invisible : Be invisible to everyone
-                    friendItem.Status = 1;
-                    break;
-                case 2: //online 
-                    friendItem.Status = 2;
-                    break;
-                case 3: //away: Online but not available
-                    friendItem.Status = 3;
-                    break;
-                case 4: //DND: Do not disturb.
-                    friendItem.Status = 4;
-                    break;
-                case 5: //LFS:  Looking For Game/Group. Could be used when you want to be invited or do matchmaking. More...
-                    friendItem.Status = 5;
-                    break;
-                case 6: //Playing:
-                    friendItem.Status = 6;
-                    break;
-            }
+            friendItem.Status = status;
+            //switch (status)
+            //{
+            //    case 0: //offline 
+            //        friendItem.Status = 0;
+            //        break;
+            //    case 1: //invisible : Be invisible to everyone
+            //        friendItem.Status = 1;
+            //        break;
+            //    case 2: //online 
+            //        friendItem.Status = 2;
+            //        break;
+            //    case 3: //away: Online but not available
+            //        friendItem.Status = 3;
+            //        break;
+            //    case 4: //DND: Do not disturb.
+            //        friendItem.Status = 4;
+            //        break;
+            //    case 5: //LFS:  Looking For Game/Group. Could be used when you want to be invited or do matchmaking. More...
+            //        friendItem.Status = 5;
+            //        break;
+            //    case 6: //Playing:
+            //        friendItem.Status = 6;
+            //        break;
+            //}
         }
         else
         {

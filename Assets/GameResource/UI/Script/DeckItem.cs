@@ -41,9 +41,11 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
                 Destroy(cardInDeckPack.gameObject);
             }
             GameData.instance.listCardInDeckPack.Clear();
-
+            
             //select deck
             GameData.instance.selectDeck = this;
+            UIManager.instance.DeckName = this.data.deckName;
+            print(this.data.deckName);
             print("Selected Deck");
 
             if (data.ListCardID.Count > 0)
