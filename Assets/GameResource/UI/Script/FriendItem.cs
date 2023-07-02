@@ -12,13 +12,62 @@ public class FriendItem : MonoBehaviour
     [SerializeField]
     private Image avatar;
     [SerializeField]
-    private TextMeshProUGUI name;
+    private Image statusImage;
+    [SerializeField] private TextMeshProUGUI statusDescription;
+    [SerializeField]
+    public TextMeshProUGUI userName;
     [SerializeField]
     private GameObject options;
+    [SerializeField]
+    private Button Options;
+
+    private int status = 0;
     private void Start()
     {
-        GetComponent<BoxCollider>().size = gameObject.GetComponent<RectTransform>().sizeDelta;
+        Options.onClick.AddListener(() => CreateDrogdownOptions());
+    }
 
+    public int Status
+    {
+        get { return status; }
+        set 
+        { 
+            status = value;
+
+            switch (status)
+            {
+                case 0: //offline 
+                    statusImage.color = Color.white;
+                    statusDescription.text = "Offline";
+                    break;
+                case 1: //invisible : Be invisible to everyone
+                    break;
+                case 2: //online 
+                    statusImage.color = Color.green;
+                    statusDescription.text = "Online";
+
+                    break;
+                case 3: //away: Online but not available
+                    statusImage.color = Color.yellow;
+                    statusDescription.text = "Away";
+
+                    break;
+                case 4: //DND: Do not disturb.
+                    statusImage.color = Color.yellow;
+                    statusDescription.text = "DND";
+
+                    break;
+                case 5: //LFS:  Looking For Game/Group. Could be used when you want to be invited or do matchmaking. More...
+                    statusImage.color = Color.blue;
+                    statusDescription.text = "LFS";
+
+                    break;
+                case 6: //Playing:
+                    statusImage.color = Color.blue;
+                    statusDescription.text = "Playing";
+                    break;
+            }
+        }
     }
     public Image Avatar
     {
@@ -26,13 +75,13 @@ public class FriendItem : MonoBehaviour
         set { avatar = value; }
     }
 
-    public TextMeshProUGUI Name
+    public TextMeshProUGUI UserName
     {
-        get { return name; }
-        set { name = value; }
+        get { return userName; }
+        set { userName = value; }
     }
 
-    private void OnMouseDown()
+    public void CreateDrogdownOptions()
     {
         Transform x = gameObject.transform.parent.Find("DropdownButton(Clone)");
         int index = 0;
@@ -43,7 +92,7 @@ public class FriendItem : MonoBehaviour
             Destroy(x.gameObject);
         }
 
-        if ( !(index - 1 == gameObject.transform.GetSiblingIndex()))
+        if (!(index - 1 == gameObject.transform.GetSiblingIndex()))
         {
             GameObject a = GameObject.Instantiate(options);
             a.gameObject.transform.parent = gameObject.transform.parent;
@@ -51,12 +100,14 @@ public class FriendItem : MonoBehaviour
             a.transform.localPosition = Vector3.one;
             a.transform.SetSiblingIndex(gameObject.transform.GetSiblingIndex() + 1);
 
-            FriendItemDropdown friendItemDropdown = a.GetComponent<FriendItemDropdown>();   
-            a.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => { 
-               friendItemDropdown.RemoveFriendInList(name.text);
+            FriendItemDropdown friendItemDropdown = a.GetComponent<FriendItemDropdown>();
+             a.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => {
+                 ChatManager.instance.SendDirectMessage(userName.text, nameof(MessageType.RequestPlay) +"|"+ "null");
+             });
+            a.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => {
+                friendItemDropdown.RemoveFriendInList(userName.text);
+                ChatManager.instance.SendDirectMessage(userName.text, nameof(MessageType.DeleteFriend) + "|" + ChatManager.instance.nickName);
             });
-
-
         }
     }
 

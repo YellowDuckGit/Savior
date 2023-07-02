@@ -112,13 +112,18 @@ public class GameData : MonoBehaviour
         //yield return StartCoroutine(LoadDeck());
         #endregion
 
+        UIManager.instance.UserName = ChatManager.instance.nickName;
+
         yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
+
+        yield return StartCoroutine(UIManager.instance.LoadElo());
+
 
         //yield return StartCoroutine(UIManager.instance.LoadElo());
 
         //UIManager.instance.TurnOnLoadingScene();
         UIManager.instance.TurnOnHomeScene();
-
+        UIManager.instance.EnableLoadingAPI(false);
         print("=====================================================================");
     }
 
@@ -309,7 +314,8 @@ public class GameData : MonoBehaviour
         {
             Debug.Log("Friend ITEMS");
             FriendItem friend = GameObject.Instantiate(FriendPrefab, Vector3.zero, Quaternion.identity).GetComponent<FriendItem>();
-            friend.Name.text = data.Username;
+            friend.userName.text = data.Username;
+            friend.Status = 0; //offline
             friend.gameObject.SetActive(false);
             listFriendItem.Add(friend);
             Debug.Log("END Friend ITEMS");
@@ -448,6 +454,9 @@ public class GameData : MonoBehaviour
                     Destroy(data.gameObject);
                 }
                 listFriendItem.Clear();
+
+                //delete  optionDropdown
+                Destroy(UIManager.instance.CollectionFriend.transform.GetChild(0).gameObject);
             }
         }
     }
@@ -672,16 +681,15 @@ public class GameData : MonoBehaviour
     {
         yield return StartCoroutine(PlayfabManager.instance.GetFriends());
         yield return StartCoroutine(InitFriendItem());
-        print("aaaaaaaa");
+        PhotonManager.instance.HandlerFriendUpdate(GameData.instance.listFriendData);
         yield return StartCoroutine(LoadFriendItem(UIManager.instance.CollectionFriend));
-        print("bbbbb");
 
     }
 
     public IEnumerator LoadFriendItem(GameObject parent)
     {
         print("LoadFriendItem");
-        if (listFriendItem[0].transform.parent != parent.transform)
+        if (listFriendItem.Count > 0 && listFriendItem[0].transform.parent != parent.transform)
         {
             Debug.Log("START LOAD Friend");
             foreach (FriendItem item in listFriendItem)

@@ -179,7 +179,7 @@ public class CollectionManager : MonoBehaviour
     public IEnumerator CreateDeck()
     {
         var NumberCardInDeck = GameData.instance.getNumberCardInDeck();
-        if (NumberCardInDeck == 20)
+        if (NumberCardInDeck == LimitNumberCardInDeck)
         {
             string deckCode = "";
             foreach (CardInDeckPack card in GameData.instance.listCardInDeckPack)
@@ -212,6 +212,7 @@ public class CollectionManager : MonoBehaviour
         }
         else
         {
+            UIManager.instance.EnablePanelErrorMessage(true, "The number of cards in the deck must be " + LimitNumberCardInDeck);
             print(this.debug("NumberCardInDeck invalid", new
             {
                 NumberCardInDeck
@@ -258,6 +259,10 @@ public class CollectionManager : MonoBehaviour
             UIManager.instance.TurnOnCollectionDeckScene();
             print("INIT DECK ITEM");
 
+        }
+        else
+        {
+            UIManager.instance.EnablePanelErrorMessage(true, "The number of cards in the deck must be " + LimitNumberCardInDeck);
         }
         //load list deck
     }

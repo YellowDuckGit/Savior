@@ -51,19 +51,24 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
                 Destroy(cardInDeckPack.gameObject);
             }
             GameData.instance.listCardInDeckPack.Clear();
-
+            
             //select deck
             GameData.instance.selectDeck = this;
+            UIManager.instance.DeckName = this.data.deckName;
+            print(this.data.deckName);
             print("Selected Deck");
 
             if (data.ListCardID.Count > 0)
             {
                 StartCoroutine(CreateDeck());
             }
+        }else if (UIManager.instance.isChooseDeckPVF)
+        {
+            UIManager.instance.LoadSeletedDeck(this.transform,UIManager.instance.CollectionDeckPVF_PlayScene,UIManager.instance.SelectFramePVF);
         }
         else if(UIManager.instance.isChooseDeck)
         {
-            UIManager.instance.LoadSeletedDeck(this.transform);
+            UIManager.instance.LoadSeletedDeck(this.transform,UIManager.instance.CollectionDeck_PlayScene,UIManager.instance.SelectFrame);
         }
         else if(UIManager.instance.isStoreDecks)
         {

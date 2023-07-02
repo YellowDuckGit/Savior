@@ -1,6 +1,8 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -56,5 +58,32 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             UIManager.instance.TurnOnChooseDeckScene();
         }
+    }
+
+
+    public void HandlerFriendUpdate(List<PlayFab.ClientModels.FriendInfo> friendInfos)
+    {
+        if (friendInfos.Count > 0)
+        {
+            string[] friendDisplayName = friendInfos.Select(f=>f.Username).ToArray();
+            //PhotonNetwork.FindFriends(friendDisplayName);
+            ChatManager.instance.chatClient.AddFriends(friendDisplayName);
+        }
+    }
+
+    public override void OnFriendListUpdate(List<FriendInfo> friendList)
+    {
+        print("OnFriendListUpdate");
+        base.OnFriendListUpdate(friendList);
+        foreach(FriendInfo a in friendList)
+        {
+            print(a.UserId +"Status: "+a.IsOnline);
+        }
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        print(cause.ToString());
+        UIManager.instance.TurnOnSignInScene();
     }
 }

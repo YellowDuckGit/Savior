@@ -12,7 +12,6 @@ public class FriendItemDropdown : MonoBehaviour
     public IEnumerator IERemoveFriendInList(string name)
     {
         yield return StartCoroutine(PlayfabManager.instance.RemoveFriend(name));
-        yield return StartCoroutine(GameData.instance.LoadFriendItem());
         Destroy(gameObject);
     }
 }
