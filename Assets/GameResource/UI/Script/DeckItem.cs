@@ -25,11 +25,21 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
         get { return this.data; }
         set
         {
+            this.id = Id;
             this.data = value;
             text_DeckName.text = this.data.deckName;
         }
     }
 
+    public IEnumerator LoadDeckData()
+    {
+        if(data != null && data.deckItemsId.Count() > 0)
+        {
+            UIManager.instance.ShowPopupDeckDetailed(this);
+        }
+
+        yield return null;
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         //deckitem in Playscene
@@ -55,9 +65,14 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
         {
             UIManager.instance.LoadSeletedDeck(this.transform);
         }
+        else if(UIManager.instance.isStoreDecks)
+        {
+            StartCoroutine(LoadDeckData());
+            print(data.deckName);
+        }
     }
 
-    IEnumerator CreateDeck()
+    public IEnumerator CreateDeck()
     {
         while (true)
         {
@@ -74,14 +89,19 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
 [Serializable]
 public class Data_Deck
 {
+    public string id;
     //field save in server
     public string deckCode;
     public string deckName;
     //
 
-
+    public Data_Deck(string id)
+    {
+        this.id = id;
+    }
 
     private List<string> listCardID = new List<string>();
+    public List<string> deckItemsId = new List<string>();
 
 
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class popupDetail : MonoBehaviour
 {
-    public TextMeshProUGUI descriptionPack;
+    public TextMeshProUGUI description;
     public Button btnCancel;
     public Button btnBuy;
 

@@ -63,12 +63,13 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
     }
     bool PutInDeck()
     {
-        if (this.numberCard > 0)
+        if (this.numberCard > 0 && this.numberCard < 4)
         {
             return true;
         }
         else return false;
     }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         print("Click");
@@ -78,6 +79,11 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
             {
                 this.PostEvent(EventID.OnPutCardInDeck, this.cardItem.cardData.Id);
             }
+        }
+        else if (UIManager.instance.isStoreCards)
+        {
+            print("show popup card");
+            UIManager.instance.ShowPopupCard(this);
         }
 
     }

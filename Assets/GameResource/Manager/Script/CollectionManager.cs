@@ -144,6 +144,38 @@ public class CollectionManager : MonoBehaviour
 
     }
 
+    public IEnumerator GetDeckFromStore(Dictionary<string, int> dic, string deckName)
+    {
+        string deckCode = "";
+        foreach ((var key, var value) in dic)
+        {
+            deckCode += key + ":" + value + "%";
+        }
+        deckCode = deckCode.Substring(0, deckCode.Length - 1);
+
+        Data_Deck newDeck;
+        print("DeckName:" + UIManager.instance.DeckName + "|");
+
+        if (string.IsNullOrEmpty(deckName))
+        {
+            newDeck = new Data_Deck(deckCode, "DeckName");
+        }
+        else
+        {
+            newDeck = new Data_Deck(deckCode, deckName);
+        }
+        print("DeckName:" + newDeck.deckName);
+
+        List<Data_Deck> listNewDeck = GameData.instance.listDeck.listDeck.ToList();
+        listNewDeck.Add(newDeck);
+
+        string json = JsonHelper.ToJson(listNewDeck.ToArray()).Replace("Items", "listDeck");
+        yield return StartCoroutine(PlayfabManager.instance.SetUserData("Decks", json));
+        yield return StartCoroutine(GameData.instance.LoadDeckItems());
+        UIManager.instance.TurnOnCollectionDeckScene();
+        yield return null;
+    }
+
     public IEnumerator CreateDeck()
     {
         var NumberCardInDeck = GameData.instance.getNumberCardInDeck();

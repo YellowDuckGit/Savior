@@ -139,7 +139,7 @@ namespace PlayFab.Events
         public event PlayFabResultEvent<GetUserDataResult> OnAdminGetUserPublisherReadOnlyDataResultEvent;
         public event PlayFabRequestEvent<GetUserDataRequest> OnAdminGetUserReadOnlyDataRequestEvent;
         public event PlayFabResultEvent<GetUserDataResult> OnAdminGetUserReadOnlyDataResultEvent;
-        public event PlayFabRequestEvent<GrantItemsToUsersRequest> OnAdminGrantItemsToUsersRequestEvent;
+        public event PlayFabRequestEvent<GrantItemsToUserRequest> OnAdminGrantItemsToUsersRequestEvent;
         public event PlayFabResultEvent<GrantItemsToUsersResult> OnAdminGrantItemsToUsersResultEvent;
         public event PlayFabRequestEvent<IncrementLimitedEditionItemAvailabilityRequest> OnAdminIncrementLimitedEditionItemAvailabilityRequestEvent;
         public event PlayFabResultEvent<IncrementLimitedEditionItemAvailabilityResult> OnAdminIncrementLimitedEditionItemAvailabilityResultEvent;
