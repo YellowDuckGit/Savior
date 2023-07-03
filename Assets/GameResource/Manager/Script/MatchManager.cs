@@ -710,7 +710,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         if (rewardID != "")
         {
-            StartCoroutine(PlayfabManager.instance.BuyPacks(catalog: "Reward", storeId: "BS1", new List<ItemPurchaseRequest>()
+            StartCoroutine(PlayfabManager.instance.BuyItems(catalog: "Reward", storeId: "BS1", new List<ItemPurchaseRequest>()
             {
                 new ItemPurchaseRequest() {ItemId = rewardID, Quantity = 1}
             }, currency: "MC"));

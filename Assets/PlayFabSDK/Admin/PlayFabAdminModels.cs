@@ -3658,7 +3658,7 @@ namespace PlayFab.AdminModels
     /// the grant/purchase operation.
     /// </summary>
     [Serializable]
-    public class GrantItemsToUsersRequest : PlayFabRequestCommon
+    public class GrantItemsToUserRequest : PlayFabRequestCommon
     {
         /// <summary>
         /// Catalog version from which items are to be granted.

@@ -13,7 +13,8 @@ public class PlayfabManager : MonoBehaviour
 {
     public static PlayfabManager instance;
 
-    private bool isAuthented = false; 
+    private bool isAuthented = false;
+    private string playFabId;
     //public Button loginButton;
     //public Button registerButton;
     //public Button Recovery;
@@ -72,7 +73,7 @@ public class PlayfabManager : MonoBehaviour
             result =>
             {
                 StartCoroutine(CheckIfSessionIsStillValid(DeviceUniqueIdentifier));
-
+                playFabId = result.PlayFabId;
             },
             error =>
             {
@@ -301,8 +302,8 @@ public class PlayfabManager : MonoBehaviour
     public IEnumerator GetCards()
     {
         bool IsApiExecuting = true;
-
         PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest();
+
         List<string> listCard = new List<string>();
         PlayFabClientAPI.GetUserInventory(request, result =>
         {
@@ -311,7 +312,46 @@ public class PlayfabManager : MonoBehaviour
                 if (item.CatalogVersion == "Card" && item.ItemClass == "Card")
                 {
                     int numberCard = (int)item.RemainingUses;
-                    listCard.Add(item.ItemId + ":" + numberCard);
+                    if (numberCard < 4)
+                    {
+                        listCard.Add(item.ItemId + ":" + numberCard);
+                    }
+                    else
+                    {
+                        PlayFab.AdminModels.RevokeInventoryItemRequest request2 = new PlayFab.AdminModels.RevokeInventoryItemRequest()
+                        {
+                            ItemInstanceId = item.ItemInstanceId,
+                            PlayFabId = playFabId,
+                        };
+                        PlayFabAdminAPI.RevokeInventoryItem(request2, result =>
+                        {
+                            print("REVOKE ITEM SUCCESS: " + item.ItemId);
+                            List<PlayFab.AdminModels.ItemGrant> itemGrants = new List<PlayFab.AdminModels.ItemGrant>();
+                            var item1 = new PlayFab.AdminModels.ItemGrant();
+                            item1.ItemId = "CoinRefund";
+                            item1.PlayFabId = playFabId;
+                            itemGrants.Add(item1);
+                            PlayFab.AdminModels.GrantItemsToUserRequest request3 = new PlayFab.AdminModels.GrantItemsToUserRequest()
+                            {
+                                CatalogVersion = "Refund",
+                                ItemGrants = itemGrants
+                            };
+                            PlayFabAdminAPI.GrantItemsToUsers(request3, result =>
+                            {
+                                print("GRANT ITEM TO USER: " + result.ItemGrantResults.Count);
+                                StartCoroutine(UIManager.instance.LoadVirtualMoney());
+                            }, (error) =>
+                            {
+                                Debug.Log("Got error retrieving user data:");
+                                Debug.Log(error.GenerateErrorReport());
+                            });
+                        }, (error) =>
+                        {
+                            Debug.Log("Got error retrieving user data:");
+                            Debug.Log(error.GenerateErrorReport());
+                        });
+                    }
+                    print("CARD INFO: " + item.ItemId + ": " + numberCard);
                 }
             }
             GameData.instance.listCard = listCard;
@@ -398,6 +438,7 @@ public class PlayfabManager : MonoBehaviour
         Debug.Log("START GET STORE");
         List<PlayFab.ClientModels.StoreItem> storeItems = new();
         List<Data_Pack> packs = new List<Data_Pack>();
+        List<Data_Deck> decks = new List<Data_Deck>();
 
         List<(string id, string name)> cards = new List<(string id, string name)>();
 
@@ -441,22 +482,38 @@ public class PlayfabManager : MonoBehaviour
                                 pack.dropTableId.Add(x);
                                 var dropTable = result.Catalog.FirstOrDefault(item => item.ItemId == x);
                                 //catalogItem.ForEach((x) => print($"catalogItem({catalogItem.IndexOf(x)}): {x.DisplayName ?? "null"}, id: {x.ItemId ?? "null"}, {x.Container.ItemContents.Count}"));
-                                print("bundle result table data: " + x);
+                                print("bundle result table data: " + x); //droptable in bundle
                             }
                         }
                         // sell card item
                         foreach (var x in item.Bundle.BundledItems)
                         {
                             pack.cardItemsId.Add(x);
-                            print($"bundle({item.DisplayName}) add item data id : " + x);
+                            print($"bundle({item.DisplayName}) add item data id : " + x); //card in droptable
                         }
                     }
                     packs.Add(pack);
                 }
+                else if (item.ItemClass == "Deck")
+                {
+                    var deck = new Data_Deck(item.ItemId);
+                    if (item.Bundle != null)
+                    {
+                        print($"Bundle DECK name: {item.DisplayName}");
+                        foreach (var x in item.Bundle.BundledItems)
+                        {
+                            print($"({item.DisplayName}) deck add item data id : " + x); //card in droptable
+                            deck.deckItemsId.Add(x);
+                        }
+                    }
+                    decks.Add(deck);
+
+                }
                 // Check if the item is a bundle
             }
-            print("number List<Data_Pack>:" + packs.Count);
+            print("number List<Data_Pack>:" + packs.Count + "\nnumber List<Data_Deck>: " + decks.Count);
             GameData.instance.listPackData = packs;
+            GameData.instance.listDeckDataInStore = decks;
             IsApiExecuting = false;
         }, (error) =>
         {
@@ -499,7 +556,7 @@ public class PlayfabManager : MonoBehaviour
         {
             orderID = result.OrderId;
             providerName = result.PaymentOptions[0].ProviderName;
-            Debug.Log("PURCHASE PACK: " + orderID);
+            Debug.Log("PURCHASE ID: " + orderID);
             IsApiExecuting = false;
         }, (error) =>
         {
@@ -507,11 +564,11 @@ public class PlayfabManager : MonoBehaviour
             Debug.Log(error.GenerateErrorReport());
         });
         yield return new WaitUntil(() => !IsApiExecuting);
-        yield return StartCoroutine(DefinePayment(orderID, currency, providerName));
+        yield return StartCoroutine(DefinePayment(orderID, currency, providerName, itemPurchases));
 
     }
 
-    private IEnumerator DefinePayment(string orderID, string currency, string providerName)
+    private IEnumerator DefinePayment(string orderID, string currency, string providerName, List<ItemPurchaseRequest> itemPurchases)
     {
         print("start define");
         bool IsApiExecuting = true;
@@ -533,20 +590,36 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitUntil(() => !IsApiExecuting);
 
-        yield return StartCoroutine(FinishPurchase(orderID));
+        yield return StartCoroutine(FinishPurchase(orderID, itemPurchases));
 
     }
 
-    private IEnumerator FinishPurchase(string orderID)
+    private IEnumerator FinishPurchase(string orderID, List<ItemPurchaseRequest> itemPurchases)
     {
         print("start finish");
         bool IsApiExecuting = true;
         var request3 = new ConfirmPurchaseRequest() { OrderId = orderID };
+        string deckName = "";
+        Dictionary<string, int> dic = new Dictionary<string, int>();
         PlayFabClientAPI.ConfirmPurchase(request3, result =>
         {
             result.Items.ForEach(x => Debug.Log("item name:  " + x.DisplayName));
             //get pack item id
-
+            if (UIManager.instance.isStoreDecks)
+            {
+                result.Items.ForEach(i =>
+                {
+                    Debug.Log("item in deck name: " + i.ItemId);
+                    if (dic.ContainsKey(i.ItemId))
+                    {
+                        dic[i.ItemId]++;
+                    }
+                    else
+                    {
+                        dic.Add(i.ItemId, 1);
+                    }
+                });
+            }
             StartCoroutine(UIManager.instance.LoadVirtualMoney());
             IsApiExecuting = false;
         }, (error) =>
@@ -555,18 +628,28 @@ public class PlayfabManager : MonoBehaviour
             Debug.Log(error.GenerateErrorReport());
         });
 
+        //yield return StartCoroutine(CollectionManager.instance.CreateDeck());
+        //UIManager.instance.TurnOnUpdateDeckScene();
         yield return new WaitUntil(() => !IsApiExecuting);
         yield return new WaitForSeconds(2f);
+        if (UIManager.instance.isStoreDecks)
+        {
+            if (itemPurchases.Count == 1)
+            {
+                deckName = itemPurchases[0].ItemId;
+            }
+            yield return StartCoroutine(CollectionManager.instance.GetDeckFromStore(dic, deckName));
+        }
         yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
+
+
     }
-    public IEnumerator BuyPacks(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
+    public IEnumerator BuyItems(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
     {
-        print("start buy pack");
+        print("start buy item");
         yield return StartPurchases(catalog, storeId, itemPurchases, currency);
         yield return null;
-
     }
-
 
     public IEnumerator GetDropTable(List<string> listTableId)
     {
@@ -635,7 +718,8 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.GetFriendsList(new PlayFab.ClientModels.GetFriendsListRequest
         {
             XboxToken = null
-        }, result => {
+        }, result =>
+        {
             GameData.instance.listFriendData = result.Friends;
             IsApiExecuting = false;
             /*DisplayFriends(_friends);*/ // triggers your UI
@@ -662,7 +746,8 @@ public class PlayfabManager : MonoBehaviour
                 break;
         }
         // Execute request and update friends when we are done
-        PlayFabClientAPI.AddFriend(request, result => {
+        PlayFabClientAPI.AddFriend(request, result =>
+        {
             Debug.Log("Friend added successfully!");
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.SetActive(false);
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
@@ -679,8 +764,8 @@ public class PlayfabManager : MonoBehaviour
     {
         bool IsApiExecuting = true;
         PlayFab.ClientModels.FriendInfo friendInfo = GameData.instance.listFriendData.Find(friend => friend.Username.Equals(Username));
-        
-        if(friendInfo != null)
+
+        if (friendInfo != null)
         {
             Debug.Log("remove" + friendInfo.FriendPlayFabId);
             PlayFabClientAPI.RemoveFriend(new PlayFab.ClientModels.RemoveFriendRequest
@@ -708,7 +793,7 @@ public class PlayfabManager : MonoBehaviour
     //    RemoveFriend(selectedFriend);
     //}
 
-    //hàm delete friends
+    //hï¿½m delete friends
     //public void DeleteFriend()
     //{
     //    StartCoroutine(RemoveFriends());

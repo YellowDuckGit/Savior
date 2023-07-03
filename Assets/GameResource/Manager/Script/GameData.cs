@@ -23,13 +23,18 @@ public class GameData : MonoBehaviour
 
     ///list card id of user, get it form playfab
     public List<string> listCard = new List<string>();
+    public List<string> listCardInDeck = new List<string>();
+
 
     public ListDeck listDeck;
 
     public List<CardItem> listCardItem = new List<CardItem>();
     public List<DeckItem> listDeckItem = new List<DeckItem>();
+    public List<DeckItem> listDeckItemInStore = new List<DeckItem>();
+    public List<Data_Deck> listDeckDataInStore = new List<Data_Deck>();
     public List<PackItem> listPackItem = new List<PackItem>(); //list object
     public List<Data_Pack> listPackData = new List<Data_Pack>(); //list instance
+    public List<Data_Deck> listDeckData = new List<Data_Deck>();
     public List<FriendInfo> listFriendData = new List<FriendInfo>();
     public List<FriendItem> listFriendItem = new List<FriendItem>();
     public List<ItemPurchaseRequest> itemPurchaseRequests = new List<ItemPurchaseRequest>();
@@ -49,6 +54,7 @@ public class GameData : MonoBehaviour
     [SerializeField] GameObject CardInInventoryPrefab_SP;
     [SerializeField] GameObject cardInDeckPackPrefab;
     [SerializeField] GameObject packPrefab;
+    [SerializeField] GameObject deckPrefab;
     [SerializeField] GameObject FriendPrefab;
 
 
@@ -99,7 +105,11 @@ public class GameData : MonoBehaviour
 
         yield return StartCoroutine(LoadPack());
 
+        yield return StartCoroutine(LoadDeck());
+
         yield return StartCoroutine(LoadFriendItem());
+
+        //yield return StartCoroutine(LoadDeck());
         #endregion
 
         UIManager.instance.UserName = ChatManager.instance.nickName;
@@ -181,7 +191,7 @@ public class GameData : MonoBehaviour
     #region Inint Function
     private IEnumerator InitDeckItem()
     {
-        print("LoadingGameObjectDeck");
+        print("INIT DECK ITEM");
 
         UnLoadListDeckItem();
 
@@ -278,6 +288,25 @@ public class GameData : MonoBehaviour
         yield return null;
     }
 
+    private IEnumerator InitDeck()
+    {
+        Debug.Log("START INIT DECK");
+        UnLoadListDeckItemInStore();
+        foreach (Data_Deck item in listDeckDataInStore)
+        {
+            Debug.Log("DECK ITEMS");
+            DeckItem deck = GameObject.Instantiate(deckPrefab, Vector3.zero, Quaternion.identity).GetComponent<DeckItem>();
+            deck.Id = item.id;
+            deck.Data = item;
+            deck.text_DeckName.text = item.deckName;
+            deck.gameObject.SetActive(false);
+            listDeckItemInStore.Add(deck);
+            Debug.Log("END PACK ITEMS");
+        }
+        Debug.Log("END INIT PACK");
+
+        yield return null;
+    }
     private IEnumerator InitFriendItem()
     {
         UnLoadListFriendItem();
@@ -314,6 +343,26 @@ public class GameData : MonoBehaviour
                     Destroy(data.gameObject);
                 }
                 listDeckItem.Clear();
+            }
+        }
+    }
+
+    public void UnLoadListDeckItemInStore()
+    {
+        if (listDeckItemInStore.Count > 0)
+        {
+            print("UnLoadListDeckItem");
+            if (listDeckItemInStore[0] == null)
+            {
+                listDeckItemInStore.Clear();
+            }
+            else
+            {
+                foreach (DeckItem data in listDeckItemInStore)
+                {
+                    Destroy(data.gameObject);
+                }
+                listDeckItemInStore.Clear();
             }
         }
     }
@@ -369,7 +418,6 @@ public class GameData : MonoBehaviour
             }
         }
     }
-
     public void UnLoadListPackItem()
     {
         if (listPackItem.Count > 0)
@@ -549,10 +597,16 @@ public class GameData : MonoBehaviour
         yield return null;
     }
 
+    public IEnumerator LoadDeck() //load deck in store
+    {
+        yield return StartCoroutine(PlayfabManager.instance.GetStores(cataLog: "Card", storeId: "DS1"));
+        yield return StartCoroutine(InitDeck());
+    }
     public IEnumerator LoadPack()
     {
         yield return StartCoroutine(PlayfabManager.instance.GetStores(cataLog: "Card", storeId: "BS1"));
         yield return StartCoroutine(InitPack());
+
         //yield return StartCoroutine(PlayFabAuth.instance.GetDropTable());
 
 
@@ -572,6 +626,42 @@ public class GameData : MonoBehaviour
                 item.text_packName.text = item.ID.ToString();
             }
             Debug.Log("END LOAD PACK");
+        }
+        yield return null;
+    }
+
+    public IEnumerator LoadDeck(GameObject parent)
+    {
+        if (listDeckItem[0].transform.parent != parent.transform)
+        {
+            Debug.Log("START LOAD DECK");
+            foreach (DeckItem item in listDeckItem)
+            {
+                item.gameObject.SetActive(true);
+                item.transform.parent = parent.transform;
+                item.transform.localScale = new Vector3(1f, 1f, 1f);
+                item.transform.localPosition = new Vector3(0f, 0f, 0f);
+                item.text_DeckName.text = item.Id.ToString();
+            }
+            Debug.Log("END LOAD DECK");
+        }
+        yield return null;
+    }
+
+    public IEnumerator LoadDeckInStore(GameObject parent)
+    {
+        if (listDeckItemInStore[0].transform.parent != parent.transform)
+        {
+            Debug.Log("START LOAD DECK IN STORE");
+            foreach (DeckItem item in listDeckItemInStore)
+            {
+                item.gameObject.SetActive(true);
+                item.transform.parent = parent.transform;
+                item.transform.localScale = new Vector3(1f, 1f, 1f);
+                item.transform.localPosition = new Vector3(0f, 0f, 0f);
+                item.text_DeckName.text = item.Id.ToString();
+            }
+            Debug.Log("END LOAD DECK IN STORE");
         }
         yield return null;
     }

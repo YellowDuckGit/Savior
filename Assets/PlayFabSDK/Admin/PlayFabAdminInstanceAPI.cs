@@ -807,7 +807,7 @@ namespace PlayFab
         /// <summary>
         /// Adds the specified items to the specified user inventories
         /// </summary>
-        public void GrantItemsToUsers(GrantItemsToUsersRequest request, Action<GrantItemsToUsersResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
+        public void GrantItemsToUsers(GrantItemsToUserRequest request, Action<GrantItemsToUsersResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
         {
             var context = (request == null ? null : request.AuthenticationContext) ?? authenticationContext;
             var callSettings = apiSettings ?? PlayFabSettings.staticSettings;
