@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d83ba4770872246a4979a83b2197df, type: 3}
+  m_Name: ForestBeast_Part1_M_2
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: ForestBeast_Part1_M_2
+  <Name>k__BackingField: Jungle Archer
+  <Cost>k__BackingField: 2
+  <Attack>k__BackingField: 3
+  <Hp>k__BackingField: 1
+  <Description>k__BackingField: When I'm summoned, give me +2|0 and  Dominate in
+    this round
+  <CardType>k__BackingField: 0
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: a4fcd1f2918cb394b82c299a6158534e, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: a6a7d13eb3377f04cae2e29f0762fa92, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 1
+  <IsCharming>k__BackingField: 0
+  <IsTreating>k__BackingField: 0
+  CardEffect: []
+  references:
+    version: 2
+    RefIds: []
