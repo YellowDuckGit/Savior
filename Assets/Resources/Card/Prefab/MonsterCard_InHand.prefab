@@ -755,7 +755,7 @@ GameObject:
   - component: {fileID: 4136078445291447237}
   - component: {fileID: 9161176528938601866}
   m_Layer: 0
-  m_Name: Card_InHand
+  m_Name: MonsterCard_InHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.GameComponent.UI.CreateDeck.UI.Script
 {
-    public class CardInPack : MonoBehaviour
+    public class CardInPack : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI costText;
@@ -26,18 +28,29 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
                 cardItem = value;
                 nameText.text = cardItem.cardData.Name.ToString();
                 costText.text = cardItem.cardData.Cost.ToString();
-                avatarCard.material = cardItem.cardData.InDeckAvatar;
+                avatarCard.sprite = cardItem.cardData.InDeckAvatar2D;
             }
         }
 
-        private void OnMouseEnter()
-        {
-            print("OnMouseEnter");
-        }
 
-        private void OnMouseDown()
+        //public void OnPointerClick(PointerEventData eventData)
+        //{
+        //    if (eventData.button == PointerEventData.InputButton.Right)
+        //    {
+        //        if (UIManager.instance.PanelCardDetails.transform != this.transform.parent)
+        //            UIManager.instance.LoadCardDetail(cardItem);
+        //    }
+        //    print("Click");
+        //}
+
+        public void OnPointerClick(PointerEventData eventData)
         {
-            print("OnMouseDown");
+            //if (eventData.button == PointerEventData.InputButton.Right)
+            //{
+            //}
+            print("Click");
+            if (UIManager.instance.PanelCardDetails.transform != this.transform.parent)
+                UIManager.instance.LoadCardDetail(cardItem);
         }
     }
 }

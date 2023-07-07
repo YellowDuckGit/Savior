@@ -5,12 +5,14 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DeckItem : MonoBehaviour, IPointerClickHandler
 {
     public TextMeshProUGUI text_DeckName;
 
     Data_Deck data;
+    public Image avatar;
 
     private string id = CommonFunction.getNewId();
 
@@ -28,6 +30,21 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
             this.id = Id;
             this.data = value;
             text_DeckName.text = this.data.deckName;
+
+            // Avatar
+            //string idSavaior = data.ListCardID.FirstOrDefault(a => a.Contains("SA"));
+
+            //if (idSavaior != null)
+            //{
+            //    CardItem cardItem = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id == idSavaior);
+            //    avatar.sprite = cardItem.cardData.NormalAvatar2D;
+            //}
+            //else
+            //{
+            //    CardItem cardItem = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id == data.ListCardID[0]);
+            //    avatar.sprite = cardItem.cardData.NormalAvatar2D;
+            //}
+            //
         }
     }
 

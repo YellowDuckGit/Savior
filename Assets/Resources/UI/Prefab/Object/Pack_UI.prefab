@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text_packName: {fileID: 4428969627925087351}
+  avatar: {fileID: 3815962110695415804}
 --- !u!1 &1960303358336631580
 GameObject:
   m_ObjectHideFlags: 0

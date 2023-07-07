@@ -72,7 +72,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         UIManager.instance.Button_FindMatch.onClick.AddListener(() => OnClickFindMatch());
         UIManager.instance.Button_AcceptMatch.onClick.AddListener(() => OnClickAcceptMatch());
         //UIManager.instance.Button_DelineMatch.onClick.AddListener(() => OnClickDeclineMatch());
-        //UIManager.instance.Button_StopFind.onClick.AddListener(() => OnClickStopFindMatch());
+        UIManager.instance.Button_StopFind.onClick.AddListener(() => OnClickStopFindMatch());
 
         //select button automatic
 
@@ -93,6 +93,10 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("OnConnectedToServer");
+        if (UIManager.instance.isWatingMatch)
+        {
+            UIManager.instance.TurnOnBackScene();
+        }
     }
 
 
@@ -181,27 +185,29 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     {
         Debug.Log("\n==========================================");
         Debug.Log("OnClickDeclineMatch()");
-
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.InRoom)
         {
-            if (_myRoomCustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.Waiting))
+            if (PhotonNetwork.IsMasterClient)
             {
-                //sysn to current room,because _myroomCustomProperties is local variable
-                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-                _myRoomCustomProperties[K_Player.K_PlayerSide.Blue] = K_Player.K_ConfirmState.DeclineMatch;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-                PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Blue;
+                if (_myRoomCustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.Waiting))
+                {
+                    //sysn to current room,because _myroomCustomProperties is local variable
+                    _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                    _myRoomCustomProperties[K_Player.K_PlayerSide.Blue] = K_Player.K_ConfirmState.DeclineMatch;
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+                    PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Blue;
+                }
             }
-        }
-        else
-        {
-            if (_myRoomCustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.Waiting))
+            else
             {
-                //sysn to current room,because _myroomCustomProperties is local variable
-                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-                _myRoomCustomProperties[K_Player.K_PlayerSide.Red] = K_Player.K_ConfirmState.DeclineMatch;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-                PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Red;
+                if (_myRoomCustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.Waiting))
+                {
+                    //sysn to current room,because _myroomCustomProperties is local variable
+                    _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                    _myRoomCustomProperties[K_Player.K_PlayerSide.Red] = K_Player.K_ConfirmState.DeclineMatch;
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+                    PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key] = K_Player.K_PlayerSide.Red;
+                }
             }
         }
     }
@@ -211,10 +217,13 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     {
         Debug.Log("\n==========================================");
         //get elo form PlayFab and run this action with parameter Elo
-        resetPlayerProperties();
-        _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-        _myRoomCustomProperties[K_Room.K_RoomState.key] = K_Room.K_RoomState.CloseRoom;
-        PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+        if (PhotonNetwork.InRoom)
+        {
+            resetPlayerProperties();
+            _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+            _myRoomCustomProperties[K_Room.K_RoomState.key] = K_Room.K_RoomState.CloseRoom;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+        }
 
     }
     #endregion
@@ -627,6 +636,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         }
         else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.CloseRoom))
         {
+            print("K_Room.K_RoomState.CloseRoom");
             if (PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.CurrentRoom.IsVisible)
             {
                 if (PhotonNetwork.IsMasterClient)

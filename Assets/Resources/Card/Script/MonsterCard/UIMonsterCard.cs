@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.GameComponent.Card.CardComponents.Script.UI
 {
@@ -91,6 +92,8 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         public Material NormalAvatar { get; set; }
         public Material InDeckAvatar { get; set; }
         public Material InBoardAvatar { get; set; }
+        public Sprite NormalAvatar2D { get; set; }
+        public Sprite InDeckAvatar2D { get; set; }
 
         public override void GetCardComponents()
         {
@@ -231,6 +234,9 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                 this.NormalAvatar = source.NormalAvatar;
                 this.InDeckAvatar= source.InDeckAvatar;
                 this.InBoardAvatar = source.InBoardAvatar;
+                this.NormalAvatar2D = source.NormalAvatar2D;
+                this.InDeckAvatar2D = source.InDeckAvatar2D;
+
                 this.RarityCard = source.RarityCard;
                 this.RegionCard = source.RegionCard;
                 this.Hp = source.Hp;

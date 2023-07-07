@@ -8,6 +8,7 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using static EnumDefine;
 
 
@@ -45,6 +46,11 @@ public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
     [field: SerializeField]
     public Material InBoardAvatar { get; set; }
 
+    [field: SerializeField]
+    public Sprite NormalAvatar2D { get; set; }
+
+    [field: SerializeField]
+    public Sprite InDeckAvatar2D { get; set; }
 
     [field: SerializeField]
     public Rarity RarityCard { get; set; }
@@ -57,6 +63,7 @@ public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
 
     [field: SerializeField]
     public bool IsTreating { get; set; }
+
 
     [SerializeReference]
     [SRLogicCard(typeof(AbstractCondition))]

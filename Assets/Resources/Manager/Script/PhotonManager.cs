@@ -10,7 +10,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 {
     public static PhotonManager instance;
     public string gameVersion;
-
+    public bool isAuthented = false;
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -52,7 +52,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
         if (UIManager.instance.isSignIn || UIManager.instance.isSignUp)
         {
+            isAuthented = true;
             StartCoroutine(GameData.instance.LoadingGameProcess());
+
         }
         else if (UIManager.instance.isWatingMatch)
         {
@@ -83,7 +85,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+        isAuthented = false;
         print(cause.ToString());
-        UIManager.instance.TurnOnSignInScene();
     }
 }

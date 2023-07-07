@@ -22,6 +22,8 @@ MonoBehaviour:
   <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 0f9462db7738eef46ad92e43c03194af, type: 2}
   <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 686eaa24730e1044ba6bdf5db4e95600, type: 2}
   <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: db740c09101702a4baca1978800d028b, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 35296b9b692b4b84f86840453bdfdefb, type: 3}
   <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0

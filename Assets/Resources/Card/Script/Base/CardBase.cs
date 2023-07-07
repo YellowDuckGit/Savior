@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using static EventGameHandler;
 
 
@@ -63,6 +64,8 @@ public abstract class CardBase : MonoBehaviourPun, IPunObservable, ICardBase
     protected Material _normalavatar;
     protected Material _inDeckavatar;
     protected Material _inBoardavatar;
+    protected Sprite _normalavatar2d;
+
     protected Rarity _rarityCard;
     protected RegionCard _regionCard;
 
@@ -83,6 +86,8 @@ public abstract class CardBase : MonoBehaviourPun, IPunObservable, ICardBase
     public abstract Material InBoardAvatar { get; set; }
     public abstract Rarity RarityCard { get; set; }
     public abstract RegionCard RegionCard { get; set; }
+    public Sprite NormalAvatar2D { get; set; }
+    public Sprite InDeckAvatar2D { get; set; }
 
     //public abstract event OnNameChange onNameChange;
     //public abstract event OnCostChange onCostChange;

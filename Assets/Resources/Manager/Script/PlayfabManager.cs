@@ -8,12 +8,14 @@ using System.Linq;
 using PlayFab.ServerModels;
 using Photon.Pun;
 using Unity.VisualScripting;
+using Photon.Pun.Demo.PunBasics;
+using Assets.GameComponent.UI.CreateDeck.UI.Script;
 
 public class PlayfabManager : MonoBehaviour
 {
     public static PlayfabManager instance;
 
-    private bool isAuthented = false;
+    public bool isAuthented = false;
     private string playFabId;
     //public Button loginButton;
     //public Button registerButton;
@@ -23,7 +25,6 @@ public class PlayfabManager : MonoBehaviour
     private void Awake()
     {
         Application.wantsToQuit += waitExitApplication;
-
 
         DontDestroyOnLoad(gameObject);
 
@@ -56,9 +57,20 @@ public class PlayfabManager : MonoBehaviour
 
     public void Logout()
     {
+        StartCoroutine(SetUserData("DeviceUniqueIdentifier", "Notyet"));
+
+        UIManager.instance.EnableLoadingAPI(true);
         PlayFabClientAPI.ForgetAllCredentials();
         PhotonNetwork.Disconnect();
         ChatManager.instance.chatClient.Disconnect();
+        StartCoroutine(WaitingLogout());
+    }
+
+    public IEnumerator WaitingLogout()
+    {
+        yield return new WaitUntil(() => !PlayFabClientAPI.IsClientLoggedIn() && !PhotonManager.instance.isAuthented && !ChatManager.instance.isAuthented);
+        UIManager.instance.EnableLoadingAPI(false);
+        UIManager.instance.TurnOnSignInScene();
     }
 
     public void Login(string username, string password)
@@ -151,6 +163,7 @@ public class PlayfabManager : MonoBehaviour
             UIManager.instance.RegisterMessage.text = "";
             UIManager.instance.RegisterMessage.text += "<align=center><b><size=200%>SignUp Failed</b><align=left><size=100%> \n";
             UIManager.instance.RegisterMessage.text += "- " + "Password and re-password do not match" + "\n";
+            UIManager.instance.EnableLoadingAPI(false);
 
         }
 
@@ -603,8 +616,27 @@ public class PlayfabManager : MonoBehaviour
         Dictionary<string, int> dic = new Dictionary<string, int>();
         PlayFabClientAPI.ConfirmPurchase(request3, result =>
         {
-            result.Items.ForEach(x => Debug.Log("item name:  " + x.DisplayName));
+            result.Items.ForEach(x => Debug.Log("item name:  " + x.ItemId + ": "+ x.RemainingUses));
+            print(result.Items.Count);
+
             //get pack item id
+
+            if (UIManager.instance.isStorePacks || UIManager.instance.isOpenPack)
+            {
+                //analysis Pack 
+                foreach(var item in itemPurchases)
+                {
+                    List<string> array = item.ItemId.Split(':').ToList();
+                    array.ForEach(a => print(a));
+                }
+
+
+
+
+                //set list item open
+                UIManager.instance.FeedBackOpenPack.PlayFeedbacks();
+
+            }
 
             if (UIManager.instance.isStoreDecks)
             {
@@ -621,6 +653,7 @@ public class PlayfabManager : MonoBehaviour
                     }
                 }
             }
+
             StartCoroutine(UIManager.instance.LoadVirtualMoney());
             IsApiExecuting = false;
         }, (error) =>
@@ -629,8 +662,6 @@ public class PlayfabManager : MonoBehaviour
             Debug.Log(error.GenerateErrorReport());
         });
 
-        //yield return StartCoroutine(CollectionManager.instance.CreateDeck());
-        //UIManager.instance.TurnOnUpdateDeckScene();
         yield return new WaitUntil(() => !IsApiExecuting);
         yield return new WaitForSeconds(2f);
         if (UIManager.instance.isStoreDecks)
@@ -641,9 +672,8 @@ public class PlayfabManager : MonoBehaviour
             }
             yield return StartCoroutine(CollectionManager.instance.GetDeckFromStore(dic, deckName));
         }
+
         yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
-
-
     }
     public IEnumerator BuyItems(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
     {
@@ -651,6 +681,71 @@ public class PlayfabManager : MonoBehaviour
         yield return StartPurchases(catalog, storeId, itemPurchases, currency);
         yield return null;
     }
+
+    #region BuyPack
+    public IEnumerator BuyPack(List<ItemPurchaseRequest> itemPurchases)
+    {
+        int numberContentReturn = itemPurchases.Count;
+        foreach (ItemPurchaseRequest itemPurchase in itemPurchases)
+        {
+            var request = new PurchaseItemRequest() { StoreId = "BS1", ItemId = itemPurchase.ItemId, VirtualCurrency = "MC", Price = 3000};
+            PlayFabClientAPI.PurchaseItem(request, result =>
+            {
+                List<string> array = result.Items[0].BundleContents;
+                array.ForEach(a => print(a));
+                GameData.instance.listCardOpenedInPack.Add(array);
+                numberContentReturn--;
+                print("GameData.instance.listCardOpenedInPack: " + GameData.instance.listCardOpenedInPack.Count);
+
+            }, (error) =>
+            {
+                Debug.Log("Got error retrieving user data:");
+                Debug.Log(error.GenerateErrorReport());
+            });
+        }
+
+        yield return new WaitUntil(() => (numberContentReturn == 0));
+
+        UIManager.instance.FeedBackOpenPack.PlayFeedbacks();
+    }
+
+    //public void BuyPack(Dictionary<string,int> keyValuePairs)
+    //{
+
+    //    foreach (KeyValuePair<string, int> entry in keyValuePairs)
+    //    {
+    //        print(entry.Key + ": " + entry.Value);
+    //        for (int i = 0; i < entry.Value; i++)
+    //        {
+    //            Grant(playFabId, entry.Key);
+    //        }
+    //    }
+    //}
+
+
+    //public void Grant(string playFabId, string tableId)
+    //{
+    //    // First, roll a random number and evaluate the drop table
+    //    PlayFabServerAPI.EvaluateRandomResultTable(new EvaluateRandomResultTableRequest()
+    //    {
+    //        TableId = tableId
+
+    //    }, result => OnRandomResultTableResponse(result, playFabId), OnError);
+    //}
+
+    //public void OnRandomResultTableResponse(EvaluateRandomResultTableResult tableResult, string playFabId)
+    //{
+    //    // Second, take the result and grant it to the player
+    //    PlayFabServerAPI.GrantItemsToUser(new GrantItemsToUserRequest
+    //    {
+    //        PlayFabId = playFabId,
+    //        ItemIds = new List<string> { tableResult.ResultItemId }
+    //    }, result =>
+    //    {
+    //        // Handle Result
+    //    }, OnError);
+    //}
+    #endregion
 
     public IEnumerator GetDropTable(List<string> listTableId)
     {
@@ -695,6 +790,29 @@ public class PlayfabManager : MonoBehaviour
         yield return new WaitUntil(() => !IsApiExecuting);
     }
 
+
+    public IEnumerator EvaluateRandomResultTable(string id)
+    {
+        bool IsApiExecuting = true;
+        var request = new EvaluateRandomResultTableRequest
+        {
+            TableId = id
+        };
+
+        PlayFabServerAPI.EvaluateRandomResultTable(request, result =>
+        {
+            print(result.ResultItemId);
+          
+            IsApiExecuting = false;
+           
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
+        print("End EvaluateRandomResultTable()");
+        yield return new WaitUntil(() => !IsApiExecuting);
+    }
     public string DeviceUniqueIdentifier
     {
         get
@@ -820,7 +938,10 @@ public class PlayfabManager : MonoBehaviour
         ChatManager.instance.ConnectoToPhotonChat();
         PhotonManager.instance.ConnectToMaster();
         isAuthented = true;
+
+       
     }
+
     #endregion
 
     //IEnumerator waitToTurnOff()

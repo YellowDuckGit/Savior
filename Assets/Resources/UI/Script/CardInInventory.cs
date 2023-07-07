@@ -16,7 +16,7 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
     [SerializeField] private TextMeshProUGUI atkText;
     [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private Image avatarCard;
-    [SerializeField] private TextMeshProUGUI amount;
+    [SerializeField] private AmountCardDisplay amount;
 
     CardItem cardItem;
 
@@ -36,8 +36,8 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
             nameText.text = value.cardData.Name;
             descriptionText.text = value.cardData.Description;
             costText.text = value.cardData.Cost.ToString();
-            avatarCard.material = value.cardData.NormalAvatar;
-            amount.text = "X" + numberCard;
+            avatarCard.sprite = value.cardData.NormalAvatar2D;
+            amount.SetAmount(numberCard);
             if (cardItem.cardData is MonsterData monsterData)
             {
                 atkText.text = monsterData.Attack.ToString();
@@ -57,7 +57,7 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
         set
         {
             numberCard = value;
-            amount.text = "X" + numberCard;
+            amount.SetAmount(numberCard);
         }
         get { return numberCard; }
     }
@@ -72,20 +72,37 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        print("Click");
-        if (UIManager.instance.isCreateDeck)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (PutInDeck())
+          
+            if (UIManager.instance.isCreateDeck)
             {
-                this.PostEvent(EventID.OnPutCardInDeck, this.cardItem.cardData.Id);
+                if (PutInDeck())
+                {
+                    this.PostEvent(EventID.OnPutCardInDeck, this.cardItem.cardData.Id);
+                }
+            }
+            else if (UIManager.instance.isStoreCards)
+            {
+                print("show popup card");
+                UIManager.instance.ShowPopupCard(this);
             }
         }
-        else if (UIManager.instance.isStoreCards)
+        else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            print("show popup card");
-            UIManager.instance.ShowPopupCard(this);
+            if(UIManager.instance.PanelCardDetails.transform != this.transform.parent)
+            UIManager.instance.LoadCardDetail(cardItem);
+        }
+        else if (eventData.button == PointerEventData.InputButton.Middle)
+        {
+            
         }
 
+        print("Click");
+      
+
     }
+
+    
 
 }

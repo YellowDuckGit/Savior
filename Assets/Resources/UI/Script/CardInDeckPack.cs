@@ -25,7 +25,7 @@ public class CardInDeckPack : MonoBehaviour, IPointerClickHandler
             cardItem = value;
             nameText.text = cardItem.cardData.Name;
             costText.text = cardItem.cardData.Cost.ToString();
-            avatarCard.material = cardItem.cardData.InDeckAvatar;
+            avatarCard.sprite = cardItem.cardData.InDeckAvatar2D;
         }
     }
 

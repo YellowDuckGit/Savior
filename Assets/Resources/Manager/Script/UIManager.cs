@@ -134,6 +134,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] CounterTime counterTimeWating;
     [SerializeField] GameObject PanelErrorMessage;
 
+    [SerializeField] public GameObject PanelCardDetails;
 
 
 
@@ -258,6 +259,13 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private MMFeedbacks FaderDirectional;
 
+    [SerializeField]
+    public MMFeedbacks FeedBackOpenPack;
+
+
+    [SerializeField]
+    public MMFeedbacks FeedBackFlipCard;
+
     #endregion
 
     [Space(10)]
@@ -322,7 +330,7 @@ public class UIManager : MonoBehaviour
         ACT_Store_BuyPack.onClick.AddListener(() =>
         {
             print("click to buy pack");
-            StartCoroutine(PlayfabManager.instance.BuyItems("Card", "BS1", GameData.instance.itemPurchaseRequests, "MC"));
+            StartCoroutine(PlayfabManager.instance.BuyPack(GameData.instance.itemPurchaseRequests));
             PopupPackDetailed.SetActive(false);
         });
         ACT_Store_CancelPack.onClick.AddListener(() => PopupPackDetailed.SetActive(false));
@@ -378,7 +386,7 @@ public class UIManager : MonoBehaviour
     #region TurnOn, TurnOff Scene
     private void TurnOn(SceneType type, bool turn)
     {
-        if (type != SceneType.Home && turn)
+        if (turn)
         {
             Fader.PlayFeedbacks();
             //FaderDirectional.PlayFeedbacks();
@@ -463,7 +471,9 @@ public class UIManager : MonoBehaviour
                 {
                     if (turn)
                     {
+                        if(lastScence == SceneType.SignUp || lastScence == SceneType.SignIn)
                         FaderRound.PlayFeedbacks();
+
                         TurnOffSceneAlreadyShow();
                         // LOAD MONEY VIRTUAL
 
@@ -845,6 +855,11 @@ public class UIManager : MonoBehaviour
             TurnOn(SceneType.CreateDeck, false);
         }
 
+        if (isOpenPack)
+        {
+            TurnOn(SceneType.OpenPack, false);
+        }
+
         if (isCollection_Cards)
         {
             TurnOn(SceneType.CollectionCards, false);
@@ -1041,6 +1056,28 @@ public class UIManager : MonoBehaviour
                 GameData.instance.selectDeck = deck.gameObject.GetComponent<DeckItem>();
             }
         }
+    }
+
+    public void LoadCardDetail(CardItem cardItem)
+    {
+        CardInInventory cardInInventory =  GameData.instance.InitCard2D(cardItem);
+        cardInInventory.transform.parent = PanelCardDetails.transform;
+        cardInInventory.gameObject.transform.localPosition = Vector3.zero;
+        cardInInventory.gameObject.transform.localScale = new Vector3(2f,2f,2f);
+        PanelCardDetails.gameObject.SetActive(true);
+    }
+
+    public void UnLoadCardDetail()
+    {
+        print("Unload: "+ PanelCardDetails.transform.childCount);
+        if(PanelCardDetails.transform.childCount > 0)
+        {
+           Transform children = PanelCardDetails.transform.GetChild(0);
+            Destroy(children.gameObject);
+            PanelCardDetails.gameObject.SetActive(false);
+        }
+
+
     }
     #endregion
 

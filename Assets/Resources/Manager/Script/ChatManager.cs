@@ -28,6 +28,7 @@ public enum PlayerStatus
 public class ChatManager  : MonoBehaviour, IChatClientListener
     {
     public static ChatManager instance;
+    public bool isAuthented = false;
 
     [SerializeField] public string nickName = "";
     [SerializeField] public string nickNameFriendinvite = "";
@@ -107,18 +108,20 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
     }
 
     public void OnDisconnected()
-        {
-            Debug.Log("You have disconnected from the Photon Chat");
-            chatClient.SetOnlineStatus(ChatUserStatus.Offline);
-        }
+    {
+        Debug.Log("You have disconnected from the Photon Chat");
+        chatClient.SetOnlineStatus(ChatUserStatus.Offline);
+        isAuthented = false;
+    }
 
-        public void OnConnected()
-        {
-            Debug.Log("You have connected to the Photon Chat");
-            //OnChatConnected?.Invoke(chatClient);
-            chatClient.SetOnlineStatus(ChatUserStatus.Online);
-            //SendDirectMessage("vanphu02", "Hi Bri");
-        }
+    public void OnConnected()
+    {
+        Debug.Log("You have connected to the Photon Chat");
+        //OnChatConnected?.Invoke(chatClient);
+        chatClient.SetOnlineStatus(ChatUserStatus.Online);
+        isAuthented = true;
+        //SendDirectMessage("vanphu02", "Hi Bri");
+    }
 
     public void OnChatStateChange(ChatState state)
     {

@@ -43,6 +43,7 @@ public class GameData : MonoBehaviour
     public List<CardInInventory> listCardInInventory = new List<CardInInventory>();
     public List<CardInDeckPack> listCardInDeckPack = new List<CardInDeckPack>();
     public List<CardInPack> listCardInPack = new List<CardInPack>();
+    public List<List<string>> listCardOpenedInPack = new List<List<string>>();
 
 
     [Header("Prefab")]
@@ -195,10 +196,6 @@ public class GameData : MonoBehaviour
     #region Inint Function
     public IEnumerator LoadCardInPackItem(DropTableInfor dropTableInfor)
     {
-        foreach(CardItem items in listCardItem)
-        {
-            print(items.cardData.Id);
-        }
 
         UnLoadListCardInPackItem();
         foreach (KeyValuePair<string, int> entry in dropTableInfor.items)
@@ -295,7 +292,24 @@ public class GameData : MonoBehaviour
     }
 
 
+    public CardInInventory InitCard2D(CardItem card)
+    {
+        print("InitCard2D");
+        GameObject prefab = null;
 
+        if(card.cardData.CardType == CardType.Monster)
+        {
+            prefab = CardInInventoryPrefab_M;
+        }
+        else if (card.cardData.CardType == CardType.Spell)
+        {
+            prefab = CardInInventoryPrefab_SP;
+        }
+      
+        CardInInventory cardInInventory = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity).GetComponent<CardInInventory>();
+        cardInInventory.CardItem = card;
+        return cardInInventory;
+    }
 
     private IEnumerator InitDeckItem()
     {

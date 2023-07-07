@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static Unity.VisualScripting.Member;
 
 public class UISpellCard : UICardBase<SpellCard>, ISpellData
@@ -60,6 +61,8 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
     public Material NormalAvatar { get; set; }
     public Material InDeckAvatar { get; set; }
     public Material InBoardAvatar { get; set; }
+    public Sprite NormalAvatar2D { get; set; }
+    public Sprite InDeckAvatar2D { get; set; }
 
     public override void RegisLocalListener()
     {
@@ -99,6 +102,8 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
             destination.NormalAvatar = source.NormalAvatar;
             destination.InDeckAvatar = source.InDeckAvatar;
             destination.InBoardAvatar = source.InBoardAvatar;
+            destination.NormalAvatar2D = source.NormalAvatar2D;
+            destination.InDeckAvatar2D = source.InDeckAvatar2D;
             destination.RarityCard = source.RarityCard;
             destination.RegionCard = source.RegionCard;
         }

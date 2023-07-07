@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.GameComponent.UI.CreateDeck.UI.Script
 {
     public class PackItem : MonoBehaviour, IPointerClickHandler
     {
         public TextMeshProUGUI text_packName;
+        public Image avatar;
         Data_Pack data;
         private string id = CommonFunction.getNewId();
 
@@ -31,6 +33,21 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
                 this.data = value;
                 text_packName.text = id;
 
+                // Avatar
+
+                //string idSavaior = data.cardItemsId.SingleOrDefault(a => a.Contains("SA"));
+
+                //if (idSavaior != null)
+                //{
+                //    CardItem cardItem = GameData.instance.listCardItem.SingleOrDefault(a=>a.cardData.Id == idSavaior);
+                //    avatar.sprite = cardItem.cardData.NormalAvatar2D;
+                //}
+                //else
+                //{
+                //    CardItem cardItem = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id == data.cardItemsId[0]);
+                //    avatar.sprite = cardItem.cardData.NormalAvatar2D;
+                //}
+                //
             }
         }
 
