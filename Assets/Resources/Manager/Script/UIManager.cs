@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
@@ -152,6 +153,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] List<TextMeshProUGUI> virtualMoney;
     [SerializeField] List<TextMeshProUGUI> username;
     [SerializeField] List<TextMeshProUGUI> usernameOpponent;
+    [SerializeField] List<TMP_InputField> SearchText;
 
 
     [Space(10)]
@@ -296,6 +298,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        SearchText.ForEach(a => a.onValueChanged.AddListener((String) => GameData.instance.SearchByText(a.text)));
 
         //isSignIn = isSignUp = is isHome = isLoading = isPlay = isCollection = isCollection_Decks = isCollection_Cards = isStore = isCreateDeck = false;
 
@@ -388,6 +391,7 @@ public class UIManager : MonoBehaviour
     {
         if (turn)
         {
+          
             Fader.PlayFeedbacks();
             //FaderDirectional.PlayFeedbacks();
         }
@@ -1469,5 +1473,7 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
+   
     #endregion
 }

@@ -37,7 +37,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         
     }
-
+    public void OnClickLogoutButton()
+    {
+        PhotonNetwork.Disconnect();
+    }
     public void ConnectToMaster()
     {
         PhotonNetwork.AutomaticallySyncScene = true;

@@ -319,7 +319,6 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         print("CreateRoom");
         PhotonNetwork.CreateRoom(RoomName, roomOptions, sqlLobby_N, null);
 
-        ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.RoomPVFCreated) + "|" + RoomName);
         return RoomName;
     }
 
@@ -384,8 +383,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         int minElo = eloInt - eloRangesuitable / 2;
         int maxElo = eloInt + eloRangesuitable / 2;
         //string stringSqlLobbyFilter = $"{K_Room.EloLobbyFilter} > {minElo} AND {K_Room.EloLobbyFilter} < {maxElo}";
-        string stringSqlLobbyFilter = $"{K_Room.EloLobbyFilter} BETWEEN '{minElo}' AND '{maxElo}'";
-        print($"Filter: {stringSqlLobbyFilter}");
+        string sqlEloRange = $"{K_Room.EloLobbyFilter} BETWEEN '{minElo}' AND '{maxElo}'";
+        print($"Filter: {sqlEloRange}");
         #region create pro
         _myRoomCustomProperties[K_Room.EloRange] = minElo + "|" + maxElo;
         _myRoomCustomProperties[K_RoomState.key] = K_Room.K_RoomState.Waiting;
@@ -427,7 +426,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 PhotonNetwork.JoinRandomOrCreateRoom(null, 0, MatchmakingMode.FillRoom, sqlLobby_N, null, null, roomOptions: roomOptions);
                 break;
             case GameMode.Rank:
-                PhotonNetwork.JoinRandomOrCreateRoom(null, 0, MatchmakingMode.FillRoom, sqlLobby_R, sqlLobbyFilter: stringSqlLobbyFilter, null, roomOptions);
+                PhotonNetwork.JoinRandomOrCreateRoom(null, 0, MatchmakingMode.FillRoom, sqlLobby_R, sqlLobbyFilter: sqlEloRange, null, roomOptions);
                 break;
         }
         yield return null;
@@ -484,7 +483,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 //UIManager.instance.UI_WaitingOppenent(false);
 
                 UIManager.instance.WatingAcceptMatch(true);
-                coroutine = StartCoroutine(TimeoutWaitingAccess());
+                coroutine = StartCoroutine(TimeoutWaitingAccept());
 
             }
             else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.StartMatch)
@@ -595,10 +594,10 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                     resetPlayerProperties();
                     PhotonNetwork.LeaveRoom();
                 }
-                else if (PhotonNetwork.LocalPlayer.CustomProperties[K_PlayerSide.key].ToString().Equals(K_PlayerSide.Blue))
-                {
-                    resetPlayerProperties();
-                    resetPropertiesRoom();
+                    else if (PhotonNetwork.LocalPlayer.CustomProperties[K_PlayerSide.key].ToString().Equals(K_PlayerSide.Blue))
+                    {
+                        resetPlayerProperties();
+                        resetPropertiesRoom();
                 }
             }
             else if (!ConfirmStateBlue && ConfirmStateRed)
@@ -719,7 +718,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         return roomInfos[indexRoom];
     }
 
-    public IEnumerator TimeoutWaitingAccess()
+    public IEnumerator TimeoutWaitingAccept()
     {
         while (true)
         {
@@ -850,19 +849,6 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         Debug.Log("OnPlayerPropertiesUpdate()");
     }
         
-    public void OnClickLogoutButton()
-    {
-        PhotonNetwork.Disconnect();
-    }
-
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        Debug.Log("Player logged out: " + cause.ToString());
-        //StartCoroutine(PlayfabManager.instance.SetUserData("DeviceUniqueIdentifier", "Notyet"));
-        // Th?c hi?n các tác v? khác t?i ?ây
-    }
-
-
 
     #endregion
 }

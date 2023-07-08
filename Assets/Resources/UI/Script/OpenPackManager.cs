@@ -18,6 +18,8 @@ public class OpenPackManager : MonoBehaviour
     public List<Card3DInInventory> card3DInInventories;
     public MMSequencer sequencer;
 
+    public MMFeedbackScale feedbackScale;
+
     public void StartOpen()
     {
         UIManager.instance.EnableLoadingAPI(true);
@@ -49,9 +51,14 @@ public class OpenPackManager : MonoBehaviour
                     card.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
 
                     card3DInInventories.Add(card);
+
+
                 }
             }
         }
+
+
+
         UIManager.instance.EnableLoadingAPI(false);
         UIManager.instance.TurnOnOpenPackScene();
         StartCoroutine(GameData.instance.LoadCardInInventoryUser());

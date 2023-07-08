@@ -1,5 +1,6 @@
 using Assets.GameComponent.Card.CardComponents.Script;
 using Assets.GameComponent.UI.CreateDeck.UI.Script;
+using MoreMountains.Feel;
 using Photon.Pun;
 using PlayFab.ClientModels;
 using System;
@@ -845,6 +846,79 @@ public class GameData : MonoBehaviour
         }
         yield return null;
     }
+
+    public void SearchByText(string text)
+    {
+        if (UIManager.instance.isCollection_Cards || UIManager.instance.isStoreCards)
+        {
+            print("Call");
+            List<CardInInventory> listShow = listCardInInventory.Where(a => a.CardItem.cardData.Name.ToLower().Contains(text.ToLower())).ToList();
+            List<CardInInventory> listHide = listCardInInventory.Except(listShow).ToList();
+
+
+            foreach (CardInInventory card in listShow)
+            {
+                card.gameObject.SetActive(true);
+            }
+
+            foreach (CardInInventory card in listHide)
+            {
+                card.gameObject.SetActive(false);
+            }
+        }
+        else if (UIManager.instance.isCollection_Decks)
+        {
+            print("Call");
+            List<DeckItem> listShow = listDeckItem.Where(a => a.text_DeckName.text.ToLower().Contains(text.ToLower())).ToList();
+            List<DeckItem> listHide = listDeckItem.Except(listShow).ToList();
+
+
+            foreach (DeckItem deck in listShow)
+            {
+                deck.gameObject.SetActive(true);
+            }
+
+            foreach (DeckItem deck in listHide)
+            {
+                deck.gameObject.SetActive(false);
+            }
+        }
+        else if (UIManager.instance.isStoreDecks)
+        {
+            print("Call");
+            List<DeckItem> listShow = listDeckItemInStore.Where(a => a.text_DeckName.text.ToLower().Contains(text.ToLower())).ToList();
+            List<DeckItem> listHide = listDeckItemInStore.Except(listShow).ToList();
+
+
+            foreach (DeckItem deck in listShow)
+            {
+                deck.gameObject.SetActive(true);
+            }
+
+            foreach (DeckItem deck in listHide)
+            {
+                deck.gameObject.SetActive(false);
+            }
+        }
+        else if (UIManager.instance.isStorePacks)
+        {
+            print("Call");
+            List<PackItem> listShow = listPackItem.Where(a => a.text_packName.text.ToLower().Contains(text.ToLower())).ToList();
+            List<PackItem> listHide = listPackItem.Except(listShow).ToList();
+
+
+            foreach (PackItem deck in listShow)
+            {
+                deck.gameObject.SetActive(true);
+            }
+
+            foreach (PackItem deck in listHide)
+            {
+                deck.gameObject.SetActive(false);
+            }
+        }
+    }
+
 
     #region Get Set
     public int Elo

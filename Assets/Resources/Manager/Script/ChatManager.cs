@@ -98,6 +98,7 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
             chatClient.SendPrivateMessage(recipient,message);
         }
 
+
     #endregion
 
     #region Photon Chat Callbacks
@@ -177,6 +178,7 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
                                 nickNameFriendinvite = sender;
                                 //PhotonNetwork.JoinLobby(FindMatchSystem.instance.sqlLobby_N);
                                 FriendRoomName = FindMatchSystem.instance.CreatePlayWithFriendRoom();
+                                SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.RoomPVFCreated) + "|" + FriendRoomName);
                                 break;
                             case nameof(MessageType.DeclineRequest):
                                 nickNameFriendinvite = null;
@@ -193,11 +195,11 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
                                 break;
                         ////////////////////////////////////////////////////////
                             case nameof(MessageType.AddFriend):
-                                PlayfabManager.instance.AddFriend(PlayfabManager.FriendIdType.Username, content);
+                                PlayfabManager.instance.AddFriend(PlayfabManager.FriendIdType.Username, sender);
                                 print("AddFriend");
                                 break;
                             case nameof(MessageType.DeleteFriend):
-                                StartCoroutine(PlayfabManager.instance.RemoveFriend(content));
+                                StartCoroutine(PlayfabManager.instance.RemoveFriend(sender));
                                 print("Delete");
                                 break;
                         }
@@ -240,30 +242,6 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
         {
             Debug.Log("Find");
             friendItem.Status = status;
-            //switch (status)
-            //{
-            //    case 0: //offline 
-            //        friendItem.Status = 0;
-            //        break;
-            //    case 1: //invisible : Be invisible to everyone
-            //        friendItem.Status = 1;
-            //        break;
-            //    case 2: //online 
-            //        friendItem.Status = 2;
-            //        break;
-            //    case 3: //away: Online but not available
-            //        friendItem.Status = 3;
-            //        break;
-            //    case 4: //DND: Do not disturb.
-            //        friendItem.Status = 4;
-            //        break;
-            //    case 5: //LFS:  Looking For Game/Group. Could be used when you want to be invited or do matchmaking. More...
-            //        friendItem.Status = 5;
-            //        break;
-            //    case 6: //Playing:
-            //        friendItem.Status = 6;
-            //        break;
-            //}
         }
         else
         {

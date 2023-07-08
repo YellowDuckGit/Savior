@@ -877,6 +877,9 @@ public class PlayfabManager : MonoBehaviour
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
             StartCoroutine(GameData.instance.LoadFriendItem());
 
+            ChatManager.instance.SendDirectMessage(friendId, nameof(MessageType.AddFriend) + "|" );
+
+
         }, (error) =>
         {
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.SetActive(true);

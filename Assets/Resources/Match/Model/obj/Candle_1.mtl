@@ -1,0 +1,40 @@
+newmtl CandleFBXASC0321SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 0.00
+newmtl CandleFBXASC0321SG1
+illum 4
+Kd 0.40 0.32 0.15
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.10 0.08 0.04
+Ns 28.25
+newmtl CandleFBXASC0322SG
+illum 4
+Kd 0.40 0.32 0.15
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.10 0.08 0.04
+Ns 28.25
+newmtl CandleFBXASC0323SG
+illum 4
+Kd 0.40 0.32 0.15
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.10 0.08 0.04
+Ns 28.25
+newmtl CandleFBXASC0324SG
+illum 4
+Kd 0.40 0.32 0.15
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.10 0.08 0.04
+Ns 28.25
