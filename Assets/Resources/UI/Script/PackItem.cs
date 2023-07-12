@@ -18,6 +18,7 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
         public Image avatar;
         Data_Pack data;
         private string id = CommonFunction.getNewId();
+        public TextMeshProUGUI price;
 
         public string ID
         {
@@ -31,7 +32,6 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
             set
             {
                 this.data = value;
-                text_packName.text = id;
 
                 // Avatar
 
@@ -77,12 +77,16 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
 public class Data_Pack
 {
     public string id;
+    public string packName;
+    public string price;
     public List<string> cardItemsId = new List<string>();
     public List<string> dropTableId = new List<string>();
 
-    public Data_Pack(string id)
+    public Data_Pack(string id, string packName, string price)
     {
         this.id = id;
+        this.packName = packName;
+        this.price = price;
     }
 
 }

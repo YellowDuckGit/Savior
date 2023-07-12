@@ -14,6 +14,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using WebSocketSharp;
 using static Data_Pack;
+using static UnityEditor.Progress;
 
 public class GameData : MonoBehaviour
 {
@@ -321,8 +322,10 @@ public class GameData : MonoBehaviour
         foreach (Data_Deck data in listDeck.listDeck)
         {
             DeckItem deckItem = GameObject.Instantiate(DeckItemPrefFab, Vector3.zero, Quaternion.identity).GetComponent<DeckItem>();
+            deckItem.price.gameObject.SetActive(false);
             deckItem.gameObject.SetActive(false);
             deckItem.Data = data;
+            deckItem.text_DeckName.text = data.deckName;
             listDeckItem.Add(deckItem);
             print("ININT");
         }
@@ -400,7 +403,9 @@ public class GameData : MonoBehaviour
             Debug.Log("PACK ITEMS");
             PackItem pack = GameObject.Instantiate(packPrefab, Vector3.zero, Quaternion.identity).GetComponent<PackItem>();
             pack.ID = item.id;
+            pack.text_packName.text = item.packName;
             pack.Data = item;
+            pack.price.text = item.price;
             pack.gameObject.SetActive(false);
             listPackItem.Add(pack);
             Debug.Log("END PACK ITEMS");
@@ -421,6 +426,8 @@ public class GameData : MonoBehaviour
             deck.Id = item.id;
             deck.Data = item;
             deck.text_DeckName.text = item.deckName;
+            Debug.Log("DECK NAME: " + item.deckName);
+            deck.price.text = item.price;
             deck.gameObject.SetActive(false);
             listDeckItemInStore.Add(deck);
             Debug.Log("END PACK ITEMS");
@@ -658,7 +665,8 @@ public class GameData : MonoBehaviour
                     deckItem.transform.parent = parent.transform;
                     deckItem.transform.localScale = new Vector3(1f, 1f, 1f);
                     deckItem.transform.localPosition = new Vector3(0f, 0f, 0f);
-
+                    deckItem.text_DeckName.text = deckItem.Data.deckName;
+                    print("LOAD DECK ITEM: " + deckItem.Data.deckName);
                 }
             }
         }
@@ -766,7 +774,8 @@ public class GameData : MonoBehaviour
                 item.transform.parent = parent.transform;
                 item.transform.localScale = new Vector3(1f, 1f, 1f);
                 item.transform.localPosition = new Vector3(0f, 0f, 0f);
-                item.text_packName.text = item.ID.ToString();
+                item.text_packName.text = item.Data.packName;
+                item.price.text = item.Data.price;
             }
             Debug.Log("END LOAD PACK");
         }
@@ -784,7 +793,6 @@ public class GameData : MonoBehaviour
                 item.transform.parent = parent.transform;
                 item.transform.localScale = new Vector3(1f, 1f, 1f);
                 item.transform.localPosition = new Vector3(0f, 0f, 0f);
-                item.text_DeckName.text = item.Id.ToString();
             }
             Debug.Log("END LOAD DECK");
         }
@@ -802,7 +810,8 @@ public class GameData : MonoBehaviour
                 item.transform.parent = parent.transform;
                 item.transform.localScale = new Vector3(1f, 1f, 1f);
                 item.transform.localPosition = new Vector3(0f, 0f, 0f);
-                item.text_DeckName.text = item.Id.ToString();
+                item.text_DeckName.text = item.Data.deckName;
+                item.price.text = item.Data.price;
             }
             Debug.Log("END LOAD DECK IN STORE");
         }

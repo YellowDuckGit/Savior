@@ -82,16 +82,24 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
                     this.PostEvent(EventID.OnPutCardInDeck, this.cardItem.cardData.Id);
                 }
             }
-            else if (UIManager.instance.isStoreCards)
-            {
-                print("show popup card");
-                UIManager.instance.ShowPopupCard(this);
-            }
+            //else if (UIManager.instance.isStoreCards)
+            //{
+            //    print("show popup card");
+            //    UIManager.instance.ShowPopupCardInStore(this);
+            //}
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
             if(UIManager.instance.PanelCardDetails.transform != this.transform.parent)
-            UIManager.instance.LoadCardDetail(cardItem);
+            {
+                UIManager.instance.LoadCardDetail(cardItem);
+
+            } 
+            //else if(UIManager.instance.isStoreCards)
+            //{
+            //    UIManager.instance.ShowPopupCardInStore(this);
+            //}
+
         }
         else if (eventData.button == PointerEventData.InputButton.Middle)
         {

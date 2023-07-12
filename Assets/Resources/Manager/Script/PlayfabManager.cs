@@ -481,12 +481,12 @@ public class PlayfabManager : MonoBehaviour
                     //    item.Bundle.BundledResultTables.ForEach((x) => print($"BundledResultTables({item.Bundle.BundledResultTables.IndexOf(x)}): {x}"));
                     //    print(string.Join("=", new string[30]));
                     //}
-
-                    var pack = new Data_Pack(item.ItemId);
+                    var currency = item.VirtualCurrencyPrices["MC"];
+                    var pack = new Data_Pack(item.ItemId, item.DisplayName, currency+"");
                     //bundles.Add(new Data_Pack(item.ItemId));
                     if (item.Bundle != null)
                     {
-                        print($"Bundle name: {item.DisplayName}");
+                        print($"Bundle name: {item.DisplayName} with price {item.VirtualCurrencyPrices}");
                         //sell pack (random card) -> droptables
                         if (item.Bundle.BundledResultTables != null)
                         {
@@ -509,7 +509,8 @@ public class PlayfabManager : MonoBehaviour
                 }
                 else if (item.ItemClass == "Deck")
                 {
-                    var deck = new Data_Deck(item.ItemId);
+                    var currency = item.VirtualCurrencyPrices["MC"];
+                    var deck = new Data_Deck(item.ItemId, item.DisplayName, currency.ToString());
                     if (item.Bundle != null)
                     {
                         print($"Bundle DECK name: {item.DisplayName}");
@@ -668,9 +669,10 @@ public class PlayfabManager : MonoBehaviour
         {
             if (itemPurchases.Count == 1)
             {
-                deckName = itemPurchases[0].ItemId;
+                deckName = UIManager.instance.DeckName;
+                print($"672 {deckName}");
             }
-            yield return StartCoroutine(CollectionManager.instance.GetDeckFromStore(dic, deckName));
+            yield return StartCoroutine(CollectionManager.instance.CreateDeckFromStore(dic, deckName));
         }
 
         yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
