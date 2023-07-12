@@ -519,8 +519,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\u0111"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 949b0bdc342c403409650cf45eec63ff, type: 2}
-  m_sharedMaterial: {fileID: 1805920546325613140, guid: 949b0bdc342c403409650cf45eec63ff, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b8f4c7d2103084c45b8919d49abdd05b, type: 2}
+  m_sharedMaterial: {fileID: 6270830094686447790, guid: b8f4c7d2103084c45b8919d49abdd05b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -654,8 +654,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: King King
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 97510f655b846824a98dc98b491a8e06, type: 2}
-  m_sharedMaterial: {fileID: 6343856649015537991, guid: 97510f655b846824a98dc98b491a8e06, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b8f4c7d2103084c45b8919d49abdd05b, type: 2}
+  m_sharedMaterial: {fileID: 6270830094686447790, guid: b8f4c7d2103084c45b8919d49abdd05b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -13,6 +13,7 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
 
     Data_Deck data;
     public Image avatar;
+    public TextMeshProUGUI price;
 
     private string id = CommonFunction.getNewId();
 
@@ -29,7 +30,7 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
         {
             this.id = Id;
             this.data = value;
-            text_DeckName.text = this.data.deckName;
+            //text_DeckName.text = this.data.deckName;
 
             // Avatar
             //string idSavaior = data.ListCardID.FirstOrDefault(a => a.Contains("SA"));
@@ -71,8 +72,8 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
             
             //select deck
             GameData.instance.selectDeck = this;
-            UIManager.instance.DeckName = this.data.deckName;
-            print(this.data.deckName);
+            UIManager.instance.DeckName = data.deckName;
+            print(data.deckName);
             print("Selected Deck");
 
             if (data.ListCardID.Count > 0)
@@ -115,11 +116,15 @@ public class Data_Deck
     //field save in server
     public string deckCode;
     public string deckName;
+    public string price;
     //
 
-    public Data_Deck(string id)
+    public Data_Deck(string id, string deckName, string price)
     {
         this.id = id;
+        Debug.Log($"125 {deckName}");
+        this.deckName = deckName;
+        this.price = price;
     }
 
     private List<string> listCardID = new List<string>();
@@ -141,6 +146,8 @@ public class Data_Deck
     {
         this.deckCode = deckCode;
         this.deckName = deckName;
+        Debug.Log($"149 {deckName}");
+
     }
 
 }

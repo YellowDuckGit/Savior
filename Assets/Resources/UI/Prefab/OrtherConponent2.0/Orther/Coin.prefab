@@ -150,7 +150,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4458877033722063939}
+  - {fileID: 6177539576242147540}
   - {fileID: 8328644010128971546}
   m_Father: {fileID: 0}
   m_RootOrder: -1
@@ -299,8 +299,40 @@ PrefabInstance:
       value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+      propertyPath: m_fontSize
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b8f4c7d2103084c45b8919d49abdd05b, type: 2}
+    - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 6270830094686447790, guid: b8f4c7d2103084c45b8919d49abdd05b, type: 2}
+    - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+      propertyPath: m_characterSpacing
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5049267288626023604, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+      propertyPath: m_enableVertexGradient
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5524140909934453292, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
       propertyPath: m_AnchorMax.x
@@ -344,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8386276073253911518, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8386276073253911518, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
       propertyPath: m_AnchorMin.x
@@ -352,7 +384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8386276073253911518, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8386276073253911518, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
       propertyPath: m_SizeDelta.x
@@ -422,7 +454,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5469897884818305659}
   m_SourcePrefab: {fileID: 100100000, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
---- !u!1 &3813807255825452028 stripped
+--- !u!224 &6177539576242147540 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8386276073253911518, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
+  m_PrefabInstance: {fileID: 2438996222145243914}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6680887686107674475 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9038242661622226017, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
   m_PrefabInstance: {fileID: 2438996222145243914}
@@ -433,7 +470,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3813807255825452028}
+  m_GameObject: {fileID: 6680887686107674475}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
@@ -457,8 +494,3 @@ MonoBehaviour:
   baked: 0
   modifiedFromInspector: 0
   bakedShadows: []
---- !u!224 &4458877033722063939 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8386276073253911518, guid: a79625cfcf47f2b46986a151ee299b22, type: 3}
-  m_PrefabInstance: {fileID: 2438996222145243914}
-  m_PrefabAsset: {fileID: 0}

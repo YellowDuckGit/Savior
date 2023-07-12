@@ -144,15 +144,15 @@ public class CollectionManager : MonoBehaviour
 
     }
 
-    public IEnumerator GetDeckFromStore(Dictionary<string, int> dic, string deckName)
+    public IEnumerator CreateDeckFromStore(Dictionary<string, int> dic, string deckName)
     {
+        print($"149 {deckName}");
         string deckCode = "";
         foreach ((var key, var value) in dic)
         {
             deckCode += key + ":" + value + "%";
         }
 
-        print(deckCode);
         deckCode = deckCode.Substring(0, deckCode.Length - 1);
 
         Data_Deck newDeck;

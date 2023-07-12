@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
+using static UnityEditor.Progress;
 
 public enum SceneType
 {
@@ -129,7 +130,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject LoadingAPIPanel;
     [SerializeField] GameObject PopupPackDetailed;
     [SerializeField] GameObject PopupDeckDetailed;
-    [SerializeField] GameObject PopupCardDetailed;
+
+
 
     [SerializeField] CountdownTimer WaitingAcceptMatch;
     [SerializeField] CounterTime counterTimeWating;
@@ -148,6 +150,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] List<TextMeshProUGUI> numberCardInDeck;
     // [SerializeField] List<TMP_InputField> deckNameCraeteDeck;
     [SerializeField] List<TMP_InputField> deckName;
+    [SerializeField] TextMeshProUGUI packName;
+    [SerializeField] TextMeshProUGUI cardPrice;
     [SerializeField] List<TextMeshProUGUI> gameMode;
     [SerializeField] List<TextMeshProUGUI> elo;
     [SerializeField] List<TextMeshProUGUI> virtualMoney;
@@ -199,7 +203,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button ACT_Store_CancelDeck;
 
     [SerializeField] Button ACT_Store_BuyCard;
-    [SerializeField] Button ACT_Store_CancelCard;
 
     [SerializeField] Button ACT_NormalMode;
     [SerializeField] Button ACT_RankedMode;
@@ -211,6 +214,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button ACT_DeclineMatch;
     [SerializeField] Button ACT_LeaveRoom;
     [SerializeField] Button ACT_StopFind;
+
 
 
 
@@ -350,9 +354,8 @@ public class UIManager : MonoBehaviour
         {
             print("click to buy card");
             StartCoroutine(PlayfabManager.instance.BuyItems("Card", "CS1", GameData.instance.itemPurchaseRequests, "MC"));
-            PopupCardDetailed.SetActive(false);
+            PanelCardDetails.SetActive(false);
         });
-        ACT_Store_CancelCard.onClick.AddListener(() => PopupCardDetailed.SetActive(false));
 
         ACT_NormalMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Normal; GameMode = "Normal"; });
         ACT_RankedMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Rank; GameMode = "Rank"; });
@@ -366,6 +369,7 @@ public class UIManager : MonoBehaviour
             PlayfabManager.instance.AddFriend(PlayfabManager.FriendIdType.Username, friendUserName.text);
         });
         //ACT_DeleteDeck.onClick.AddListener(() => { PlayfabManager.instance.RemoveFriend("vanphu02"); });
+
         #endregion
 
         TurnOn(SceneType.SignIn, true); //Default
@@ -391,11 +395,10 @@ public class UIManager : MonoBehaviour
     {
         if (turn)
         {
-          
+
             Fader.PlayFeedbacks();
             //FaderDirectional.PlayFeedbacks();
         }
-
         print("Type: " + type + " Turn: " + turn);
         switch (type)
         {
@@ -475,8 +478,8 @@ public class UIManager : MonoBehaviour
                 {
                     if (turn)
                     {
-                        if(lastScence == SceneType.SignUp || lastScence == SceneType.SignIn)
-                        FaderRound.PlayFeedbacks();
+                        if (lastScence == SceneType.SignUp || lastScence == SceneType.SignIn)
+                            FaderRound.PlayFeedbacks();
 
                         TurnOffSceneAlreadyShow();
                         // LOAD MONEY VIRTUAL
@@ -552,6 +555,7 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "Collection Deck";
                 }
 
                 if (isCollection_Decks)
@@ -561,7 +565,6 @@ public class UIManager : MonoBehaviour
                 }
                 break;
             case SceneType.CollectionCards:
-
                 if (isCollection_Cards ^ turn)
                 {
                     if (turn)
@@ -574,6 +577,7 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "Collection Card";
                 }
 
                 if (isCollection_Cards)
@@ -597,6 +601,8 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "Pack Store";
+
                 }
 
                 if (isStorePacks)
@@ -619,6 +625,7 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "Deck Store";
                 }
 
                 if (isStoreDecks)
@@ -641,6 +648,7 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "Card Store";
                 }
 
                 if (isStoreCards)
@@ -669,6 +677,7 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "Create New Deck";
                 }
 
                 if (isCreateDeck)
@@ -694,6 +703,7 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "PVP - Choose Deck";
                 }
 
                 if (isChooseDeck)
@@ -719,6 +729,8 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "PVF - Choose Deck";
+
                 }
 
                 if (isChooseDeckPVF)
@@ -1064,19 +1076,38 @@ public class UIManager : MonoBehaviour
 
     public void LoadCardDetail(CardItem cardItem)
     {
-        CardInInventory cardInInventory =  GameData.instance.InitCard2D(cardItem);
+    
+        CardInInventory cardInInventory = GameData.instance.InitCard2D(cardItem);
         cardInInventory.transform.parent = PanelCardDetails.transform;
         cardInInventory.gameObject.transform.localPosition = Vector3.zero;
-        cardInInventory.gameObject.transform.localScale = new Vector3(2f,2f,2f);
+        cardInInventory.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
         PanelCardDetails.gameObject.SetActive(true);
+
+        if(isStoreCards)
+        {  
+            print($"UIManager 1087 {isStoreCards}");
+            ACT_Store_BuyCard.gameObject.SetActive(true);
+            cardPrice.transform.parent.gameObject.SetActive(true);
+            GameData.instance.itemPurchaseRequests.Clear();
+            GameData.instance.itemPurchaseRequests.Add(new PlayFab.ClientModels.ItemPurchaseRequest()
+            {
+                ItemId = cardItem.cardData.Id,
+                Quantity = 1
+            });
+        }
+        if(isCollection_Cards)
+        {
+            //ACT_Store_BuyCard.gameObject.SetActive(false);
+            //cardPrice.transform.parent.gameObject.SetActive(false);
+        }
     }
 
     public void UnLoadCardDetail()
     {
-        print("Unload: "+ PanelCardDetails.transform.childCount);
-        if(PanelCardDetails.transform.childCount > 0)
+        print("Unload: " + PanelCardDetails.transform.childCount);
+        if (PanelCardDetails.transform.childCount > 0)
         {
-           Transform children = PanelCardDetails.transform.GetChild(0);
+            Transform children = PanelCardDetails.transform.GetChild(0);
             Destroy(children.gameObject);
             PanelCardDetails.gameObject.SetActive(false);
         }
@@ -1100,7 +1131,7 @@ public class UIManager : MonoBehaviour
     string Elo
     {
         get { return elo[0].text; }
-        set { this.elo.ForEach(a => a.text = "Ranking Score: " + value); }
+        set { this.elo.ForEach(a => a.text = "Elo: " + value); }
     }
 
     public string NumberCardInDeck
@@ -1370,7 +1401,7 @@ public class UIManager : MonoBehaviour
         LoadingAPIPanel.SetActive(enable);
     }
 
-    public void ShowPopupCard(CardInInventory item)
+    public void ShowPopupCardInStore(CardInInventory item)
     {
         GameData.instance.itemPurchaseRequests.Clear();
         GameData.instance.itemPurchaseRequests.Add(new PlayFab.ClientModels.ItemPurchaseRequest()
@@ -1378,11 +1409,10 @@ public class UIManager : MonoBehaviour
             ItemId = item.CardItem.cardData.Id,
             Quantity = 1
         });
-        var popup = PopupCardDetailed.GetComponent<popupDetail>();
-        PopupCardDetailed.SetActive(true);
 
-        popup.description.text = item.CardItem.cardData.Name + "\n" + item.CardItem.cardData.Description;
+        //popup.description.text = item.CardItem.cardData.Name + "\n" + item.CardItem.cardData.Description;
     }
+
     public IEnumerator ShowPopupDeckDetailed(DeckItem item)
     {
         GameData.instance.itemPurchaseRequests.Clear();
@@ -1392,6 +1422,7 @@ public class UIManager : MonoBehaviour
             Quantity = 1
         });
         PopupDeckDetailed.SetActive(true);
+        print($"UIManager 1408 {item.Data.deckName}");
         var deckData = GameData.instance.listDeckDataInStore.Find(i => i.id == item.Id);
         Dictionary<string, int> dic = new Dictionary<string, int>();
         foreach (var key in deckData.deckItemsId)
@@ -1407,7 +1438,7 @@ public class UIManager : MonoBehaviour
         }
 
         yield return StartCoroutine(GameData.instance.LoadCardInDeckStoreItem(dic));
-
+        UIManager.instance.DeckName = item.Data.deckName;
 
     }
 
@@ -1446,9 +1477,10 @@ public class UIManager : MonoBehaviour
 
         DropTableInfor matchingitems = GameData.instance.dropTableInforList.FirstOrDefault(x => dic.ContainsKey(x.id)); // get the items from the list that have the same id as the keys in dic
         if (matchingitems != null) print("Not null");
-
+        print($"1464 {item.Data.packName}");
+        packName.text = item.Data.packName;
         yield return StartCoroutine(GameData.instance.LoadCardInPackItem(matchingitems));
-       
+
     }
 
     public void WatingAcceptMatch(bool enable)
@@ -1474,6 +1506,6 @@ public class UIManager : MonoBehaviour
 
     }
 
-   
+
     #endregion
 }
