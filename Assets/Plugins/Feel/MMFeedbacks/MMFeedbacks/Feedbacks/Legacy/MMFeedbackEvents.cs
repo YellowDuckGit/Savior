@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -87,5 +88,10 @@ namespace MoreMountains.Feedbacks
 			base.CustomReset();
 			ResetEvents.Invoke();
 		}
-	}
+
+        public static implicit operator MMFeedbackEvents(MMF_Feedback v)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

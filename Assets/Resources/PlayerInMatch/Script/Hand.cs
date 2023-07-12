@@ -422,7 +422,6 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
                 _cards[numberCardInHand - 1].gameObject.transform.localRotation = Quaternion.identity;
             }
         }
-
         if (_cards.Count >= 1)
         {
             //sort Y hand card
@@ -437,7 +436,6 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
 
             }
         }
-
     }
 
     private void ScaleCardInHand()

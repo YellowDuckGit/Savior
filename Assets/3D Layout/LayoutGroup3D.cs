@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DG.Tweening;
+using DG.Tweening.Plugins.Options;
 
 public enum LayoutStyle
 {
@@ -34,6 +36,18 @@ public enum Alignment
 [ExecuteAlways]
 public class LayoutGroup3D : MonoBehaviour
 {
+    [Space(10)]
+    [Header("Custom")]
+    [SerializeField]
+    private bool CustomSortingCard = true;
+    [SerializeField]
+    private float spacingZ = 0.1f;
+    [SerializeField]
+    private float custom_StartAngleOffset = 90;
+    [SerializeField]
+    private float RadiusSpace = 10;
+    [Space(10)]
+
     [HideInInspector]
     public List<Transform> LayoutElements;
     [HideInInspector]
@@ -88,6 +102,7 @@ public class LayoutGroup3D : MonoBehaviour
     public bool ForceContinuousRebuild = false;
     [Tooltip("If true, child gameobjects that are not activeSelf will be ignored for the layout.  Otherwise, inactive child gameobjects will be included in the layout.")]
     public bool IgnoreDeactivatedElements = true;
+
 
     public void RebuildLayout()
     {
@@ -442,13 +457,57 @@ public class LayoutGroup3D : MonoBehaviour
                 break;
         }
 
+        //Custom
+        List<float> listZ = new List<float>();
+        if (CustomSortingCard)
+        {
+            listZ.Add(-(LayoutElements.Count - 1) / 2 * spacingZ);
+            for (int i = 1; i < LayoutElements.Count; i++)
+            {
+                listZ.Add(listZ[i - 1] + ( spacingZ));
+            }
+            customSortingCard();
+        }
+
+        //if ((LayoutElements.Count - 1 ) % 2 == 0) //Chan
+        //{
+        //    listZ.Add( -(LayoutElements.Count - 1) / 2);
+        //    for(int i=1;i<LayoutElements.Count; i++)
+        //    {
+        //        listZ.Add(listZ[i-0]+spacingZ);
+        //    }
+        //}
+        //else //Le
+        //{
+        //    listZ.Add( -(LayoutElements.Count - 1) / 2);
+        //    for (int i = 1; i < LayoutElements.Count; i++)
+        //    {
+        //        listZ.Add(listZ[i - 0] + spacingZ);
+        //    }
+        //}
+        //
+
         for (int i = 0; i < LayoutElements.Count; i++)
         {
             float angle = (LayoutElements.Count > 1) ? (float)i / (LayoutElements.Count - 1) * MaxArcAngle * Mathf.Deg2Rad : 0f;
             float x = Mathf.Cos(angle + Mathf.Deg2Rad * StartAngleOffset) * (Radius + spiralSum);
             float y = Mathf.Sin(angle + Mathf.Deg2Rad * StartAngleOffset) * (Radius + spiralSum);
-            pos = primaryAxis * x + secondaryAxis * y;
-            LayoutElements[i].localPosition = pos + StartPositionOffset;
+            //Custom
+            Vector3 z = Vector3.zero;
+            if (CustomSortingCard)
+            {
+                z = new Vector3(0f, 0f, listZ[i]);
+            }
+
+            pos = primaryAxis * x + secondaryAxis * y + z;
+            
+
+            if (CustomSortingCard && Application.IsPlaying(gameObject))
+            {
+                print("Call");
+                LayoutElements[i].transform.DOLocalMove(pos + StartPositionOffset,0.5f,false);
+            }else
+                LayoutElements[i].localPosition = pos + StartPositionOffset;
 
             // Handle rotation of elements
             if (AlignToRadius)
@@ -458,6 +517,7 @@ public class LayoutGroup3D : MonoBehaviour
             
             spiralSum += spiralIncrement;
         }
+
     }
 
     private void AlignRadialElement(int i, Vector3 LocalElemPos)
@@ -1043,4 +1103,15 @@ public class LayoutGroup3D : MonoBehaviour
         quaternion.w = (m01 - m10) * num2;
         return quaternion;
     }
+
+    //Custom
+    public void customSortingCard()
+    {
+        MaxArcAngle =  LayoutElements.Count * RadiusSpace;
+        StartAngleOffset = custom_StartAngleOffset - (MaxArcAngle/2);
+
+        //float y = transform.position.y + (Radius - 1);
+        //transform.position = new Vector3(transform.position.x, y, transform.position.z);
+    }
+    //
 }
