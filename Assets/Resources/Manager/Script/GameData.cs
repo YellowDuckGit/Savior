@@ -14,7 +14,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using WebSocketSharp;
 using static Data_Pack;
-using static UnityEditor.Progress;
 
 public class GameData : MonoBehaviour
 {
@@ -46,6 +45,8 @@ public class GameData : MonoBehaviour
     public List<CardInDeckPack> listCardInDeckPack = new List<CardInDeckPack>();
     public List<CardInPack> listCardInPack = new List<CardInPack>();
     public List<List<string>> listCardOpenedInPack = new List<List<string>>();
+    public Dictionary<string, string> listCardPrice = new Dictionary<string, string>();
+
 
 
     [Header("Prefab")]
@@ -112,6 +113,9 @@ public class GameData : MonoBehaviour
 
         yield return StartCoroutine(LoadDeck());
 
+        //Load Price of Card
+        yield return StartCoroutine(LoadingCardPrice());
+        
         yield return StartCoroutine(LoadFriendItem());
 
         //yield return StartCoroutine(LoadDeck());
@@ -176,6 +180,18 @@ public class GameData : MonoBehaviour
             card.NumberCard = amount;
         }
         print("CARD AMOUNT: " + listCard.Count());
+
+        yield return null;
+    }
+
+    private IEnumerator LoadingCardPrice()
+    {
+        foreach (KeyValuePair<string, string> entry in listCardPrice)
+        {
+            print(entry.Key + ": " + entry.Value);
+            CardItem card = listCardItem.SingleOrDefault(a=>a.cardData.Id == entry.Key);
+            if(card != null) card.price = Int32.Parse(entry.Value);
+        }
 
         yield return null;
     }
@@ -310,6 +326,18 @@ public class GameData : MonoBehaviour
       
         CardInInventory cardInInventory = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity).GetComponent<CardInInventory>();
         cardInInventory.CardItem = card;
+
+        CardInDeckPack cardInDeckPack = listCardInDeckPack.SingleOrDefault(a => a.CardItem == card);
+        if (cardInDeckPack != null)
+        {
+            cardInInventory.NumberCard = card.amount - cardInDeckPack.NumberCard;
+        }
+        else
+        {
+            cardInInventory.NumberCard = card.amount;
+        }
+
+
         return cardInInventory;
     }
 
@@ -693,20 +721,45 @@ public class GameData : MonoBehaviour
                 card.gameObject.SetActive(true);
                 card.transform.parent = parent.transform;
                 card.transform.localScale = new Vector3(1f, 1f, 1f);
-
+                card.transform.localPosition = Vector3.zero;
                 //number card
-                CardInDeckPack cardInDeckPack = listCardInDeckPack.SingleOrDefault(a => a.CardItem == card.CardItem);
-                if (cardInDeckPack != null)
-                {
-                    card.NumberCard = card.CardItem.amount - cardInDeckPack.NumberCard;
-                }
-                else
-                {
-                    card.NumberCard = card.CardItem.amount;
-                }
+              
             }
         }
+
+        foreach (CardInInventory card in listCardInInventory)
+        {
+            CardInDeckPack cardInDeckPack = listCardInDeckPack.SingleOrDefault(a => a.CardItem == card.CardItem);
+            if (cardInDeckPack != null)
+            {
+                print("if (cardInDeckPack != null)");
+                card.NumberCard = card.CardItem.amount - cardInDeckPack.NumberCard;
+            }
+            else
+            {
+                print("if (cardInDeckPack -= null)");
+                print(card.CardItem.amount);
+                card.NumberCard = card.CardItem.amount;
+            }
+        }
+
         yield return null;
+
+
+        //if (listCardInInventory[0].transform.parent != parent.transform)
+        //{
+        //    foreach (CardInInventory card in listCardInInventory)
+        //    {
+        //        card.gameObject.SetActive(true);
+        //        card.transform.parent = parent.transform;
+        //        card.transform.localScale = new Vector3(1f, 1f, 1f);
+
+        //        card.transform.localPosition = Vector3.zero;
+        //        //numer card
+        //        card.NumberCard = card.CardItem.amount;
+        //    }
+        //}
+        //yield return null;
     }
 
     public IEnumerator LoadCardInDeckPack(List<string> listCardID)

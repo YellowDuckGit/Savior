@@ -3982,6 +3982,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6703841854243996848, guid: 56d2fc3deebfc2c48a55a8909d90de16, type: 3}
+      propertyPath: offset.x
+      value: 0.00000071525585
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703841854243996848, guid: 56d2fc3deebfc2c48a55a8909d90de16, type: 3}
+      propertyPath: offset.y
+      value: -12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23550,7 +23558,7 @@ RectTransform:
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0.99999994}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -27916,7 +27924,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &939106757
 RectTransform:
   m_ObjectHideFlags: 0
@@ -28514,6 +28522,14 @@ PrefabInstance:
     - target: {fileID: 6678956338950088828, guid: 56d2fc3deebfc2c48a55a8909d90de16, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703841854243996848, guid: 56d2fc3deebfc2c48a55a8909d90de16, type: 3}
+      propertyPath: offset.x
+      value: 0.00000071525585
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703841854243996848, guid: 56d2fc3deebfc2c48a55a8909d90de16, type: 3}
+      propertyPath: offset.y
+      value: -12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -35640,6 +35656,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00099f8dbc7fe484e8846dd5c9a6e97d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CustomSortingCard: 1
+  spacingZ: 0.1
+  custom_StartAngleOffset: 90
+  RadiusSpace: 10
   LayoutElements: []
   ElementDimensions: {x: -3.56, y: 1, z: 1}
   Spacing: 15.38
@@ -39769,7 +39789,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MonsterCardPrefab: {fileID: -4312212746381258581, guid: cb9c9a3bfe331f04a909d8bd9fc06d4e, type: 3}
-  SpellCardPrefab: {fileID: -7588298800689687812, guid: 233c6d8ebbc914647ba819e475597b0f, type: 3}
+  SpellCardPrefab: {fileID: -4312212746381258581, guid: 30eb83a8263a1f04583c395913082857, type: 3}
   packContainer: {fileID: 463539338}
   cardContainer: {fileID: 1217717293}
   card3DInInventories: []
@@ -41636,7 +41656,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5803922}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7529412}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -50221,15 +50241,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 60
     m_Right: 0
     m_Top: 50
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 3
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 300, y: 450}
-  m_Spacing: {x: 30, y: 30}
+  m_Spacing: {x: 60, y: 60}
   m_Constraint: 0
   m_ConstraintCount: 1
 --- !u!224 &1810286559
@@ -50250,7 +50270,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0.000023427921, y: 0}
-  m_SizeDelta: {x: 0, y: -930.33}
+  m_SizeDelta: {x: 0, y: -950.33}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1812399212
 GameObject:
@@ -57737,6 +57757,10 @@ PrefabInstance:
     - target: {fileID: 4062028952441139550, guid: 6bcf2c4c5c55e304e97d32c9d34c021b, type: 3}
       propertyPath: m_Name
       value: Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281761541652893707, guid: 6bcf2c4c5c55e304e97d32c9d34c021b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.1353989
       objectReference: {fileID: 0}
     - target: {fileID: 7325147291095238232, guid: 6bcf2c4c5c55e304e97d32c9d34c021b, type: 3}
       propertyPath: m_Pivot.x

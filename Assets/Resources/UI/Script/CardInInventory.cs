@@ -63,6 +63,7 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
     }
     bool PutInDeck()
     {
+        print(this.numberCard);
         if (this.numberCard > 0 && this.numberCard < 4)
         {
             return true;
@@ -74,36 +75,26 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-          
+         
+
+            if (UIManager.instance.PanelCardDetails.transform != this.transform.parent)
+            {
+                UIManager.instance.LoadCardDetail(cardItem);
+
+            }
+        }
+        
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+
             if (UIManager.instance.isCreateDeck)
             {
                 if (PutInDeck())
                 {
+                    print("Pust Card In DEck");
                     this.PostEvent(EventID.OnPutCardInDeck, this.cardItem.cardData.Id);
                 }
             }
-            //else if (UIManager.instance.isStoreCards)
-            //{
-            //    print("show popup card");
-            //    UIManager.instance.ShowPopupCardInStore(this);
-            //}
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            if(UIManager.instance.PanelCardDetails.transform != this.transform.parent)
-            {
-                UIManager.instance.LoadCardDetail(cardItem);
-
-            } 
-            //else if(UIManager.instance.isStoreCards)
-            //{
-            //    UIManager.instance.ShowPopupCardInStore(this);
-            //}
-
-        }
-        else if (eventData.button == PointerEventData.InputButton.Middle)
-        {
-            
         }
 
         print("Click");

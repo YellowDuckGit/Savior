@@ -31,7 +31,7 @@ public class CollectionManager : MonoBehaviour
     [SerializeField] GameObject gameObjetDeck;
     [SerializeField] GameObject gameObjectInventory;
 
-    public int LimitNumberCardInDeck = 20;
+    public int LimitNumberCardInDeck = 40;
 
     void Start()
     {
@@ -224,7 +224,7 @@ public class CollectionManager : MonoBehaviour
 
     public IEnumerator UpdateDeck()
     {
-        if (GameData.instance.getNumberCardInDeck() == 20)
+        if (GameData.instance.getNumberCardInDeck() == LimitNumberCardInDeck)
         {
             #region Create new Deck
             string deckCode = "";

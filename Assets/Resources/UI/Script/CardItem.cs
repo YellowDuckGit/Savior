@@ -13,6 +13,7 @@ public enum CardItemState
 [Serializable]
 public class CardItem: MonoBehaviour
 {
+    public int price;
   
     public int amount = 0;
 

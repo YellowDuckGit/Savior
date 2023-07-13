@@ -1,4 +1,5 @@
 using Assets.GameComponent.UI.CreateDeck.UI.Script;
+using DG.Tweening;
 using MoreMountains.Feedbacks;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
-using static UnityEditor.Progress;
 
 public enum SceneType
 {
@@ -408,7 +408,11 @@ public class UIManager : MonoBehaviour
                     if (turn)
                     {
                         TurnOffSceneAlreadyShow();
-                        // LOAD MONEY VIRTUAL
+
+                        if (UIManager.instance.loginMessage.transform.parent.gameObject.activeSelf)
+                        {
+                           UIManager.instance.loginMessage.transform.parent.gameObject.SetActive(false);
+                        }
 
                     }
                     isSignIn = turn;
@@ -432,7 +436,9 @@ public class UIManager : MonoBehaviour
                     if (turn)
                     {
                         TurnOffSceneAlreadyShow();
-                        // LOAD MONEY VIRTUAL
+
+                        if (UIManager.instance.RegisterMessage.transform.parent.gameObject.activeSelf)
+                            UIManager.instance.RegisterMessage.transform.parent.gameObject.SetActive(false);
                     }
                     isSignUp = turn;
 
@@ -454,8 +460,11 @@ public class UIManager : MonoBehaviour
                 {
                     if (turn)
                     {
+
                         TurnOffSceneAlreadyShow();
-                        // LOAD MONEY VIRTUAL
+
+                        if (UIManager.instance.recoverMessage.transform.parent.gameObject.activeSelf)
+                            UIManager.instance.recoverMessage.transform.parent.gameObject.SetActive(false);
 
                     }
                     isRecovery = turn;
@@ -664,9 +673,9 @@ public class UIManager : MonoBehaviour
                 {
                     if (turn)
                     {
-                        StartCoroutine(GameData.instance.LoadCardCollection(CreateDeck_CollectionCard));
+                        //StartCoroutine(GameData.instance.LoadCardCollection(CreateDeck_CollectionCard));
                         StartCoroutine(GameData.instance.LoadCardInDeckPack(CreateDeck_CardInDeck));
-                        //StartCoroutine(GameData.instance.LoadCardInInventoryUser(CardInventory));
+                        StartCoroutine(GameData.instance.LoadCardInInventoryUser(CreateDeck_CollectionCard));
                         LoadDeckName();
                         LoadNumberCardInDeck(GameData.instance.getNumberCardInDeck());
 
@@ -827,16 +836,23 @@ public class UIManager : MonoBehaviour
 
         if (isSignIn)
         {
+            loginUsername.text = "";
+            loginPassword.text = "";
             TurnOn(SceneType.SignIn, false);
         }
 
         if (isSignUp)
         {
+            regUsername.text = "";
+            regPassword.text = "";
+            regEmail.text = "";
+            regRePassword.text = "";
             TurnOn(SceneType.SignUp, false);
         }
 
         if (isRecovery)
         {
+            regEmail.text = "";
             TurnOn(SceneType.Recovery, false);
         }
 
@@ -868,6 +884,9 @@ public class UIManager : MonoBehaviour
 
         if (isCreateDeck)
         {
+            GameData.instance.selectDeck = null;
+            GameData.instance.UnLoadCardInDeckPack();
+
             TurnOn(SceneType.CreateDeck, false);
         }
 
@@ -958,13 +977,14 @@ public class UIManager : MonoBehaviour
     }
     public void TurnOnCreateDeckScene()
     {
+        print("TurnOnCreateDeckScene");
         TurnOn(SceneType.CreateDeck, true);
         ACT_SaveDeck.onClick.RemoveAllListeners();
-        GameData.instance.selectDeck = null;
         ACT_SaveDeck.onClick.AddListener(() => StartCoroutine(CollectionManager.instance.CreateDeck()));
     }
     public void TurnOnUpdateDeckScene()
     {
+        print("TurnOnUpdateDeckScene");
         TurnOn(SceneType.CreateDeck, true);
         ACT_SaveDeck.onClick.RemoveAllListeners();
         ACT_SaveDeck.onClick.AddListener(() => StartCoroutine(CollectionManager.instance.UpdateDeck()));
@@ -1086,8 +1106,16 @@ public class UIManager : MonoBehaviour
         if(isStoreCards)
         {  
             print($"UIManager 1087 {isStoreCards}");
+            print(cardItem.amount);
+
+            if(cardItem.amount != 3)
             ACT_Store_BuyCard.gameObject.SetActive(true);
+            else
+            {
+                ACT_Store_BuyCard.gameObject.SetActive(false);
+            }
             cardPrice.transform.parent.gameObject.SetActive(true);
+            cardPrice.text = cardItem.price.ToString();
             GameData.instance.itemPurchaseRequests.Clear();
             GameData.instance.itemPurchaseRequests.Add(new PlayFab.ClientModels.ItemPurchaseRequest()
             {
@@ -1097,8 +1125,8 @@ public class UIManager : MonoBehaviour
         }
         if(isCollection_Cards)
         {
-            //ACT_Store_BuyCard.gameObject.SetActive(false);
-            //cardPrice.transform.parent.gameObject.SetActive(false);
+            ACT_Store_BuyCard.gameObject.SetActive(false);
+            cardPrice.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -1107,7 +1135,7 @@ public class UIManager : MonoBehaviour
         print("Unload: " + PanelCardDetails.transform.childCount);
         if (PanelCardDetails.transform.childCount > 0)
         {
-            Transform children = PanelCardDetails.transform.GetChild(0);
+            Transform children = PanelCardDetails.transform.GetComponentInChildren<CardInInventory>().transform;
             Destroy(children.gameObject);
             PanelCardDetails.gameObject.SetActive(false);
         }
@@ -1370,6 +1398,7 @@ public class UIManager : MonoBehaviour
         {
             recoverMessage = value;
             EnableLoadingAPI(false);
+
         }
     }
     #endregion

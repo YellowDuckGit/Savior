@@ -314,6 +314,7 @@ public class PlayfabManager : MonoBehaviour
     #region Set-Get Data In Inventory
     public IEnumerator GetCards()
     {
+        print("GetCards");
         bool IsApiExecuting = true;
         PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest();
 
@@ -338,31 +339,49 @@ public class PlayfabManager : MonoBehaviour
                         };
                         PlayFabAdminAPI.RevokeInventoryItem(request2, result =>
                         {
-                            print("REVOKE ITEM SUCCESS: " + item.ItemId);
-                            List<PlayFab.AdminModels.ItemGrant> itemGrants = new List<PlayFab.AdminModels.ItemGrant>();
-                            var item1 = new PlayFab.AdminModels.ItemGrant();
-                            item1.ItemId = "CoinRefund";
-                            item1.PlayFabId = playFabId;
-                            itemGrants.Add(item1);
-                            PlayFab.AdminModels.GrantItemsToUserRequest request3 = new PlayFab.AdminModels.GrantItemsToUserRequest()
+                            GrantItem("Card", item.ItemId, 3);
+                            int numberOutlimit = numberCard - 3;
+                            print("Number Out Limit: "+numberOutlimit);
+
+                            CardItem a = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id.Equals(item.ItemId));
+                            string itemID = "";
+                            if (a != null)
                             {
-                                CatalogVersion = "Refund",
-                                ItemGrants = itemGrants
-                            };
-                            PlayFabAdminAPI.GrantItemsToUsers(request3, result =>
+                                switch (a.cardData.RarityCard)
+                                {
+                                    case Rarity.Normal:
+                                        itemID = "NormalRefund";
+                                        break;
+                                    case Rarity.Elite:
+                                        itemID = "EliteRefund";
+                                        break;
+                                    case Rarity.Epic:
+                                        itemID = "EpicRefund";
+                                        break;
+                                    case Rarity.Legendary:
+                                        itemID = "LegenRefund";
+                                        break;
+                                }
+
+                                GrantItem("Refund", itemID, numberOutlimit);
+                            }
+                            else
                             {
-                                print("GRANT ITEM TO USER: " + result.ItemGrantResults.Count);
-                                StartCoroutine(UIManager.instance.LoadVirtualMoney());
-                            }, (error) =>
-                            {
-                                Debug.Log("Got error retrieving user data:");
-                                Debug.Log(error.GenerateErrorReport());
-                            });
+                                Console.Error.WriteLine("ERROR");
+                            }
+
+
+                            //
+
+
+
                         }, (error) =>
                         {
                             Debug.Log("Got error retrieving user data:");
                             Debug.Log(error.GenerateErrorReport());
                         });
+
+
                     }
                     print("CARD INFO: " + item.ItemId + ": " + numberCard);
                 }
@@ -377,6 +396,36 @@ public class PlayfabManager : MonoBehaviour
         });
 
         yield return new WaitUntil(() => !IsApiExecuting);
+    }
+
+    public void GrantItem(string catalog, string itemID, int amount)
+    {
+        List<PlayFab.AdminModels.ItemGrant> itemGrants = new List<PlayFab.AdminModels.ItemGrant>();
+        var item1 = new PlayFab.AdminModels.ItemGrant();
+        item1.ItemId = itemID;
+        item1.PlayFabId = playFabId;
+
+        for (int i = 0; i < amount; i++)
+        {
+            print("Add");
+            itemGrants.Add(item1);
+        }
+
+        PlayFab.AdminModels.GrantItemsToUserRequest request3 = new PlayFab.AdminModels.GrantItemsToUserRequest()
+        {
+            CatalogVersion = catalog,
+            ItemGrants = itemGrants
+        };
+
+        PlayFabAdminAPI.GrantItemsToUsers(request3, result =>
+        {
+            print("GRANT ITEM TO USER: " + result.ItemGrantResults.Count);
+            StartCoroutine(UIManager.instance.LoadVirtualMoney());
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
     }
 
     public IEnumerator GetElo()
@@ -453,14 +502,8 @@ public class PlayfabManager : MonoBehaviour
         List<Data_Pack> packs = new List<Data_Pack>();
         List<Data_Deck> decks = new List<Data_Deck>();
 
-        List<(string id, string name)> cards = new List<(string id, string name)>();
+        Dictionary<string, string> cards = new Dictionary<string, string>();
 
-        //GetStoreItemsRequest request = new GetStoreItemsRequest()
-        // {
-        //    CatalogVersion = "Card",
-        //    StoreId = "BS1"
-        //};
-        //test
         PlayFabClientAPI.GetCatalogItems(new PlayFab.ClientModels.GetCatalogItemsRequest() { CatalogVersion = "Card" }, result =>
         {
             var catalogItem = result.Catalog;
@@ -469,20 +512,13 @@ public class PlayfabManager : MonoBehaviour
 
                 if (item.ItemClass == "Card")
                 {
-                    cards.Add((item.ItemId, item.DisplayName));
+                    cards.Add(item.ItemId, item.VirtualCurrencyPrices["MC"].ToString());
                 }
                 else if (item.ItemClass == "Bundle")
                 {
-                    //debug
-                    //if (item.Bundle != null)
-                    //{
-                    //    print(string.Join("=", new string[30]));
-                    //    item.Bundle.BundledItems.ForEach((x) => print($"BundledItems({item.Bundle.BundledItems.IndexOf(x)}): {x}"));
-                    //    item.Bundle.BundledResultTables.ForEach((x) => print($"BundledResultTables({item.Bundle.BundledResultTables.IndexOf(x)}): {x}"));
-                    //    print(string.Join("=", new string[30]));
-                    //}
+
                     var currency = item.VirtualCurrencyPrices["MC"];
-                    var pack = new Data_Pack(item.ItemId, item.DisplayName, currency+"");
+                    var pack = new Data_Pack(item.ItemId, item.DisplayName, currency + "");
                     //bundles.Add(new Data_Pack(item.ItemId));
                     if (item.Bundle != null)
                     {
@@ -528,6 +564,7 @@ public class PlayfabManager : MonoBehaviour
             print("number List<Data_Pack>:" + packs.Count + "\nnumber List<Data_Deck>: " + decks.Count);
             GameData.instance.listPackData = packs;
             GameData.instance.listDeckDataInStore = decks;
+            GameData.instance.listCardPrice = cards;
             IsApiExecuting = false;
         }, (error) =>
         {
@@ -617,7 +654,7 @@ public class PlayfabManager : MonoBehaviour
         Dictionary<string, int> dic = new Dictionary<string, int>();
         PlayFabClientAPI.ConfirmPurchase(request3, result =>
         {
-            result.Items.ForEach(x => Debug.Log("item name:  " + x.ItemId + ": "+ x.RemainingUses));
+            result.Items.ForEach(x => Debug.Log("item name:  " + x.ItemId + ": " + x.RemainingUses));
             print(result.Items.Count);
 
             //get pack item id
@@ -625,7 +662,7 @@ public class PlayfabManager : MonoBehaviour
             if (UIManager.instance.isStorePacks || UIManager.instance.isOpenPack)
             {
                 //analysis Pack 
-                foreach(var item in itemPurchases)
+                foreach (var item in itemPurchases)
                 {
                     List<string> array = item.ItemId.Split(':').ToList();
                     array.ForEach(a => print(a));
@@ -655,7 +692,7 @@ public class PlayfabManager : MonoBehaviour
                 }
             }
 
-            StartCoroutine(UIManager.instance.LoadVirtualMoney());
+           
             IsApiExecuting = false;
         }, (error) =>
         {
@@ -676,6 +713,7 @@ public class PlayfabManager : MonoBehaviour
         }
 
         yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
+        yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
     }
     public IEnumerator BuyItems(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
     {
@@ -690,7 +728,7 @@ public class PlayfabManager : MonoBehaviour
         int numberContentReturn = itemPurchases.Count;
         foreach (ItemPurchaseRequest itemPurchase in itemPurchases)
         {
-            var request = new PurchaseItemRequest() { StoreId = "BS1", ItemId = itemPurchase.ItemId, VirtualCurrency = "MC", Price = 3000};
+            var request = new PurchaseItemRequest() { StoreId = "BS1", ItemId = itemPurchase.ItemId, VirtualCurrency = "MC", Price = 3000 };
             PlayFabClientAPI.PurchaseItem(request, result =>
             {
                 List<string> array = result.Items[0].BundleContents;
@@ -698,6 +736,7 @@ public class PlayfabManager : MonoBehaviour
                 GameData.instance.listCardOpenedInPack.Add(array);
                 numberContentReturn--;
                 print("GameData.instance.listCardOpenedInPack: " + GameData.instance.listCardOpenedInPack.Count);
+                StartCoroutine(UIManager.instance.LoadVirtualMoney());
 
             }, (error) =>
             {
@@ -711,48 +750,12 @@ public class PlayfabManager : MonoBehaviour
         UIManager.instance.FeedBackOpenPack.PlayFeedbacks();
     }
 
-    //public void BuyPack(Dictionary<string,int> keyValuePairs)
-    //{
-
-    //    foreach (KeyValuePair<string, int> entry in keyValuePairs)
-    //    {
-    //        print(entry.Key + ": " + entry.Value);
-    //        for (int i = 0; i < entry.Value; i++)
-    //        {
-    //            Grant(playFabId, entry.Key);
-    //        }
-    //    }
-    //}
-
-
-    //public void Grant(string playFabId, string tableId)
-    //{
-    //    // First, roll a random number and evaluate the drop table
-    //    PlayFabServerAPI.EvaluateRandomResultTable(new EvaluateRandomResultTableRequest()
-    //    {
-    //        TableId = tableId
-
-    //    }, result => OnRandomResultTableResponse(result, playFabId), OnError);
-    //}
-
-    //public void OnRandomResultTableResponse(EvaluateRandomResultTableResult tableResult, string playFabId)
-    //{
-    //    // Second, take the result and grant it to the player
-    //    PlayFabServerAPI.GrantItemsToUser(new GrantItemsToUserRequest
-    //    {
-    //        PlayFabId = playFabId,
-    //        ItemIds = new List<string> { tableResult.ResultItemId }
-    //    }, result =>
-    //    {
-    //        // Handle Result
-    //    }, OnError);
-    //}
     #endregion
 
     public IEnumerator GetDropTable(List<string> listTableId)
     {
 
-        foreach(string item in listTableId.Distinct().ToList())
+        foreach (string item in listTableId.Distinct().ToList())
         {
             print(item);
         }
@@ -804,9 +807,9 @@ public class PlayfabManager : MonoBehaviour
         PlayFabServerAPI.EvaluateRandomResultTable(request, result =>
         {
             print(result.ResultItemId);
-          
+
             IsApiExecuting = false;
-           
+
         }, (error) =>
         {
             Debug.Log("Got error retrieving user data:");
@@ -879,7 +882,7 @@ public class PlayfabManager : MonoBehaviour
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
             StartCoroutine(GameData.instance.LoadFriendItem());
 
-            ChatManager.instance.SendDirectMessage(friendId, nameof(MessageType.AddFriend) + "|" );
+            ChatManager.instance.SendDirectMessage(friendId, nameof(MessageType.AddFriend) + "|");
 
 
         }, (error) =>
@@ -911,7 +914,7 @@ public class PlayfabManager : MonoBehaviour
         yield return StartCoroutine(GameData.instance.LoadFriendItem());
     }
 
-   
+
 
     //IEnumerator RemoveFriends()
     //{
@@ -934,7 +937,7 @@ public class PlayfabManager : MonoBehaviour
 
     void AuthencatonSuccess()
     {
-        PlayerPrefs.SetString("USERNAME",UIManager.instance.LoginUsername.text);
+        PlayerPrefs.SetString("USERNAME", UIManager.instance.LoginUsername.text);
 
         StartCoroutine(SetUserData("DeviceUniqueIdentifier", DeviceUniqueIdentifier));
         //connect
@@ -944,7 +947,7 @@ public class PlayfabManager : MonoBehaviour
         PhotonManager.instance.ConnectToMaster();
         isAuthented = true;
 
-       
+
     }
 
     #endregion
