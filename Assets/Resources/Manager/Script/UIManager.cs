@@ -493,6 +493,9 @@ public class UIManager : MonoBehaviour
                         TurnOffSceneAlreadyShow();
                         // LOAD MONEY VIRTUAL
 
+                        // TUTORIAL
+                        TutorialManager.instance.PlayTutorialChain();
+
                     }
                     isHome = turn;
 
