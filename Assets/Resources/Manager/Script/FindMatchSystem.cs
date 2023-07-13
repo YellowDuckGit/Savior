@@ -230,7 +230,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
     private IEnumerator JoinedLobby()
     {
-        yield return StartCoroutine(PlayfabManager.instance.GetElo());
+        yield return StartCoroutine(UIManager.instance.LoadElo());
         SetDataPlayerFindMatch();
         //UIManager.instance.UI_WaitingOppenent(false);
     }
