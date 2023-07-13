@@ -428,25 +428,78 @@ public class PlayfabManager : MonoBehaviour
         });
     }
 
-    public IEnumerator GetElo()
+    #region Elo
+
+    public IEnumerator SubmitScore(int playerScore)
     {
+        print("SubmitScore");
         bool IsApiExecuting = true;
-        PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest() { };
-        PlayFabClientAPI.GetUserInventory(request, result =>
+        PlayFabClientAPI.UpdatePlayerStatistics(new PlayFab.ClientModels.UpdatePlayerStatisticsRequest
         {
-            PlayFab.ClientModels.ItemInstance item = result.Inventory.Single(a => a.CatalogVersion == "Reward" && a.ItemClass == "Elo");
-            int elo = (int)item.RemainingUses;
-            GameData.instance.Elo = elo;
+            Statistics = new List<PlayFab.ClientModels.StatisticUpdate> {
+            new PlayFab.ClientModels.StatisticUpdate {
+                StatisticName = "Rank",
+                Value = playerScore
+            }
+    }
+        }, result => {
+            GameData.instance.Elo = playerScore;
             IsApiExecuting = false;
         }, (error) =>
         {
             Debug.Log("Got error retrieving user data:");
             Debug.Log(error.GenerateErrorReport());
         });
+        yield return new WaitUntil(() => !IsApiExecuting);
+        yield return StartCoroutine(UIManager.instance.LoadElo());
+    }
 
+   
+
+    public IEnumerator GetScore()
+    {
+        bool IsApiExecuting = true;
+
+        //PlayFabClientAPI.GetPlayerStatistics(new PlayFab.ClientModels.GetPlayerStatisticsRequest
+        //{
+        //    Statistics = new List<PlayFab.ClientModels.StatisticUpdate> {
+        //    new PlayFab.ClientModels.StatisticUpdate {
+        //        StatisticName = "Rank",
+        //        Value = playerScore
+        //    }
+        //}
+        //}, result => OnStatisticsUpdated(result), FailureCallback);
+        print("Elo");
+        PlayFab.ClientModels.GetPlayerStatisticsRequest request = new PlayFab.ClientModels.GetPlayerStatisticsRequest() { };
+        request.StatisticNames = new List<string>() { "Rank" };
+        PlayFabClientAPI.GetPlayerStatistics(request, result =>
+        {
+            if(result.Statistics.Count > 0)
+            {
+                List<PlayFab.ClientModels.StatisticValue> listStatisticValue;
+                listStatisticValue = result.Statistics;
+                foreach (PlayFab.ClientModels.StatisticValue statisticValue in listStatisticValue)
+                {
+                    print(statisticValue.StatisticName + " " + statisticValue.Value + " ");
+                    GameData.instance.Elo = statisticValue.Value;
+                }
+            }
+            else
+            {
+                StartCoroutine(SubmitScore(100));
+            }
+
+            IsApiExecuting = false;
+        }, (error) =>
+        {
+            Debug.Log("Got error retrieving user data:");
+            Debug.Log(error.GenerateErrorReport());
+        });
         yield return new WaitUntil(() => !IsApiExecuting);
     }
 
+    #endregion
+    
     public IEnumerator GetVirtualCurrency()
     {
         bool IsApiExecuting = true;

@@ -31,7 +31,6 @@ public class TabInput : MonoBehaviour
 
     void SelectInputField()
     {
-        print(inputSelect);
         list[inputSelect].Select();
     }
 

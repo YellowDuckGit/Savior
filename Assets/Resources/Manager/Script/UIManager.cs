@@ -1045,7 +1045,7 @@ public class UIManager : MonoBehaviour
 
     public IEnumerator LoadElo()
     {
-        yield return StartCoroutine(PlayfabManager.instance.GetElo());
+        yield return StartCoroutine(PlayfabManager.instance.GetScore());
         Elo = GameData.instance.Elo.ToString();
         yield return null;
     }

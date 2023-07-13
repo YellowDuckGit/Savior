@@ -1,5 +1,6 @@
 using Assets.GameComponent.Card.CardComponents.Script;
 using Assets.GameComponent.UI.CreateDeck.UI.Script;
+using ExitGames.Client.Photon.StructWrapping;
 using MoreMountains.Feel;
 using Photon.Pun;
 using PlayFab.ClientModels;
@@ -126,7 +127,6 @@ public class GameData : MonoBehaviour
         yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
 
         yield return StartCoroutine(UIManager.instance.LoadElo());
-
 
         //yield return StartCoroutine(UIManager.instance.LoadElo());
 
@@ -986,7 +986,10 @@ public class GameData : MonoBehaviour
     public int Elo
     {
         get { return _elo; }
-        set { _elo = value; }
+        set { 
+            
+            _elo = value;
+        }
     }
 
     public int Coin
