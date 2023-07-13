@@ -454,7 +454,16 @@ public class PlayfabManager : MonoBehaviour
         yield return StartCoroutine(UIManager.instance.LoadElo());
     }
 
-   
+    string[] rank = { "Topaz", "Spinel", "Aquamarine", "Emerald", "Ruby", "Sapphire", "Diamond" };
+    void CalRank(int elo, int partRank, int eloToUpLevelRank)
+    {
+        int rankIndex = elo / (eloToUpLevelRank * partRank);
+        int levelIndex = (elo % eloToUpLevelRank) / (eloToUpLevelRank / partRank) + 1;
+
+        Debug.Log(rank[rankIndex]);
+        Debug.Log("Level " + levelIndex);
+    }
+
 
     public IEnumerator GetScore()
     {

@@ -25,14 +25,14 @@ public class TutorialManager : MonoBehaviour
 
     public enum tutorial
     {
+        None,
         HomeTutorial,
         StoreTutorial
     }
 
-    public List<tutorial> tutorialChain = new List<tutorial>()
-    {
-        tutorial.HomeTutorial,
-        tutorial.StoreTutorial
+    private List<tutorial> tutorialChain = new List<tutorial>() 
+    { 
+        tutorial.None , tutorial.HomeTutorial, tutorial.StoreTutorial
     };
 
     public tutorial tutorialCurrent;
@@ -45,20 +45,25 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-        isPlayTutorialChain = true;
     }
     public void PlayTutorialChain()
     {
-        if (isPlayTutorialChain)
+        if (isPlayTutorialChain && !isPlayTutorial)
         {
-            if (tutorialCurrent == tutorialChain[0])
+            if (tutorialCurrent == tutorial.None)
             {
-                PlayTutorial(tutorialChain[0]);
+                print("None");
+                PlayTutorial(tutorialChain[1]);
             }
             else
             {
-                int index = tutorialChain.IndexOf(tutorialCurrent);
-                PlayTutorial(tutorialChain[index + 1]);
+                int index = tutorialChain.IndexOf(tutorialCurrent) + 1;
+                print(index);
+                if(index <= tutorialChain.Count -1)
+                {
+                    PlayTutorial(tutorialChain[index]);
+                    print("Play");
+                }
             }
         }
     }
@@ -73,6 +78,8 @@ public class TutorialManager : MonoBehaviour
     public void PlayTutorial(tutorial tutorialEnum)
     {
         Debug.LogError("PLAY TUTORIAL");
+        Debug.LogError("PLAY" + tutorialEnum);
+
         isPlayTutorial = true;
         switch (tutorialEnum)
         {

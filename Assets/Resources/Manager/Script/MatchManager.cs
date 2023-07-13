@@ -713,7 +713,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             StartCoroutine(PlayfabManager.instance.BuyItems(catalog: "Reward", storeId: "BS1", new List<ItemPurchaseRequest>()
             {
                 new ItemPurchaseRequest() {ItemId = rewardID, Quantity = 1}
-            }, currency: "MC"));
+            }, currency: "MC"));    
         }
 
         //set UI
