@@ -454,15 +454,6 @@ public class PlayfabManager : MonoBehaviour
         yield return StartCoroutine(UIManager.instance.LoadElo());
     }
 
-    string[] rank = { "Topaz", "Spinel", "Aquamarine", "Emerald", "Ruby", "Sapphire", "Diamond" };
-    void CalRank(int elo, int partRank, int eloToUpLevelRank)
-    {
-        int rankIndex = elo / (eloToUpLevelRank * partRank);
-        int levelIndex = (elo % eloToUpLevelRank) / (eloToUpLevelRank / partRank) + 1;
-
-        Debug.Log(rank[rankIndex]);
-        Debug.Log("Level " + levelIndex);
-    }
 
 
     public IEnumerator GetScore()
@@ -507,8 +498,44 @@ public class PlayfabManager : MonoBehaviour
         yield return new WaitUntil(() => !IsApiExecuting);
     }
 
+    string[] rank = { "Topaz", "Spinel", "Aquamarine", "Emerald", "Ruby", "Sapphire", "Diamond" };
+    void CalRank(int elo, int partRank, int eloToUpLevelRank)
+    {
+        int rankIndex = elo / (eloToUpLevelRank * partRank);
+        int levelIndex = (elo % eloToUpLevelRank) / (eloToUpLevelRank / partRank) + 1;
+
+        Debug.Log(rank[rankIndex]);
+        Debug.Log("Level " + levelIndex);
+    }
+
+    public IEnumerator CalElo(bool win, int eloPlayer, int eloOpponent)
+    {
+        int W;
+        float We;
+        float R0 = eloPlayer;
+        float Rd = eloOpponent;
+        float C = 400; //hang so
+        float K = 50; //hang so
+        float B = 1.5f; ///hang so 
+        float N = 0; //Chuoi thang
+        if (win) W = 1;
+        else W = 0;
+
+        We = (float)(1 / (1 + Math.Pow(10,(R0 - Rd) / C)));
+        int Rn = (int)(R0 + K * (W - We) + B*(N - 1));
+
+        print("We: "+We);
+        print("Rn :"+Rn);   
+
+        //Incase Player have below 0 elo
+        if(Rn < 0)
+        {
+            Rn = 0;
+        }
+        yield return StartCoroutine(SubmitScore(Rn));
+    }
     #endregion
-    
+
     public IEnumerator GetVirtualCurrency()
     {
         bool IsApiExecuting = true;

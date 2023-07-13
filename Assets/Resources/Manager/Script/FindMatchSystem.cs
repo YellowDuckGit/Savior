@@ -256,7 +256,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         _myRoomCustomProperties[K_PlayerSide.Blue] = K_ConfirmState.Waiting;
         _myRoomCustomProperties[K_Player.DeckBlue] = "";
         _myRoomCustomProperties[K_Player.DeckRed] = "";
-        _myRoomCustomProperties[K_Player.Elo] = elo;
+        _myRoomCustomProperties[K_Player.EloRed] = "";
+        _myRoomCustomProperties[K_Player.EloBlue] = "";
         _myRoomCustomProperties["GameMode"] = ((int)gameMode).ToString();
 
         //list properties of room
@@ -267,6 +268,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             K_PlayerSide.Blue,
             K_Player.DeckBlue,
             K_Player.DeckRed,
+            K_Player.EloRed,
+            K_Player.EloBlue,
             "GameMode"
         };
         RoomOptions roomOptions = new RoomOptions
@@ -349,6 +352,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         _myRoomCustomProperties[K_Player.K_PlayerSide.Blue] = K_Player.K_ConfirmState.Waiting;
         _myRoomCustomProperties[K_Player.DeckBlue] = "";
         _myRoomCustomProperties[K_Player.DeckRed] = "";
+        _myRoomCustomProperties[K_Player.EloRed] = "";
+        _myRoomCustomProperties[K_Player.EloBlue] = "";
         _myRoomCustomProperties["GameMode"] = "";
         PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
     }
@@ -392,6 +397,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         _myRoomCustomProperties[K_PlayerSide.Blue] = K_ConfirmState.Waiting;
         _myRoomCustomProperties[K_Player.DeckBlue] = "";
         _myRoomCustomProperties[K_Player.DeckRed] = "";
+        _myRoomCustomProperties[K_Player.EloRed] = "";
+        _myRoomCustomProperties[K_Player.EloBlue] = "";
         _myRoomCustomProperties["GameMode"] = ((int)gameMode).ToString();
         _myRoomCustomProperties[K_Room.EloLobbyFilter] = elo;
         //list properties of room
@@ -402,6 +409,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             K_PlayerSide.Blue,
             K_Player.DeckBlue,
             K_Player.DeckRed,
+            K_Player.EloRed,
+            K_Player.EloBlue,
             "GameMode",
             K_Room.EloLobbyFilter
         };
@@ -873,7 +882,10 @@ public static class K_Room
 
 public static class K_Player
 {
+    public static readonly string EloRed = "ELORED";
+    public static readonly string EloBlue = "ELOBULE";
     public static readonly string Elo = "ELO";
+
 
     public static readonly string DeckRed = "DECKRED";
     public static readonly string DeckBlue = "DECKBLUE";

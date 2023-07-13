@@ -665,44 +665,70 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region Function with resource for player
     IEnumerator ProvideReward(bool isRanked)
     {
-        string rewardRankedID = "B1";
-        string rewardNormalID = "B2";
+        string rewardWinRankedID = "B1";
+        string rewardWinNormalID = "B2";
+        string rewardLoseRankedID = "B1.1";
+        string rewardLoseNormalID = "B2.2";
         string rewardID = "";
+
+        int eloBlue = Int32.Parse(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloBlue].ToString());
+        int eloRed = Int32.Parse(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloRed].ToString());
 
         if (isBlueWin)
         {
-            if (localPlayerSide.Equals(K_PlayerSide.Blue))
+            if (localPlayerSide.Equals(K_PlayerSide.Blue)) //win
             {
                 switch (FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
-                        rewardID = rewardNormalID;
+                        rewardID = rewardWinNormalID;
                         break;
                     case GameMode.Rank:
-                        rewardID = rewardRankedID;
+                        rewardID = rewardWinRankedID;
+                        PlayfabManager.instance.CalElo(true, eloBlue, eloRed);
                         break;
                 }
             }
-            else if (localPlayerSide.Equals(K_PlayerSide.Red))
+            else if (localPlayerSide.Equals(K_PlayerSide.Red)) //lose
             {
+                switch (FindMatchSystem.instance.gameMode)
+                {
+                    case GameMode.Normal:
+                        rewardID = rewardLoseNormalID;
+                        break;
 
+                    case GameMode.Rank:
+                        rewardID = rewardLoseRankedID;
+                        PlayfabManager.instance.CalElo(false, eloRed, eloBlue);
+                        break;
+                }
             }
         }
         else if (isRedWin)
         {
-            if (localPlayerSide.Equals(K_PlayerSide.Blue))
-            {
-
-            }
-            else if (localPlayerSide.Equals(K_PlayerSide.Red))
+            if (localPlayerSide.Equals(K_PlayerSide.Blue)) //lose
             {
                 switch (FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
-                        rewardID = rewardNormalID;
+                        rewardID = rewardLoseNormalID;
                         break;
                     case GameMode.Rank:
-                        rewardID = rewardRankedID;
+                        rewardID = rewardLoseRankedID;
+                        PlayfabManager.instance.CalElo(false, eloBlue, eloRed);
+                        break;
+                }
+            }
+            else if (localPlayerSide.Equals(K_PlayerSide.Red)) //win
+            {
+                switch (FindMatchSystem.instance.gameMode)
+                {
+                    case GameMode.Normal:
+                        rewardID = rewardWinNormalID;
+                        break;
+                    case GameMode.Rank:
+                        rewardID = rewardWinRankedID;
+                        PlayfabManager.instance.CalElo(true, eloRed, eloBlue);
                         break;
                 }
             }
