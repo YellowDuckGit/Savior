@@ -14,46 +14,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: FrostClaw_Part2_SP_3
   <Name>k__BackingField: Village Unity
-  <Cost>k__BackingField: 1
+  <Cost>k__BackingField: 8
   <SpellType>k__BackingField: 0
   <Description>k__BackingField: Grant +4|+4 for all allies in this round
   <CardType>k__BackingField: 1
   <Avatar>k__BackingField: {fileID: 2100000, guid: 105d9225b1e95e9418587c02be401322,
     type: 2}
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 0
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 1
   CardEffect:
   - rid: 2363595294456414217
   references:
     version: 2
     RefIds:
+    - rid: 1073282966915383347
+      type: {class: SelectMulti, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi,
+        asm: Assembly-CSharp}
+      data:
+        multiTargetType:
+          rid: 1073282966915383348
+    - rid: 1073282966915383348
+      type: {class: SelectMulti/MultiTargetType/MultiTargetCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          owner: 1
+          cardPosition: 4
+          Rarity: 0
+          region: 0
+          CardType:
+            rid: 1073282966915383349
+          match: {fileID: 0}
+        Effects:
+        - rid: 1073282966915383350
+    - rid: 1073282966915383349
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        monsterOptions: []
+    - rid: 1073282966915383350
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
+        asm: Assembly-CSharp}
+      data:
+        pitch: []
+        Attack: 4
+        Hp: 4
+        InTurn: 1
     - rid: 2363595294456414217
       type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
         asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
-        Action:
-        - rid: 2363595294456414218
-    - rid: 2363595294456414218
-      type: {class: AllMonsterCardInYourField, ns: Assets.GameComponent.Card.Logic.TargetObject,
-        asm: Assembly-CSharp}
-      data:
-        SelectTargetObjects:
-        - SelectTargetObject:
-            rid: 2363595294456414219
-          Effect:
-          - rid: 2363595294456414220
-    - rid: 2363595294456414219
-      type: {class: SelectTargetCard, ns: Assets.GameComponent.Card.Logic.TargetObject.Select,
-        asm: Assembly-CSharp}
-      data:
-        owner: 0
-        cardPosition: 3
-        cardType: 0
-        isDamed: 0
-    - rid: 2363595294456414220
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
-      data:
-        number: 4
-        InTurn: 1
+        Actions:
+        - rid: 1073282966915383347

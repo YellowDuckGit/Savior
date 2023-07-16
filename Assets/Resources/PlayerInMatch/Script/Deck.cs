@@ -1,4 +1,6 @@
 using Assets.GameComponent.Card.CardComponents.Script;
+using Assets.GameComponent.Card.Logic.Effect.CreateCard;
+using Assets.GameComponent.Card.Logic.TargetObject.Target.PlayerTarget;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -8,41 +10,69 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static K_Player;
 using Random = System.Random;
-
+[Serializable]
 public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
 {
 
     //list data get by id cards 
-    public List<ICardData> cardDatas = new List<ICardData>();
+    [SerializeField] public List<ICardData> cardDatas = new List<ICardData>();
 
     //list monsters card in deck
-    private List<CardBase> _cards = new List<CardBase>();
+    [SerializeField] private List<CardBase> _cards = new List<CardBase>();
 
     #region List Card function
     // Implementing the Count property
     public int Count
     {
-        get { return _cards.Count; }
+        get
+        {
+            return _cards.Count;
+        }
     }
 
     // Implementing the IsReadOnly property
     public bool IsReadOnly
     {
-        get { return false; }
+        get
+        {
+            return false;
+        }
     }
 
     // Implementing the indexer
     public CardBase this[int index]
     {
-        get { return _cards[index]; }
-        set { _cards[index] = value; }
+        get
+        {
+            return _cards[index];
+        }
+        set
+        {
+            _cards[index] = value;
+        }
     }
 
     // Implementing the Add method
     public void Add(CardBase item)
     {
-        _cards.Add(item);
+        if(_cards.Count < 20)
+        {
+            _cards.Add(item);
+
+            var photonID = item.photonView.ViewID;
+            var index = _cards.IndexOf(item);
+        }
+
+        else
+        {
+            Debug.LogError(this.debug("Add to desk error", new
+            {
+                item,
+                repeat = _cards.Contains(item)
+            }));
+        }
     }
 
     // Implementing the Clear method
@@ -110,7 +140,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public void AddRange(ICollection<CardBase> cards)
     {
         // Loop through the cards and add each one to the _cards field
-        foreach (CardBase card in cards)
+        foreach(CardBase card in cards)
         {
             _cards.Add(card);
         }
@@ -121,32 +151,17 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         return _cards.Where(card => card != null && card.photonView.ViewID == photonID).FirstOrDefault();
     }
 
-    //shuffle cards
-    private void Shuffle(IList _list)
-    {
-        // Use a random number generator
-        Random rng = new Random();
-        // Loop through the list from the last element to the first
-        for (int i = _list.Count - 1; i > 0; i--)
-        {
-            // Pick a random index between 0 and i
-            int j = rng.Next(i + 1);
-            // Swap the elements at i and j
-            object temp = _list[i];
-            _list[i] = _list[j];
-            _list[j] = temp;
-        }
-    }
+
 
     //draw a top card
     public CardBase Draw()
     {
         // Check if the list is null or empty
-        if (_cards == null || _cards.Count == 0)
+        if(_cards == null || _cards.Count == 0)
         {
             //// Throw an exception or return null
             //throw new InvalidOperationException("The list of cards is empty.");
-             return null;
+            return null;
         }
         // Otherwise, proceed as before
         CardBase card = _cards[0];
@@ -158,10 +173,10 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public List<CardBase> Draw(int count, bool random = false)
     {
         List<CardBase> cards = new List<CardBase>();
-        if (random)
+        if(random)
         {
             Random rnd = new Random();
-            for (int i = 0; i < count; i++)
+            for(int i = 0; i < count; i++)
             {
                 int j = rnd.Next(0, _cards.Count);
                 CardBase card = _cards[j];
@@ -171,7 +186,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         }
         else
         {
-            for (int i = 0; i < count; i++)
+            for(int i = 0; i < count; i++)
             {
                 CardBase card = _cards[0];
                 _cards.RemoveAt(0);
@@ -220,6 +235,10 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         return card;
     }
 
+    public List<CardBase> GetAll()
+    {
+        return _cards;
+    }
 
     #endregion
 
@@ -254,24 +273,25 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         print("DeckCode : " + deckCode);
         List<string> listCardID = deckCode.Split('%').ToList();
         print("Desk before: \n" + string.Join(",", listCardID.ToArray()));
-        if (listCardID != null)
+        if(listCardID != null)
         {
             listCardID.Shuffle();
         }
         print("Desk after: \n" + string.Join(",", listCardID.ToArray()));
 
-        foreach (string str in listCardID)
+        foreach(string str in listCardID)
         {
-            if (!string.IsNullOrEmpty(str))
+            if(!string.IsNullOrEmpty(str))
             {
                 string[] arr = str.Split(':');
                 string id = arr[0];
                 int amount = Int32.Parse(arr[1]);
 
-                for (int i = 0; i < amount; i++)
+                for(int i = 0; i < amount; i++)
                 {
                     ICardData data = listMonsterDataInGame.First(a => a.Id.Equals(id));
-                    if (data != null) cardDatas.Add(data);
+                    if(data != null)
+                        cardDatas.Add(data);
                 }
             }
         }
@@ -283,36 +303,41 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     /// <returns></returns>
     public IEnumerator CreateMonsterCardsInDeckMatch()
     {
-        this.Shuffle(cardDatas);
+        cardDatas.Shuffle();
 
-        foreach (var cardData in cardDatas)
+        foreach(var cardData in cardDatas)
         {
-            if (cardData is MonsterData monsterData)
+            if(cardData is IMonsterData monsterData)
             {
-                /*
-                * Raise Event for 2 player create same data for card
-                */
-                MonsterCard monsterCard = PhotonNetwork.Instantiate("MonsterCard", Vector3.zero, Quaternion.identity).GetComponent<MonsterCard>(); //create a monster without data
-                object[] datas = new object[] { monsterData.Id, monsterCard.photonView.ViewID };
-                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-                PhotonNetwork.RaiseEvent((byte)RaiseEvent.SET_DATA_CARD_EVENT, datas, raiseEventOptions, SendOptions.SendUnreliable);
+                var CreateMonster = new CreateCard
+                {
+                    CardPosition = CardPosition.InDeck,
+                    CardTarget = (MonsterData)monsterData,
+                    owner = CardOwner.You,
+                };
+                yield return StartCoroutine(EffectManager.Instance.ExecuteEffectEvent(CreateMonster, new PlayerTarget
+                {
+                    side = CreateMonster.owner
+                }, MatchManager.instance.LocalPlayer));
             }
-            else if (cardData is SpellData spellData)
+            else if(cardData is ISpellData)
             {
-                /*
-                * Raise Event for 2 player create same data for card
-                */
-                SpellCard spellCard = PhotonNetwork.Instantiate("SpellCard", Vector3.zero, Quaternion.identity).GetComponent<SpellCard>(); //create a monster without data
-                object[] datas = new object[] { spellData.Id, spellCard.photonView.ViewID };
-                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-                PhotonNetwork.RaiseEvent((byte)RaiseEvent.SET_DATA_CARD_EVENT, datas, raiseEventOptions, SendOptions.SendUnreliable);
+                var CreateSpell = new CreateCard
+                {
+                    CardPosition = CardPosition.InDeck,
+                    CardTarget = (SpellData)cardData,
+                    owner = CardOwner.You,
+                };
+                yield return StartCoroutine(EffectManager.Instance.ExecuteEffectEvent(CreateSpell, new PlayerTarget
+                {
+                    side = CreateSpell.owner
+                }, MatchManager.instance.LocalPlayer));
             }
             else
             {
                 print(this.debug("Not found type of card data"));
             }
-
-
+            yield return new WaitUntil(() => MatchManager.instance.LocalPlayer.initialCardPlace.onReady());
         }
 
         yield return null;
@@ -385,4 +410,11 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         }
     }
 
+    public bool Full
+    {
+        get
+        {
+            return _cards.Count == 20;
+        }
+    }
 }

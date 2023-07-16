@@ -12,9 +12,9 @@ public class Dame : AbstractEffect
     public bool inturn { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
 
-    public override void GainEffect(object register, EffectManager match)
+    public override bool GainEffect(object register, EffectManager match)
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 
     public override void RevokeEffect(object register, MatchManager match)

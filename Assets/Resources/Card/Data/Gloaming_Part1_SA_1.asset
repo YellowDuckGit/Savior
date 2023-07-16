@@ -21,14 +21,17 @@ MonoBehaviour:
     this game. Round Start: Kill Strongest Enemy with 3- Health. 2. Round End: Next
     round, grant 0|+1 for each  Charming enemies for weakest ally 3. Each 2 rounds,
     Charming strongest enemy'
-  <CardType>k__BackingField: 0
+  <CardType>k__BackingField: 1
   <Avatar>k__BackingField: {fileID: 2100000, guid: 9a28c1392cafb3e47a39e097f7c98ba0,
     type: 2}
   <RarityCard>k__BackingField: 3
-  <RegionCard>k__BackingField: 2
-  <IsCharming>k__BackingField: 0
+  <RegionCard>k__BackingField: 3
+  <IsCharming>k__BackingField: 1
   <IsTreating>k__BackingField: 0
-  CardEffect: []
+  <IsDominating>k__BackingField: 0
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
+  CardEffects: []
   references:
     version: 2
     RefIds: []

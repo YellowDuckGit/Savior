@@ -18,13 +18,10 @@ MonoBehaviour:
   <SpellType>k__BackingField: 1
   <Description>k__BackingField: Grant +2|+1 and Dominate to 2 allies in this round
   <CardType>k__BackingField: 1
-  <RarityCard>k__BackingField: 1
+  <Avatar>k__BackingField: {fileID: 2100000, guid: 1ac27d0fcde76e549a6d7b3c1d7fb7c7,
+    type: 2}
+  <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 1
-  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 2cc074a43691b93409d806f51284a357, type: 2}
-  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 77cdcb36d5ac44a499e369de5affbd45, type: 2}
-  <InBoardAvatar>k__BackingField: {fileID: 0}
-  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: d80348244736cf5449643dd735617ce1, type: 3}
-  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 34119c41d9704984ba4e3063fca88d44, type: 3}
   CardEffect: []
   references:
     version: 2

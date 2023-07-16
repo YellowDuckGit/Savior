@@ -17,12 +17,61 @@ MonoBehaviour:
   <Cost>k__BackingField: 5
   <SpellType>k__BackingField: 1
   <Description>k__BackingField: Deal 4 to a unit if it's Charmed
-  <CardType>k__BackingField: 1
+  <CardType>k__BackingField: 2
   <Avatar>k__BackingField: {fileID: 2100000, guid: 4c12d7c7a53987046a435e9efcac826e,
     type: 2}
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 2
-  CardEffect: []
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 3
+  CardEffect:
+  - rid: 1073283052834127891
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1073283052834127891
+      type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
+        asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 1073283052834127892
+    - rid: 1073283052834127892
+      type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject,
+        asm: Assembly-CSharp}
+      data:
+        selectTargets:
+        - target:
+            rid: 1073283052834127893
+          Effects:
+          - rid: 1073283052834127896
+    - rid: 1073283052834127893
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        owner: 2
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        CardType:
+          rid: 1073283052834127894
+        match: {fileID: 0}
+    - rid: 1073283052834127894
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        monsterOptions:
+        - rid: 1073283052834127895
+    - rid: 1073283052834127895
+      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptAttribute,
+        ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        attributes:
+          _IsCharming: 1
+          _IsTreating: 0
+          _IsDominating: 0
+          _IsBlockAttack: 0
+          _IsBlockDefend: 0
+    - rid: 1073283052834127896
+      type: {class: Dame, ns: , asm: Assembly-CSharp}
+      data:
+        pitch: []
+        number: 4

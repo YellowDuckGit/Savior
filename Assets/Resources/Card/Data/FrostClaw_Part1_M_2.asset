@@ -25,7 +25,39 @@ MonoBehaviour:
   <RegionCard>k__BackingField: 0
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
-  CardEffect: []
+  <IsDominating>k__BackingField: 1
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
+  CardEffects:
+  - rid: 4170877821461463045
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4170877821461463045
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
+        asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 4170877821461463048
+    - rid: 4170877821461463048
+      type: {class: SpecifyAction, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 4170877821461463049
+        Effects:
+        - rid: 4170877821461463050
+    - rid: 4170877821461463049
+      type: {class: SpecifyAction/SpecifyType/SpecifyCardPlayer, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
+        asm: Assembly-CSharp}
+      data:
+        side: 1
+    - rid: 4170877821461463050
+      type: {class: CreateCard, ns: Assets.GameComponent.Card.Logic.Effect.CreateCard,
+        asm: Assembly-CSharp}
+      data:
+        pitch: []
+        CardTarget: {fileID: 11400000, guid: b0c84a52d1f59254a802b54e17bda2b2, type: 2}
+        owner: 1
+        CardPosition: 4

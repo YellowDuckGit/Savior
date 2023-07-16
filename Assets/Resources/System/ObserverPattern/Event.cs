@@ -28,13 +28,13 @@ public enum EventID
     /// </summary>
     OnSummonMonster,
     AfterSummon,
-    OnCardSelected,
+    OnObjectSelected,
     EndMatch,
     EndAttackAndDefensePhase,
     OnEndTurn,
     OnEndRound,
     OnStartRound,
-    OnClickCard,
+    OnUIClickCard,
     OnEnterCard,
     OnExitCard,
     OnCardUpdate,
@@ -42,4 +42,9 @@ public enum EventID
     OnMoveToSummonZone,
     OnMoveToGraveyard,
     OnMoveCardInTriggerSpell,
+    OnLeftClickCard,
+    OnRightClickCard,
+    OnCardDamaged,
+    OnStartMatch,
+    OnEndMatch
 }

@@ -1,4 +1,4 @@
-﻿internal class MoveCardInTriggerSpellArgs
+﻿public class MoveCardInTriggerSpellArgs
 {
     public object sender;
     public SpellCard card;

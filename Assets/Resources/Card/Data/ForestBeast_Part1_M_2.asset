@@ -20,15 +20,15 @@ MonoBehaviour:
   <Description>k__BackingField: When I'm summoned, give me +2|0 and  Dominate in
     this round
   <CardType>k__BackingField: 0
-  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: a4fcd1f2918cb394b82c299a6158534e, type: 2}
-  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: a6a7d13eb3377f04cae2e29f0762fa92, type: 2}
-  <InBoardAvatar>k__BackingField: {fileID: 0}
-  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 14b51d94002c239449ed15193f1294a8, type: 3}
-  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 1804b6adf58faec498ec156613647cd4, type: 3}
-  <RarityCard>k__BackingField: 1
+  <Avatar>k__BackingField: {fileID: 2100000, guid: 29b0f5d9d14fc26429fa5849a67ae0fb,
+    type: 2}
+  <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
+  <IsDominating>k__BackingField: 0
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
   CardEffect: []
   references:
     version: 2

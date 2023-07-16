@@ -62,11 +62,11 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Select
 
             if (this.owner == CardOwner.You)
             {
-                return MatchManager.instance.localPlayer == cardBase.CardPlayer;
+                return MatchManager.instance.LocalPlayer == cardBase.CardPlayer;
             }
             else
             {
-                return MatchManager.instance.localPlayer != cardBase.CardPlayer;
+                return MatchManager.instance.LocalPlayer != cardBase.CardPlayer;
             }
         }
     }

@@ -6,11 +6,12 @@ using UnityEngine;
 [SRName("Logic/Effect/Heal")]
 public class Heal : AbstractEffect
 {
+    [UnityEngine.Header("Effect Value")]
     public int number;
 
-    public override void GainEffect(object register, EffectManager match)
+    public override bool GainEffect(object register, EffectManager match)
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 
     public override void RevokeEffect(object register, MatchManager match)

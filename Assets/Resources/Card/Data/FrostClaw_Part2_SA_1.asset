@@ -24,10 +24,13 @@ MonoBehaviour:
   <Avatar>k__BackingField: {fileID: 2100000, guid: 96e4bc7d94409a147a8bd7e85bf9c494,
     type: 2}
   <RarityCard>k__BackingField: 3
-  <RegionCard>k__BackingField: 0
+  <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
-  <IsTreating>k__BackingField: 0
-  CardEffect: []
+  <IsTreating>k__BackingField: 1
+  <IsDominating>k__BackingField: 0
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
+  CardEffects: []
   references:
     version: 2
     RefIds: []

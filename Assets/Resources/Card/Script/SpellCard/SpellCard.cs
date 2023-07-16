@@ -7,7 +7,10 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SpellCard : CardBase, ISpellCard
 {
@@ -25,84 +28,195 @@ public class SpellCard : CardBase, ISpellCard
     [SerializeField]
     public AbstractCondition[] LogicCard;
 
-    public override string Id { get { return _id; } set { this._id = value; } }
-    public override string Name { get { return _name; } set { this._name = value; this.PostEvent(EventID.OnCardUpdate, this); } }
-    public override string Description { get { return _description; } set { this._description = value; this.PostEvent(EventID.OnCardUpdate, this); } }
-    public override int Cost { get { return _cost; } set { this._cost = value; this.PostEvent(EventID.OnCardUpdate, this); } }
-    public override bool IsSelectAble { get { return _isSelectAble; } set { this._isSelectAble = value; } }
-    public override bool IsSelected { get { return _isSelected; } set { this._isSelected = value; } }
-    public override bool Forcusable { get { return _forcusable; } set { this._forcusable = value; } }
-    public override bool IsFocus { get { return _isFocus; } set { this._isFocus = value; } }
-    public override CardPosition Position { get { return _position; } set { this._position = value; } }
-    public override CardOwner CardOwner { get { return _cardOwner; } set { this._cardOwner = value; } }
-    public override CardType CardType { get { return _cardType; } set { this._cardType = value; } }
-    public override CardPlayer CardPlayer { get { return _cardPlayer; } set { this._cardPlayer = value; } }
-    public override Material NormalAvatar { get { return _normalavatar; } set { this._normalavatar = value; this.PostEvent(EventID.OnCardUpdate, this); } }
-    public override Material InDeckAvatar { get { return _normalavatar; } set { this._normalavatar = value; this.PostEvent(EventID.OnCardUpdate, this); } }
-    public override Material InBoardAvatar { get { return _normalavatar; } set { this._normalavatar = value; this.PostEvent(EventID.OnCardUpdate, this); } }
-    public SpellData BaseSpellData { get { return _baseSpellData; } set { this._baseSpellData = value; } }
-    public override Rarity RarityCard { get { return _rarityCard; } set { this._rarityCard = value; } }
-    public override RegionCard RegionCard { get { return _regionCard; } set { this._regionCard = value; } }
-    public SpellType SpellType { get { return _spellType; } set { this._spellType = value; } }
-
-
-    public override void OnClick()
+    public override string Id
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        get
         {
-            print("left Click card");
-            print(this.debug(this.ToString(), new { _isSelectAble }));
-
-            if (_isSelectAble)
-            {
-
-                if (this.Position == CardPosition.InHand)
-                {
-                    print("Card On hand");
-
-                    if (hand == null) hand = gameObject.GetComponentInParent<Hand>();
-                    print(IsSelected ? $"this {Name} have been selected" : $"this {Name} dosen't have been selected");
-                    if (!IsSelected)
-                    {
-                        print("Card doesn't select yet");
-                        var listMonsterCard = hand.GetAllCardInHand(); //get all monster card in hand
-                                                                       //var listUIMonsterCard = listSelect(a => (a.UI)).ToList();//Get UI list
-
-                        var cardSelected = listMonsterCard.SingleOrDefault(a => a.IsSelected == true);//TODO: select card selected-- this true on select 0ne //get card selected
-
-                        if (cardSelected != null) //remove select
-                        {
-                            cardSelected.IsSelected = false;
-                            print($"Card {cardSelected.Name} be unselect");
-                        }
-                        this.IsSelected = true;
-                    }
-                    //else //bam lai mot lan nua thi no van focus nhung khong select la sai
-                    //{
-                    //    this.IsSelected = false;
-                    //    print($"Card {Name} have been unselected");
-                    //}
-                }
-                else if (Position == CardPosition.InSummonField || Position == CardPosition.InFightField)
-                {
-                    print(this.debug("Select card on field"));
-
-                    //check if in pharse atk or defense --> user can select card in summon field to move this in action file
-                    if (!this.IsSelected)
-                    {
-                        this.IsSelected = true; //co the select nhieu monstercard trong 2 field nay 
-                    }
-                    else
-                    {
-                        this.IsSelected = false;
-                    }
-                }
-            }
-            print($"{this.Name} card can't be select");
+            return _id;
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse1))
+        set
         {
-            print(this.ToString());
+            this._id = value;
+        }
+    }
+    public override string Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            this._name = value;
+            OnPropertyChanged(nameof(Name));
+        }
+    }
+    public override string Description
+    {
+        get
+        {
+            return _description;
+        }
+        set
+        {
+            this._description = value;
+            OnPropertyChanged(nameof(Description));
+        }
+    }
+    public override int Cost
+    {
+        get
+        {
+            return _cost;
+        }
+        set
+        {
+            this._cost = value;
+            OnPropertyChanged(nameof(Cost));
+        }
+    }
+    public override bool IsSelectAble
+    {
+        get
+        {
+            return _isSelectAble;
+        }
+        set
+        {
+            this._isSelectAble = value;
+        }
+    }
+    public override bool IsSelected
+    {
+        get
+        {
+            return _isSelected;
+        }
+        set
+        {
+            this._isSelected = value;
+        }
+    }
+    public override bool Forcusable
+    {
+        get
+        {
+            return _forcusable;
+        }
+        set
+        {
+            this._forcusable = value;
+        }
+    }
+    public override bool IsFocus
+    {
+        get
+        {
+            return _isFocus;
+        }
+        set
+        {
+            this._isFocus = value;
+        }
+    }
+    public override CardPosition Position
+    {
+        get
+        {
+            return _position;
+        }
+        set
+        {
+            this._position = value;
+        }
+    }
+    public override CardOwner CardOwner
+    {
+        get
+        {
+            return _cardOwner;
+        }
+        set
+        {
+            this._cardOwner = value;
+        }
+    }
+    public override CardType CardType
+    {
+        get
+        {
+            return _cardType;
+        }
+        set
+        {
+            this._cardType = value;
+        }
+    }
+    public override CardPlayer CardPlayer
+    {
+        get
+        {
+            return _cardPlayer;
+        }
+        set
+        {
+            this._cardPlayer = value;
+        }
+    }
+    public override Material Avatar
+    {
+        get
+        {
+            return _avartar;
+        }
+        set
+        {
+            this._avartar = value;
+            OnPropertyChanged(nameof(Avatar));
+        }
+    }
+    public SpellData BaseSpellData
+    {
+        get
+        {
+            return _baseSpellData;
+        }
+        set
+        {
+            this._baseSpellData = value;
+        }
+    }
+    public override Rarity RarityCard
+    {
+        get
+        {
+            return _rarityCard;
+        }
+        set
+        {
+            this._rarityCard = value;
+        }
+    }
+    public override RegionCard RegionCard
+    {
+        get
+        {
+            return _regionCard;
+        }
+        set
+        {
+            this._regionCard = value;
+        }
+    }
+    public SpellType SpellType
+    {
+        get
+        {
+            return _spellType;
+        }
+        set
+        {
+            this._spellType = value;
         }
     }
 
@@ -112,9 +226,9 @@ public class SpellCard : CardBase, ISpellCard
 
     public override void SetupCard()
     {
-        if (photonView.IsMine)
+        if(photonView.IsMine)
         {
-            if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+            if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
                 //get player, hand, deck
                 GameObject side = GameObject.Find(MatchManager.instance.redSideGameObjectName);
@@ -127,7 +241,7 @@ public class SpellCard : CardBase, ISpellCard
                 this.transform.parent = deck.transform;
 
                 //add card to list card in deck
-                deck.Add(this);
+                CardPlayer.initialCardPlace.Enqueue(this);
 
                 //set position
                 this.transform.position = deck.PositionInitialCardInDeck;
@@ -136,7 +250,7 @@ public class SpellCard : CardBase, ISpellCard
 
 
             }
-            else if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+            else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 //get player, hand, deck
                 GameObject side = GameObject.Find(MatchManager.instance.blueSideGameObjectName);
@@ -146,7 +260,7 @@ public class SpellCard : CardBase, ISpellCard
 
 
                 //add card to list card in deck
-                deck.Add(this);
+                CardPlayer.initialCardPlace.Enqueue(this);
 
                 //becom children of deck
                 this.transform.parent = deck.transform;
@@ -159,7 +273,7 @@ public class SpellCard : CardBase, ISpellCard
         }
         else
         {
-            if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+            if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
                 //set parent
                 //get player, hand, deck
@@ -172,14 +286,14 @@ public class SpellCard : CardBase, ISpellCard
                 this.transform.parent = deck.transform;
 
                 //add card to list card in deck
-                deck.Add(this);
+                CardPlayer.initialCardPlace.Enqueue(this);
 
                 //set position
                 this.transform.position = deck.PositionInitialCardInDeck;
                 this.transform.Rotate(new Vector3(180f, 0f, 0f));
 
             }
-            else if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+            else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 //get player, hand, deck
                 GameObject side = GameObject.Find(MatchManager.instance.redSideGameObjectName);
@@ -191,7 +305,7 @@ public class SpellCard : CardBase, ISpellCard
                 this.transform.parent = deck.transform;
 
                 //add card to list card in deck
-                deck.Add(this);
+                CardPlayer.initialCardPlace.Enqueue(this);
 
                 //set position
                 this.transform.position = deck.PositionInitialCardInDeck;
@@ -205,50 +319,32 @@ public class SpellCard : CardBase, ISpellCard
     {
     }
 
-    public override void NetworkingClient_EventReceived(EventData obj)
-    {
-        var args = obj.GetData();
-        if ((RaiseEvent)obj.Code == RaiseEvent.SET_DATA_CARD_EVENT)
-        {
-            if (args.photonviewID.Equals(photonView.ViewID))
-            {
-                BaseSpellData = (SpellData)GameData.instance.listCardDataInGame.First(a => a.Id.Equals(args.cardDataId));
-                LoadCardFromData();
-            }
-        }
-    }
 
-    public override void LoadCardFromData()
+
+    public override IEnumerator LoadCardFromData()
     {
-        print($"Start Load Data for {_baseSpellData.Name}");
+        print($"Start Load Data for {BaseCard.Name}");
         //load data form monster data
-        ISpellData source = _baseSpellData;
-        ISpellData destination = this;
+        SpellData source = (SpellData)BaseCard;
+        Id = source.Id;
+        Name = source.Name;
+        Cost = source.Cost;
+        Description = source.Description;
+        CardType = source.CardType;
+        Avatar = source.Avatar;
+        RarityCard = source.RarityCard;
+        RegionCard = source.RegionCard;
 
-        destination.Id = source.Id;
-        destination.Name = source.Name;
-        destination.Cost = source.Cost;
-        destination.Description = source.Description;
-        destination.CardType = source.CardType;
-        destination.NormalAvatar = source.NormalAvatar;
-        destination.InDeckAvatar = source.InDeckAvatar;
-        destination.InBoardAvatar = source.InBoardAvatar;
-        destination.RarityCard = source.RarityCard;
-        destination.RegionCard = source.RegionCard;
-        //this.Id = _baseSpellData.Id;
-        //this.Name = _baseSpellData.name;
-        //this.Description = _baseSpellData.Description;
-        //this.Cost = _baseSpellData.Cost;
-        //this.avatar = _baseSpellData.avatar;
-        if (_baseSpellData.CardEffect != null)
+        if(source.CardEffect != null)
         {
-            this.LogicCard = _baseSpellData.CardEffect;
-            for (int i = 0; i < this.LogicCard.Length; i++)
+            this.LogicCard = source.CardEffect;
+            for(int i = 0; i < this.LogicCard.Length; i++)
             {
                 EffectManager.Instance.EffectRegistor(this.LogicCard[i], this);
             }
         }
         print("End Load Data");
+        yield return null;
     }
     public void RemoveCardFormParentPresent()
     {
@@ -260,7 +356,14 @@ public class SpellCard : CardBase, ISpellCard
         this.transform.parent = parentTransform;
         this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
 
-        if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+        if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             transform.Rotate(0f, 180f, 0f);
+    }
+
+    public override string ToString()
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.AppendLine($"[SPELL] {Name}{{{Cost}}} - {Description}");
+        return builder.ToString();
     }
 }

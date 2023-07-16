@@ -1,5 +1,10 @@
+using Assets.GameComponent.Card.Logic.Effect;
+using Assets.GameComponent.Card.Logic.Effect.CreateCard;
+using Assets.GameComponent.Card.Logic.Effect.Destroy;
 using Assets.GameComponent.Card.Logic.Effect.Gain;
 using Assets.GameComponent.Card.Logic.TargetObject.Select;
+using Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget;
+using Assets.GameComponent.Card.Logic.TargetObject.Target.PlayerTarget;
 using Assets.GameComponent.Card.LogicCard;
 using Assets.GameComponent.Card.LogicCard.ListLogic.Effect;
 using ExitGames.Client.Photon;
@@ -9,7 +14,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -18,6 +22,7 @@ using UnityEngine;
 //using static Assets.GameComponent.Card.Logic.TargetObject.SelectTargetObject;
 using static EffectManager;
 using static EventGameHandler;
+using Debug = UnityEngine.Debug;
 
 public static class CommonFunction
 {
@@ -26,6 +31,15 @@ public static class CommonFunction
         Guid myuuid = Guid.NewGuid();
         return myuuid.ToString();
     }
+    public static List<string> GetEnumValuesAsString<T>() where T : Enum
+    {
+        List<string> values = new List<string>();
+        foreach(T enumValue in Enum.GetValues(typeof(T)))
+        {
+            values.Add(enumValue.ToString());
+        }
+        return values;
+    }
 
     public static int FindClosestNumber(int[] numbers, int target)
     {
@@ -33,15 +47,15 @@ public static class CommonFunction
         int max = numbers.Length - 1;
         int closest = 0;
 
-        while (min <= max)
+        while(min <= max)
         {
             int mid = (min + max) / 2;
 
-            if (numbers[mid] == target)
+            if(numbers[mid] == target)
             {
                 return numbers[mid];
             }
-            else if (numbers[mid] > target)
+            else if(numbers[mid] > target)
             {
                 max = mid - 1;
             }
@@ -50,7 +64,7 @@ public static class CommonFunction
                 min = mid + 1;
             }
 
-            if (Math.Abs(numbers[mid] - target) < Math.Abs(numbers[closest] - target))
+            if(Math.Abs(numbers[mid] - target) < Math.Abs(numbers[closest] - target))
             {
                 closest = mid;
             }
@@ -65,15 +79,15 @@ public static class CommonFunction
         int max = numbers.Length - 1;
         int closest = 0;
 
-        while (min <= max)
+        while(min <= max)
         {
             int mid = (min + max) / 2;
 
-            if (numbers[mid] == target)
+            if(numbers[mid] == target)
             {
                 return numbers[mid];
             }
-            else if (numbers[mid] > target)
+            else if(numbers[mid] > target)
             {
                 max = mid - 1;
             }
@@ -82,7 +96,7 @@ public static class CommonFunction
                 min = mid + 1;
             }
 
-            if (Math.Abs(numbers[mid] - target) < Math.Abs(numbers[closest] - target))
+            if(Math.Abs(numbers[mid] - target) < Math.Abs(numbers[closest] - target))
             {
                 closest = mid;
             }
@@ -90,32 +104,15 @@ public static class CommonFunction
 
         return closest;
     }
-    public static List<string> GetEnumValuesAsString<T>() where T : Enum
+
+    public static bool isEqualsAttibutes(this IEffectAttributes a, IEffectAttributes b)
     {
-        List<string> values = new List<string>();
-        foreach (T enumValue in Enum.GetValues(typeof(T)))
-        {
-            values.Add(enumValue.ToString());
-        }
-        return values;
+        return a.IsCharming == b.IsCharming &&
+            a.IsTreating == b.IsTreating &&
+            a.IsDominating == b.IsDominating &&
+            a.IsBlockAttack == b.IsBlockAttack &&
+            a.IsBlockDefend == b.IsBlockDefend;
     }
-
-    public static string[] getFolderTree(string path)
-    {
-        
-        var rootDir = @""+ path;
-        DirectoryInfo directoryInfo = new DirectoryInfo(rootDir);
-
-        var dirs = new System.Collections.Generic.List<string>();
-        foreach (var dir in directoryInfo.GetDirectories())
-        {
-            dirs.Add(dir.Name.Replace($"{rootDir}\\", ""));
-        }
-        var result = dirs.ToArray();
-
-        return result;
-    }
-
 }
 public static class ListExtensions
 {
@@ -125,7 +122,7 @@ public static class ListExtensions
         // Get a random number generator
         System.Random random = new System.Random();
         // Loop from the last element to the second one
-        for (int i = list.Count - 1; i > 0; i--)
+        for(int i = list.Count - 1; i > 0; i--)
         {
             // Pick a random index from 0 to i
             int j = random.Next(i + 1);
@@ -135,6 +132,7 @@ public static class ListExtensions
             list[j] = temp;
         }
     }
+
     //c# extension
     public static dynamic GetData(this EventData obj)
     {
@@ -146,54 +144,93 @@ public static class ListExtensions
         int summonZoneID;
         string cardDataId;
         int photonviewID;
-        switch ((RaiseEvent)obj.Code)
+        CardPosition cardPosition;
+        switch((RaiseEvent)obj.Code)
         {
             case RaiseEvent.DRAW_CARD_EVENT:
                 Console.WriteLine("Draw a card");
-                return new { };
+                return new
+                {
+                };
             case RaiseEvent.SET_DATA_CARD_EVENT:
                 datas = (object[])obj.CustomData;
                 cardDataId = (string)datas[0];
                 photonviewID = (int)datas[1];
                 Console.WriteLine("Set data monster");
-                return new { cardDataId, photonviewID };
-            case RaiseEvent.UPDATE_DATA_MONSTER_EVENT:
-                datas = (object[])obj.CustomData;
-                MonsterCard card = datas[0] as MonsterCard;
-                photonviewID = (int)datas[1];
-                Console.WriteLine("Set data monster");
-                return new { card, photonviewID };
-            case RaiseEvent.MoveCardInTriggerSpell:
+                return new
+                {
+                    cardDataId,
+                    photonviewID
+                };
+
+            case RaiseEvent.SUMMON_MONSTER:
                 Console.WriteLine("Summon monster");
                 zoneID = (int)datas[0];
                 cardID = (int)datas[1];
                 playerSide = (string)datas[2];
-                return new { zoneID, cardID, playerSide };
+                cardPosition = (CardPosition)datas[3];
+                bool isSpecialSummon = (int)datas[4] == 1;
+                return new
+                {
+                    zoneID,
+                    cardID,
+                    playerSide,
+                    cardPosition,
+                    isSpecialSummon
+                };
+            case RaiseEvent.MoveCardInTriggerSpell:
+                Console.WriteLine("MoveCardInTriggerSpell monster");
+                playerSide = datas[0] as string;
+                cardID = (int)datas[1];
+                return new
+                {
+                    playerSide,
+                    cardID
+                };
             case RaiseEvent.SKIP_TURN:
                 playerSide = (string)datas[0];
 
-                return new { playerSide };
+                return new
+                {
+                    playerSide
+                };
 
             case RaiseEvent.SWITCH_TURN:
-                return new { };
+                return new
+                {
+                };
 
             case RaiseEvent.MOVE_FIGHTZONE:
-                return new { };
+                return new
+                {
+                };
 
             case RaiseEvent.MOVE_SUMMONZONE:
                 fightZoneID = (int)datas[0];
                 summonZoneID = (int)datas[1];
                 cardID = (int)datas[2];
                 playerSide = (string)datas[3];
-                return new { fightZoneID, summonZoneID, cardID, playerSide };
+                return new
+                {
+                    fightZoneID,
+                    summonZoneID,
+                    cardID,
+                    playerSide
+                };
 
             case RaiseEvent.ATTACK:
                 playerSide = (string)datas[0];
-                return new { playerSide };
+                return new
+                {
+                    playerSide
+                };
 
             case RaiseEvent.DEFENSE:
                 playerSide = (string)datas[0];
-                return new { playerSide };
+                return new
+                {
+                    playerSide
+                };
             case RaiseEvent.EFFECT_EXCUTE:
 
                 Type typeEffect = null;
@@ -208,7 +245,7 @@ public static class ListExtensions
 
                 var selectType = datas[5] as string; //select type
                 var selectJson = datas[6] as string; //select json
-                switch (typeAsString)
+                switch(typeAsString)
                 {
                     case "BuffStats":
                         typeEffect = typeof(BuffStats);
@@ -219,34 +256,66 @@ public static class ListExtensions
                     case "Gain":
                         typeEffect = typeof(Gain);
                         break;
+                    case "Heal":
+                        typeEffect = typeof(Heal);
+                        break;
+                    case "DestroyObject":
+                        typeEffect = typeof(DestroyObject);
+                        break;
+                    case "CreateCard":
+                        typeEffect = typeof(CreateCard);
+                        break;
                 }
 
-                switch (selectType)
+                switch(selectType)
                 {
-                    case "SelectTargetPlayer":
-                        typeSelect = typeof(SelectTargetPlayer);
+                    case "PlayerTarget":
+                        typeSelect = typeof(PlayerTarget);
                         break;
-                    case "SelectTargetCard":
-                        typeSelect = typeof(SelectTargetCard);
+                    case "CardTarget":
+                        typeSelect = typeof(CardTarget);
                         break;
                 }
 
-                if (typeEffect != null && typeSelect != null)
+                if(typeEffect != null && typeSelect != null)
                 {
                     var abstractEffect = JsonUtility.FromJson(json as string, typeEffect); //effect data
                     var selectTarget = JsonUtility.FromJson(selectJson as string, typeSelect); //select data
-                    return new { senderPlayerSide, abstractEffect, selectTarget, targetType, targetID };
+                    return new
+                    {
+                        senderPlayerSide,
+                        abstractEffect,
+                        selectTarget,
+                        targetType,
+                        targetID
+                    };
                 }
                 else
                 {
-                    UnityEngine.Debug.Log("can not get type of effect");
+                    Debug.Log(typeEffect.debug("can not get type of effect", new
+                    {
+                        typeEffect.GetType().Name
+                    }));
                 }
                 return null;
             case RaiseEvent.EFFECT_UPDATE_STATUS:
                 EffectStatus status = (EffectStatus)datas[0];
-                return new { status };
+                return new
+                {
+                    status
+                };
+            case RaiseEvent.NEXT_STEP:
+                senderPlayerSide = datas[0] as string;
+                bool isNEXT_STEP = (bool)datas[1];
+                return new
+                {
+                    senderPlayerSide,
+                    isNEXT_STEP
+                };
             default:
-                return new { };
+                return new
+                {
+                };
         }
     }
 }
@@ -262,15 +331,15 @@ public static class DebugHelper
         string time = DateTime.Now.ToString("HH:mm:ss");
         string v1 = string.Format("{0}|{1}>>{2}::{3} {4}", time, className, methodName, line, string.IsNullOrEmpty(des) ? "" : $">>{des}");
         stringBuilder.Append(v1);
-        if (valuesToDisplay != null && valuesToDisplay.Length != 0)
+        if(valuesToDisplay != null && valuesToDisplay.Length != 0)
         {
-            for (int i = 0; i < valuesToDisplay.Length; i++)
+            for(int i = 0; i < valuesToDisplay.Length; i++)
             {
-                if (valuesToDisplay[i] != null)
+                if(valuesToDisplay[i] != null)
                 {
                     Type type = valuesToDisplay[i].GetType();
                     var properties = type.GetProperties();
-                    foreach (var property in properties)
+                    foreach(var property in properties)
                     {
                         var value = property.GetValue(valuesToDisplay[i]);
                         stringBuilder.Append(string.Format("\n${0}: {1}", property.Name, (value ?? "null").ToString()));
@@ -279,24 +348,6 @@ public static class DebugHelper
             }
         }
         return stringBuilder.ToString();
-    }
-
-    public static void LoadPathsRecursive(string path, ref List<string> paths)
-    {
-        var fullPath = Application.dataPath + "/Resources/" + path;
-        DirectoryInfo dirInfo = new DirectoryInfo(fullPath);
-        foreach (var file in dirInfo.GetFiles())
-        {
-            if (file.Name.Contains(".PNG") && !file.Name.Contains(".meta"))
-            {
-                paths.Add(path + "/" + file.Name.Replace(".PNG", ""));
-            }
-        }
-
-        foreach (var dir in dirInfo.GetDirectories())
-        {
-            LoadPathsRecursive(path + "/" + dir.Name, ref paths);
-        }
     }
 }
 
@@ -309,17 +360,17 @@ public static class DataExtension
         // Get the type of the destination object
         Type destinationType = destination.GetType();
         // Loop through all the properties of the source object
-        foreach (PropertyInfo property in sourceType.GetProperties())
+        foreach(PropertyInfo property in sourceType.GetProperties())
         {
             // Check if the property can be read and written
-            if (property.CanRead && property.CanWrite)
+            if(property.CanRead && property.CanWrite)
             {
                 // Get the value of the property from the source object
                 object value = property.GetValue(source, null);
                 // Find the matching property in the destination object by name and type
                 PropertyInfo destinationProperty = destinationType.GetProperty(property.Name, property.PropertyType);
                 // Check if the matching property exists and can be written
-                if (destinationProperty != null && destinationProperty.CanWrite)
+                if(destinationProperty != null && destinationProperty.CanWrite)
                 {
                     // Set the value of the property to the destination object
                     destinationProperty.SetValue(destination, value, null);
@@ -328,4 +379,3 @@ public static class DataExtension
         }
     }
 }
-

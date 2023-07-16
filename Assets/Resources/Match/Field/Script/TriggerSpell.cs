@@ -14,7 +14,10 @@ public class TriggerSpell : MonoBehaviourPun
     private SpellCard _spellCard { get; set; } = default!;
     public SpellCard SpellCard
     {
-        get { return _spellCard; }
+        get
+        {
+            return _spellCard;
+        }
         set
         {
             _spellCard = value;
@@ -38,10 +41,13 @@ public class TriggerSpell : MonoBehaviourPun
 
         var cardselected = player.hand.GetAllCardInHand().SingleOrDefault(a => a.IsSelected == true);
 
-        print(this.debug(cardselected != null ? $"summon card {cardselected.ToString()}" : "card selected be null", new { cardselected }));
-        if (cardselected != null)
+        print(this.debug(cardselected != null ? $"summon card {cardselected.ToString()}" : "card selected be null", new
         {
-            if (cardselected != null && cardselected is SpellCard spellCard)
+            cardselected
+        }));
+        if(cardselected != null)
+        {
+            if(cardselected != null && cardselected is SpellCard spellCard)
             {
                 print(this.debug("card selected is spell card, execute spell card", new
                 {
@@ -58,12 +64,38 @@ public class TriggerSpell : MonoBehaviourPun
         }
     }
 
-    private IEnumerator MoveCardInTriggerSpellEvent(SpellCard spellCard)
+    IEnumerator MoveCardInTriggerSpellEvent(SpellCard spellCard)
     {
-        if (spellCard != null && spellCard.Cost <= matchManager.localPlayer.mana.Number)
+        if(spellCard != null && spellCard.Cost <= matchManager.LocalPlayer.mana.Number)
         {
             print(this.debug($"can use spell {SpellCard}"));
-            this.PostEvent(EventID.OnMoveCardInTriggerSpell, this);
+            yield return StartCoroutine(EffectManager.Instance.OnBeforeSummon(spellCard, () =>
+            {
+                this.PostEvent(EventID.OnMoveCardInTriggerSpell, new MoveCardInTriggerSpellArgs
+                {
+                    sender = this,
+                    card = spellCard,
+                    triggerSpell = this
+                });
+                //print(this.debug($"Summon {monsterCardInHand.ToString()}"));
+                //this.PostEvent(EventID.OnSummonMonster,
+                //       new SummonArgs
+                //       {
+                //           card = monsterCardInHand,
+                //           summonZone = this
+                //       }
+                //       );
+            }));
+            //this.PostEvent(EventID.OnMoveCardInTriggerSpell, new MoveCardInTriggerSpellArgs {
+            //    sender = this,
+            //    card = spellCard,
+            //    triggerSpell = this
+            //});
+        }
+        else
+        {
+            print(this.debug($"can not use spell {SpellCard}"));
+
         }
         yield return null;
     }

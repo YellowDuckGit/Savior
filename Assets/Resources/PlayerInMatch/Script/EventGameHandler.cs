@@ -14,7 +14,7 @@ public class EventGameHandler
     public delegate void OnDescriptionChange(string description);
     public delegate void OnPositionChange(CardPosition position);
     public delegate void OnSelectChange(bool value);
-    public delegate void OnavatarChange(Material material);
+    public delegate void OnAvartarChange(Material material);
     public delegate void OnFocusChange(bool value);
     #endregion
 
@@ -37,6 +37,8 @@ public class EventGameHandler
     {
         public MonsterCard card;
         public SummonZone summonZone;
+        public CardPosition cardPosition;
+        public bool isSpecialSummon = false; //not minus cost
     }
     #endregion
     public class PlayArgs

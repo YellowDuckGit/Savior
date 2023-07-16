@@ -18,34 +18,80 @@ MonoBehaviour:
   <Attack>k__BackingField: 2
   <Hp>k__BackingField: 2
   <Description>k__BackingField: To play me, Strike an enemy Charmed
-  <CardType>k__BackingField: 0
+  <CardType>k__BackingField: 1
   <Avatar>k__BackingField: {fileID: 2100000, guid: c2c35c2cc17b37e4bb44a6d783bf0177,
     type: 2}
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 2
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 3
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
-  CardEffect:
-  - rid: 9168627790434533376
+  <IsDominating>k__BackingField: 0
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
+  CardEffects:
+  - rid: 1073283011172630559
   references:
     version: 2
     RefIds:
-    - rid: 9168627790434533376
+    - rid: 1073283011172630559
       type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
         asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
-        Action:
-        - rid: 9168627790434533381
-    - rid: 9168627790434533381
-      type: {class: SelfTarget, ns: Assets.GameComponent.Card.Logic.TargetObject,
+        Actions:
+        - rid: 1073283011172630560
+    - rid: 1073283011172630560
+      type: {class: Have, ns: Assets.GameComponent.Card.Logic.Have, asm: Assembly-CSharp}
+      data:
+        _not: 0
+        circle: 0
+        target:
+          rid: 1073283011172630561
+        Actions:
+        - rid: 1073283011172630564
+    - rid: 1073283011172630561
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
         asm: Assembly-CSharp}
       data:
-        Effect:
-        - rid: 9168627790434533382
-    - rid: 9168627790434533382
+        owner: 2
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        CardType:
+          rid: 1073283011172630562
+        match: {fileID: 0}
+    - rid: 1073283011172630562
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        monsterOptions:
+        - rid: 1073283011172630563
+    - rid: 1073283011172630563
+      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptAttribute,
+        ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        attributes:
+          _IsCharming: 1
+          _IsTreating: 0
+          _IsDominating: 0
+          _IsBlockAttack: 0
+          _IsBlockDefend: 0
+    - rid: 1073283011172630564
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073283011172630565
+        Effects:
+        - rid: 1073283011172630566
+    - rid: 1073283011172630565
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+    - rid: 1073283011172630566
       type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
         asm: Assembly-CSharp}
       data:
-        number: 10
+        pitch: []
+        Attack: 2
+        Hp: 0
         InTurn: 0

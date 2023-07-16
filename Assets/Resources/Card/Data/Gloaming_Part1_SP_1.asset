@@ -18,43 +18,85 @@ MonoBehaviour:
   <SpellType>k__BackingField: 1
   <Description>k__BackingField: Deal to a unit equal number of times you've been 
     Charmed enemy in this round
-  <CardType>k__BackingField: 1
+  <CardType>k__BackingField: 2
   <Avatar>k__BackingField: {fileID: 2100000, guid: f3848180156cc394785a7b5045d22524,
     type: 2}
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 2
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 3
   CardEffect:
-  - rid: 9168627768910938112
+  - rid: 1073283052834127876
   references:
     version: 2
     RefIds:
-    - rid: 9168627768910938112
+    - rid: 1073283052834127876
       type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
         asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
-        Action:
-        - rid: 9168627768910938113
-    - rid: 9168627768910938113
+        Actions:
+        - rid: 1073283052834127877
+    - rid: 1073283052834127877
       type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject,
         asm: Assembly-CSharp}
       data:
-        SelectTargetObjects:
-        - SelectTargetObject:
-            rid: 9168627768910938114
-          Effect:
-          - rid: 9168627768910938115
-    - rid: 9168627768910938114
-      type: {class: SelectTargetCard, ns: Assets.GameComponent.Card.Logic.TargetObject.Select,
+        selectTargets:
+        - target:
+            rid: 1073283052834127878
+          Effects:
+          - rid: 1073283052834127880
+    - rid: 1073283052834127878
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
         asm: Assembly-CSharp}
       data:
-        owner: 0
-        cardPosition: 3
-        cardType: 0
-        isDamed: 0
-    - rid: 9168627768910938115
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
+        owner: 2
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        CardType:
+          rid: 1073283052834127879
+        match: {fileID: 0}
+    - rid: 1073283052834127879
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
         asm: Assembly-CSharp}
       data:
-        number: 1
-        InTurn: 1
+        monsterOptions: []
+    - rid: 1073283052834127880
+      type: {class: Dame, ns: , asm: Assembly-CSharp}
+      data:
+        pitch:
+        - pitchType:
+            rid: 1073283052834127881
+        number: 2
+    - rid: 1073283052834127881
+      type: {class: AbstractEffect/EffectPitch/PitchType/PitchCount, ns: Assets.GameComponent.Card.LogicCard,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073283052834127882
+    - rid: 1073283052834127882
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        owner: 2
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        CardType:
+          rid: 1073283052834127883
+        match: {fileID: 0}
+    - rid: 1073283052834127883
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        monsterOptions:
+        - rid: 1073283052834127884
+    - rid: 1073283052834127884
+      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptAttribute,
+        ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        attributes:
+          _IsCharming: 1
+          _IsTreating: 0
+          _IsDominating: 0
+          _IsBlockAttack: 0
+          _IsBlockDefend: 0
