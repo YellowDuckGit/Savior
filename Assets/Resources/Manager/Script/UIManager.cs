@@ -139,6 +139,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] public GameObject PanelCardDetails;
 
+    [SerializeField] public GameObject PanelSkipTutorial;
+
 
 
     /// <summary>
@@ -215,8 +217,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button ACT_LeaveRoom;
     [SerializeField] Button ACT_StopFind;
 
-
-
+    [SerializeField] Button ACT_SkipTutorial;
+    [SerializeField] Button ACT_NotSkipTutorial;
 
     [Space(10)]
     [Header("Scene State")]
@@ -368,7 +370,20 @@ public class UIManager : MonoBehaviour
         {
             PlayfabManager.instance.AddFriend(PlayfabManager.FriendIdType.Username, friendUserName.text);
         });
-        //ACT_DeleteDeck.onClick.AddListener(() => { PlayfabManager.instance.RemoveFriend("vanphu02"); });
+        //ACT_DeleteDeck.onClick.AddListener(() => { PlayfabManager.instance.RemoveFriend("vanphu02"); });]
+
+        // TUTORIAL
+        ACT_SkipTutorial.onClick.AddListener(() =>
+        {
+            TutorialManager.instance.isSkip = false;
+            TutorialManager.instance.PlayTutorialChain();
+        });
+
+        ACT_NotSkipTutorial.onClick.AddListener(() =>
+        {
+            TutorialManager.instance.isSkip = true;
+            TutorialManager.instance.Skip();
+        });
 
         #endregion
 
@@ -411,7 +426,7 @@ public class UIManager : MonoBehaviour
 
                         if (UIManager.instance.loginMessage.transform.parent.gameObject.activeSelf)
                         {
-                           UIManager.instance.loginMessage.transform.parent.gameObject.SetActive(false);
+                            UIManager.instance.loginMessage.transform.parent.gameObject.SetActive(false);
                         }
 
                     }
@@ -538,6 +553,9 @@ public class UIManager : MonoBehaviour
                         //StartCoroutine(GameData.instance.LoadDeckItems(CollectionDeck_PlayScene));
                         //GameData.instance.UnLoadCardInDeckPack();
                         TurnOffSceneAlreadyShow();
+
+                        // TUTORIAL
+                        TutorialManager.instance.PlayTutorialChain();
                     }
                     isPlay = turn;
                     foreach (GameObject obj in PlayScene)
@@ -607,6 +625,10 @@ public class UIManager : MonoBehaviour
                     {
                         StartCoroutine(GameData.instance.LoadPack(StorePacks));
                         TurnOffSceneAlreadyShow();
+
+                        //TUTORIAL
+                        Debug.Log("START TUTORIAL IN STORE");
+                        TutorialManager.instance.PlayTutorialChain();
                     }
                     isStorePacks = turn;
                     foreach (GameObject obj in StorePacksScene)
@@ -631,6 +653,9 @@ public class UIManager : MonoBehaviour
                     {
                         StartCoroutine(GameData.instance.LoadDeckInStore(StoreDecks));
                         TurnOffSceneAlreadyShow();
+
+                        // TUTORIAL
+                        TutorialManager.instance.PlayTutorialChain();
                     }
                     isStoreDecks = turn;
                     foreach (GameObject obj in StoreDecksScene)
@@ -683,6 +708,9 @@ public class UIManager : MonoBehaviour
                         LoadNumberCardInDeck(GameData.instance.getNumberCardInDeck());
 
                         TurnOffSceneAlreadyShow();
+
+                        //TUTORIAL
+                        TutorialManager.instance.PlayTutorialChain();
                     }
                     isCreateDeck = turn;
                     foreach (GameObject obj in CreateDeckScene)
@@ -1099,20 +1127,20 @@ public class UIManager : MonoBehaviour
 
     public void LoadCardDetail(CardItem cardItem)
     {
-    
+
         CardInInventory cardInInventory = GameData.instance.InitCard2D(cardItem);
         cardInInventory.transform.parent = PanelCardDetails.transform;
         cardInInventory.gameObject.transform.localPosition = Vector3.zero;
         cardInInventory.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
         PanelCardDetails.gameObject.SetActive(true);
 
-        if(isStoreCards)
-        {  
+        if (isStoreCards)
+        {
             print($"UIManager 1087 {isStoreCards}");
             print(cardItem.amount);
 
-            if(cardItem.amount != 3)
-            ACT_Store_BuyCard.gameObject.SetActive(true);
+            if (cardItem.amount != 3)
+                ACT_Store_BuyCard.gameObject.SetActive(true);
             else
             {
                 ACT_Store_BuyCard.gameObject.SetActive(false);
@@ -1126,7 +1154,7 @@ public class UIManager : MonoBehaviour
                 Quantity = 1
             });
         }
-        if(isCollection_Cards)
+        if (isCollection_Cards)
         {
             ACT_Store_BuyCard.gameObject.SetActive(false);
             cardPrice.transform.parent.gameObject.SetActive(false);
@@ -1141,8 +1169,10 @@ public class UIManager : MonoBehaviour
             Transform children = PanelCardDetails.transform.GetComponentInChildren<CardInInventory>().transform;
             Destroy(children.gameObject);
             PanelCardDetails.gameObject.SetActive(false);
+            // TUTORIAL
+            print("UN LOAD TUTORIAL");
+            TutorialManager.instance.PlayTutorialChain();
         }
-
 
     }
     #endregion

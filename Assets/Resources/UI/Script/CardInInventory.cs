@@ -79,6 +79,8 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
                 UIManager.instance.LoadCardDetail(cardItem);
 
             }
+            // TUTORIAL
+            TutorialManager.instance.PlayTutorialChain();
         }
         
         else if (eventData.button == PointerEventData.InputButton.Right)
@@ -91,6 +93,8 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
                     print("Pust Card In DEck");
                     this.PostEvent(EventID.OnPutCardInDeck, this.cardItem.cardData.Id);
                 }
+                // TUTORIAL
+                TutorialManager.instance.PlayTutorialChain();
             }
         }
 

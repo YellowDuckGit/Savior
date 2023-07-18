@@ -54,6 +54,8 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
         if(data != null && data.deckItemsId.Count() > 0)
         {
             yield return StartCoroutine(UIManager.instance.ShowPopupDeckDetailed(this));
+            //TUTORIAL
+            TutorialManager.instance.PlayTutorialChain();
         }
 
         yield return null;
@@ -80,6 +82,9 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
             {
                 StartCoroutine(CreateDeck());
             }
+
+            // TUTORIAL
+            TutorialManager.instance.PlayTutorialChain();
         }else if (UIManager.instance.isChooseDeckPVF)
         {
             UIManager.instance.LoadSeletedDeck(this.transform,UIManager.instance.CollectionDeckPVF_PlayScene,UIManager.instance.SelectFramePVF);
@@ -88,6 +93,8 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
         {
             print(data.deckCode);   
             UIManager.instance.LoadSeletedDeck(this.transform,UIManager.instance.CollectionDeck_PlayScene,UIManager.instance.SelectFrame);
+
+            TutorialManager.instance.PlayTutorialChain();
         }
         else if(UIManager.instance.isStoreDecks)
         {

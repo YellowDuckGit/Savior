@@ -175,6 +175,8 @@ public class CollectionManager : MonoBehaviour
         yield return StartCoroutine(PlayfabManager.instance.SetUserData("Decks", json));
         yield return StartCoroutine(GameData.instance.LoadDeckItems());
         UIManager.instance.TurnOnCollectionDeckScene();
+        // TUTORIAL
+        TutorialManager.instance.PlayTutorialChain();
         yield return null;
     }
 

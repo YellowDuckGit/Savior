@@ -62,6 +62,9 @@ public class OpenPackManager : MonoBehaviour
         UIManager.instance.EnableLoadingAPI(false);
         UIManager.instance.TurnOnOpenPackScene();
         StartCoroutine(GameData.instance.LoadCardInInventoryUser());
+
+        //// TUTORIAL
+        //TutorialManager.instance.PlayTutorialChain();
     }
 
     public void SkipFlip()
