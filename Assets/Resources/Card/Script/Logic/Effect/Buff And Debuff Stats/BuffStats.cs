@@ -11,10 +11,10 @@ namespace Assets.GameComponent.Card.LogicCard.ListLogic.Effect
     [SRName("Logic/Effect/BuffStats")]
     public class BuffStats : AbstractEffect, IInturnEffect
     {
-        public int number;
+        public int Attack, Hp;
         public bool InTurn;
 
-        public override void GainEffect(object register, EffectManager match)
+        public override bool GainEffect(object register, EffectManager match)
         {
             MonoBehaviour.print(match.debug("GainEffect Buffstart", new
             {
@@ -26,11 +26,12 @@ namespace Assets.GameComponent.Card.LogicCard.ListLogic.Effect
                 {
                     register
                 }));
-                monster.Attack += number;
-                monster.Hp += number;
+                monster.Attack += Attack;
+                monster.Hp += Hp;
                 monster.EffectSContain.Add(this);
-
+                return true;
             }
+            return false;
         }
 
         public override void RevokeEffect(object register, MatchManager match)
@@ -43,8 +44,8 @@ namespace Assets.GameComponent.Card.LogicCard.ListLogic.Effect
                 }));
                 if (register is MonsterCard monster)
                 {
-                    monster.Attack -= number;
-                    monster.Hp -= number;
+                    monster.Attack -= Attack;
+                    monster.Hp -= Hp;
                     monster.EffectSContain.Remove(this);
                     MonoBehaviour.print(match.debug("RevokeEffect Buffstart", new
                     {
@@ -53,8 +54,5 @@ namespace Assets.GameComponent.Card.LogicCard.ListLogic.Effect
                 }
             }
         }
-
-
-        //public bool inTurn;
     }
 }

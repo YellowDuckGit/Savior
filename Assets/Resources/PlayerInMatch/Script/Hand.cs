@@ -137,6 +137,11 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         return _cards.Where(card => card != null && card.photonView.ViewID == photonID).FirstOrDefault();
     }
 
+    public List<CardBase> GetAllCardSelected()
+    {
+        return _cards.Where(card => card != null && card.IsSelected).ToList();
+    }
+
     //shuffle cards
     private void Shuffle(IList _list)
     {
@@ -422,6 +427,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
                 _cards[numberCardInHand - 1].gameObject.transform.localRotation = Quaternion.identity;
             }
         }
+
         if (_cards.Count >= 1)
         {
             //sort Y hand card
@@ -436,9 +442,10 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
 
             }
         }
+
     }
 
-    private void ScaleCardInHand()
+    public void ScaleCardInHand()
     {
         for (int i = 0; i <= _cards.Count - 1; i++)
         {

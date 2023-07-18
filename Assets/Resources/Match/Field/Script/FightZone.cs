@@ -20,9 +20,13 @@ public class FightZone : MonoBehaviourPun, IPunObservable
     public Material DefenseIconMaterial;
 
     [HideInInspector]
-    public bool isSelect;
-
-    [HideInInspector] public MonsterCard monsterCard;
+    public MonsterCard monsterCard
+    {
+        get
+        {
+            return GetMonsterCard();
+        }
+    }
 
     [HideInInspector] public CardPlayer player;
 
@@ -35,7 +39,7 @@ public class FightZone : MonoBehaviourPun, IPunObservable
 
     public void setIconField()
     {
-        if (type == FieldType.Attack)
+        if(type == FieldType.Attack)
         {
             Icon.material = AttackIconMaterial;
         }
@@ -64,7 +68,7 @@ public class FightZone : MonoBehaviourPun, IPunObservable
 
     private void NetworkingClient_EventReceived(EventData obj)
     {
-        if ((RaiseEvent)obj.Code == RaiseEvent.MOVE_FIGHTZONE)
+        if((RaiseEvent)obj.Code == RaiseEvent.MOVE_FIGHTZONE)
         {
             object[] datas = (object[])obj.CustomData;
             int fightZoneID = (int)datas[0];
@@ -72,23 +76,23 @@ public class FightZone : MonoBehaviourPun, IPunObservable
             int cardID = (int)datas[2];
             string playerSide = (string)datas[3];
 
-            if (fightZoneID.Equals(photonView.ViewID))
+            if(fightZoneID.Equals(photonView.ViewID))
             {
                 print("REventReceived MOVE_FIGHTZONE");
 
                 //CardTarget cardTarget = player.hand.getMonsterCardsInHand().Find(a => a.photonView.ViewID.Equals(cardID)).cardTarget;
                 SummonZone summonZone = null;
-                if (playerSide.Equals(K_Player.K_PlayerSide.Blue))
+                if(playerSide.Equals(K_Player.K_PlayerSide.Blue))
                 {
                     summonZone = matchManager.bluePlayer.summonZones.Single(a => a.photonView.ViewID.Equals(summonZoneID));
                 }
-                else if (playerSide.Equals(K_Player.K_PlayerSide.Red))
+                else if(playerSide.Equals(K_Player.K_PlayerSide.Red))
                 {
                     summonZone = matchManager.redPlayer.summonZones.Single(a => a.photonView.ViewID.Equals(summonZoneID));
                 }
 
-                monsterCard = summonZone.monsterCard;
-                if (monsterCard != null)
+                var monsterCard = summonZone.GetMonsterCard(true);
+                if(monsterCard != null)
                 {
                     monsterCard.MoveToFightZone(this);
                     this.PostEvent(EventID.OnMoveCardToFightZone, playerSide);
@@ -104,7 +108,7 @@ public class FightZone : MonoBehaviourPun, IPunObservable
         bool A = matchManager.isRightToAttack(player.side); //player who have attack tokken
         bool B = matchManager.gamePhase == MatchManager.GamePhase.Attack; //In attack phase
         bool C = matchManager.isRightToDefense(player.side); //player who have defense tokken
-        if (C)
+        if(C)
         {
             var PlayerAttack = matchManager.GetAttackPlayer();
             var AttackFieldFillByMonster = PlayerAttack.fightZones.Where(zone => zone.monsterCard != null).ToList();
@@ -121,7 +125,7 @@ public class FightZone : MonoBehaviourPun, IPunObservable
          * Case 1: Player Attack who have an attack tokken, do not attack yet
          * Case 2: Player Defense who have an defense tokken and he in attack phase (blueTriggerAttack|redTriggerAttack is true)
          */
-        if ((A && !B && !C) || (C && B))
+        if((A && !B && !C) || (C && B))
         {
             print("is Right To Attack");
             MonsterCard monsterCard = null;
@@ -129,35 +133,41 @@ public class FightZone : MonoBehaviourPun, IPunObservable
             List<SummonZone> summonZones = new List<SummonZone>();
 
             //get single monster card is select by hand
-            if (player.side.Equals(K_Player.K_PlayerSide.Blue))
+            if(player.side.Equals(K_Player.K_PlayerSide.Blue))
             {
-                if (matchManager.bluePlayer.summonZones.Any(a => a.monsterCard != null))
+                if(matchManager.bluePlayer.summonZones.Any(a => a.GetMonsterCard() != null))
                 {
                     print("1");
-                    summonZones = matchManager.bluePlayer.summonZones.FindAll(a => a.monsterCard != null);
+                    summonZones = matchManager.bluePlayer.summonZones.FindAll(a => a.GetMonsterCard() != null);
                     print("2");
 
-                    if (summonZones.Count > 0)
+                    if(summonZones.Count > 0)
                     {
                         print("3");
-                        foreach (SummonZone monsterZone in summonZones)
+                        foreach(SummonZone monsterZone in summonZones)
                         {
                             print("4");
 
-                            if (monsterZone.monsterCard.IsSelected)
+                            if(monsterZone.GetMonsterCard().IsSelected)
                             {
-                                print(this.debug($"Fight zone process for {monsterZone.monsterCard}", new { monsterZone.monsterCard.IsCharming }));
-                                if ((player.tokken == EnumDefine.GameTokken.Attack && !monsterZone.monsterCard.IsCharming) || player.tokken == EnumDefine.GameTokken.Defend)
+                                print(this.debug($"Fight zone process for {monsterZone.GetMonsterCard()}", new
+                                {
+                                    monsterZone.GetMonsterCard().IsCharming
+                                }));
+                                if((player.tokken == EnumDefine.GameTokken.Attack && !monsterZone.GetMonsterCard().IsCharming && !monsterZone.GetMonsterCard().IsBlockAttack) || player.tokken == EnumDefine.GameTokken.Defend)
                                 {
                                     print("5");
-                                    monsterCard = monsterZone.monsterCard;
+                                    monsterCard = monsterZone.GetMonsterCard();
                                     summonZoneSelected = monsterZone;
                                 }
                                 else
                                 {
                                     print("6");
-                                    print(this.debug("charming count", new { monsterZone.monsterCard.charmingCount }));
-                                    monsterZone.monsterCard.IsSelected = false;
+                                    print(this.debug("charming count", new
+                                    {
+                                        monsterZone.GetMonsterCard().charmingCount
+                                    }));
+                                    monsterZone.GetMonsterCard().IsSelected = false;
                                 }
                                 break;
                             }
@@ -174,34 +184,37 @@ public class FightZone : MonoBehaviourPun, IPunObservable
                 }
 
             }
-            else if (player.side.Equals(K_Player.K_PlayerSide.Red))
+            else if(player.side.Equals(K_Player.K_PlayerSide.Red))
             {
-                if (matchManager.redPlayer.summonZones.Any(a => a.monsterCard != null))
+                if(matchManager.redPlayer.summonZones.Any(a => a.GetMonsterCard() != null))
                 {
                     print("1");
-                    summonZones = matchManager.redPlayer.summonZones.FindAll(a => a.monsterCard != null);
+                    summonZones = matchManager.redPlayer.summonZones.FindAll(a => a.GetMonsterCard() != null);
                     print("2");
 
-                    if (summonZones.Count > 0)
+                    if(summonZones.Count > 0)
                     {
                         print("3");
-                        foreach (SummonZone monsterZone in summonZones)
+                        foreach(SummonZone monsterZone in summonZones)
                         {
                             print("4");
 
-                            if (monsterZone.monsterCard.IsSelected)
+                            if(monsterZone.GetMonsterCard().IsSelected)
                             {
-                                print(this.debug($"Fight zone process for n{monsterZone.monsterCard}", new { monsterZone.monsterCard.IsCharming }));
-                                if ((player.tokken == EnumDefine.GameTokken.Attack && !monsterZone.monsterCard.IsCharming) || player.tokken == EnumDefine.GameTokken.Defend)
+                                print(this.debug($"Fight zone process for n{monsterZone.GetMonsterCard()}", new
+                                {
+                                    monsterZone.GetMonsterCard().IsCharming
+                                }));
+                                if((player.tokken == EnumDefine.GameTokken.Attack && !monsterZone.GetMonsterCard().IsCharming) || (player.tokken == EnumDefine.GameTokken.Defend && !monsterZone.GetMonsterCard().IsBlockDefend))
                                 {
                                     print("5");
-                                    monsterCard = monsterZone.monsterCard;
+                                    monsterCard = monsterZone.GetMonsterCard();
                                     summonZoneSelected = monsterZone;
                                 }
                                 else
                                 {
                                     print("6");
-                                    monsterZone.monsterCard.IsSelected = false;
+                                    monsterZone.GetMonsterCard().IsSelected = false;
                                 }
                                 break;
                             }
@@ -218,7 +231,7 @@ public class FightZone : MonoBehaviourPun, IPunObservable
                 }
             }
 
-            if (monsterCard != null && summonZoneSelected != null)
+            if(monsterCard != null && summonZoneSelected != null)
             {
                 print("RaiseEvent.MOVE_FIGHTZONE");
                 // ID zone, ID cardTarget
@@ -229,9 +242,43 @@ public class FightZone : MonoBehaviourPun, IPunObservable
         }
     }
 
+    public MonsterCard GetMonsterCard(bool remove = false)
+    {
 
+        if(isFilled())
+        {
+
+            MonsterCard monsterCard = this.gameObject.transform.GetChild(0).GetComponent<MonsterCard>();
+            if(remove)
+            {
+                monsterCard.transform.SetParent(null);
+            }
+            return monsterCard;
+        }
+        return null;
+    }
+
+    public void SetMonsterCard(MonsterCard monsterCard)
+    {
+        if(!isFilled())
+        {
+            monsterCard.RemoveCardFormParentPresent();
+            monsterCard.MoveCardIntoNewParent(transform);
+            monsterCard.Position = CardPosition.InFightField;
+        }
+        else
+        {
+            Debug.LogError(this.debug("SummonZone is filled"));
+        }
+    }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+    }
+
+    public bool isFilled()
+    {
+        print(this.debug($"Fight zone {name} children count: " + this.gameObject.transform.childCount));
+        return this.gameObject.transform.childCount > 0;
     }
     // Start is called before the first frame update
 }

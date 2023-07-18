@@ -21,11 +21,65 @@ MonoBehaviour:
   <CardType>k__BackingField: 0
   <Avatar>k__BackingField: {fileID: 2100000, guid: 8922a1459a7bb5f4d83d322667f3ba95,
     type: 2}
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 0
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
-  CardEffect: []
+  <IsDominating>k__BackingField: 0
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
+  CardEffects:
+  - rid: 1073282966915383321
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1073282966915383321
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
+        asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 1073282966915383322
+    - rid: 1073282966915383322
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073282966915383323
+        Effects:
+        - rid: 1073282966915383324
+    - rid: 1073282966915383323
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+    - rid: 1073282966915383324
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
+        asm: Assembly-CSharp}
+      data:
+        pitch:
+        - pitchType:
+            rid: 1073282966915383325
+        Attack: 1
+        Hp: 1
+        InTurn: 0
+    - rid: 1073282966915383325
+      type: {class: AbstractEffect/EffectPitch/PitchType/PitchCount, ns: Assets.GameComponent.Card.LogicCard,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073282966915383326
+    - rid: 1073282966915383326
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        owner: 1
+        cardPosition: 4
+        Rarity: 0
+        region: 1
+        CardType:
+          rid: 1073282966915383327
+        match: {fileID: 0}
+    - rid: 1073282966915383327
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        monsterOptions: []

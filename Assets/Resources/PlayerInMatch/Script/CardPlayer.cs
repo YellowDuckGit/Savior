@@ -1,4 +1,6 @@
+using Assets.GameComponent.Manager.IManager;
 using Photon.Pun;
+using PlayFab.ServerModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ using UnityEngine;
 using static EnumDefine;
 using static MatchManager;
 
-public class CardPlayer : MonoBehaviourPun, IPunObservable
+public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
 {
     public Hand hand;
     public PlayerCamera camera;
@@ -23,12 +25,30 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable
     public List<SummonZone> summonZones = new List<SummonZone>(6);
     public List<FightZone> fightZones = new List<FightZone>(6);
     public TriggerSpell spellZone;
+    public InitCardPlace initialCardPlace;
     public PlayerAction playerAction;
     public bool isSkipTurn { get; set; } = default!;
     public bool isAttackAvaliable { get; set; } = default!;
+    public bool _IsSelectAble;
+    public bool IsSelectAble
+    {
+        get => _IsSelectAble; set => _IsSelectAble = value;
+    }
+    public bool _IsSelected;
+    public bool IsSelected
+    {
+        get => _IsSelected; set
+        {
+            _IsSelected = value;
+            if(value)
+            {
+                this.PostEvent(EventID.OnObjectSelected, this);
+            }
+        }
+    }
 
     public MatchManager matchManager;
-
+    internal bool isNEXT_STEP;
 
     private void Awake()
     {
@@ -41,24 +61,25 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
-        if (photonView.IsMine)
+        if(photonView.IsMine)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if(Input.GetKeyDown(KeyCode.Mouse0))
             {
                 hand.clickLeftMouse();
             }
         }
     }
+    //TODO: Select Player
     public IEnumerator SetupPlayer()
     {
         print(this.debug());
-        if (photonView.IsMine)
+        if(photonView.IsMine)
         {
             print(this.debug("Gain player side IsMine", new
             {
                 MatchManager.instance.localPlayerSide
             }));
-            if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+            if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
 
                 //set name
@@ -72,8 +93,9 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable
                 summonZones = this.gameObject.transform.parent.GetComponentsInChildren<SummonZone>().ToList();
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
                 spellZone = this.gameObject.transform.parent.GetComponentInChildren<TriggerSpell>();
+                initialCardPlace = this.gameObject.transform.parent.GetComponentInChildren<InitCardPlace>();
             }
-            else if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+            else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
                 //set name
                 name = "RedPlayer";
@@ -86,7 +108,7 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable
                 summonZones = this.gameObject.transform.parent.GetComponentsInChildren<SummonZone>().ToList();
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
                 spellZone = this.gameObject.transform.parent.GetComponentInChildren<TriggerSpell>();
-
+                initialCardPlace = this.gameObject.transform.parent.GetComponentInChildren<InitCardPlace>();
             }
 
 
@@ -97,7 +119,7 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable
             {
                 MatchManager.instance.localPlayerSide
             }));
-            if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+            if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 name = "RedPlayer";
                 side = K_Player.K_PlayerSide.Red;
@@ -108,9 +130,10 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable
                 summonZones = this.gameObject.transform.parent.GetComponentsInChildren<SummonZone>().ToList();
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
                 spellZone = this.gameObject.transform.parent.GetComponentInChildren<TriggerSpell>();
+                initialCardPlace = this.gameObject.transform.parent.GetComponentInChildren<InitCardPlace>();
 
             }
-            else if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+            else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
                 name = "BluePlayer";
                 side = K_Player.K_PlayerSide.Blue;
@@ -121,6 +144,7 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable
                 summonZones = this.gameObject.transform.parent.GetComponentsInChildren<SummonZone>().ToList();
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
                 spellZone = this.gameObject.transform.parent.GetComponentInChildren<TriggerSpell>();
+                initialCardPlace = this.gameObject.transform.parent.GetComponentInChildren<InitCardPlace>();
 
             }
         }
@@ -134,9 +158,19 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable
 
     }
 
+    public override string ToString()
+    {
+        return string.Format("[PLAYER]: {0} - {1}", name, side);
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+    }
 
+    internal IEnumerator NextStepAction(bool isNEXT_STEP)
+    {
+        yield return new WaitUntil(() => this.isNEXT_STEP == false);
+        this.isNEXT_STEP = isNEXT_STEP;
     }
     //public List<MonsterCard> GetAllCard()
     //{

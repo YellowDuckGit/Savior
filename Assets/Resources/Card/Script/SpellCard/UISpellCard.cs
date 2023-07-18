@@ -1,10 +1,10 @@
-using Assets.GameComponent.Card.CardComponents.Script;
+﻿using Assets.GameComponent.Card.CardComponents.Script;
 using Assets.GameComponent.Card.CardComponents.Script.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using static Unity.VisualScripting.Member;
 
 public class UISpellCard : UICardBase<SpellCard>, ISpellData
@@ -58,11 +58,31 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
     public RegionCard RegionCard { get; set; }
     public SpellType SpellType { get; set; }
     public override GameObject UIOutline { get => _outline; set => _outline = value; }
-    public Material NormalAvatar { get; set; }
-    public Material InDeckAvatar { get; set; }
-    public Material InBoardAvatar { get; set; }
-    public Sprite NormalAvatar2D { get; set; }
-    public Sprite InDeckAvatar2D { get; set; }
+    public Material NormalAvatar
+    {
+        get;
+        set;
+    }
+    public Material InDeckAvatar
+    {
+        get;
+        set;
+    }
+    public Material InBoardAvatar
+    {
+        get;
+        set;
+    }
+    public Sprite NormalAvatar2D
+    {
+        get;
+        set;
+    }
+    public Sprite InDeckAvatar2D
+    {
+        get;
+        set;
+    }
 
     public override void RegisLocalListener()
     {
@@ -80,6 +100,10 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
                 this.UIAvatar = transform.Find(nameof(Avatar)).GetComponent<MeshRenderer>();
                 this.UIOutline = transform.Find("OutlineCard")?.gameObject;
                 CardTarget = gameObject.GetComponent<SpellCard>();
+                if(CardTarget != null)
+                {
+                    CardTarget.PropertyChanged += OnCardUpdate;
+                }
             }
         }
         else
@@ -88,25 +112,81 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
         }
     }
 
-    public override void OnCardUpdate(SpellCard cardTarget)
+    public override void OnCardUpdate(object sender, PropertyChangedEventArgs e)
     {
-        if (cardTarget == this.CardTarget)
+
+        if (sender is SpellCard spellCard && spellCard == this.CardTarget)
         {
-            ISpellData source = cardTarget;
-            ISpellData destination = this;
-            destination.Id = source.Id;
-            destination.Name = source.Name;
-            destination.Cost = source.Cost;
-            destination.Description = source.Description;
-            destination.CardType = source.CardType;
-            destination.NormalAvatar = source.NormalAvatar;
-            destination.InDeckAvatar = source.InDeckAvatar;
-            destination.InBoardAvatar = source.InBoardAvatar;
-            destination.NormalAvatar2D = source.NormalAvatar2D;
-            destination.InDeckAvatar2D = source.InDeckAvatar2D;
-            destination.RarityCard = source.RarityCard;
-            destination.RegionCard = source.RegionCard;
+            print(this.debug($"Update card {spellCard.ToString()}"));
+            ISpellData source = spellCard;
+            // Sử dụng cấu trúc switch để kiểm tra tên của thuộc tính đã thay đổi
+            switch (e.PropertyName)
+            {
+                // Nếu thuộc tính là Id
+                case nameof(Id):
+                    // Gán giá trị của thuộc tính Id của nguồn cho thuộc tính Id của đích
+                    this.Id = source.Id;
+                    break;
+                // Nếu thuộc tính là Name
+                case nameof(Name):
+                    // Gán giá trị của thuộc tính Name của nguồn cho thuộc tính Name của đích
+                    this.Name = source.Name;
+                    break;
+                // Nếu thuộc tính là Cost
+                case nameof(Cost):
+                    // Gán giá trị của thuộc tính Cost của nguồn cho thuộc tính Cost của đích
+                    this.Cost = source.Cost;
+                    break;
+                // Nếu thuộc tính là Description
+                case nameof(Description):
+                    // Gán giá trị của thuộc tính Description của nguồn cho thuộc tính Description của đích
+                    this.Description = source.Description;
+                    break;
+                // Nếu thuộc tính là CardType
+                case nameof(CardType):
+                    // Gán giá trị của thuộc tính CardType của nguồn cho thuộc tính CardType của đích
+                    this.CardType = source.CardType;
+                    break;
+                // Nếu thuộc tính là Avatar
+                case nameof(Avatar):
+                    // Gán giá trị của thuộc tính Avatar của nguồn cho thuộc tính Avatar của đích
+                    this.Avatar = source.Avatar;
+                    break;
+                // Nếu thuộc tính là RarityCard
+                case nameof(RarityCard):
+                    // Gán giá trị của thuộc tính RarityCard của nguồn cho thuộc tính RarityCard của đích
+                    this.RarityCard = source.RarityCard;
+                    break;
+                // Nếu thuộc tính là RegionCard
+                case nameof(RegionCard):
+                    // Gán giá trị của thuộc tính RegionCard của nguồn cho thuộc tính RegionCard của đích
+                    this.RegionCard = source.RegionCard;
+                    break;
+            }
+            //this.Id = source.Id;
+            //this.Name = source.Name;
+            //this.Cost = source.Cost;
+            //this.Description = source.Description;
+            //this.CardType = source.CardType;
+            //this.Avatar = source.Avatar;
+            //this.RarityCard = source.RarityCard;
+            //this.RegionCard = source.RegionCard;
+            //this.Hp = source.Hp;
+            //this.Attack = source.Attack;
         }
+        //if (cardTarget == this.CardTarget)
+        //{
+        //    ISpellData source = cardTarget;
+        //    ISpellData destination = this;
+        //    destination.Id = source.Id;
+        //    destination.Name = source.Name;
+        //    destination.Cost = source.Cost;
+        //    destination.Description = source.Description;
+        //    destination.CardType = source.CardType;
+        //    destination.Avatar = source.Avatar;
+        //    destination.RarityCard = source.RarityCard;
+        //    destination.RegionCard = source.RegionCard;
+        //}
     }
 
 

@@ -23,6 +23,12 @@ public class CameraManager : MonoBehaviour
     public MMFeedbacks CameraFeedBacks;
 
     public CinemachineVirtualCamera CardCamera;
+    public CinemachineVirtualCamera Normal;
+    public CinemachineVirtualCamera Board;
+    public CinemachineVirtualCamera Hand;
+    public CinemachineVirtualCamera MP_HP;
+    public CinemachineVirtualCamera SkipTurn;
+
 
     //[SerializeField] Button B_Normal;
     //[SerializeField] Button B_Board;

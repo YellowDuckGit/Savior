@@ -1,4 +1,5 @@
 ﻿using Assets.GameComponent.Card.Logic;
+using Assets.GameComponent.Card.Logic.Effect;
 using Assets.GameComponent.Card.Logic.TargetObject;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,8 @@ namespace Assets.GameComponent.Card.LogicCard
         public CardBase Card;
 
         [SerializeReference]
-        [SRLogicCard(typeof(AbstractTargetObject))]
-        public List<AbstractData> Action;
+        [SRLogicCard(typeof(AbstractAction))]
+        public List<AbstractAction> Actions;
 
     }
 }

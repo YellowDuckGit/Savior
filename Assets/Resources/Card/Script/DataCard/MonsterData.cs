@@ -8,9 +8,7 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 using static EnumDefine;
-
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "MC", menuName = "Scriptable Objects/MonsterCard", order = 1)]
@@ -24,13 +22,13 @@ public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
 
     [field: SerializeField]
     public int Cost { get; set; }
-
+    
     [field: SerializeField]
     public int Attack { get; set; }
 
     [field: SerializeField]
     public int Hp { get; set; }
-
+    
     [field: SerializeField]
     public string Description { get; set; }
 
@@ -38,19 +36,7 @@ public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
     public CardType CardType { get; set; }
 
     [field: SerializeField]
-    public Material NormalAvatar { get; set; }
-
-    [field: SerializeField]
-    public Material InDeckAvatar { get; set; }
-
-    [field: SerializeField]
-    public Material InBoardAvatar { get; set; }
-
-    [field: SerializeField]
-    public Sprite NormalAvatar2D { get; set; }
-
-    [field: SerializeField]
-    public Sprite InDeckAvatar2D { get; set; }
+    public Material Avatar { get; set; }
 
     [field: SerializeField]
     public Rarity RarityCard { get; set; }
@@ -63,9 +49,41 @@ public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
 
     [field: SerializeField]
     public bool IsTreating { get; set; }
+    [field: SerializeField]
+    public bool IsDominating { get ; set ; }
 
+    [field: SerializeField]
+    public bool IsBlockAttack { get; set; }
+
+    [field: SerializeField]
+    public bool IsBlockDefend { get ; set ; }
+    public Material NormalAvatar
+    {
+        get;
+        set;
+    }
+    public Material InDeckAvatar
+    {
+        get;
+        set;
+    }
+    public Material InBoardAvatar
+    {
+        get;
+        set;
+    }
+    public Sprite NormalAvatar2D
+    {
+        get;
+        set;
+    }
+    public Sprite InDeckAvatar2D
+    {
+        get;
+        set;
+    }
 
     [SerializeReference]
     [SRLogicCard(typeof(AbstractCondition))]
-    public AbstractCondition[] CardEffect;
+    public AbstractCondition[] CardEffects;
 }

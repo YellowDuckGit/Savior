@@ -10,12 +10,12 @@ public sealed class DragAndDropManager : MonoBehaviour
     private LayerMask ZoneRaycastMask;
 
 
-    [SerializeField, Range(0.1f, 2.0f)]
-    private float dragSpeed = 1.0f;
+    [SerializeField]
+    private float dragSpeed;
 
     // Height at which we want the card to be in a drag operation.
-    [SerializeField, Range(0.0f, 10.0f)]
-    private float height = 1.0f;
+    [SerializeField]
+    private float height;
 
     [SerializeField]
     private Vector2 cardSize;
@@ -90,7 +90,6 @@ public sealed class DragAndDropManager : MonoBehaviour
 
             // We are only interested in the first one.
             hit = raycastHitsCard[0].transform;
-            print("Hit: " + hit);
         }
         return hit;
     }
@@ -172,7 +171,6 @@ public sealed class DragAndDropManager : MonoBehaviour
         Transform hit = MouseRaycastCard();
         if (hit != null)
         {
-            print("hit != null");
             draggable = hit.GetComponent<IDrag>();
             if (draggable is { IsDraggable: true })
                 currentDragTransform = hit;
@@ -209,7 +207,6 @@ public sealed class DragAndDropManager : MonoBehaviour
     private void Update()
     {
         if (currentDrag != null)
-        print(currentDrag.DragOriginPosition);
 
         if (currentDrag == null)
         {
@@ -226,7 +223,7 @@ public sealed class DragAndDropManager : MonoBehaviour
                     oldMouseWorldPosition = MousePositionToWorldPoint();
 
                     // Hide the mouse icon.
-                    Cursor.visible = false;
+                    //Cursor.visible = false;
                     // And we lock the movements to the window frame,
                     // so we can't move objects out of the camera's view.          
                     Cursor.lockState = CursorLockMode.Confined;
@@ -289,109 +286,62 @@ public sealed class DragAndDropManager : MonoBehaviour
                 currentDragTransform = null;
 
                 // We return the mouse icon to its normal state.
-                Cursor.visible = true;
+                //Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
             }
         }
 
-        //if (currentZone == null)
-        //{
-        //    DropZone dropZone = DetectDropZone();
-        //    // Left mouse button pressed?
-        //    if (Input.GetMouseButtonDown(0) == true)
-        //    {
-        //        print("ZoneButtonDown");
-        //        // Is there an IDrag object under the mouse pointer?
-        //        if (dropZone != null)
-        //        {
-        //            // We already have an object to start the drag operation!
-        //            currentZone = dropZone;
-        //            //currentDragTransform = hit;
-        //            oldMouseWorldPosition = MousePositionToWorldPoint();
-
-        //            // Hide the mouse icon.
-        //            Cursor.visible = false;
-        //            // And we lock the movements to the window frame,
-        //            // so we can't move objects out of the camera's view.          
-        //            Cursor.lockState = CursorLockMode.Confined;
-
-        //            // The drag operation begins.
-        //            currentZone.isOvering = true;
-
-        //            if (currentDrag != null)
-        //            {
-        //                print("CurrentZone != null && have drag");
-        //                currentDrag.DragOriginPosition = ZoneTransform.position;
-        //            }
-        //            //currentZone.OnBeginDrag(new Vector3(raycastHits[0].point.x, raycastHits[0].point.y + height, raycastHits[0].point.z));
-        //        }
-        //    }
-        //    else
-        //    {
-
-        //    }
-        //}
-        //else
-        //{
-        //    // Is the left mouse button held down?
-        //    if (Input.GetMouseButton(0) == true)
-        //    {
-
-        //    }
-        //    else if (Input.GetMouseButtonUp(0) == true)
-        //    {
-        //        currentZone.isOvering = false;
-        //        currentZone = null;
-        //        ZoneTransform = null;
-
-        //        // We return the mouse icon to its normal state.
-        //        Cursor.visible = true;
-        //        Cursor.lockState = CursorLockMode.None;
-        //    }
-
-        //}
-
-        if(Input.GetMouseButton(0) == true)
+        if (currentDrag != null)
         {
-            DropZone dropZone = DetectDropZone();
-
-            print("ZoneButtonDown");
-            // Is there an IDrag object under the mouse pointer?
-            if (dropZone != null)
+            if (Input.GetMouseButton(0) == true)
             {
-                // We already have an object to start the drag operation!
-                currentZone = dropZone;
-                //currentDragTransform = hit;
-                oldMouseWorldPosition = MousePositionToWorldPoint();
+                DropZone dropZone = DetectDropZone();
 
-                // Hide the mouse icon.
-                Cursor.visible = false;
-                // And we lock the movements to the window frame,
-                // so we can't move objects out of the camera's view.          
-                Cursor.lockState = CursorLockMode.Confined;
-
-                // The drag operation begins.
-                currentZone.isOvering = true;
-
-                if (currentDrag != null)
+                // Is there an IDrag object under the mouse pointer?
+                if (dropZone != null)
                 {
-                    print("CurrentZone != null && have drag");
-                    currentDrag.DragOriginPosition = ZoneTransform.position;
+                    // We already have an object to start the drag operation!
+                    currentZone = dropZone;
+                    //currentDragTransform = hit;
+                    oldMouseWorldPosition = MousePositionToWorldPoint();
+
+                    // Hide the mouse icon.
+                    //Cursor.visible = false;
+                    // And we lock the movements to the window frame,
+                    // so we can't move objects out of the camera's view.          
+                    Cursor.lockState = CursorLockMode.Confined;
+
+                    // The drag operation begins.
+                    currentZone.isOvering = true;
+
+                    if (currentDrag != null)
+                    {
+                        print("CurrentZone != null && have drag");
+                        currentDrag.DragOriginPosition = ZoneTransform.position;
+                    }
+                    //currentZone.OnBeginDrag(new Vector3(raycastHits[0].point.x, raycastHits[0].point.y + height, raycastHits[0].point.z));
                 }
-                //currentZone.OnBeginDrag(new Vector3(raycastHits[0].point.x, raycastHits[0].point.y + height, raycastHits[0].point.z));
+            }
+            else if(Input.GetMouseButtonUp(0) == true)
+            {
+                currentZone.isOvering = false;
+                currentZone = null;
+                ZoneTransform = null;
+
+                // We return the mouse icon to its normal state.
+                //Cursor.visible = true;
+                //Cursor.lockState = CursorLockMode.None;
             }
         }
-        else if(Input.GetMouseButtonUp(0) == true)
+
+
+        if(currentZone == null)
         {
-            currentZone.isOvering = false;
-            currentZone = null;
-            ZoneTransform = null;
-
-            // We return the mouse icon to its normal state.
-            //Cursor.visible = true;
-            //Cursor.lockState = CursorLockMode.None;
         }
+        else
+        {
 
+        }
     }
 
     private void OnEnable()

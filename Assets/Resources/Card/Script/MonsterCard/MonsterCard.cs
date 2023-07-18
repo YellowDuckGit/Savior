@@ -11,6 +11,7 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -28,24 +29,22 @@ using static EventGameHandler;
 public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
 {
     [Header("Reference Display")]
-    private MonsterData _baseMonsterData;
 
     [Space(10)]
     [Header("Stats")]
-    private int _attack;
-    private int _hp;
-    private int _defaultHp;
+    [SerializeField] private int _attack;
+    [SerializeField] private int _hp;
+    [SerializeField] private int _defaultHp;
 
     [Space(10)]
     [Header("State Card")]
 
     //public CardPlayer cardPlayer;
-    public Hand hand;
-    public Deck deck;
+    public Hand Hand;
+    public Deck Deck;
 
     [SerializeField]
     public AbstractCondition[] LogicCard;
-
 
     //public void Awake()
     //{
@@ -67,9 +66,9 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     private void StartRound(MatchManager matchManager)
     {
         print("start round");
-        if (IsCharming)
+        if(IsCharming)
         {
-            if (--charmingCount <= 0)
+            if(--charmingCount <= 0)
             {
                 print("Revoke IsCharming");
                 IsCharming = false;
@@ -77,23 +76,27 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             };
         }
 
-        if (IsTreating)
+        if(IsTreating)
         {
-            if (this.Hp < this.DefaultHp)
+            if(this.Hp < this.DefaultHp)
             {
                 this.Hp += this.Hp;
-                if (this.Hp > this.DefaultHp)
+                if(this.Hp > this.DefaultHp)
                 {
                     this.Hp = this.DefaultHp;
                 }
             }
         }
-        print(this.debug(this.ToString(), new { IsCharming, charmingCount }));
+        print(this.debug(this.ToString(), new
+        {
+            IsCharming,
+            charmingCount
+        }));
     }
 
     #region Get Set
 
-    private bool _isTreating;
+    [SerializeField] private bool _isTreating;
     public bool IsTreating
     {
         get
@@ -102,25 +105,21 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         }
         set
         {
-            if (value)
+            if(value)
             {
                 _isTreating = true;
             }
         }
     }
 
-    public MonsterData BaseMonsterData
-    {
-        get { return this._baseMonsterData; }
-        set { this._baseMonsterData = value; }
-    }
+
 
     public override string Id
     {
         get => _id;
         set
         {
-            if (!string.IsNullOrEmpty(_id))
+            if(!string.IsNullOrEmpty(_id))
                 _id = value;
         }
     }
@@ -129,7 +128,8 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         get => _name; set
         {
             _name = value;
-            this.PostEvent(EventID.OnCardUpdate, this);
+            OnPropertyChanged(nameof(Name));
+            //this.PostEvent(EventID.OnCardUpdate, this);
 
             //onNameChange?.Invoke(value);
         }
@@ -139,7 +139,9 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         get => _description; set
         {
             _description = value;
-            this.PostEvent(EventID.OnCardUpdate, this);
+            OnPropertyChanged(nameof(Description));
+
+            //this.PostEvent(EventID.OnCardUpdate, this);
 
             //onDescriptionChange?.Invoke(value);
 
@@ -150,7 +152,9 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         get => _cost; set
         {
             _cost = value;
-            this.PostEvent(EventID.OnCardUpdate, this);
+            OnPropertyChanged(nameof(Cost));
+
+            //this.PostEvent(EventID.OnCardUpdate, this);
 
             //onCostChange?.Invoke(value);
         }
@@ -160,7 +164,10 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         get => _isSelected; set
         {
             _isSelected = value;
-            this.PostEvent(EventID.OnCardSelected, this);
+            if(value)
+            {
+                this.PostEvent(EventID.OnObjectSelected, this);
+            }
             //onSelectChange?.Invoke(value);
         }
     }
@@ -172,62 +179,57 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             //onPositionChange?.Invoke(value);
         }
     }
-    public override Material NormalAvatar
+    public override Material Avatar
     {
-        get => _normalavatar; set
+        get => _avartar; set
         {
-            _normalavatar = value;
-            this.PostEvent(EventID.OnCardUpdate, this);
+            _avartar = value;
+            OnPropertyChanged(nameof(Avatar));
 
-            //onavatarChange?.Invoke(value);
-        }
-    }
+            //this.PostEvent(EventID.OnCardUpdate, this);
 
-    public override Material InBoardAvatar
-    {
-        get => _inBoardavatar; set
-        {
-            _inBoardavatar = value;
-            this.PostEvent(EventID.OnCardUpdate, this);
-
-            //onavatarChange?.Invoke(value);
-        }
-    }
-
-    public override Material InDeckAvatar
-    {
-        get => _inDeckavatar; set
-        {
-            _inDeckavatar = value;
-            this.PostEvent(EventID.OnCardUpdate, this);
-
-            //onavatarChange?.Invoke(value);
+            //onAvartarChange?.Invoke(value);
         }
     }
     public int Attack
     {
-        get { return this._attack; }
+        get
+        {
+            return this._attack;
+        }
         set
         {
             this._attack = value;
-            this.PostEvent(EventID.OnCardUpdate, this);
+            OnPropertyChanged(nameof(Attack));
+
+            //this.PostEvent(EventID.OnCardUpdate, this);
 
             //onAttackChange?.Invoke(value);
         }
+
     }
     public int Hp
     {
-        get { return this._hp; }
+        get
+        {
+            return this._hp;
+        }
         set
         {
+            if(value < this._hp)
+            {
+                this.PostEvent(EventID.OnCardDamaged, this);
+            }
             this._hp = value;
             //onHpChange?.Invoke(value);
-            this.PostEvent(EventID.OnCardUpdate, this);
-            if (IsCharming)
+            OnPropertyChanged(nameof(Hp));
+
+            //this.PostEvent(EventID.OnCardUpdate, this);
+            if(IsCharming)
             {
                 IsCharming = false;
             }
-            if (isDead())
+            if(isDead())
             {
                 MoveToGraveyard();
             }
@@ -237,7 +239,10 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
 
     public int DefaultHp
     {
-        get { return this._defaultHp; }
+        get
+        {
+            return this._defaultHp;
+        }
         set
         {
             this._defaultHp = value;
@@ -260,15 +265,25 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     }
     public override CardOwner CardOwner
     {
-
-
-        get { return _cardOwner; }
-        set { _cardOwner = value; }
+        get
+        {
+            return _cardOwner;
+        }
+        set
+        {
+            _cardOwner = value;
+        }
     }
     public override CardType CardType
     {
-        get { return _cardType; }
-        set { _cardType = value; }
+        get
+        {
+            return _cardType;
+        }
+        set
+        {
+            _cardType = value;
+        }
     }
     public override bool IsSelectAble
     {
@@ -294,16 +309,22 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         }
     }
     public int charmingCount = 0;
+    [SerializeField]
     private bool _IsCharming;
+
     public bool IsCharming
     {
-        get { return _IsCharming; }
+        get
+        {
+            return _IsCharming;
+        }
         set
         {
-            if (value && Position == CardPosition.InSummonField)
+            if(value /*&& Position == CardPosition.InSummonField*/)
             {
                 charmingCount = 2;
-                _IsCharming = value;
+                _IsCharming = true;
+                //this.PostEvent(EventID.OnGainedAttribute, nameof(IsCharming));
             }
             else
             {
@@ -313,9 +334,35 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         }
     }
 
-    public override Rarity RarityCard { get; set; }
-    public override RegionCard RegionCard { get; set; }
-
+    public override Rarity RarityCard
+    {
+        get; set;
+    }
+    public override RegionCard RegionCard
+    {
+        get; set;
+    }
+    [SerializeField]
+    private bool _IsDominating;
+    public bool IsDominating
+    {
+        get
+        {
+            return _IsDominating;
+        }
+        set
+        {
+            _IsDominating = value;
+        }
+    }
+    public bool IsBlockAttack
+    {
+        get; set;
+    }
+    public bool IsBlockDefend
+    {
+        get; set;
+    }
 
     #endregion
 
@@ -325,7 +372,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     //public override event OnDescriptionChange onDescriptionChange;
     //public override event OnPositionChange onPositionChange;
     //public override event OnSelectChange onSelectChange;
-    //public override event OnavatarChange onavatarChange;
+    //public override event OnAvartarChange onAvartarChange;
     //public override event OnFocusChange onFocusChange;
     //public event OnAttactChange onAttackChange;
     //public event OnPlay onPlay;
@@ -349,29 +396,6 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     //    PhotonNetwork.NetworkingClient.EventReceived -= NetworkingClient_EventReceived;
     //}
 
-    public override void NetworkingClient_EventReceived(EventData obj)
-    {
-        var args = obj.GetData();
-        if ((RaiseEvent)obj.Code == RaiseEvent.SET_DATA_CARD_EVENT)
-        {
-            if (args.photonviewID.Equals(photonView.ViewID))
-            {
-                BaseMonsterData = (MonsterData)GameData.instance.listCardDataInGame.First(a => a.Id.Equals(args.cardDataId));
-                LoadCardFromData();
-            }
-        }
-        if ((RaiseEvent)obj.Code == RaiseEvent.UPDATE_DATA_MONSTER_EVENT)
-        {
-            if (args.photonviewID.Equals(photonView.ViewID))
-            {
-                var card = args.card as MonsterCard;
-                this.Hp = card.Hp;
-                this.Attack = card.Attack;
-            }
-        }
-    }
-
-
     private void RevokeEffectAtEndTurn(MatchManager match)
     {
         this.EffectSContain.Where(eff => eff is IInturnEffect).ToList().ForEach(eff => eff.RevokeEffect(this, match: match));
@@ -380,30 +404,30 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     #endregion
 
     #region SetUp Card
-    public override void LoadCardFromData()
+    public override IEnumerator LoadCardFromData()
     {
-        print($"Start Load Data for {_baseMonsterData.Name}");
-        IMonsterData source = _baseMonsterData;
+        print($"Start Load Data for {BaseCard.Name}");
+        MonsterData source = (MonsterData)BaseCard;
 
         this.Id = source.Id;
         this.Name = source.Name;
         this.Cost = source.Cost;
         this.Description = source.Description;
         this.CardType = source.CardType;
-        this.NormalAvatar = source.NormalAvatar;
-        this.InDeckAvatar = source.InDeckAvatar;
-        this.InBoardAvatar = source.InBoardAvatar;
+        this.Avatar = source.Avatar;
         this.RarityCard = source.RarityCard;
         this.RegionCard = source.RegionCard;
         this.Hp = source.Hp;
         this.Attack = source.Attack;
 
-        IEffectAttributes effsource = _baseMonsterData;
+        IEffectAttributes effsource = source;
         IEffectAttributes effDestination = this;
 
         effDestination.IsCharming = effsource.IsCharming;
         effDestination.IsTreating = effsource.IsTreating;
-
+        effDestination.IsDominating = effsource.IsDominating;
+        effDestination.IsBlockAttack = effsource.IsBlockAttack;
+        effDestination.IsBlockDefend = effsource.IsBlockDefend;
         //load data form monster data
         //this.Id = _baseMonsterData.Id;
         //this.Name = _baseMonsterData.Name;
@@ -411,19 +435,19 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         //this.Cost = _baseMonsterData.Cost;
         //this.Attack = _baseMonsterData.Attack;
         //this.Hp = _baseMonsterData.Hp;
-        this.DefaultHp = _baseMonsterData.Hp; //default hp
-        //this.avatar = _baseMonsterData.avatar;
+        this.DefaultHp = source.Hp; //default hp
+        //this.Avartar = _baseMonsterData.Avartar;
         //this.IsCharming = _baseMonsterData.IsCharming;
         //this.isTreating = _baseMonsterData.IsTreating;
-        if (_baseMonsterData.CardEffect != null)
+        if(source.CardEffects != null)
         {
-            this.LogicCard = _baseMonsterData.CardEffect;
-            for (int i = 0; i < this.LogicCard.Length; i++)
+            this.LogicCard = source.CardEffects;
+            for(int i = 0; i < this.LogicCard.Length; i++)
             {
                 EffectManager.Instance.EffectRegistor(this.LogicCard[i], this);
             }
         }
-        print("End Load Data");
+        yield return null;
     }
 
     //public void updateCard()
@@ -436,7 +460,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     //    this.Cost = _baseMonsterData.Cost;
     //    this.Attack = _baseMonsterData.Attack;
     //    this.Hp = _baseMonsterData.Hp;
-    //    this.avatar = _baseMonsterData.avatar;
+    //    this.Avartar = _baseMonsterData.Avartar;
     //    this.isTreating = _baseMonsterData.IsTreating;
     //    if (_baseMonsterData.CardEffect != null)
     //    {
@@ -552,8 +576,23 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
 
     public void attack(MonsterCard opponentCard)
     {
-        opponentCard.Hp -= this.Attack;
+
         print(Hp);
+        if(IsDominating && CardPlayer.tokken == EnumDefine.GameTokken.Attack)
+        {
+            print(this.debug("Attack with IsDominating", new
+            {
+                card = this.ToString()
+            }));
+            if(Attack > opponentCard.Hp)
+            {
+                var offset = Attack - opponentCard.Hp;
+                opponentCard.CardPlayer.hp.decrease(offset);
+
+            }
+        }
+        opponentCard.Hp -= this.Attack;
+        print(this.debug($"Attact {this} -> {opponentCard}"));
     }
 
     public override void Play(MatchManager matchManager)
@@ -625,7 +664,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         this.transform.parent = parentTransform;
         this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
 
-        if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+        if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             transform.Rotate(0f, 180f, 0f);
     }
     #endregion
@@ -638,36 +677,41 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
 
     public bool isDead()
     {
-        if (_hp <= 0)
+        if(_hp <= 0)
         {
             return true;
         }
-        else return false;
+        else
+            return false;
     }
     #endregion
 
     public void SelectCard()
     {
-        print(this.debug(this.ToString(), new { _isSelectAble }));
+        print(this.debug(this.ToString(), new
+        {
+            _isSelectAble
+        }));
 
-        if (_isSelectAble)
+        if(_isSelectAble)
         {
 
-            if (this.Position == CardPosition.InHand)
+            if(this.Position == CardPosition.InHand)
             {
                 print("Card On hand");
 
-                if (hand == null) hand = gameObject.GetComponentInParent<Hand>();
+                if(Hand == null)
+                    Hand = gameObject.GetComponentInParent<Hand>();
                 print(IsSelected ? $"this {Name} have been selected" : $"this {Name} dosen't have been selected");
-                if (!IsSelected)
+                if(!IsSelected)
                 {
                     print("Card doesn't select yet");
-                    var listMonsterCard = hand.GetAllCardInHand(); //get all monster card in hand
+                    var listMonsterCard = Hand.GetAllCardInHand(); //get all monster card in hand
                                                                    //var listUIMonsterCard = listSelect(a => (a.UI)).ToList();//Get UI list
 
                     var cardSelected = listMonsterCard.SingleOrDefault(a => a.IsSelected == true);//TODO: select card selected-- this true on select 0ne //get card selected
 
-                    if (cardSelected != null) //remove select
+                    if(cardSelected != null) //remove select
                     {
                         cardSelected.IsSelected = false;
                         print($"Card {cardSelected.Name} be unselect");
@@ -680,12 +724,12 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
                 //    print($"Card {Name} have been unselected");
                 //}
             }
-            else if (Position == CardPosition.InSummonField || Position == CardPosition.InFightField)
+            else if(Position == CardPosition.InSummonField || Position == CardPosition.InFightField)
             {
                 print(this.debug("Select card on field"));
 
                 //check if in pharse atk or defense --> user can select card in summon field to move this in action file
-                if (!this.IsSelected)
+                if(!this.IsSelected)
                 {
                     this.IsSelected = true; //co the select nhieu monstercard trong 2 field nay 
                 }
@@ -700,109 +744,105 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
 
     public override string ToString()
     {
-        return $"{Name}{{{Cost}}} {Attack}|{Hp}";
+        StringBuilder builder = new StringBuilder();
+        builder.Append($"[MONSTER] {Name}{{{Cost}}} {Attack}|{Hp}");
+        //IEffectAttributes effectAttributes = this;
+        //builder.AppendLine(this.debug("-", new
+        //{
+        //    IsCharming,
+        //    IsTreating,
+        //    IsDominating,
+        //    IsBlockAttack,
+        //    IsBlockDefend
+        //}));
+        return builder.ToString();
     }
 
-    public override void OnClick()
-    {
-        print(this.debug(this.ToString()));
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            print("left Click card");
-            //select 
-            //IsSelected = true; 
-            SelectCard();
-            //if (Forcusable)
-            IsFocus = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            print(this.ToString());
-        }
-    }
+    //public override void LeftClickCard()
+    //{
+    //    SelectCard();
+    //}
+
+    //public override void RightClickCard()
+    //{
+    //}
 
     public override void SetupCard()
     {
-        if (photonView.IsMine)
+        if(photonView.IsMine)
         {
-            if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+            if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
                 //get player, hand, deck
                 GameObject side = GameObject.Find(MatchManager.instance.redSideGameObjectName);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
-                hand = CardPlayer.GetComponentInChildren<Hand>();
-                deck = CardPlayer.GetComponentInChildren<Deck>();
-
+                Hand = CardPlayer.GetComponentInChildren<Hand>();
+                Deck = CardPlayer.GetComponentInChildren<Deck>();
+                CardOwner = CardOwner.You;
 
                 //becom children of deck
-                this.transform.parent = deck.transform;
+                this.transform.parent = CardPlayer.initialCardPlace.transform;
 
                 //add card to list card in deck
-                deck.Add(this);
-
-                //set position
-                this.transform.position = deck.PositionInitialCardInDeck;
+                CardPlayer.initialCardPlace.Enqueue(this);
                 this.transform.Rotate(new Vector3(180f, 0f, 0f));
             }
-            else if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+            else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 //get player, hand, deck
                 GameObject side = GameObject.Find(MatchManager.instance.blueSideGameObjectName);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
-                hand = CardPlayer.GetComponentInChildren<Hand>();
-                deck = CardPlayer.GetComponentInChildren<Deck>();
+                Hand = CardPlayer.GetComponentInChildren<Hand>();
+                Deck = CardPlayer.GetComponentInChildren<Deck>();
+                CardOwner = CardOwner.You;
 
 
                 //add card to list card in deck
-                deck.Add(this);
+                CardPlayer.initialCardPlace.Enqueue(this);
 
                 //becom children of deck
-                this.transform.parent = deck.transform;
-
-                //set position
-                this.transform.position = deck.PositionInitialCardInDeck;
+                this.transform.parent = CardPlayer.initialCardPlace.transform;
                 this.transform.Rotate(new Vector3(180f, 0f, 0f));
-
             }
         }
         else
         {
-            if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+            if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
                 //set parent
                 //get player, hand, deck
                 GameObject side = GameObject.Find(MatchManager.instance.blueSideGameObjectName);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
-                hand = CardPlayer.GetComponentInChildren<Hand>();
-                deck = CardPlayer.GetComponentInChildren<Deck>();
+                Hand = CardPlayer.GetComponentInChildren<Hand>();
+                Deck = CardPlayer.GetComponentInChildren<Deck>();
+                CardOwner = CardOwner.Opponent;
 
                 //becom children of deck
-                this.transform.parent = deck.transform;
+                this.transform.parent = CardPlayer.initialCardPlace.transform;
 
                 //add card to list card in deck
-                deck.Add(this);
+                CardPlayer.initialCardPlace.Enqueue(this);
 
                 //set position
-                this.transform.position = deck.PositionInitialCardInDeck;
                 this.transform.Rotate(new Vector3(180f, 0f, 0f));
 
             }
-            else if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+            else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 //get player, hand, deck
                 GameObject side = GameObject.Find(MatchManager.instance.redSideGameObjectName);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
-                hand = CardPlayer.GetComponentInChildren<Hand>();
-                deck = CardPlayer.GetComponentInChildren<Deck>();
+                Hand = CardPlayer.GetComponentInChildren<Hand>();
+                Deck = CardPlayer.GetComponentInChildren<Deck>();
+                CardOwner = CardOwner.Opponent;
 
                 //becom children of deck
-                this.transform.parent = deck.transform;
+                this.transform.parent = CardPlayer.initialCardPlace.transform;
 
                 //add card to list card in deck
-                deck.Add(this);
+                CardPlayer.initialCardPlace.Enqueue(this);
 
                 //set position
-                this.transform.position = deck.PositionInitialCardInDeck;
                 this.transform.Rotate(new Vector3(180f, 0f, 0f));
 
             }

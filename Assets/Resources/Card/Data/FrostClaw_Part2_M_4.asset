@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: FrostClaw_Part2_M_4
   <Name>k__BackingField: Undauted
-  <Cost>k__BackingField: 6
+  <Cost>k__BackingField: 3
   <Attack>k__BackingField: 2
   <Hp>k__BackingField: 1
   <Description>k__BackingField: When I'm summoned, deal 3 to enemy BackBone. Summon
@@ -22,11 +22,86 @@ MonoBehaviour:
   <CardType>k__BackingField: 0
   <Avatar>k__BackingField: {fileID: 2100000, guid: 0822921ca0c96624dbf459aec78ca75f,
     type: 2}
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 0
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
-  CardEffect: []
+  <IsDominating>k__BackingField: 0
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
+  CardEffects:
+  - rid: 1073282966915383328
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1073282966915383328
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
+        asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 1073282966915383329
+        - rid: 1073283037012426752
+    - rid: 1073282966915383329
+      type: {class: SpecifyAction, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073282966915383330
+        Effects:
+        - rid: 1073282966915383331
+    - rid: 1073282966915383330
+      type: {class: SpecifyAction/SpecifyType/SpecifyCardPlayer, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
+        asm: Assembly-CSharp}
+      data:
+        side: 2
+    - rid: 1073282966915383331
+      type: {class: Dame, ns: , asm: Assembly-CSharp}
+      data:
+        pitch: []
+        number: 3
+    - rid: 1073283037012426752
+      type: {class: SpecifyAction, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073283037012426753
+        Effects:
+        - rid: 1073283037012426754
+    - rid: 1073283037012426753
+      type: {class: SpecifyAction/SpecifyType/SpecifyCardPlayer, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
+        asm: Assembly-CSharp}
+      data:
+        side: 1
+    - rid: 1073283037012426754
+      type: {class: CreateCard, ns: Assets.GameComponent.Card.Logic.Effect.CreateCard,
+        asm: Assembly-CSharp}
+      data:
+        pitch:
+        - pitchType:
+            rid: 1073283043488169984
+        CardTarget: {fileID: 11400000, guid: ef72874406547f144a0b65fb5b6d8606, type: 2}
+        owner: 1
+        CardPosition: 4
+    - rid: 1073283043488169984
+      type: {class: AbstractEffect/EffectPitch/PitchType/PitchCount, ns: Assets.GameComponent.Card.LogicCard,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073283043488169985
+    - rid: 1073283043488169985
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        owner: 2
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        CardType:
+          rid: 1073283043488169986
+        match: {fileID: 0}
+    - rid: 1073283043488169986
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        monsterOptions: []

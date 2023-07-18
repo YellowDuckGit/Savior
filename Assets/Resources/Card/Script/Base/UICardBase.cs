@@ -3,9 +3,11 @@ using Assets.GameComponent.Card.Logic.ConditionTrigger.Round;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Video;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -25,23 +27,51 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     [SerializeField] protected T _cardTarget;
     protected GameObject _outline;
 
-    public abstract TextMeshProUGUI UIName { get; set; }
-    public abstract TextMeshProUGUI UICost { get; set; }
-    public abstract TextMeshProUGUI UIDescription { get; set; }
-    public abstract MeshRenderer UIAvatar { get; set; }
-    public abstract GameObject UIOutline { get; set; }
+    public abstract TextMeshProUGUI UIName
+    {
+        get; set;
+    }
+    public abstract TextMeshProUGUI UICost
+    {
+        get; set;
+    }
+    public abstract TextMeshProUGUI UIDescription
+    {
+        get; set;
+    }
+    public abstract MeshRenderer UIAvatar
+    {
+        get; set;
+    }
+    public abstract GameObject UIOutline
+    {
+        get; set;
+    }
 
-    public abstract T CardTarget { get; set; }
+    public abstract T CardTarget
+    {
+        get; set;
+    }
 
     private void Awake()
     {
         print(this.debug($"UI for {CardTarget} Awake"));
         GetCardComponents();
-        this.RegisterListener(EventID.OnCardUpdate, (CardTarget) => OnCardUpdate(CardTarget as T));
-        this.RegisterListener(EventID.OnClickCard, (cardTarget) => OnClickOnCard(cardTarget as UICardBase<T>));
+        //this.RegisterListener(EventID.OnCardUpdate, (CardTarget) => OnCardUpdate(CardTarget as T));
+        RegisLocalListener();
+    }
+
+    private void RegistInterActionEvent()
+    {
+        this.RegisterListener(EventID.OnUIClickCard, (cardTarget) => OnClickOnCard(cardTarget as UICardBase<T>));
         this.RegisterListener(EventID.OnEnterCard, (cardTarget) => OnEnterCard(cardTarget as UICardBase<T>));
         this.RegisterListener(EventID.OnExitCard, (cardTarget) => OnExitCard(cardTarget as UICardBase<T>));
-        RegisLocalListener();
+    }
+    private void RevokeInterActionEvent()
+    {
+        this.RemoveListener(EventID.OnUIClickCard, (cardTarget) => OnClickOnCard(cardTarget as UICardBase<T>));
+        this.RemoveListener(EventID.OnEnterCard, (cardTarget) => OnEnterCard(cardTarget as UICardBase<T>));
+        this.RemoveListener(EventID.OnExitCard, (cardTarget) => OnExitCard(cardTarget as UICardBase<T>));
     }
 
     private void Start()
@@ -55,7 +85,7 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     public abstract void RegisLocalListener();
 
     public abstract void GetCardComponents();
-    public abstract void OnCardUpdate(T cardTarget);
+    public abstract void OnCardUpdate(object sender, PropertyChangedEventArgs e);
 
     //public abstract void updateName(string Name);/* => this.Name.text = name;*/
     //public abstract void updateDescription(string Description);/* => this.Description.text = Description;*/
@@ -67,19 +97,29 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     private bool _isSelected;
     private bool _isEnter;
     private bool _isForcus;
+    private bool _interactable;
 
     public bool IsSelected
     {
-        get { return _isSelected; }
-        set { _isSelected = value; }
+        get
+        {
+            return _isSelected;
+        }
+        set
+        {
+            _isSelected = value;
+        }
     }
 
     public bool IsEnter
     {
-        get { return _isEnter; }
+        get
+        {
+            return _isEnter;
+        }
         set
         {
-            if (value)
+            if(value)
             {
                 EnterCard();
             }
@@ -93,10 +133,13 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
 
     public bool IsForcus
     {
-        get { return _isForcus; }
+        get
+        {
+            return _isForcus;
+        }
         set
         {
-            if (value)
+            if(value)
             {
                 FocusCard();
             }
@@ -108,6 +151,22 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         }
     }
 
+    public bool Interactable
+    {
+        get => _interactable; set
+        {
+            _interactable = value;
+
+            if(_interactable)
+            {
+                RegistInterActionEvent();
+            }
+            else
+            {
+                RevokeInterActionEvent();
+            }
+        }
+    }
 
     public Vector3 OriginPostion;
     public Vector3 OriginRotation;
@@ -126,6 +185,14 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
 
 
     #endregion
+    private void OnEnable()
+    {
+        Interactable = true;
+    }
+    public void OnDisable()
+    {
+        Interactable = false;
+    }
     public void OnMouseEnter()
     {
         this.PostEvent(EventID.OnEnterCard, this);
@@ -138,18 +205,18 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
 
     private void OnMouseDown()
     {
-        this.PostEvent(EventID.OnClickCard, this);
+        this.PostEvent(EventID.OnUIClickCard, this);
     }
 
     private void OnClickOnCard(UICardBase<T> cardTarget)
     {
-        if (cardTarget == this)
+        if(cardTarget == this)
         {
             this.IsForcus = true;
         }
         else
         {
-            if (this.IsForcus)
+            if(this.IsForcus)
             {
                 this.IsForcus = false;
             }
@@ -157,11 +224,11 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     }
     private void OnEnterCard(UICardBase<T> cardUITarget)
     {
-        if (cardUITarget == this)
+        if(cardUITarget == this)
         {
-            if (this.CardTarget.Position == CardPosition.InHand)
+            if(this.CardTarget.Position == CardPosition.InHand)
             {
-                if (!IsEnter)
+                if(!IsEnter)
                 {
                     IsEnter = true;
                 }
@@ -169,9 +236,9 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         }
         else
         {
-            if (this.CardTarget.Position == CardPosition.InHand)
+            if(this.CardTarget.Position == CardPosition.InHand)
             {
-                if (IsEnter)
+                if(IsEnter)
                 {
                     IsEnter = false;
                 }
@@ -181,11 +248,11 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
 
     private void OnExitCard(UICardBase<T> cardTarget)
     {
-        if (cardTarget == this)
+        if(cardTarget == this)
         {
-            if (this.CardTarget.Position == CardPosition.InHand)
+            if(this.CardTarget.Position == CardPosition.InHand)
             {
-                if (IsEnter)
+                if(IsEnter)
                 {
                     IsEnter = false;
                 }
@@ -198,12 +265,11 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         //turn on effect
 
         this.OriginPostion = _cardTarget.gameObject.transform.localPosition;
-        this.OriginRotation = _cardTarget.gameObject.transform.localRotation.ToEulerAngles();
-
+        this.OriginRotation = _cardTarget.gameObject.transform.localRotation.eulerAngles;
         _cardTarget.gameObject.transform.localPosition = new Vector3(this.OriginPostion.x + offsetPostionEnter.x,
                                                 this.OriginPostion.y + offsetPostionEnter.y,
                                                 offsetPostionEnter.z);
-        _cardTarget.gameObject.transform.localRotation = Quaternion.EulerAngles(RotationEnter);
+        _cardTarget.gameObject.transform.localRotation = Quaternion.Euler(RotationEnter);
 
     }
 
@@ -211,35 +277,36 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     {
         //turn off effect
         _cardTarget.gameObject.transform.localPosition = this.OriginPostion;
-        _cardTarget.gameObject.transform.localRotation = Quaternion.EulerAngles(this.OriginRotation);
+        _cardTarget.gameObject.transform.localRotation = Quaternion.Euler(this.OriginRotation);
     }
 
     public bool FocusCard()
     {
-        print($"FocusCard card {_cardTarget.Name}");
-        if (this._outline != null)
+        print($"FocusCard card {_cardTarget.Name}, ID: {_cardTarget.photonView.ViewID}");
+        if(this._outline != null)
         {
             this._isForcus = true;
             this._outline.SetActive(true);
         }
-        return this._outline.activeSelf;
+        return this.IsForcus;
     }
     public bool UnFocusCard()
     {
         print($"UnFocusCard card {_cardTarget.Name}");
-        if (this._outline != null)
+        if(this._outline != null)
         {
             this._isForcus = false;
-            if (!_cardTarget.IsSelected) this._outline.SetActive(false);
+            if(!_cardTarget.IsSelected)
+                this._outline.SetActive(false);
         }
-        return this._outline.activeSelf;
+        return this.IsForcus;
     }
 
     Color originalColor;
     public bool SelectCard()
     {
         print($"select card {_cardTarget.Name}");
-        if (this._outline != null)
+        if(this._outline != null)
         {
             this._isSelected = true;
             //_card.IsSelected = true;
@@ -254,7 +321,7 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     public bool UnSelectCard()
     {
         print($"unselect card {_cardTarget.Name}");
-        if (this._outline != null)
+        if(this._outline != null)
         {
             this._isSelected = false;
             //_card.IsSelected = false;

@@ -20,39 +20,57 @@ MonoBehaviour:
   <CardType>k__BackingField: 1
   <Avatar>k__BackingField: {fileID: 2100000, guid: 6040fdcc99610ad41ba01853e0bc90a6,
     type: 2}
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 0
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 1
   CardEffect:
-  - rid: 2363595294456414213
+  - rid: 1073282966915383341
   references:
     version: 2
     RefIds:
-    - rid: 2363595294456414213
+    - rid: 1073282966915383341
       type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
         asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
-        Action:
-        - rid: 2363595294456414214
-    - rid: 2363595294456414214
+        Actions:
+        - rid: 1073282966915383342
+    - rid: 1073282966915383342
       type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject,
         asm: Assembly-CSharp}
       data:
-        SelectTargetObjects:
-        - SelectTargetObject:
-            rid: 2363595294456414215
-          Effect:
-          - rid: 2363595294456414216
-    - rid: 2363595294456414215
-      type: {class: SelectTargetCard, ns: Assets.GameComponent.Card.Logic.TargetObject.Select,
+        selectTargets:
+        - target:
+            rid: 1073282966915383343
+          Effects:
+          - rid: 1073282966915383345
+    - rid: 1073282966915383343
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
         asm: Assembly-CSharp}
       data:
-        owner: 0
-        cardPosition: 3
-        cardType: 0
-        isDamed: 0
-    - rid: 2363595294456414216
+        owner: 1
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        CardType:
+          rid: 1073282966915383344
+        match: {fileID: 0}
+    - rid: 1073282966915383344
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
+        asm: Assembly-CSharp}
+      data:
+        monsterOptions: []
+    - rid: 1073282966915383345
       type: {class: Gain, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
+      data:
+        pitch: []
+        _Gain:
+          rid: 1073282966915383346
+    - rid: 1073282966915383346
+      type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain,
+        asm: Assembly-CSharp}
       data:
         _IsCharming: 0
         _IsTreating: 1
+        _IsDominating: 0
+        _IsBlockAttack: 0
+        _IsBlockDefend: 0

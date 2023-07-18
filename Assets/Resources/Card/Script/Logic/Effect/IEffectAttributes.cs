@@ -10,6 +10,8 @@ namespace Assets.GameComponent.Card.Logic.Effect
     {
         public bool IsCharming { get; set; }
         public bool IsTreating { get; set; }
-
+        public bool IsDominating { get; set; }
+        public bool IsBlockAttack { get; set; }
+        public bool IsBlockDefend { get; set; }
     }
 }

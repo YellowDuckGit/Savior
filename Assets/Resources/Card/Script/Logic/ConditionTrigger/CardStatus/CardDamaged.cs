@@ -5,14 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
-namespace Assets.GameComponent.Card.Logic.TargetObject
+namespace Assets.GameComponent.Card.Logic.ConditionTrigger.CardStatus
 {
-    [SRName("Logic/TargetObject/Select/Select Target")]
-    public class SelectTarget : AbstractTargetObject
+    [SRName("Logic/ConditionTrigger/CardStatus/CardDamaged")]
+
+    public class CardDamaged : AbstractCondition
     {
     }
-
-
 }

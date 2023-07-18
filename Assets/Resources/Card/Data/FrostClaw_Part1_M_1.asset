@@ -18,14 +18,69 @@ MonoBehaviour:
   <Attack>k__BackingField: 0
   <Hp>k__BackingField: 2
   <Description>k__BackingField: 'Round End: Kill me to play Frost Blade'
-  <CardType>k__BackingField: 0
+  <CardType>k__BackingField: 1
   <Avatar>k__BackingField: {fileID: 2100000, guid: 622d5113b9164914782fa4c190e5e33f,
     type: 2}
   <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 0
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
-  CardEffect: []
+  <IsDominating>k__BackingField: 0
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
+  CardEffects:
+  - rid: 1073283051609128960
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1073283051609128960
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
+        asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 1073283051609128961
+    - rid: 1073283051609128961
+      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent,
+        asm: Assembly-CSharp}
+      data:
+        EventID: 15
+        LifeTime: 1
+        Actions:
+        - rid: 1073283051609128962
+        - rid: 4170877821461463041
+    - rid: 1073283051609128962
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073283051609128963
+        Effects:
+        - rid: 1073283051609128964
+    - rid: 1073283051609128963
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+    - rid: 1073283051609128964
+      type: {class: DestroyObject, ns: Assets.GameComponent.Card.Logic.Effect.Destroy,
+        asm: Assembly-CSharp}
+      data:
+        pitch: []
+    - rid: 4170877821461463041
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 4170877821461463043
+        Effects:
+        - rid: 4170877821461463044
+    - rid: 4170877821461463043
+      type: {class: SelectSelf/SelfType/SelfCardPlayer, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+    - rid: 4170877821461463044
+      type: {class: CreateCard, ns: Assets.GameComponent.Card.Logic.Effect.CreateCard,
+        asm: Assembly-CSharp}
+      data:
+        pitch: []
+        CardTarget: {fileID: 11400000, guid: d263a8480b11a6c4b8e7e62738e1dd49, type: 2}
+        owner: 1
+        CardPosition: 2

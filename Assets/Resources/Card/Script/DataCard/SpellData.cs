@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
-[System.Serializable]
+namespace Assets.GameComponent.Card.CardComponents.Script
+{
+    [System.Serializable]
     [CreateAssetMenu(fileName = "MC", menuName = "Scriptable Objects/SpellCard", order = 2)]
     public class SpellData : ScriptableObject, ISpellData
     {
@@ -29,23 +30,41 @@ using UnityEngine.UI;
         public CardType CardType { get; set; }
 
         [field: SerializeField]
+        public Material Avatar { get; set; }
+
+        [field: SerializeField]
         public Rarity RarityCard { get; set; }
 
         [field: SerializeField]
         public RegionCard RegionCard { get; set; }
-        [field: SerializeField]
-        public Material NormalAvatar { get; set; }
-        [field: SerializeField]
-        public Material InDeckAvatar { get; set; }
-        [field: SerializeField]
-         public Material InBoardAvatar { get; set; }
+        public Material NormalAvatar
+        {
+            get;
+            set;
+        }
+        public Material InDeckAvatar
+        {
+            get;
+            set;
+        }
+        public Material InBoardAvatar
+        {
+            get;
+            set;
+        }
+        public Sprite NormalAvatar2D
+        {
+            get;
+            set;
+        }
+        public Sprite InDeckAvatar2D
+        {
+            get;
+            set;
+        }
 
-        [field: SerializeField]
-        public Sprite NormalAvatar2D { get; set; }
-        [field: SerializeField]
-        public Sprite InDeckAvatar2D { get; set; }
-
-    [SerializeReference]
+        [SerializeReference]
         [SRLogicCard(typeof(AbstractCondition))]
         public AbstractCondition[] CardEffect;
     }
+}

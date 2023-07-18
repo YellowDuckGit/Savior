@@ -17,15 +17,52 @@ MonoBehaviour:
   <Cost>k__BackingField: 1
   <Attack>k__BackingField: 2
   <Hp>k__BackingField: 3
-  <Description>k__BackingField: When I survive damaged, Grant me +0|+1
+  <Description>k__BackingField: When I survive damaged, grant me +0|+1
   <CardType>k__BackingField: 0
   <Avatar>k__BackingField: {fileID: 2100000, guid: d30a0dd0067ff464a89b375b51a03690,
     type: 2}
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 0
+  <RarityCard>k__BackingField: 1
+  <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
-  CardEffect: []
+  <IsDominating>k__BackingField: 0
+  <IsBlockAttack>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 0
+  CardEffects:
+  - rid: 1073282966915383352
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1073282966915383352
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
+        asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 1073282966915383360
+    - rid: 1073282966915383360
+      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent,
+        asm: Assembly-CSharp}
+      data:
+        EventID: 28
+        Actions:
+        - rid: 1073282966915383362
+    - rid: 1073282966915383362
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073282966915383363
+        Effects:
+        - rid: 1073282966915383364
+    - rid: 1073282966915383363
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
+        asm: Assembly-CSharp}
+    - rid: 1073282966915383364
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
+        asm: Assembly-CSharp}
+      data:
+        pitch: []
+        Attack: 0
+        Hp: 1
+        InTurn: 0
