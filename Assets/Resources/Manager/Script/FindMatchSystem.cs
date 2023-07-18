@@ -113,6 +113,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     void OnClickNormalMode()
     {
         gameMode = GameMode.Normal;
+
+        TutorialManager.instance.PlayTutorialChain();
     }
 
     void OnClickTutorialMode()

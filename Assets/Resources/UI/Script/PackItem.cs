@@ -64,6 +64,8 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
             {
                 yield return StartCoroutine(PlayfabManager.instance.GetDropTable(data.dropTableId));
                 yield return StartCoroutine(UIManager.instance.ShowPopupPackDetailed(this));
+                // TUTORIAL
+                TutorialManager.instance.PlayTutorialChain();
             } else
             {
                 print("LOAD DATA DROP TABLE EMPTY");

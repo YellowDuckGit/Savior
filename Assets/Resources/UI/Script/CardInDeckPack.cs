@@ -54,6 +54,9 @@ public class CardInDeckPack : MonoBehaviour, IPointerClickHandler
         if(CanRemoveCard())
         {
             this.PostEvent(EventID.OnRemoveCardInDeck, this.cardItem.cardData.Id);
+
+            // TUTORIAL
+            TutorialManager.instance.PlayTutorialChain();
         }
     }
 

@@ -129,6 +129,7 @@ public class PlayfabManager : MonoBehaviour
             PlayFabClientAPI.RegisterPlayFabUser(registerRequest,
                 result =>
                 {
+                    TutorialManager.instance.isNewbie = true;
                     Login(username, password);
                 },
                 error =>
