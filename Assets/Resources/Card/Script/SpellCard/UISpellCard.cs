@@ -5,16 +5,22 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using static Unity.VisualScripting.Member;
 
 public class UISpellCard : UICardBase<SpellCard>, ISpellData
 {
+    public CardAnimationController controller;
+
     public override TextMeshProUGUI UIName { get; set; }
     public override TextMeshProUGUI UICost { get; set; }
     public override TextMeshProUGUI UIDescription { get; set; }
     public override MeshRenderer UIAvatar { get; set; }
     public override SpellCard CardTarget { get { return _cardTarget; } set { _cardTarget = value; } }
-
+    public override CardAnimationController Controller
+    {
+        get => controller; set => controller = value;
+    }
     public string Id
     {
         set; get;

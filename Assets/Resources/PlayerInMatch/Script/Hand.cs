@@ -273,16 +273,35 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         {
             _cards.Add(card);
             card.Position = CardPosition.InHand;
-            card.gameObject.transform.parent = this.gameObject.transform;
+
+            CreateParentSortingForCard(card);
+            //card.gameObject.transform.parent = this.gameObject.transform;
         }
     }
 
     public void RemoveCardFormHand(MonsterCard card)
     {
         _cards.Remove(card);
+        RemoveParentSortingForCard(card);
     }
     #endregion
 
+    public void CreateParentSortingForCard(CardBase Card)
+    {
+        GameObject parentCard = new GameObject();
+        parentCard.transform.parent = this.gameObject.transform;
+
+        Card.transform.parent = parentCard.transform;
+        Card.transform.position = Vector3.zero;
+        Card.transform.rotation = Quaternion.Euler(90f,0f,0f);
+    }
+
+    public void RemoveParentSortingForCard(CardBase Card)
+    {
+        GameObject parentCard = Card.transform.parent.gameObject;
+        Card.transform.parent = null;
+        GameObject.Destroy(parentCard);
+    }
     #region GET SET
     public List<CardBase> GetAllCardInHand()
     {

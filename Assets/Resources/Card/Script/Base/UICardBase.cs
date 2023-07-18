@@ -27,6 +27,10 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     [SerializeField] protected T _cardTarget;
     protected GameObject _outline;
 
+    public abstract CardAnimationController Controller
+    {
+        get; set;
+    }
     public abstract TextMeshProUGUI UIName
     {
         get; set;
@@ -176,11 +180,6 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     //private CardBase _card;
 
 
-    [Header("Effect")]
-    [SerializeField] Vector3 offsetPostionEnter;
-
-    [SerializeField] Vector3 RotationEnter;
-
     #region Set Get
 
 
@@ -260,24 +259,31 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         }
 
     }
+
+    #region Animation 
     public void EnterCard()
     {
         //turn on effect
 
-        this.OriginPostion = _cardTarget.gameObject.transform.localPosition;
-        this.OriginRotation = _cardTarget.gameObject.transform.localRotation.eulerAngles;
-        _cardTarget.gameObject.transform.localPosition = new Vector3(this.OriginPostion.x + offsetPostionEnter.x,
-                                                this.OriginPostion.y + offsetPostionEnter.y,
-                                                offsetPostionEnter.z);
-        _cardTarget.gameObject.transform.localRotation = Quaternion.Euler(RotationEnter);
+        //this.OriginPostion = _cardTarget.gameObject.transform.localPosition;
+        //this.OriginRotation = _cardTarget.gameObject.transform.localRotation.eulerAngles;
+        //_cardTarget.gameObject.transform.localPosition = new Vector3(this.OriginPostion.x + offsetPostionEnter.x,
+        //                                        this.OriginPostion.y + offsetPostionEnter.y,
+        //                                        offsetPostionEnter.z);
+        //_cardTarget.gameObject.transform.localRotation = Quaternion.Euler(RotationEnter);
+        print("PlayeHover");
+        Controller.PlayHover();
 
     }
 
     public void UnEnterCard()
     {
         //turn off effect
-        _cardTarget.gameObject.transform.localPosition = this.OriginPostion;
-        _cardTarget.gameObject.transform.localRotation = Quaternion.Euler(this.OriginRotation);
+        //_cardTarget.gameObject.transform.localPosition = this.OriginPostion;
+        //_cardTarget.gameObject.transform.localRotation = Quaternion.Euler(this.OriginRotation);
+        print("UnEnterCard");
+        Controller.PlayUnHover();
+
     }
 
     public bool FocusCard()
@@ -331,6 +337,8 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         }
         return this._outline.activeSelf;
     }
+
+    #endregion
     #endregion
 }
 

@@ -13,8 +13,8 @@ public class CardAnimationController : MonoBehaviour
         DrawCard
     }
 
-    [MMInspectorButton("Spell")]
-    public bool Play;
+    //[MMInspectorButton("Spell")]
+    //public bool Play;
 
     //[Space(10)]
     //[Header("Init Animation")]
@@ -35,23 +35,13 @@ public class CardAnimationController : MonoBehaviour
     private MMF_Player MMF_Hover;
     private MMF_Player MMF_DestroyCard;
     private MMF_Player MMF_GetDamage;
-    private MMF_Player MMF_Spell;
 
-
-    bool isHover = false;
 
     private void Start()
     {
         MMF_Hover = AnimationCardManager.instance.CreateAnimationFB_Hover(Card);
         MMF_DestroyCard = AnimationCardManager.instance.CreateAnimationFB_Destroy(Card);
         MMF_GetDamage = AnimationCardManager.instance.CreateAnimationFB_GetDamage(Card);
-        MMF_Spell = AnimationCardManager.instance.CreateAnimationFB_SpellShot(Card, OpponentTest, AnimationCardManager.SpellColor.Violet);
-
-    }
-
-    public void Spell()
-    {
-        MMF_Spell.PlayFeedbacks();
     }
 
     public void PlayDrawCard(Transform hand)
@@ -72,25 +62,17 @@ public class CardAnimationController : MonoBehaviour
 
     public void PlayHover()
     {
-        if (isHover)
-        {
-            isHover = false;
-            MMF_Hover.StopFeedbacks();
-            MMF_Hover.Direction = MMFeedbacks.Directions.BottomToTop;
-            MMF_Hover.PlayFeedbacks();
-        }
+
+        MMF_Hover.StopFeedbacks();
+        MMF_Hover.Direction = MMFeedbacks.Directions.BottomToTop;
+        MMF_Hover.PlayFeedbacks();
     }
 
     public void PlayUnHover()
     {
-        if (!isHover)
-        {
-            isHover = true;
-            MMF_Hover.StopFeedbacks();
-            MMF_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
-            MMF_Hover.PlayFeedbacks();
-
-        }
+        MMF_Hover.StopFeedbacks();
+        MMF_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
+        MMF_Hover.PlayFeedbacks();
     }
 
     public void PlayGetDame()

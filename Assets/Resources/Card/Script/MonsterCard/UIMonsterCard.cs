@@ -13,6 +13,8 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
 {
     public class UIMonsterCard : UICardBase<MonsterCard>, IUIMonsterCard, IMonsterData
     {
+        public CardAnimationController controller;
+
         [SerializeField] //for debug
         private TextMeshProUGUI _uiAttack;
         [SerializeField] //for debug
@@ -192,6 +194,10 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         {
             get;
             set;
+        }
+        public override CardAnimationController Controller
+        {
+            get => controller; set => controller = value;
         }
 
         public override void GetCardComponents()
