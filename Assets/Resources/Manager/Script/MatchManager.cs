@@ -143,18 +143,20 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
     private void Start()
     {
-        UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => SkipTurnEvent());
-        UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
+        //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => SkipTurnEvent());
+        //UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
+        
+
         blueSideGameObjectName = blueSide.name;
         redSideGameObjectName = redSide.name;
         turnPresent = K_PlayerSide.Blue;
         /*
          * Regist function process for local event
          */
-        this.RegisterListener(EventID.OnMoveCardToSummonZone, param => MoveCardToSummonZoneEvent((string)param));
-        this.RegisterListener(EventID.OnMoveCardToFightZone, param => MoveCardToFightZoneEvent((string)param));
-        this.RegisterListener(EventID.OnSummonMonster, param => SummonCardEvent(param as SummonArgs));
-        this.RegisterListener(EventID.OnMoveCardInTriggerSpell, param => MoveCardInTriggerSpellEvent(param as MoveCardInTriggerSpellArgs));
+        //this.RegisterListener(EventID.OnMoveCardToSummonZone, param => MoveCardToSummonZoneEvent((string)param));
+        //this.RegisterListener(EventID.OnMoveCardToFightZone, param => MoveCardToFightZoneEvent((string)param));
+        //this.RegisterListener(EventID.OnSummonMonster, param => SummonCardEvent(param as SummonArgs));
+        //this.RegisterListener(EventID.OnMoveCardInTriggerSpell, param => MoveCardInTriggerSpellEvent(param as MoveCardInTriggerSpellArgs));
         StartCoroutine(InitalGameProcess());
     }
 
@@ -181,7 +183,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         card.IsSelected = false;
         //change card from hand to summon zone 
         var cardSelected = player.hand.Draw(card);
-        player.hand.SortPostionRotationCardInHand();
+        //player.hand.SortPostionRotationCardInHand();
         card.Position = CardPosition.InTriggerSpellField;
 
         card.RemoveCardFormParentPresent();
@@ -241,11 +243,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         if(localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
-            LocalPlayer = PhotonNetwork.Instantiate("CardPlayer", positionBlue, Quaternion.Euler(rotationBlue)).GetComponent<CardPlayer>();
+            LocalPlayer = PhotonNetwork.Instantiate("BluePlayer", positionBlue, Quaternion.Euler(rotationBlue)).GetComponent<CardPlayer>();
         }
         else if(localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
         {
-            LocalPlayer = PhotonNetwork.Instantiate("CardPlayer", positionRed, Quaternion.Euler(rotationRed)).GetComponent<CardPlayer>();
+            LocalPlayer = PhotonNetwork.Instantiate("RedPlayer", positionRed, Quaternion.Euler(rotationRed)).GetComponent<CardPlayer>();
         }
         yield return null;
     }
@@ -318,9 +320,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
     IEnumerator BeginMatch()
     {
         print(this.debug($"Begin Match"));
-        UIMatchManager.instance.TurnLoadingScene(true);
+        //UIMatchManager.instance.TurnLoadingScene(true);
 
         yield return StartCoroutine(PlayerInit());
+
+
 
         yield return new WaitUntil(() => redPlayer != null && bluePlayer != null);
 
@@ -368,7 +372,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //yield return new WaitUntil(() => !bluePlayer.deck.cards.Any(a => a.BaseMonsterData == null)
         //        && !redPlayer.deck.cards.Any(a => a.BaseMonsterData == null));
 
-        yield return StartCoroutine(UIMatchManager.instance.flipUI());
+        //yield return StartCoroutine(UIMatchManager.instance.flipUI());
 
         //provide initial resource
         yield return StartCoroutine(ProvideHP(initialHP, bluePlayer));
@@ -390,6 +394,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(3);
         UIMatchManager.instance.TurnLoadingScene(false);
+
+  
+        CameraManager.instance.OnclickSwitchCameraNormal();
     }
 
     private IEnumerator Next()
@@ -412,6 +419,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator MiddleMatch()
     {
+        UIMatchManager.instance.SkipTurn_Interactive = false;
+        UIMatchManager.instance.setEventSkipTurn(SkipTurnEvent);
+
         yield return StartCoroutine(Next());
 
         /*
@@ -590,13 +600,19 @@ public class MatchManager : MonoBehaviourPunCallbacks
          */
         if(localPlayerSide.Equals(turnPresent))
         {
-            UIMatchManager.instance.Turn = "Your Turn";
-            UIMatchManager.instance.GetACT_SkipTurn.interactable = true;
+            //UIMatchManager.instance.Turn = "Your Turn";
+            //UIMatchManager.instance.GetACT_SkipTurn.interactable = true;
+
+            UIMatchManager.instance.Turn(turnPresent);
+            UIMatchManager.instance.SkipTurn_Interactive = true;
         }
         else
         {
-            UIMatchManager.instance.Turn = "Opponent turn";
-            UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
+            //UIMatchManager.instance.Turn = "Opponent turn";
+            //UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
+            UIMatchManager.instance.Turn(turnPresent);
+            UIMatchManager.instance.SkipTurn_Interactive = false;
+
         }
         //TODO: check player can be summon or use card
         //TODO: Player can attack
@@ -1116,7 +1132,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         card.IsSelected = false;
         //change card from hand to summon zone 
         card.CardPlayer.hand.RemoveCardFormHand(card);
-        card.CardPlayer.hand.SortPostionRotationCardInHand();
+        //card.CardPlayer.hand.SortPostionRotationCardInHand();
 
         zoneRequest.SetMonsterCard(card);
         zoneRequest.isSelected = false;
@@ -1420,9 +1436,15 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }));
         //UI
         if(LocalPlayer.tokken == GameTokken.Attack)
-            UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Attack";
+        {
+            //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Attack";
+            UIMatchManager.instance.RightAttack();
+        }
         else
-            UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Defense";
+        {
+            //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Defense";
+            UIMatchManager.instance.RightAttack();
+        }
 
         //if (localPlayerSide.Equals(K_PlayerSide.Blue))
         //{
@@ -1529,23 +1551,33 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     void SetSkipAction()
     {
-        UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
-        UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => SkipTurnEvent());
-        UIMatchManager.instance.TextButton_ACT_SkipTurn = "Skip";
+        //UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
+        //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => SkipTurnEvent());
+        //UIMatchManager.instance.TextButton_ACT_SkipTurn = "Skip";
+
+        UIMatchManager.instance.removeAllEventSkipTurn();
+        UIMatchManager.instance.setEventSkipTurn(SkipTurnEvent);
+
     }
 
     void SetDefenseAction()
     {
-        UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
-        UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => DefenseEvent());
-        UIMatchManager.instance.TextButton_ACT_SkipTurn = "Defense";
+        //UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
+        //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => DefenseEvent());
+        //UIMatchManager.instance.TextButton_ACT_SkipTurn = "Defense";
+
+        UIMatchManager.instance.removeAllEventSkipTurn();
+        UIMatchManager.instance.setEventSkipTurn(DefenseEvent);
     }
 
     void SetAttackAction()
     {
-        UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
-        UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => AttackEvent());
-        UIMatchManager.instance.TextButton_ACT_SkipTurn = "Attack";
+        //UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
+        //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => AttackEvent());
+        //UIMatchManager.instance.TextButton_ACT_SkipTurn = "Attack";
+
+        UIMatchManager.instance.removeAllEventSkipTurn();
+        UIMatchManager.instance.setEventSkipTurn(AttackEvent);
     }
     /// <summary>
     /// set to default player skip turn action

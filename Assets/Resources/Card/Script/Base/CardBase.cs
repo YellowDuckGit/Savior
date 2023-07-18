@@ -74,7 +74,11 @@ public abstract class CardBase : MonoBehaviourPun, IPunObservable, ICardBase, IN
     [SerializeField] protected CardOwner _cardOwner;
     [SerializeField] protected CardType _cardType;
     [SerializeField] protected CardPlayer _cardPlayer;
-    [SerializeField] protected Material _avartar;
+    [SerializeField] protected Material _normalAvatar;
+    [SerializeField] protected Material _inDeckAvatar;
+    [SerializeField] protected Material _inBoardAvatar;
+    [SerializeField] protected Sprite _normalAvatar2D;
+    [SerializeField] protected Sprite _inDeckAvatar2D;
     [SerializeField] protected Rarity _rarityCard;
     [SerializeField] protected RegionCard _regionCard;
     [SerializeField] protected ICardData BaseCard;
@@ -126,10 +130,6 @@ public abstract class CardBase : MonoBehaviourPun, IPunObservable, ICardBase, IN
     {
         get; set;
     }
-    public abstract Material Avatar
-    {
-        get; set;
-    }
     public abstract Rarity RarityCard
     {
         get; set;
@@ -143,27 +143,27 @@ public abstract class CardBase : MonoBehaviourPun, IPunObservable, ICardBase, IN
         get;
         set;
     } = false;
-    public Material NormalAvatar
+    public abstract Material NormalAvatar
     {
         get;
         set;
     }
-    public Material InDeckAvatar
+    public abstract Material InDeckAvatar
     {
         get;
         set;
     }
-    public Material InBoardAvatar
+    public abstract Material InBoardAvatar
     {
         get;
         set;
     }
-    public Sprite NormalAvatar2D
+    public abstract Sprite NormalAvatar2D
     {
         get;
         set;
     }
-    public Sprite InDeckAvatar2D
+    public abstract Sprite InDeckAvatar2D
     {
         get;
         set;

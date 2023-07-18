@@ -34,6 +34,7 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
             cardItem = value;
             numberCard = cardItem.amount;
             nameText.text = value.cardData.Name;
+            print(value.cardData.Id + " || value.cardData.Name: " + value.cardData.Name);
             descriptionText.text = value.cardData.Description;
             costText.text = value.cardData.Cost.ToString();
             avatarCard.sprite = value.cardData.NormalAvatar2D;
@@ -43,11 +44,7 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
                 atkText.text = monsterData.Attack.ToString();
                 hpText.text = monsterData.Hp.ToString();
             }
-            //descriptionText.text = value.cardData.description;
-            //costText.text = value.cardData.cost.ToString();
-            //atkText.text = value.cardData.atk.ToString();
-            //hpText.text = value.cardData.hp.ToString();
-            //avatarCard.material = value.cardData.material;
+          
         }
     }
 

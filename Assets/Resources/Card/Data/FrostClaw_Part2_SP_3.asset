@@ -17,25 +17,26 @@ MonoBehaviour:
   <Cost>k__BackingField: 8
   <SpellType>k__BackingField: 0
   <Description>k__BackingField: Grant +4|+4 for all allies in this round
-  <CardType>k__BackingField: 1
-  <Avatar>k__BackingField: {fileID: 2100000, guid: 105d9225b1e95e9418587c02be401322,
-    type: 2}
-  <RarityCard>k__BackingField: 1
+  <CardType>k__BackingField: 2
+  <RarityCard>k__BackingField: 3
   <RegionCard>k__BackingField: 1
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 74b508cddd2989b469c318c1db61b68c, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 0f17385fbb9e3884dba13deb38e8b261, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: fcac99f0046971f43a6e55c5d1465dc2, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 86f9d94e29e53074fbf069cbaa1522aa, type: 3}
   CardEffect:
   - rid: 2363595294456414217
   references:
     version: 2
     RefIds:
     - rid: 1073282966915383347
-      type: {class: SelectMulti, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi,
-        asm: Assembly-CSharp}
+      type: {class: SelectMulti, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi, asm: Assembly-CSharp}
       data:
         multiTargetType:
           rid: 1073282966915383348
     - rid: 1073282966915383348
-      type: {class: SelectMulti/MultiTargetType/MultiTargetCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi,
-        asm: Assembly-CSharp}
+      type: {class: SelectMulti/MultiTargetType/MultiTargetCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi, asm: Assembly-CSharp}
       data:
         target:
           owner: 1
@@ -48,21 +49,18 @@ MonoBehaviour:
         Effects:
         - rid: 1073282966915383350
     - rid: 1073282966915383349
-      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         monsterOptions: []
     - rid: 1073282966915383350
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
         Attack: 4
         Hp: 4
         InTurn: 1
     - rid: 2363595294456414217
-      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:

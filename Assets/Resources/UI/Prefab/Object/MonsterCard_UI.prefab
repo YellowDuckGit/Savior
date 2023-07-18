@@ -652,7 +652,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: King King
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 22e571cff78c66f41bf47798b1904af9, type: 2}
   m_sharedMaterial: {fileID: -9042173746908917682, guid: 22e571cff78c66f41bf47798b1904af9, type: 2}
@@ -1335,7 +1335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0847f8c1c09781f4e93f6b190dcdbafa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 320270092226482872}
+  nameText: {fileID: 3262868542611457018}
   descriptionText: {fileID: 320270092226482872}
   costText: {fileID: 1412359946360523958}
   atkText: {fileID: 4554391062555872471}

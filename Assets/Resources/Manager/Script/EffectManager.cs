@@ -961,8 +961,8 @@ public class EffectManager : MonoBehaviourPun
                             createdCard.Parents = CardOwner.hand;
                             CardOwner.hand.Add(createdCard);
                             createdCard.gameObject.transform.parent = CardOwner.hand.gameObject.transform;
-                            CardOwner.hand.ScaleCardInHand();
-                            CardOwner.hand.SortPostionRotationCardInHand();
+                            //CardOwner.hand.ScaleCardInHand();
+                            //CardOwner.hand.SortPostionRotationCardInHand();
                             break;
                         case CardPosition.InFightField:
 

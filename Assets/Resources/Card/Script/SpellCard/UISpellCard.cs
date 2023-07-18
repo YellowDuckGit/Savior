@@ -95,7 +95,7 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
             while (this.UIName == null || this.UIDescription == null || this.UICost == null || this.UIAvatar == null || CardTarget == null)
             {
                 this.UIName = canvas.transform.Find(nameof(Name)).GetComponent<TextMeshProUGUI>();
-                this.UIDescription = canvas.transform.Find(nameof(Description)).GetComponent<TextMeshProUGUI>();
+                this.UIDescription = canvas.transform.Find("Description Container").transform.Find("Description").transform.Find(nameof(Description)).GetComponent<TextMeshProUGUI>();
                 this.UICost = canvas.transform.Find(nameof(Cost)).GetComponent<TextMeshProUGUI>();
                 this.UIAvatar = transform.Find(nameof(Avatar)).GetComponent<MeshRenderer>();
                 this.UIOutline = transform.Find("OutlineCard")?.gameObject;
@@ -147,11 +147,7 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
                     // Gán giá trị của thuộc tính CardType của nguồn cho thuộc tính CardType của đích
                     this.CardType = source.CardType;
                     break;
-                // Nếu thuộc tính là Avatar
-                case nameof(Avatar):
-                    // Gán giá trị của thuộc tính Avatar của nguồn cho thuộc tính Avatar của đích
-                    this.Avatar = source.Avatar;
-                    break;
+         
                 // Nếu thuộc tính là RarityCard
                 case nameof(RarityCard):
                     // Gán giá trị của thuộc tính RarityCard của nguồn cho thuộc tính RarityCard của đích
@@ -161,6 +157,18 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
                 case nameof(RegionCard):
                     // Gán giá trị của thuộc tính RegionCard của nguồn cho thuộc tính RegionCard của đích
                     this.RegionCard = source.RegionCard;
+                    break;
+                case nameof(NormalAvatar):
+                    this.NormalAvatar = source.NormalAvatar;
+                    break;
+                case nameof(InDeckAvatar):
+                    this.InDeckAvatar = source.InDeckAvatar;
+                    break;
+                case nameof(NormalAvatar2D):
+                    this.NormalAvatar2D = source.NormalAvatar2D;
+                    break;
+                case nameof(InDeckAvatar2D):
+                    this.InDeckAvatar2D = source.InDeckAvatar2D;
                     break;
             }
             //this.Id = source.Id;

@@ -106,6 +106,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5465230180155248174}
   - component: {fileID: 1948686807778722894}
+  - component: {fileID: 2501302405202372569}
+  - component: {fileID: 3017486803118139259}
   m_Layer: 0
   m_Name: SortingHand
   m_TagString: Untagged
@@ -179,6 +181,47 @@ MonoBehaviour:
   NeedsRebuild: 0
   ForceContinuousRebuild: 0
   IgnoreDeactivatedElements: 1
+--- !u!114 &2501302405202372569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3224450563620362961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5096ffc6312a5a5419a72185db8ca435, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cards: []
+  deck: {fileID: 0}
+  distanceBetweenCard: {x: 0, y: 0, z: 0}
+  rotationBetweenCard: {x: 0, y: 0, z: 0}
+  scaleBetweenCard: {x: 0, y: 0, z: 0}
+  camera: {fileID: 0}
+--- !u!114 &3017486803118139259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3224450563620362961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 2501302405202372569}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6949002759095177370
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,7 +282,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5504059140155119415}
+  - {fileID: 5593307301986818428}
   m_Father: {fileID: 5465230180155248174}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -436,7 +479,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30babd5348e92e541992cce766dc0a18, type: 3}
---- !u!4 &5504059140155119415 stripped
+--- !u!4 &5593307301986818428 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 143327916430052938, guid: 30babd5348e92e541992cce766dc0a18, type: 3}
   m_PrefabInstance: {fileID: 5504059140155119414}

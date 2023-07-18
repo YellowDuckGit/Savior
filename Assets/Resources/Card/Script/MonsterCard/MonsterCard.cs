@@ -46,17 +46,6 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     [SerializeField]
     public AbstractCondition[] LogicCard;
 
-    //public void Awake()
-    //{
-    //    //Register();
-    //    SetupMonsterCard();
-    //}
-
-    //public void Start()
-    //{
-    //    this.RegisterListener(EventID.OnStartRound, (match) => StartRound(match as MatchManager));
-    //}
-
     public override void RegistLocalEvent()
     {
         this.RegisterListener(EventID.OnStartRound, (match) => StartRound(match as MatchManager));
@@ -179,18 +168,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             //onPositionChange?.Invoke(value);
         }
     }
-    public override Material Avatar
-    {
-        get => _avartar; set
-        {
-            _avartar = value;
-            OnPropertyChanged(nameof(Avatar));
-
-            //this.PostEvent(EventID.OnCardUpdate, this);
-
-            //onAvartarChange?.Invoke(value);
-        }
-    }
+ 
     public int Attack
     {
         get
@@ -285,6 +263,63 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             _cardType = value;
         }
     }
+
+    public override Material NormalAvatar
+    {
+        get
+        {
+            return _normalAvatar;
+        }
+        set
+        {
+            _normalAvatar = value;
+        }
+    }
+    public override Material InDeckAvatar
+    {
+        get
+        {
+            return _inDeckAvatar;
+        }
+        set
+        {
+            _inDeckAvatar = value;
+        }
+    }
+    public override Material InBoardAvatar
+    {
+        get
+        {
+            return _inBoardAvatar;
+        }
+        set
+        {
+            _inBoardAvatar = value;
+        }
+    }
+    public override Sprite NormalAvatar2D
+    {
+        get
+        {
+            return _normalAvatar2D;
+        }
+        set
+        {
+            _normalAvatar2D = value;
+        }
+    }
+    public override Sprite InDeckAvatar2D
+    {
+        get
+        {
+            return _inDeckAvatar2D;
+        }
+        set
+        {
+            _inDeckAvatar2D = value;
+        }
+    }
+
     public override bool IsSelectAble
     {
         get
@@ -364,6 +399,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         get; set;
     }
 
+
     #endregion
 
     #region Raise Event
@@ -414,7 +450,12 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         this.Cost = source.Cost;
         this.Description = source.Description;
         this.CardType = source.CardType;
-        this.Avatar = source.Avatar;
+        this.NormalAvatar = source.NormalAvatar;
+        this.NormalAvatar2D = source.NormalAvatar2D;
+        this.InDeckAvatar = source.InDeckAvatar;
+        this.InDeckAvatar2D = source.InDeckAvatar2D;
+        this.InBoardAvatar = source.InBoardAvatar;
+
         this.RarityCard = source.RarityCard;
         this.RegionCard = source.RegionCard;
         this.Hp = source.Hp;

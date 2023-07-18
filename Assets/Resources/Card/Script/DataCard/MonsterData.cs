@@ -36,9 +36,6 @@ public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
     public CardType CardType { get; set; }
 
     [field: SerializeField]
-    public Material Avatar { get; set; }
-
-    [field: SerializeField]
     public Rarity RarityCard { get; set; }
 
     [field: SerializeField]
@@ -57,26 +54,36 @@ public class MonsterData : ScriptableObject, IMonsterData, IEffectAttributes
 
     [field: SerializeField]
     public bool IsBlockDefend { get ; set ; }
+    [field: SerializeField]
     public Material NormalAvatar
     {
         get;
         set;
     }
+
+    [field: SerializeField]
+
     public Material InDeckAvatar
     {
         get;
         set;
     }
+    [field: SerializeField]
+
     public Material InBoardAvatar
     {
         get;
         set;
     }
+    [field: SerializeField]
+
     public Sprite NormalAvatar2D
     {
         get;
         set;
     }
+    [field: SerializeField]
+
     public Sprite InDeckAvatar2D
     {
         get;

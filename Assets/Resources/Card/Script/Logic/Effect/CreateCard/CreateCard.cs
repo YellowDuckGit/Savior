@@ -38,7 +38,7 @@ namespace Assets.GameComponent.Card.Logic.Effect.CreateCard
                 * Raise Event for 2 player create same data for card
                 */
                 Debug.Log(MatchManager.instance.debug("Create Monster Card Object"));
-                Card = PhotonNetwork.Instantiate("MonsterCard", Vector3.zero, Quaternion.identity).GetComponent<MonsterCard>(); //create a monster without data
+                Card = PhotonNetwork.Instantiate("MonsterCard_Prefab", Vector3.zero, Quaternion.identity).GetComponent<MonsterCard>(); //create a monster without data
                 object[] datas = new object[] { monsterData.Id, Card.photonView.ViewID };
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
                 PhotonNetwork.RaiseEvent((byte)RaiseEvent.SET_DATA_CARD_EVENT, datas, raiseEventOptions, SendOptions.SendUnreliable);
@@ -49,7 +49,7 @@ namespace Assets.GameComponent.Card.Logic.Effect.CreateCard
                 * Raise Event for 2 player create same data for card
                 */
                 Debug.Log(MatchManager.instance.debug("Create Spell Card Object"));
-                Card = PhotonNetwork.Instantiate("SpellCard", Vector3.zero, Quaternion.identity).GetComponent<SpellCard>(); //create a monster without data
+                Card = PhotonNetwork.Instantiate("SpellCard_Prefab", Vector3.zero, Quaternion.identity).GetComponent<SpellCard>(); //create a monster without data
                 object[] datas = new object[] { spellData.Id, Card.photonView.ViewID };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };

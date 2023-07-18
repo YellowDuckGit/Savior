@@ -1,16 +1,23 @@
+using Cinemachine;
 using MoreMountains.Feedbacks;
+using MoreMountains.FeedbacksForThirdParty;
 using MoreMountains.Tools;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.VFX;
 using UnityEngine.XR;
 
 public class AnimationCardManager : MonoBehaviour
 {
-    public static AnimationCardManager instance;
+    public enum SpellColor
+    {
+        Violet, White, Blue, Green
+    }
 
+    public static AnimationCardManager instance;
 
     [Header("Draw Card")]
     public MMPathMovement path;
@@ -30,6 +37,19 @@ public class AnimationCardManager : MonoBehaviour
 
     [Header("Get Damage")]
     public AnimationCurve GetDamage_curve;
+
+
+    [Header("SpellShot")]
+    public GameObject SpellViolet;
+    public GameObject SpellWhite;
+    public GameObject SpellBlue;
+    public GameObject SpellGreen;
+
+    public AnimationCurve SpellShot_curveDestination;
+    public AnimationCurve SpellShot_curveScaleXDestination;
+    public AnimationCurve SpellShot_curveScaleYDestination;
+    public AnimationCurve SpellShot_curveScaleZDestination;
+
 
     private void Awake()
     {
@@ -290,6 +310,136 @@ public class AnimationCardManager : MonoBehaviour
         return mMF_Player;
     }
 
+    public MMF_Player CreateAnimationFB_SpellShot(Transform Card,Transform targetOpponent, SpellColor spellColor)
+    {
+        GameObject prefab = null;
+
+        switch (spellColor)
+        {
+            case SpellColor.Violet:
+                prefab = SpellViolet;
+                break;
+            case SpellColor.White:
+                prefab = SpellWhite;
+                break;
+            case SpellColor.Blue:
+                prefab = SpellBlue;
+                break;
+            case SpellColor.Green:
+                prefab = SpellGreen;
+                break;
+        }
+
+        GameObject effect = GameObject.Instantiate(prefab);
+
+        string name = "FB_SpellShot";
+
+        MMF_Player mMF_Player = CreateMMF_PlayerContainer(Card, name, true, effect);
+
+        MMF_Scale scale = new MMF_Scale();
+        scale.AnimateScaleTarget = effect.transform;
+        scale.Mode = MMF_Scale.Modes.Additive;
+
+        scale.FeedbackDuration = 0.2f;
+        scale.RemapCurveZero = 0f;
+        scale.RemapCurveOne = 0.02f;
+
+        scale.AnimateX = true;
+        scale.AnimateY = true;
+        scale.AnimateZ = true;
+        scale.AnimateScaleTweenX = new MMTweenType(SpellShot_curveScaleXDestination);
+        scale.AnimateScaleTweenY = new MMTweenType(SpellShot_curveScaleYDestination);
+        scale.AnimateScaleTweenZ = new MMTweenType(SpellShot_curveScaleZDestination);
+        scale.AnimateScaleX = SpellShot_curveScaleXDestination;
+        scale.AnimateScaleX = SpellShot_curveScaleYDestination;
+        scale.AnimateScaleX = SpellShot_curveScaleZDestination;
+
+        //scale.AnimateScaleTweenZ = new MMTweenType(curveScaleDestination);
+        //scale.AnimateScaleZ = curveScaleDestination;
+
+        mMF_Player.AddFeedback(scale);
+
+        MMF_HoldingPause pause1 = new MMF_HoldingPause();
+        pause1.PauseDuration = 0.2f;
+        mMF_Player.AddFeedback(pause1);
+
+        MMF_DestinationTransform mMFeedbackDestinationTransform = new MMF_DestinationTransform();
+        mMFeedbackDestinationTransform.TargetTransform = effect.transform;
+        mMFeedbackDestinationTransform.ForceOrigin = false;
+        mMFeedbackDestinationTransform.Destination = targetOpponent;
+
+        mMFeedbackDestinationTransform.SeparatePositionCurve = true;
+        mMFeedbackDestinationTransform.AnimatePositionTween = new MMTweenType(SpellShot_curveDestination);
+        mMFeedbackDestinationTransform.GlobalAnimationCurve = SpellShot_curveDestination;
+        mMFeedbackDestinationTransform.Duration = 0.2f;
+
+        mMFeedbackDestinationTransform.AnimatePositionX = true;
+        mMFeedbackDestinationTransform.AnimatePositionY = true;
+        mMFeedbackDestinationTransform.AnimatePositionZ = true;
+        mMFeedbackDestinationTransform.AnimateRotationX = false;
+        mMFeedbackDestinationTransform.AnimateRotationY = false;
+        mMFeedbackDestinationTransform.AnimateRotationZ = false;
+        mMFeedbackDestinationTransform.AnimateRotationW = false;
+        mMFeedbackDestinationTransform.AnimateScaleX = false;
+        mMFeedbackDestinationTransform.AnimateScaleY = false;
+        mMFeedbackDestinationTransform.AnimateScaleZ = false;
+
+        mMF_Player.AddFeedback(mMFeedbackDestinationTransform);
+
+        mMF_Player.Initialization();
+
+        return mMF_Player;
+    }
+
+    public void CreateAniamtionCamera(ref MMF_Player mMF_Player, int firstChanel)
+    {
+
+        MMF_Events cameraNormal = new MMF_Events();
+       
+        MMF_CinemachineTransition mMF_CinemachineTransition0 = new MMF_CinemachineTransition();
+        mMF_CinemachineTransition0.TargetVirtualCamera = mMF_Player.gameObject.transform.Find("NormalCamera").GetComponent<CinemachineVirtualCamera>();
+        mMF_CinemachineTransition0.Channel = firstChanel;
+        firstChanel++;
+
+        MMF_CinemachineTransition mMF_CinemachineTransition1 = new MMF_CinemachineTransition();
+        mMF_CinemachineTransition1.TargetVirtualCamera = mMF_Player.gameObject.transform.Find("BoardCamera").GetComponent<CinemachineVirtualCamera>();
+        mMF_CinemachineTransition1.Channel = firstChanel;
+        firstChanel++;
+
+
+        MMF_CinemachineTransition mMF_CinemachineTransition2 = new MMF_CinemachineTransition();
+        mMF_CinemachineTransition2.TargetVirtualCamera = mMF_Player.gameObject.transform.Find("HandCamera").GetComponent<CinemachineVirtualCamera>();
+        mMF_CinemachineTransition2.Channel = firstChanel;
+        firstChanel++;
+
+
+        MMF_CinemachineTransition mMF_CinemachineTransition3 = new MMF_CinemachineTransition();
+        mMF_CinemachineTransition3.TargetVirtualCamera = mMF_Player.gameObject.transform.Find("MP_HPCamera").GetComponent<CinemachineVirtualCamera>();
+        mMF_CinemachineTransition3.Channel = firstChanel;
+        firstChanel++;
+
+
+        MMF_CinemachineTransition mMF_CinemachineTransition4 = new MMF_CinemachineTransition();
+        mMF_CinemachineTransition4.TargetVirtualCamera = mMF_Player.gameObject.transform.Find("SkipTurn_Camera").GetComponent<CinemachineVirtualCamera>();
+        mMF_CinemachineTransition4.Channel = firstChanel;
+        firstChanel++;
+
+
+        MMF_CinemachineTransition mMF_CinemachineTransition5 = new MMF_CinemachineTransition();
+        mMF_CinemachineTransition5.TargetVirtualCamera = mMF_Player.gameObject.transform.Find("CardCamera").GetComponent<CinemachineVirtualCamera>();
+        mMF_CinemachineTransition5.Channel = firstChanel;
+        firstChanel++;
+
+
+        mMF_Player.AddFeedback(mMF_CinemachineTransition0);
+        mMF_Player.AddFeedback(mMF_CinemachineTransition1);
+        mMF_Player.AddFeedback(mMF_CinemachineTransition2);
+        mMF_Player.AddFeedback(mMF_CinemachineTransition3);
+        mMF_Player.AddFeedback(mMF_CinemachineTransition4);
+        mMF_Player.AddFeedback(mMF_CinemachineTransition5);
+
+        mMF_Player.Initialization();
+    }
 
     private void SetCardInHand(Transform CardAnimated, Transform Hand)
     {
@@ -301,7 +451,7 @@ public class AnimationCardManager : MonoBehaviour
         //cardTarget.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
     }
 
-    private MMF_Player CreateMMF_PlayerContainer(Transform targetAnimated, string name, bool destroyOld)
+    private MMF_Player CreateMMF_PlayerContainer(Transform targetAnimated, string name, bool destroyOld, GameObject childGameObject = null)
     {
         Transform containerOld = targetAnimated.Find("MMF_PlayerContainer").gameObject.transform.Find(name);
         if (containerOld != null)
@@ -316,7 +466,13 @@ public class AnimationCardManager : MonoBehaviour
         MMF_PlayerContainer.name = name;
         MMF_PlayerContainer.transform.parent = container.transform;
         MMF_PlayerContainer.AddComponent<MMF_Player>();
+        
+        if(childGameObject!= null)
+        childGameObject.transform.parent = MMF_PlayerContainer.transform;
+
         return MMF_PlayerContainer.GetComponent<MMF_Player>();
 
     }
+
+
 }

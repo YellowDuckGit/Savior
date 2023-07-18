@@ -1,12 +1,17 @@
 using JetBrains.Annotations;
+using MoreMountains.Feedbacks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static K_Player;
 
 public class UIMatchManager : MonoBehaviour
 {
@@ -33,18 +38,24 @@ public class UIMatchManager : MonoBehaviour
     [Header("Loading Data")]
     [Space(5)]
     //Create Card Scene
-    [SerializeField] TextMeshProUGUI T_Turn;
-    [SerializeField] TextMeshProUGUI T_RightAttack;
-    [SerializeField] TextMeshProUGUI T_ACT_SkipTurn;
+    //[SerializeField] TextMeshProUGUI T_Turn;
+    [SerializeField] MMF_Player lightBlue;
+    [SerializeField] MMF_Player lightRed;
+
+    [SerializeField] MMF_Player SkipTurnRed;
+    [SerializeField] MMF_Player SkipTurnBlue;
+
+    public bool SkipTurn_Interactive = true;
+
+    //[SerializeField] TextMeshProUGUI T_RightAttack;
+    //[SerializeField] TextMeshProUGUI T_ACT_SkipTurn;
     [SerializeField] TextMeshProUGUI T_ResultMatch;
 
+    //[Space(10)]
 
-
-    [Space(10)]
-
-    [Header("Button Event")]
-    [Space(5)]
-    [SerializeField] Button ACT_SkipTurn;
+    //[Header("Button Event")]
+    //[Space(5)]
+    //[SerializeField] Button ACT_SkipTurn;
 
     private void Awake()
     {
@@ -84,23 +95,98 @@ public class UIMatchManager : MonoBehaviour
     #region Get Set
     
 
-    public string Turn
+    //public string Turn
+    //{
+    //    get { return T_Turn.text; }
+    //    set { this.T_Turn.text = value; }
+    //}
+
+    public void Turn(string turn)
     {
-        get { return T_Turn.text; }
-        set { this.T_Turn.text = value; }
+        if (K_Player.K_PlayerSide.Blue.Equals(turn))
+        {
+            lightBlue.PlayFeedbacks();
+        }else if (K_Player.K_PlayerSide.Red.Equals(turn))
+        {
+            lightRed.PlayFeedbacks();
+        }
     }
 
-    public string RightAttack
+    public void SkipTurn()
     {
-        get { return T_RightAttack.text; }
-        set { this.T_RightAttack.text = value; }
+        if (SkipTurn_Interactive)
+        {
+            if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+            {
+                print("SkipTurnBlue.PlayFeedbacks();");
+                SkipTurnBlue.PlayFeedbacks();
+            }
+            else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
+            {
+                print("SkipTurnRed.PlayFeedbacks();");
+                SkipTurnRed.PlayFeedbacks();
+            }
+        }
     }
 
-    public string TextButton_ACT_SkipTurn
+    public void setEventSkipTurn(UnityAction function)
     {
-        get { return T_ACT_SkipTurn.text; }
-        set { this.T_ACT_SkipTurn.text = value; }
+        print("setEventSkipTurn");
+        if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+        {
+
+            MMF_Events mMF_PlayerEvents = new MMF_Events();
+
+            UnityEvent ev2 = new UnityEvent();
+            ev2.AddListener(() => function());
+            mMF_PlayerEvents.PlayEvents = ev2;
+
+            SkipTurnBlue.AddFeedback(mMF_PlayerEvents);
+            SkipTurnBlue.Initialization();
+        }
+        else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
+        {
+
+            MMF_Events mMF_PlayerEvents = new MMF_Events();
+
+            UnityEvent ev2 = new UnityEvent();
+            ev2.AddListener(() => function());
+            mMF_PlayerEvents.PlayEvents = ev2;
+
+            SkipTurnRed.AddFeedback(mMF_PlayerEvents);
+            SkipTurnRed.Initialization();
+
+        }
     }
+
+    public void removeAllEventSkipTurn()
+    {
+        //if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+        //{
+        //    EventSkipTurnBlue.PlayEvents.RemoveAllListeners();
+        //}
+        //else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
+        //{
+        //    EventSkipTurnRed.PlayEvents.RemoveAllListeners();
+        //}
+    }
+    public void RightAttack()
+    {
+        ///Feedback Change right attach bang icon
+        Debug.Log("RightAttack");
+    }
+
+    //public string RightAttack
+    //{
+    //    get { return T_RightAttack.text; }
+    //    set { this.T_RightAttack.text = value; }
+    //}
+
+    //public string TextButton_ACT_SkipTurn
+    //{
+    //    get { return T_ACT_SkipTurn.text; }
+    //    set { this.T_ACT_SkipTurn.text = value; }
+    //}
 
     string ResultMatch
     {
@@ -108,10 +194,10 @@ public class UIMatchManager : MonoBehaviour
         set { this.T_ResultMatch.text = value; }
     }
 
-    public Button GetACT_SkipTurn
-    {
-        get { return this.ACT_SkipTurn; }
-    }
+    //public Button GetACT_SkipTurn
+    //{
+    //    get { return this.ACT_SkipTurn; }
+    //}
 
 
     #endregion
@@ -173,7 +259,7 @@ public class UIMatchManager : MonoBehaviour
 
     public void TurnLoadingScene(bool turn)
     {
-        PanelLoading.SetActive(turn);
+        //PanelLoading.SetActive(turn);
     }
     #endregion
 

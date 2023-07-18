@@ -9,7 +9,6 @@ public interface ICardData
     public int Cost { get; set; }
     public string Description { get; set; }
     public CardType CardType { get; set; }
-    public Material Avatar { get; set; }
     public Material NormalAvatar
     {
         get; set;

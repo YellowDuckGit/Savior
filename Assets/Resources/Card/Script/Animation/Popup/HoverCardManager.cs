@@ -10,32 +10,40 @@ public class HoverCardManager : MonoBehaviour
 
     bool isHover = false;
 
+    public bool TurnOn = false;
     private void OnMouseExit()
     {
-        if (isHover)
+        if (TurnOn)
         {
-            //print("FeedBack_UnHover");
-            //isHover = false;
-            //FeedBack_UnHover.PlayFeedbacks();
-            print("FeedBack_Exit Hover");
+            if (isHover)
+            {
+                //print("FeedBack_UnHover");
+                //isHover = false;
+                //FeedBack_UnHover.PlayFeedbacks();
+                print("FeedBack_Exit Hover");
 
-            isHover = false;
-            FeedBack_Hover.StopFeedbacks();
-            FeedBack_Hover.Direction = MMFeedbacks.Directions.BottomToTop;
-            FeedBack_Hover.PlayFeedbacks();
+                isHover = false;
+                FeedBack_Hover.StopFeedbacks();
+                FeedBack_Hover.Direction = MMFeedbacks.Directions.BottomToTop;
+                FeedBack_Hover.PlayFeedbacks();
+            }
         }
+      
     }
 
     private void OnMouseOver()
     {
-        if (!isHover)
+        if (TurnOn)
         {
-            print("FeedBack_Hover");
-            isHover = true;
-            FeedBack_Hover.StopFeedbacks();
-            FeedBack_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
-            FeedBack_Hover.PlayFeedbacks();
+            if (!isHover)
+            {
+                print("FeedBack_Hover");
+                isHover = true;
+                FeedBack_Hover.StopFeedbacks();
+                FeedBack_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
+                FeedBack_Hover.PlayFeedbacks();
 
+            }
         }
     }
 }

@@ -19,32 +19,34 @@ MonoBehaviour:
   <Hp>k__BackingField: 2
   <Description>k__BackingField: Grant me +1|+1 for each enemies Charmed in this game
   <CardType>k__BackingField: 1
-  <Avatar>k__BackingField: {fileID: 2100000, guid: 4eceda339b3ad584db10588fd19118b8,
-    type: 2}
-  <RarityCard>k__BackingField: 1
+  <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 3
   <IsCharming>k__BackingField: 1
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 71baab14657fe5e479711bde032c8d06, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: a04899710de58a247b5d0246ddc11701, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: aad4e682ff1b8584c9309c283bc70e82, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 66de6f8df7dbf7a468e12d2f7169d2b8, type: 3}
   CardEffects:
   - rid: 1073283011172630536
   references:
     version: 2
     RefIds:
     - rid: 1073283011172630536
-      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
         - rid: 1073283011172630537
     - rid: 1073283011172630537
-      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent,
-        asm: Assembly-CSharp}
+      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent, asm: Assembly-CSharp}
       data:
         EventID: 15
+        LifeTime: 0
         Actions:
         - rid: 1073283011172630538
     - rid: 1073283011172630538
@@ -52,13 +54,14 @@ MonoBehaviour:
       data:
         _not: 0
         circle: 0
+        comepare: 1
+        number: 0
         target:
           rid: 1073283011172630539
         Actions:
         - rid: 1073283011172630540
     - rid: 1073283011172630539
-      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         owner: 2
         cardPosition: 4
@@ -68,33 +71,28 @@ MonoBehaviour:
           rid: 1073283052834127914
         match: {fileID: 0}
     - rid: 1073283011172630540
-      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
-        asm: Assembly-CSharp}
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
       data:
         target:
           rid: 1073283011172630541
         Effects:
         - rid: 1073283011172630542
     - rid: 1073283011172630541
-      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
-        asm: Assembly-CSharp}
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
     - rid: 1073283011172630542
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
         Attack: 1
         Hp: 1
         InTurn: 0
     - rid: 1073283052834127914
-      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         monsterOptions:
         - rid: 1073283052834127915
     - rid: 1073283052834127915
-      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptAttribute,
-        ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptAttribute, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         attributes:
           _IsCharming: 1

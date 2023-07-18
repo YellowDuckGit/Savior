@@ -18,49 +18,48 @@ MonoBehaviour:
   <Attack>k__BackingField: 2
   <Hp>k__BackingField: 3
   <Description>k__BackingField: When I survive damaged, grant me +0|+1
-  <CardType>k__BackingField: 0
-  <Avatar>k__BackingField: {fileID: 2100000, guid: d30a0dd0067ff464a89b375b51a03690,
-    type: 2}
-  <RarityCard>k__BackingField: 1
+  <CardType>k__BackingField: 1
+  <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 4a607eabdbe69b847838c2fa977c6308, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 46e3d580400942e479c6c7f30d1cc19e, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 2e7bb7211ed2319479c530efd467360c, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 0709123a1b8f54c48ae6b623b9ae7927, type: 3}
   CardEffects:
   - rid: 1073282966915383352
   references:
     version: 2
     RefIds:
     - rid: 1073282966915383352
-      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
         - rid: 1073282966915383360
     - rid: 1073282966915383360
-      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent,
-        asm: Assembly-CSharp}
+      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent, asm: Assembly-CSharp}
       data:
         EventID: 28
+        LifeTime: 0
         Actions:
         - rid: 1073282966915383362
     - rid: 1073282966915383362
-      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
-        asm: Assembly-CSharp}
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
       data:
         target:
           rid: 1073282966915383363
         Effects:
         - rid: 1073282966915383364
     - rid: 1073282966915383363
-      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
-        asm: Assembly-CSharp}
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
     - rid: 1073282966915383364
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
         Attack: 0

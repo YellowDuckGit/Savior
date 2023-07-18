@@ -5,12 +5,9 @@ using UnityEngine;
 
 public class SwitchTurn : MonoBehaviour
 {
-    [SerializeField] MMFeedbacks RedEffect;
-    [SerializeField] MMFeedbacks BlueEffect;
-
 
     void OnMouseDown()
     {
-        RedEffect.PlayFeedbacks();
+        UIMatchManager.instance.SkipTurn();
     }
 }

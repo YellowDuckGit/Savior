@@ -202,7 +202,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                 while(this.UIName == null || this.UIDescription == null || this.UICost == null || this.UIAttack == null || this.UIHp == null || this.UIAvatar == null || CardTarget == null)
                 {
                     this.UIName = canvas.transform.Find(nameof(Name)).GetComponent<TextMeshProUGUI>();
-                    this.UIDescription = canvas.transform.Find(nameof(Description)).GetComponent<TextMeshProUGUI>();
+                    this.UIDescription = canvas.transform.Find("Description Container").transform.Find("Description").transform.Find(nameof(Description)).GetComponent<TextMeshProUGUI>();
                     this.UICost = canvas.transform.Find(nameof(Cost)).GetComponent<TextMeshProUGUI>();
                     this.UIAttack = canvas.transform.Find(nameof(Attack)).GetComponent<TextMeshProUGUI>();
                     this.UIHp = canvas.transform.Find(nameof(Hp)).GetComponent<TextMeshProUGUI>();
@@ -352,7 +352,8 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                     // Nếu thuộc tính là Avatar
                     case nameof(Avatar):
                         // Gán giá trị của thuộc tính Avatar của nguồn cho thuộc tính Avatar của đích
-                        this.Avatar = source.Avatar;
+                        this.Avatar = source.NormalAvatar;
+
                         break;
                     // Nếu thuộc tính là RarityCard
                     case nameof(RarityCard):

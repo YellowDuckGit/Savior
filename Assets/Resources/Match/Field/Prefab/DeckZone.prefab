@@ -116,6 +116,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8939474752521973751}
   - component: {fileID: 6312546503212900211}
+  - component: {fileID: -3300781131837058350}
+  - component: {fileID: -5276675292705164224}
+  - component: {fileID: 4403763123870663439}
   m_Layer: 0
   m_Name: DeckZone
   m_TagString: Untagged
@@ -160,3 +163,80 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.70017767, y: 0.012479251, z: 1.0159178}
   m_Center: {x: -0.0011329651, y: 0.002405651, z: 0.0024294853}
+--- !u!114 &-3300781131837058350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6710953167965678889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &-5276675292705164224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6710953167965678889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78cb63bcbaf073a4f931538296963547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cards: []
+  finishCardDataLoad: 0
+  offsetInstantiate: {x: 0, y: 0, z: 0}
+--- !u!114 &4403763123870663439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6710953167965678889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00099f8dbc7fe484e8846dd5c9a6e97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CustomSortingCard: 1
+  spacingZ: 0.1
+  custom_StartAngleOffset: 90
+  RadiusSpace: 10
+  LayoutElements: []
+  ElementDimensions: {x: 1, y: 0.002, z: 1}
+  Spacing: 0
+  Style: 0
+  GridConstraintCount: 0
+  SecondaryConstraintCount: 0
+  UseFullCircle: 0
+  MaxArcAngle: 0
+  Radius: 1
+  StartAngleOffset: 0
+  AlignToRadius: 0
+  PrimaryAlignmentAxis: 2
+  SecondaryAlignmentAxis: 1
+  LayoutAxis: 1
+  SecondaryLayoutAxis: 1
+  ElementRotations: []
+  StartPositionOffset: {x: 0, y: 0, z: 0}
+  SpiralFactor: 0
+  PrimaryAlignment: 0
+  SecondaryAlignment: 0
+  TertiaryAlignment: 0
+  NeedsRebuild: 0
+  ForceContinuousRebuild: 0
+  IgnoreDeactivatedElements: 1

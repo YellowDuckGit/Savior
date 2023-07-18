@@ -5273,7 +5273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f98094c512e0dae4e845a41a072d1a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameVersion: 0.2
+  gameVersion: 0.5
   gameMode: 0
   eloRangesuitable: 50
 --- !u!4 &190819876

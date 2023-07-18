@@ -368,6 +368,7 @@ public class GameData : MonoBehaviour
         UnLoadListCardItem();
         foreach (ICardData cardData in listCardDataInGame)
         {
+            print("ICardData: " + cardData.Name);
 
             CardItem cardItem = GameObject.Instantiate(CardItemPrefab, Vector3.zero, Quaternion.identity).GetComponent<CardItem>();
             cardItem.gameObject.SetActive(false);

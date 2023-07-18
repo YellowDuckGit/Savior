@@ -18,31 +18,32 @@ MonoBehaviour:
   <Attack>k__BackingField: 4
   <Hp>k__BackingField: 1
   <Description>k__BackingField: When I'm summoned, grant 0|+2 for strongest ally
-  <CardType>k__BackingField: 0
-  <Avatar>k__BackingField: {fileID: 2100000, guid: 545fcdda6a9056943bc4e2d970f35cf5,
-    type: 2}
-  <RarityCard>k__BackingField: 1
+  <CardType>k__BackingField: 1
+  <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 36968b535f005a549bb541c3be18fe2f, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 4fa29cbdbfb0f66478cf703bd27ec3fe, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 0160cfcd583f7524fa11b2afa9c1576c, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 7a31a88366e1880408ee3ea99841ef44, type: 3}
   CardEffects:
   - rid: 1073282966915383315
   references:
     version: 2
     RefIds:
     - rid: 1073282966915383315
-      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
         - rid: 1073282966915383317
     - rid: 1073282966915383317
-      type: {class: SelectStrongest, ns: Assets.GameComponent.Card.Logic.TargetObject.Select,
-        asm: Assembly-CSharp}
+      type: {class: SelectStrongest, ns: Assets.GameComponent.Card.Logic.TargetObject.Select, asm: Assembly-CSharp}
       data:
         owner: 1
         cardPosition: 4
@@ -51,8 +52,7 @@ MonoBehaviour:
         Effects:
         - rid: 1073282966915383318
     - rid: 1073282966915383318
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
         Attack: 0

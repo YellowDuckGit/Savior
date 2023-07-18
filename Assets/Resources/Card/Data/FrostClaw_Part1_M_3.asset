@@ -20,30 +20,31 @@ MonoBehaviour:
   <Description>k__BackingField: 'When I''ve seen Frost Blade  played 2 times.  Round
     Start: Summon a Guardian'
   <CardType>k__BackingField: 1
-  <Avatar>k__BackingField: {fileID: 2100000, guid: e98518c4d7c1d7342ac9337c9668b3ef,
-    type: 2}
-  <RarityCard>k__BackingField: 0
+  <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 0
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 2be7a34b00b61884d929d802e8db50d4, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 4e402219ed81ea24fbcf8c1608784730, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 2a8ff9ffa178d3440aa555185c5ba161, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 3a12b5987cebdcf42a4c2ad5184af298, type: 3}
   CardEffects:
   - rid: 4170877821461463051
   references:
     version: 2
     RefIds:
     - rid: 4170877821461463051
-      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
         - rid: 4170877821461463052
     - rid: 4170877821461463052
-      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent,
-        asm: Assembly-CSharp}
+      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent, asm: Assembly-CSharp}
       data:
         EventID: 16
         LifeTime: 0
@@ -61,8 +62,7 @@ MonoBehaviour:
         Actions:
         - rid: 4170877821461463062
     - rid: 4170877821461463056
-      type: {class: SpecifyAction/SpecifyType/SpecifyCard, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
-        asm: Assembly-CSharp}
+      type: {class: SpecifyAction/SpecifyType/SpecifyCard, ns: Assets.GameComponent.Card.Logic.Actions.Specify, asm: Assembly-CSharp}
       data:
         owner: 1
         cardPosition: 2
@@ -70,21 +70,18 @@ MonoBehaviour:
         region: 0
         target: {fileID: 11400000, guid: d263a8480b11a6c4b8e7e62738e1dd49, type: 2}
     - rid: 4170877821461463062
-      type: {class: SpecifyAction, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
-        asm: Assembly-CSharp}
+      type: {class: SpecifyAction, ns: Assets.GameComponent.Card.Logic.Actions.Specify, asm: Assembly-CSharp}
       data:
         target:
           rid: 4170877821461463063
         Effects:
         - rid: 4170877821461463064
     - rid: 4170877821461463063
-      type: {class: SpecifyAction/SpecifyType/SpecifyCardPlayer, ns: Assets.GameComponent.Card.Logic.Actions.Specify,
-        asm: Assembly-CSharp}
+      type: {class: SpecifyAction/SpecifyType/SpecifyCardPlayer, ns: Assets.GameComponent.Card.Logic.Actions.Specify, asm: Assembly-CSharp}
       data:
         side: 1
     - rid: 4170877821461463064
-      type: {class: CreateCard, ns: Assets.GameComponent.Card.Logic.Effect.CreateCard,
-        asm: Assembly-CSharp}
+      type: {class: CreateCard, ns: Assets.GameComponent.Card.Logic.Effect.CreateCard, asm: Assembly-CSharp}
       data:
         pitch: []
         CardTarget: {fileID: 11400000, guid: b0c84a52d1f59254a802b54e17bda2b2, type: 2}

@@ -13,7 +13,7 @@ public class CardAnimationController : MonoBehaviour
         DrawCard
     }
 
-    [MMInspectorButton("PlayGetDame")]
+    [MMInspectorButton("Spell")]
     public bool Play;
 
     //[Space(10)]
@@ -25,6 +25,8 @@ public class CardAnimationController : MonoBehaviour
     [Header("Properties")]
 
     public Transform Card;
+    public Transform OpponentTest;
+
     //public Transform Hand;
     //[Space(10)]
     //[Header("MMF")]
@@ -33,6 +35,8 @@ public class CardAnimationController : MonoBehaviour
     private MMF_Player MMF_Hover;
     private MMF_Player MMF_DestroyCard;
     private MMF_Player MMF_GetDamage;
+    private MMF_Player MMF_Spell;
+
 
     bool isHover = false;
 
@@ -41,6 +45,13 @@ public class CardAnimationController : MonoBehaviour
         MMF_Hover = AnimationCardManager.instance.CreateAnimationFB_Hover(Card);
         MMF_DestroyCard = AnimationCardManager.instance.CreateAnimationFB_Destroy(Card);
         MMF_GetDamage = AnimationCardManager.instance.CreateAnimationFB_GetDamage(Card);
+        MMF_Spell = AnimationCardManager.instance.CreateAnimationFB_SpellShot(Card, OpponentTest, AnimationCardManager.SpellColor.Violet);
+
+    }
+
+    public void Spell()
+    {
+        MMF_Spell.PlayFeedbacks();
     }
 
     public void PlayDrawCard(Transform hand)

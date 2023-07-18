@@ -86,6 +86,7 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
         }
         else if(UIManager.instance.isChooseDeck)
         {
+            print(data.deckCode);   
             UIManager.instance.LoadSeletedDeck(this.transform,UIManager.instance.CollectionDeck_PlayScene,UIManager.instance.SelectFrame);
         }
         else if(UIManager.instance.isStoreDecks)

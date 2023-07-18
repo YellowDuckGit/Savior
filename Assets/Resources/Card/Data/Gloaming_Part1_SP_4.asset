@@ -19,31 +19,31 @@ MonoBehaviour:
   <Description>k__BackingField: If have 2 allies be killed in this round, Charming
     2 enemies
   <CardType>k__BackingField: 2
-  <Avatar>k__BackingField: {fileID: 2100000, guid: 45729b9b9bd4e6e4f9ee835eb4fe893f,
-    type: 2}
-  <RarityCard>k__BackingField: 1
+  <RarityCard>k__BackingField: 3
   <RegionCard>k__BackingField: 3
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 7823551acd913054591b25c5a9576cbc, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: a644f87191bc0e94d973468493ffe5be, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: c0fea6f11ef99094eb61b136483485d4, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 771635cc269214a4a82a0ae4870129ee, type: 3}
   CardEffect:
   - rid: 1073283052834127906
   references:
     version: 2
     RefIds:
     - rid: 1073283052834127906
-      type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
         - rid: 1073283052834127907
     - rid: 1073283052834127907
-      type: {class: SelectMulti, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi,
-        asm: Assembly-CSharp}
+      type: {class: SelectMulti, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi, asm: Assembly-CSharp}
       data:
         multiTargetType:
           rid: 1073283052834127908
     - rid: 1073283052834127908
-      type: {class: SelectMulti/MultiTargetType/MultiTargetCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi,
-        asm: Assembly-CSharp}
+      type: {class: SelectMulti/MultiTargetType/MultiTargetCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi, asm: Assembly-CSharp}
       data:
         target:
           owner: 2
@@ -56,20 +56,17 @@ MonoBehaviour:
         Effects:
         - rid: 1073283052834127912
     - rid: 1073283052834127909
-      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         monsterOptions:
         - rid: 1073283052834127910
     - rid: 1073283052834127910
-      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptHp,
-        ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptHp, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         value:
           rid: 1073283052834127911
     - rid: 1073283052834127911
-      type: {class: AbstractTarget/AbstractTargetDataType/AbstractTargetDataTypeValue/ValueNumber,
-        ns: Assets.GameComponent.Card.Logic.TargetObject.Target, asm: Assembly-CSharp}
+      type: {class: AbstractTarget/AbstractTargetDataType/AbstractTargetDataTypeValue/ValueNumber, ns: Assets.GameComponent.Card.Logic.TargetObject.Target, asm: Assembly-CSharp}
       data:
         comepare: 4
         number: 2
@@ -80,8 +77,7 @@ MonoBehaviour:
         _Gain:
           rid: 1073283052834127913
     - rid: 1073283052834127913
-      type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain,
-        asm: Assembly-CSharp}
+      type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
       data:
         _IsCharming: 1
         _IsTreating: 0

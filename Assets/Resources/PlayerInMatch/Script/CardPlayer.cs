@@ -1,4 +1,6 @@
 using Assets.GameComponent.Manager.IManager;
+using Cinemachine;
+using MoreMountains.Feedbacks;
 using Photon.Pun;
 using PlayFab.ServerModels;
 using System;
@@ -15,7 +17,7 @@ using static MatchManager;
 public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
 {
     public Hand hand;
-    public PlayerCamera camera;
+    public MMFeedbacks camera;
     public Deck deck;
     public GameObject graveyard;
     public HP hp;
@@ -61,13 +63,7 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
 
     private void Update()
     {
-        if(photonView.IsMine)
-        {
-            if(Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                hand.clickLeftMouse();
-            }
-        }
+      
     }
     //TODO: Select Player
     public IEnumerator SetupPlayer()
@@ -94,6 +90,14 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
                 spellZone = this.gameObject.transform.parent.GetComponentInChildren<TriggerSpell>();
                 initialCardPlace = this.gameObject.transform.parent.GetComponentInChildren<InitCardPlace>();
+
+                transform.localPosition = MatchManager.instance.positionBlue;
+                transform.rotation = Quaternion.identity;
+
+                CameraManager.instance.SetupCamera(K_Player.K_PlayerSide.Blue,this);
+                print("SetupCamera Blue Local Finish");
+                //CameraManager.instance.OnclickSwitchCameraNormal();
+
             }
             else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
@@ -109,6 +113,15 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
                 spellZone = this.gameObject.transform.parent.GetComponentInChildren<TriggerSpell>();
                 initialCardPlace = this.gameObject.transform.parent.GetComponentInChildren<InitCardPlace>();
+                transform.localPosition = MatchManager.instance.positionRed;
+                transform.rotation = Quaternion.identity;
+
+                CameraManager.instance.SetupCamera(K_Player.K_PlayerSide.Red,this);
+                print("SetupCamera Red Local Finish");
+
+                //CameraManager.instance.OnclickSwitchCameraNormal();
+
+
             }
 
 
@@ -132,6 +145,12 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
                 spellZone = this.gameObject.transform.parent.GetComponentInChildren<TriggerSpell>();
                 initialCardPlace = this.gameObject.transform.parent.GetComponentInChildren<InitCardPlace>();
 
+                transform.localPosition = MatchManager.instance.positionRed;
+                transform.rotation = Quaternion.identity;
+                CameraManager.instance.SetupCamera(K_Player.K_PlayerSide.Red, this);
+                print("SetupCamera Red Finish");
+
+
             }
             else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
@@ -145,6 +164,12 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
                 spellZone = this.gameObject.transform.parent.GetComponentInChildren<TriggerSpell>();
                 initialCardPlace = this.gameObject.transform.parent.GetComponentInChildren<InitCardPlace>();
+
+                transform.localPosition = MatchManager.instance.positionBlue;
+                transform.rotation = Quaternion.identity;
+
+                CameraManager.instance.SetupCamera(K_Player.K_PlayerSide.Blue, this);
+                print("SetupCamera Blue Finish");
 
             }
         }

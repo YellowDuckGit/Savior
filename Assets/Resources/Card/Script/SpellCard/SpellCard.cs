@@ -163,18 +163,7 @@ public class SpellCard : CardBase, ISpellCard
             this._cardPlayer = value;
         }
     }
-    public override Material Avatar
-    {
-        get
-        {
-            return _avartar;
-        }
-        set
-        {
-            this._avartar = value;
-            OnPropertyChanged(nameof(Avatar));
-        }
-    }
+ 
     public SpellData BaseSpellData
     {
         get
@@ -217,6 +206,62 @@ public class SpellCard : CardBase, ISpellCard
         set
         {
             this._spellType = value;
+        }
+    }
+
+    public override Material NormalAvatar
+    {
+        get
+        {
+            return _normalAvatar;
+        }
+        set
+        {
+            this._normalAvatar = value;
+        }
+    }
+    public override Material InDeckAvatar
+    {
+        get
+        {
+            return _inDeckAvatar;
+        }
+        set
+        {
+            this._inDeckAvatar = value;
+        }
+    }
+    public override Material InBoardAvatar
+    {
+        get
+        {
+            return _inBoardAvatar;
+        }
+        set
+        {
+            this._inBoardAvatar = value;
+        }
+    }
+    public override Sprite NormalAvatar2D
+    {
+        get
+        {
+            return _normalAvatar2D;
+        }
+        set
+        {
+            this._normalAvatar2D = value;
+        }
+    }
+    public override Sprite InDeckAvatar2D
+    {
+        get
+        {
+            return _inDeckAvatar2D;
+        }
+        set
+        {
+            this._inDeckAvatar2D = value;
         }
     }
 
@@ -331,7 +376,13 @@ public class SpellCard : CardBase, ISpellCard
         Cost = source.Cost;
         Description = source.Description;
         CardType = source.CardType;
-        Avatar = source.Avatar;
+        NormalAvatar = source.NormalAvatar;
+        NormalAvatar2D = source.NormalAvatar2D;
+        InDeckAvatar = source.InDeckAvatar;
+        InDeckAvatar2D = source.InDeckAvatar2D;
+        InBoardAvatar = source.InBoardAvatar;
+        NormalAvatar = source.NormalAvatar;
+
         RarityCard = source.RarityCard;
         RegionCard = source.RegionCard;
 

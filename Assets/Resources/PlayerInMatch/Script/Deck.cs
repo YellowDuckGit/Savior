@@ -57,7 +57,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     // Implementing the Add method
     public void Add(CardBase item)
     {
-        if(_cards.Count < 20)
+        if(_cards.Count < CollectionManager.instance.LimitNumberCardInDeck)
         {
             _cards.Add(item);
 
@@ -414,7 +414,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         get
         {
-            return _cards.Count == 20;
+            return _cards.Count == CollectionManager.instance.LimitNumberCardInDeck;
         }
     }
 }

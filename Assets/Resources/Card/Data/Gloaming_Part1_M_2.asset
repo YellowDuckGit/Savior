@@ -20,23 +20,25 @@ MonoBehaviour:
   <Description>k__BackingField: Dominate To play me, choose an enemy Charmed. Grant
     me enemy's power
   <CardType>k__BackingField: 1
-  <Avatar>k__BackingField: {fileID: 2100000, guid: 64798d156bb3ee44ea7ac0db66453131,
-    type: 2}
-  <RarityCard>k__BackingField: 1
+  <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 3
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 1
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 8bddf2f15ce84b8499d520dccab44fcf, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 3ff1d2dc3cf9be542b5f4ac00652fd21, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 6d6ce7be2fd005b40b25b15b6cf32ef9, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 5b936d0162234c24abef8a3a87f6f81f, type: 3}
   CardEffects:
   - rid: 1073283011172630551
   references:
     version: 2
     RefIds:
     - rid: 1073283011172630551
-      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
@@ -46,13 +48,14 @@ MonoBehaviour:
       data:
         _not: 0
         circle: 0
+        comepare: 1
+        number: 0
         target:
           rid: 1073283011172630553
         Actions:
         - rid: 1073283011172630556
     - rid: 1073283011172630553
-      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         owner: 2
         cardPosition: 4
@@ -62,14 +65,12 @@ MonoBehaviour:
           rid: 1073283011172630554
         match: {fileID: 0}
     - rid: 1073283011172630554
-      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         monsterOptions:
         - rid: 1073283011172630555
     - rid: 1073283011172630555
-      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptAttribute,
-        ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptAttribute, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         attributes:
           _IsCharming: 1
@@ -78,19 +79,16 @@ MonoBehaviour:
           _IsBlockAttack: 0
           _IsBlockDefend: 0
     - rid: 1073283011172630556
-      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
-        asm: Assembly-CSharp}
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
       data:
         target:
           rid: 1073283011172630557
         Effects:
         - rid: 1073283011172630558
     - rid: 1073283011172630557
-      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
-        asm: Assembly-CSharp}
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
     - rid: 1073283011172630558
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
         Attack: 5

@@ -498,7 +498,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.StartMatch)
             {
                 Debug.Log("UI START");
-                UIManager.instance.TurnOnMatchingScene();
+                //UIManager.instance.TurnOnMatchingScene();
                 //UIManager.instance.UI_StartMatch(true);
                 //UIManager.instance.UI_ConfirmMatchmaking(false);
 
@@ -678,7 +678,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
             {
                 print("TwoPLayerReady");
-                //PhotonNetwork.LoadLevel("Match");
+                PhotonNetwork.LoadLevel("MatchScene");
             }
         }
         //Debug.Log("RoomID: " + PhotonNetwork.CurrentRoom.Name + "\n Openn: " + PhotonNetwork.CurrentRoom.IsOpen + "\n Isvisiable: " + PhotonNetwork.CurrentRoom.IsVisible);
