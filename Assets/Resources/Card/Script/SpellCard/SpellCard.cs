@@ -163,7 +163,7 @@ public class SpellCard : CardBase, ISpellCard
             this._cardPlayer = value;
         }
     }
- 
+
     public SpellData BaseSpellData
     {
         get
@@ -414,7 +414,7 @@ public class SpellCard : CardBase, ISpellCard
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.AppendLine($"[SPELL] {Name}{{{Cost}}} - {Description}");
+        builder.Append($"[SPELL] {Name}{{{Cost}}} - {Description} [{photonView.ViewID}]");
         return builder.ToString();
     }
 }

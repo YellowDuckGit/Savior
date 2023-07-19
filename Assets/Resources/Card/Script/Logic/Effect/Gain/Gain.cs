@@ -1,6 +1,7 @@
 ﻿using Assets.GameComponent.Card.Logic.Effect.Store;
 using Assets.GameComponent.Card.Logic.TargetObject.Select;
 using Assets.GameComponent.Card.LogicCard;
+using Assets.GameComponent.Card.LogicCard.ListLogic.Effect;
 using JetBrains.Annotations;
 using SerializeReferenceEditor;
 using System;
@@ -19,12 +20,14 @@ using static UnityEngine.Rendering.DebugUI;
 namespace Assets.GameComponent.Card.Logic.Effect.Gain
 {
     [SRName("Logic/Effect/Gain")]
-    public class Gain : AbstractEffect
+    public class Gain : AbstractEffect, IInturnEffect
     {
 
         [SerializeReference]
         [SRLogicCard(typeof(GainData))]
         public GainData _Gain = null;
+
+        public bool InTurn;
 
         [Serializable]
         public abstract class GainData : AbstractData
@@ -176,6 +179,7 @@ namespace Assets.GameComponent.Card.Logic.Effect.Gain
                     if(register is MonsterCard monster)
                     {
                         monster.IsCharming = true;
+                        monster.EffectSContain.Add(this);
                         return true;
                     }
 
@@ -188,6 +192,7 @@ namespace Assets.GameComponent.Card.Logic.Effect.Gain
                     {
                         monster.IsTreating = true;
                         this.debug("monster is treating: " + monster.IsTreating);
+                        monster.EffectSContain.Add(this);
                         return true;
                     }
 
@@ -198,6 +203,7 @@ namespace Assets.GameComponent.Card.Logic.Effect.Gain
                     if(register is MonsterCard monster)
                     {
                         monster.IsDominating = true;
+                        monster.EffectSContain.Add(this);
                         return true;
                     }
                     return false;
@@ -207,6 +213,7 @@ namespace Assets.GameComponent.Card.Logic.Effect.Gain
                     if(register is MonsterCard monster)
                     {
                         monster.IsBlockAttack = true;
+                        monster.EffectSContain.Add(this);
                         return true;
                     }
                     return false;
@@ -216,6 +223,7 @@ namespace Assets.GameComponent.Card.Logic.Effect.Gain
                     if(register is MonsterCard monster)
                     {
                         monster.IsBlockDefend = true;
+                        monster.EffectSContain.Add(this);
                         return true;
                     }
                     return false;
@@ -234,6 +242,74 @@ namespace Assets.GameComponent.Card.Logic.Effect.Gain
 
         public override void RevokeEffect(object register, MatchManager match)
         {
+            if(InTurn)
+            {
+                if(_Gain is GainMonsterAttribute gainAttr)
+                {
+                    if(gainAttr._IsCharming)
+                    {
+                        if(register is MonsterCard monster)
+                        {
+                            monster.EffectSContain.Remove(this);
+                            monster.IsCharming = false;
+
+                        }
+
+                    }
+
+                    if(gainAttr._IsTreating)
+                    {
+                        if(register is MonsterCard monster)
+                        {
+                            monster.EffectSContain.Remove(this);
+                            monster.IsTreating = false;
+                            this.debug("monster is treating: " + monster.IsTreating);
+
+                        }
+
+
+                    }
+                    if(gainAttr._IsDominating)
+                    {
+                        if(register is MonsterCard monster)
+                        {
+                            monster.EffectSContain.Remove(this);
+                            monster.IsDominating = false;
+
+                        }
+
+                    }
+                    if(gainAttr._IsBlockAttack)
+                    {
+                        if(register is MonsterCard monster)
+                        {
+                            monster.EffectSContain.Remove(this);
+                            monster.IsBlockAttack = false;
+
+                        }
+
+                    }
+                    if(gainAttr._IsBlockDefend)
+                    {
+                        if(register is MonsterCard monster)
+                        {
+                            monster.EffectSContain.Remove(this);
+                            monster.IsBlockDefend = false;
+
+                        }
+
+                    }
+                }
+                else if(_Gain is GainMonsterStats gainStarts)
+                {
+                    if(register is MonsterCard monster)
+                    {
+                        gainStarts.Execute(register, monster);
+                    }
+                }
+
+            }
+
         }
     }
 }

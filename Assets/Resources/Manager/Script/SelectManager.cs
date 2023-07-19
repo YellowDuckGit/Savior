@@ -561,24 +561,29 @@ namespace Assets.GameComponent.Manager
                         {
                             if(targetSelected is CardBase card)
                             {
-                                targetElement.target = new CardTarget
+                                var target = new CardTarget
                                 {
                                     cardPosition = (CardPosition)card.Position,
                                     owner = (CardOwner)card.CardOwner,
                                     Rarity = (Rarity)card.RarityCard,
                                     region = (RegionCard)card.RegionCard
                                 };
+                                result.Add((targetElement.Effects, target, targetSelected));
                             }
                             else
                             if(targetSelected is CardPlayer player)
                             {
-                                targetElement.target = new PlayerTarget
+                                var target = new PlayerTarget
                                 {
                                     side = CardOwner.You
                                 };
+                                result.Add((targetElement.Effects, target, targetSelected));
                             }
                         }
-                        result.Add((targetElement.Effects, targetElement.target, targetSelected));
+                        else
+                        {
+                            result.Add((targetElement.Effects, targetElement.target, targetSelected));
+                        }
                         //action(targetElement.Effects, targetElement.target, targetSelected);
                         graph.RemoveAll(list => list[i] != targetSelected);
                     }

@@ -31,6 +31,12 @@ namespace Assets.GameComponent.Card.Logic.ConditionTrigger.TriggerEvent
         public bool _isBlockDefend;
         public bool IsBlockDefend { get { return _isBlockDefend; } set { _isBlockDefend = value; } }
 
+        public bool _isInTurn;
+        public bool IsInTurn
+        {
+            get; set;
+        }
+
         [Header("Toggle status")]
         [Space(10)]
         public bool toggleStatus = true;

@@ -18,19 +18,16 @@ MonoBehaviour:
   <Attack>k__BackingField: 4
   <Hp>k__BackingField: 2
   <Description>k__BackingField: Dominate
-  <CardType>k__BackingField: 1
-  <RarityCard>k__BackingField: 1
+  <CardType>k__BackingField: 0
+  <Avatar>k__BackingField: {fileID: 2100000, guid: 65f01c8352597d24c8d3fb7b401ef55d,
+    type: 2}
+  <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
-  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: b5d40463c5e276e4ea5e9e0e4f5c2ae8, type: 2}
-  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 02f43cb0982622442a21753e8b3fb7a3, type: 2}
-  <InBoardAvatar>k__BackingField: {fileID: 0}
-  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 5fd46fe8174235f499cc43b2295827ad, type: 3}
-  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 408970054ed5b4b448ba46c785a2bd65, type: 3}
   CardEffects: []
   references:
     version: 2

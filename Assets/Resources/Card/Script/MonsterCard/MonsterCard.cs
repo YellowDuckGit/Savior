@@ -1,5 +1,4 @@
-﻿
-using Assets.GameComponent.Card.CardComponents.Script;
+﻿using Assets.GameComponent.Card.CardComponents.Script;
 using Assets.GameComponent.Card.CardComponents.Script.UI;
 using Assets.GameComponent.Card.Logic.Effect;
 using Assets.GameComponent.Card.LogicCard;
@@ -168,7 +167,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             //onPositionChange?.Invoke(value);
         }
     }
- 
+
     public int Attack
     {
         get
@@ -399,6 +398,10 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         get; set;
     }
 
+    public bool IsInTurn
+    {
+        get; set;
+    }
 
     #endregion
 
@@ -786,7 +789,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.Append($"[MONSTER] {Name}{{{Cost}}} {Attack}|{Hp}");
+        builder.Append($"[MONSTER] {Name}{{{Cost}}} {Attack}|{Hp} [{photonView.ViewID}]");
         //IEffectAttributes effectAttributes = this;
         //builder.AppendLine(this.debug("-", new
         //{

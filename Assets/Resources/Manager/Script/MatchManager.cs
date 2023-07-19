@@ -141,7 +141,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => SkipTurnEvent());
         //UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
-        
+
         turnPresent = K_PlayerSide.Blue;
         /*
          * Regist function process for local event
@@ -188,7 +188,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         if(card != null)
         {
-            Destroy(card.gameObject); //destroy spell card after use
+            card.transform.SetParent(null);
+            card.gameObject.SetActive(false); //destroy spell card after use
         }
 
         /*
@@ -335,14 +336,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
         /*
          * Create and set up for each card in desk
          */
-        if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
-        {
-            yield return StartCoroutine(bluePlayer.deck.CreateMonsterCardsInDeckMatch());
-        }
-        else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
-        {
-            yield return StartCoroutine(redPlayer.deck.CreateMonsterCardsInDeckMatch());
-        }
+
+        yield return StartCoroutine(LocalPlayer.deck.CreateMonsterCardsInDeckMatch());
+
 
         yield return new WaitUntil(() =>
         {
@@ -354,13 +350,42 @@ public class MatchManager : MonoBehaviourPunCallbacks
             return bluePlayer.deck.Full
              && redPlayer.deck.Full;
         });
-        //print string of card in desk with format <index>. <card> [id] \newline
-        var deskBlue = bluePlayer.deck.GetAll();
-        print("BLUEDECK" + string.Join("\n", deskBlue.Select(c => string.Format("{0}. {1} [{2}]", deskBlue.IndexOf(c), c, c.photonView.ViewID))));
-        var deskred = redPlayer.deck.GetAll();
-        print("REDDECK" + string.Join("\n", deskred.Select(c => string.Format("{0}. {1} [{2}]", deskred.IndexOf(c), c, c.photonView.ViewID))));
+
+        ExitGames.Client.Photon.Hashtable _myRoomCustomProperties = new ExitGames.Client.Photon.Hashtable();
+        _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        //upload local instancd deck to custom room properties
+        if(localPlayerSide == K_PlayerSide.Red)
+        {
+            _myRoomCustomProperties[K_Player.OrderInstanceCardRed] = string.Join("@", redPlayer.deck.GetAll().Select(card => card.photonView.ViewID));
+            print(this.debug("send Template (Red): \n" + _myRoomCustomProperties[K_Player.OrderInstanceCardRed]));
+            PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+        }
+        else if(localPlayerSide == K_PlayerSide.Blue)
+        {
+            _myRoomCustomProperties[K_Player.OrderInstanceCardBlue] = string.Join("@", bluePlayer.deck.GetAll().Select(card => card.photonView.ViewID));
+            print(this.debug("send Template (Blue): \n" + _myRoomCustomProperties[K_Player.OrderInstanceCardBlue]));
+            PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+        }
+        else
+        {
+            Debug.LogError("Local player side is not set");
+        }
+
+        /*
+         * Sync opposite player's deck photon view id and card in deck
+         */
 
         yield return StartCoroutine(Next());
+
+        yield return StartCoroutine(SyncOppositePlayerDeck());
+
+
+        //print string of card in desk with format <index>. <card> [id] \newline
+        var deskBlue = bluePlayer.deck.GetAll();
+        print("BLUEDECK" + string.Join("\n", deskBlue.Select(c => string.Format("{0}. {1}", deskBlue.IndexOf(c), c))));
+        var deskred = redPlayer.deck.GetAll();
+        print("REDDECK" + string.Join("\n", deskred.Select(c => string.Format("{0}. {1}", deskred.IndexOf(c), c))));
 
         //yield return new WaitUntil(() => !bluePlayer.deck.cards.Any(a => a.BaseMonsterData == null)
         //        && !redPlayer.deck.cards.Any(a => a.BaseMonsterData == null));
@@ -373,6 +398,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         yield return StartCoroutine(ProvideMP(initialMana, bluePlayer));
         yield return StartCoroutine(ProvideMP(initialMana, redPlayer));
 
+        yield return StartCoroutine(Next());
         //draw amout of card when start match
         if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
@@ -383,12 +409,31 @@ public class MatchManager : MonoBehaviourPunCallbacks
         {
             yield return StartCoroutine(DrawPhase(5, redPlayer));
         }
-        yield return StartCoroutine(Next());
 
         yield return new WaitForSeconds(3);
         UIMatchManager.instance.TurnLoadingScene(false);
+    }
 
-  
+    private IEnumerator SyncOppositePlayerDeck()
+    {
+        yield return new WaitUntil(() => PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(K_Player.OrderInstanceCardBlue) && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(K_Player.OrderInstanceCardRed));
+
+        List<int> oppositeDeckOrder = null;
+        if(localPlayerSide == K_PlayerSide.Red)
+        {
+            var deckOrder = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.OrderInstanceCardBlue].ToString().Split('@');
+            oppositeDeckOrder = deckOrder.Select(int.Parse).ToList();
+        }
+        else if(localPlayerSide == K_PlayerSide.Blue)
+        {
+            var deckOrder = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.OrderInstanceCardRed].ToString().Split('@');
+            oppositeDeckOrder = deckOrder.Select(int.Parse).ToList();
+        }
+        else
+        {
+            Debug.LogError("Local player side is not set");
+        }
+        yield return StartCoroutine(OpponentPlayer.deck.SetOrderInstanceCard(oppositeDeckOrder));
         CameraManager.instance.OnclickSwitchCameraNormal();
     }
 
@@ -555,6 +600,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     IEnumerator EndRound()
     {
         this.PostEvent(EventID.OnEndRound, this);
+        yield return StartCoroutine(EffectManager.Instance.ExecuteOnEndRound(this));
         //TODO: Event end round
         print(this.debug());
         yield return null;
