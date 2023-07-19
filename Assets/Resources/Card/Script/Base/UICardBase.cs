@@ -1,5 +1,6 @@
 ﻿using Assets.GameComponent.Card.CardComponents.Script.UI;
 using Assets.GameComponent.Card.Logic.ConditionTrigger.Round;
+using EPOOutline;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     [SerializeField] protected MeshRenderer _avatar;
     /*For debug*/
     [SerializeField] protected T _cardTarget;
-    protected GameObject _outline;
+    protected Outlinable _outline;
 
     public abstract CardAnimationController Controller
     {
@@ -47,7 +48,7 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     {
         get; set;
     }
-    public abstract GameObject UIOutline
+    public abstract Outlinable UIOutline
     {
         get; set;
     }
@@ -263,14 +264,6 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     #region Animation 
     public void EnterCard()
     {
-        //turn on effect
-
-        //this.OriginPostion = _cardTarget.gameObject.transform.localPosition;
-        //this.OriginRotation = _cardTarget.gameObject.transform.localRotation.eulerAngles;
-        //_cardTarget.gameObject.transform.localPosition = new Vector3(this.OriginPostion.x + offsetPostionEnter.x,
-        //                                        this.OriginPostion.y + offsetPostionEnter.y,
-        //                                        offsetPostionEnter.z);
-        //_cardTarget.gameObject.transform.localRotation = Quaternion.Euler(RotationEnter);
         print("PlayeHover");
         Controller.PlayHover();
 
@@ -278,9 +271,6 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
 
     public void UnEnterCard()
     {
-        //turn off effect
-        //_cardTarget.gameObject.transform.localPosition = this.OriginPostion;
-        //_cardTarget.gameObject.transform.localRotation = Quaternion.Euler(this.OriginRotation);
         print("UnEnterCard");
         Controller.PlayUnHover();
 
@@ -292,7 +282,7 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         if(this._outline != null)
         {
             this._isForcus = true;
-            this._outline.SetActive(true);
+            this._outline.enabled = true;
         }
         return this.IsForcus;
     }
@@ -303,7 +293,7 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         {
             this._isForcus = false;
             if(!_cardTarget.IsSelected)
-                this._outline.SetActive(false);
+                this._outline.enabled = false;
         }
         return this.IsForcus;
     }
@@ -319,9 +309,9 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
             Renderer rend = this._outline.GetComponent<Renderer>();
             originalColor = rend.material.color;
             rend.material.color = new Color(0.5f, 1, 1);
-            this._outline.SetActive(true);
+            this._outline.enabled = true;
         }
-        return this._outline.activeSelf;
+        return this._outline.isActiveAndEnabled;
     }
 
     public bool UnSelectCard()
@@ -333,9 +323,9 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
             //_card.IsSelected = false;
             Renderer rend = this._outline.GetComponent<Renderer>();
             rend.material.color = originalColor;
-            this._outline.SetActive(false);
+            this._outline.enabled = false;
         }
-        return this._outline.activeSelf;
+        return this._outline.isActiveAndEnabled;
     }
 
     #endregion

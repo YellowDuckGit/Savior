@@ -121,10 +121,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public GamePhase gamePhase = GamePhase.Normal;
     #endregion
 
-    //use for find game object side in editor
-    public string blueSideGameObjectName;
-    public string redSideGameObjectName;
-
     //defind what side of local client side
     public string localPlayerSide;
 
@@ -146,9 +142,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => SkipTurnEvent());
         //UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
         
-
-        blueSideGameObjectName = blueSide.name;
-        redSideGameObjectName = redSide.name;
         turnPresent = K_PlayerSide.Blue;
         /*
          * Regist function process for local event
@@ -529,6 +522,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
             bluePlayerTokken = (Enum.GetName(typeof(GameTokken), bluePlayer.tokken))
         }));
 
+        UIMatchManager.instance.ChangeTokken();
+
+
         SetRightToAttack();
         if(!AttributeGained.ContainsKey(round))
         {
@@ -737,6 +733,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 blueTokken = Enum.GetName(typeof(GameTokken), bluePlayer.tokken),
                 redTokken = Enum.GetName(typeof(GameTokken), redPlayer.tokken)
             }));
+
+            UIMatchManager.instance.ChangeTokken();
         }
         else
         {

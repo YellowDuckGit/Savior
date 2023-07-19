@@ -57,6 +57,15 @@ public class UIMatchManager : MonoBehaviour
     //[Space(5)]
     //[SerializeField] Button ACT_SkipTurn;
 
+    public MMFeedbacksSequencer MMFeedbacksSequencerAttackRed;
+    public MMFeedbacksSequencer MMFeedbacksSequencerAttackBlue;
+    public MMFeedbacksSequencer MMFeedbacksSequencerDefendRed;
+    public MMFeedbacksSequencer MMFeedbacksSequencerDefendBlue;
+
+    private EnumDefine.GameTokken lastRedTokken = EnumDefine.GameTokken.None;
+    private EnumDefine.GameTokken lastBlueTokken = EnumDefine.GameTokken.None;
+
+
     private void Awake()
     {
         //DontDestroyOnLoad(gameObject);
@@ -187,6 +196,30 @@ public class UIMatchManager : MonoBehaviour
     //    get { return T_ACT_SkipTurn.text; }
     //    set { this.T_ACT_SkipTurn.text = value; }
     //}
+
+  
+
+    public void ChangeTokken()
+    {
+        if(MatchManager.instance.redPlayer.tokken == EnumDefine.GameTokken.Attack)
+        {
+            MMFeedbacksSequencerAttackRed.PlaySequence();
+        }else if (MatchManager.instance.redPlayer.tokken == EnumDefine.GameTokken.Defend)
+        {
+            MMFeedbacksSequencerDefendRed.PlaySequence();
+        }
+
+        if (MatchManager.instance.bluePlayer.tokken == EnumDefine.GameTokken.Attack)
+        {
+            MMFeedbacksSequencerAttackBlue.PlaySequence();
+        }
+        else if (MatchManager.instance.bluePlayer.tokken == EnumDefine.GameTokken.Defend)
+        {
+            MMFeedbacksSequencerDefendBlue.PlaySequence();
+        }
+
+
+    }
 
     string ResultMatch
     {

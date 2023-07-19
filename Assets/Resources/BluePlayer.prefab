@@ -1856,6 +1856,18 @@ PrefabInstance:
       propertyPath: ObservedComponents.Array.data[0]
       value: 
       objectReference: {fileID: 3551832618827241097}
+    - target: {fileID: 4403763123870663439, guid: 9edc2c0cd642ecf4d88736169c11b98e, type: 3}
+      propertyPath: LayoutElements.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403763123870663439, guid: 9edc2c0cd642ecf4d88736169c11b98e, type: 3}
+      propertyPath: ElementRotations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4403763123870663439, guid: 9edc2c0cd642ecf4d88736169c11b98e, type: 3}
+      propertyPath: ElementRotations.Array.data[0].w
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6710953167965678889, guid: 9edc2c0cd642ecf4d88736169c11b98e, type: 3}
       propertyPath: m_Name
       value: DeckZone_Blue

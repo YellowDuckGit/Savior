@@ -277,6 +277,27 @@ public class AnimationCardManager : MonoBehaviour
 
         mMF_Player.AddFeedback(position);
 
+        MMF_Rotation rotation = new MMF_Rotation();
+        rotation.AnimateRotationTarget = targetAnimated;
+
+        rotation.Mode = MMF_Rotation.Modes.Additive;
+        rotation.FeedbackDuration = 0.2f;
+        rotation.RemapCurveZero = 0f;
+        rotation.RemapCurveOne = 1f;
+
+        position.AnimateX = false;
+        position.AnimateY = true;
+        position.AnimateZ = false;
+
+        position.AnimatePositionTweenY = new MMTweenType(Hover_curve);
+        position.AnimatePositionCurveY = Hover_curve;
+
+        position.InitialPositionTransform = targetAnimated.transform;
+        position.InitialPosition = new Vector3(0f, 0f, 0f);
+
+        mMF_Player.AddFeedback(position);
+
+
         mMF_Player.Initialization();
 
         return mMF_Player;

@@ -62,18 +62,19 @@ public class CardAnimationController : MonoBehaviour
 
     public void PlayHover()
     {
-
         MMF_Hover.StopFeedbacks();
-        MMF_Hover.Direction = MMFeedbacks.Directions.BottomToTop;
+        MMF_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
         MMF_Hover.PlayFeedbacks();
+
     }
 
     public void PlayUnHover()
     {
         MMF_Hover.StopFeedbacks();
-        MMF_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
+        MMF_Hover.Direction = MMFeedbacks.Directions.BottomToTop;
         MMF_Hover.PlayFeedbacks();
     }
+      
 
     public void PlayGetDame()
     {

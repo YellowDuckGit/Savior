@@ -276,7 +276,7 @@ public class SpellCard : CardBase, ISpellCard
             if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
                 //get player, hand, deck
-                GameObject side = GameObject.Find(MatchManager.instance.redSideGameObjectName);
+                GameObject side = GameObject.Find(MatchManager.instance.redSide.name);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
                 hand = CardPlayer.GetComponentInChildren<Hand>();
                 deck = CardPlayer.GetComponentInChildren<Deck>();
@@ -298,7 +298,7 @@ public class SpellCard : CardBase, ISpellCard
             else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 //get player, hand, deck
-                GameObject side = GameObject.Find(MatchManager.instance.blueSideGameObjectName);
+                GameObject side = GameObject.Find(MatchManager.instance.blueSide.name);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
                 hand = CardPlayer.GetComponentInChildren<Hand>();
                 deck = CardPlayer.GetComponentInChildren<Deck>();
@@ -322,7 +322,7 @@ public class SpellCard : CardBase, ISpellCard
             {
                 //set parent
                 //get player, hand, deck
-                GameObject side = GameObject.Find(MatchManager.instance.blueSideGameObjectName);
+                GameObject side = GameObject.Find(MatchManager.instance.blueSide.name);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
                 hand = CardPlayer.GetComponentInChildren<Hand>();
                 deck = CardPlayer.GetComponentInChildren<Deck>();
@@ -341,7 +341,7 @@ public class SpellCard : CardBase, ISpellCard
             else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 //get player, hand, deck
-                GameObject side = GameObject.Find(MatchManager.instance.redSideGameObjectName);
+                GameObject side = GameObject.Find(MatchManager.instance.redSide.name);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
                 hand = CardPlayer.GetComponentInChildren<Hand>();
                 deck = CardPlayer.GetComponentInChildren<Deck>();
