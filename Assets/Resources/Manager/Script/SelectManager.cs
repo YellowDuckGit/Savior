@@ -77,6 +77,11 @@ namespace Assets.GameComponent.Manager
 
         private void OnLeftClickCard(CardBase cardBase)
         {
+            print(nameof(OnLeftClickCard));
+
+            if(cardBase != null) print("CardBase != null");
+
+            print(cardBase.IsSelectAble);
             /*
              * kiểm tra có thể chọn được hay không(selectAble)
              * nếu chọn được thì đã chọn đủ chưa
@@ -86,8 +91,11 @@ namespace Assets.GameComponent.Manager
 
             if(cardBase.IsSelectAble)
             {
-                if(cardBase.Position == CardPosition.InHand)
+                print("IsSelectAble");
+
+                if (cardBase.Position == CardPosition.InHand)
                 {
+                    print("Card In Hand");
                     if(!cardBase.IsSelected)
                     {
                         var selectedCards = cardBase.CardPlayer.hand.GetAllCardSelected();
@@ -118,83 +126,7 @@ namespace Assets.GameComponent.Manager
                     }
                 }
             }
-            //if (cardBase is MonsterCard monsterCard)
-            //{
-            //    if (monsterCard.IsSelectAble)
-            //    {
-            //        if (monsterCard.Position == CardPosition.InHand)
-            //        {
-            //            if (!monsterCard.IsSelected)
-            //            {
-            //                var selectedCards = monsterCard.CardPlayer.hand.GetAllCardSelected();
-            //                if (selectedCards.Count > 0)
-            //                {
-            //                    selectedCards.ForEach(card => card.IsSelected = false);
-            //                    print($"Unselect {selectedCards.Count} cards");
-            //                }
-            //                monsterCard.IsSelected = true;
-            //            }
-            //            else
-            //            {
-            //                print(this.debug($"Card {monsterCard} have been selected"));
-            //            }
-            //        }
-            //        else if (monsterCard.Position == CardPosition.InSummonField || monsterCard.Position == CardPosition.InFightField)
-            //        {
-            //            print(this.debug("Select card on field"));
-
-            //            //check if in pharse atk or defense --> user can select card in summon field to move this in action file
-            //            if (!monsterCard.IsSelected)
-            //            {
-            //                monsterCard.IsSelected = true; //co the select nhieu monstercard trong 2 field nay 
-            //            }
-            //            else
-            //            {
-            //                monsterCard.IsSelected = false;
-            //            }
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    if (cardBase is SpellCard spellCard)
-            //    {
-            //        if (spellCard.IsSelectAble)
-            //        {
-            //            if (spellCard.Position == CardPosition.InHand)
-            //            {
-            //                if (!spellCard.IsSelected)
-            //                {
-            //                    var selectedCards = spellCard.CardPlayer.hand.GetAllCardSelected();
-            //                    if (selectedCards.Count > 0)
-            //                    {
-            //                        selectedCards.ForEach(card => card.IsSelected = false);
-            //                        print($"Unselect {selectedCards.Count} cards");
-            //                    }
-            //                    spellCard.IsSelected = true;
-            //                }
-            //                else
-            //                {
-            //                    print(this.debug($"Card {spellCard} have been selected"));
-            //                }
-            //            }
-            //            else if (spellCard.Position == CardPosition.InSummonField || spellCard.Position == CardPosition.InFightField)
-            //            {
-            //                print(this.debug("Select card on field"));
-
-            //                //check if in pharse atk or defense --> user can select card in summon field to move this in action file
-            //                if (!spellCard.IsSelected)
-            //                {
-            //                    spellCard.IsSelected = true; //co the select nhieu monstercard trong 2 field nay 
-            //                }
-            //                else
-            //                {
-            //                    spellCard.IsSelected = false;
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+       
         }
 
         private void ObjectSelected(object selectedTarget)

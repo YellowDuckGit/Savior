@@ -20,8 +20,6 @@ MonoBehaviour:
   <Description>k__BackingField: Grant Dominate. If enemy BackBone has  10 or more,
     give me +3|0
   <CardType>k__BackingField: 0
-  <Avatar>k__BackingField: {fileID: 2100000, guid: 20eafb80027ea4e4abc88ea8ff61d721,
-    type: 2}
   <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
@@ -29,14 +27,18 @@ MonoBehaviour:
   <IsDominating>k__BackingField: 1
   <IsBlockAttack>k__BackingField: 1
   <IsBlockDefend>k__BackingField: 0
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 346b517f2bb6f8b4fb2240250dd93155, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 8ebd5b6233c772947a9a6b88fcb6a4f4, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 2bbbfa5ac740bc144ae135b81e229c5a, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 28b37746dd7766e4da5f4039cd9dbf9b, type: 3}
   CardEffects:
   - rid: 3819367381030141952
   references:
     version: 2
     RefIds:
     - rid: 3819367381030141952
-      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
@@ -53,40 +55,34 @@ MonoBehaviour:
         Actions:
         - rid: 3819367381030141957
     - rid: 3819367381030141954
-      type: {class: PlayerTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.PlayerTarget,
-        asm: Assembly-CSharp}
+      type: {class: PlayerTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.PlayerTarget, asm: Assembly-CSharp}
       data:
         side: 2
         playerOptions:
         - rid: 3819367381030141955
     - rid: 3819367381030141955
-      type: {class: PlayerTarget/TargetPlayerOption/TargetPlayerOtpHP, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.PlayerTarget,
-        asm: Assembly-CSharp}
+      type: {class: PlayerTarget/TargetPlayerOption/TargetPlayerOtpHP, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.PlayerTarget, asm: Assembly-CSharp}
       data:
         value:
           rid: 3819367381030141956
     - rid: 3819367381030141956
-      type: {class: AbstractTarget/AbstractTargetDataType/AbstractTargetDataTypeValue/ValueNumber,
-        ns: Assets.GameComponent.Card.Logic.TargetObject.Target, asm: Assembly-CSharp}
+      type: {class: AbstractTarget/AbstractTargetDataType/AbstractTargetDataTypeValue/ValueNumber, ns: Assets.GameComponent.Card.Logic.TargetObject.Target, asm: Assembly-CSharp}
       data:
         comepare: 2
         number: 10
     - rid: 3819367381030141957
-      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
-        asm: Assembly-CSharp}
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
       data:
         target:
           rid: 3819367381030141959
         Effects:
         - rid: 3819367381030141958
     - rid: 3819367381030141958
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
         Attack: 2
         Hp: 0
         InTurn: 0
     - rid: 3819367381030141959
-      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self,
-        asm: Assembly-CSharp}
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}

@@ -218,6 +218,8 @@ public class SpellCard : CardBase, ISpellCard
         set
         {
             this._normalAvatar = value;
+            OnPropertyChanged(nameof(NormalAvatar));
+
         }
     }
     public override Material InDeckAvatar

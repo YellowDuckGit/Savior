@@ -23,7 +23,7 @@ public class HP : MonoBehaviour
         set
         {
             number = value;
-            textMeshPro.text = "HP: " + number.ToString();
+            textMeshPro.text = number.ToString();
             if (number <= 0)
             {
                 MatchManager.instance.ResultMatch(WinCondition.EnemyLoseAllHp);

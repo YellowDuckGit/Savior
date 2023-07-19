@@ -194,7 +194,7 @@ namespace AClockworkBerry
             while (queue.Count > TotalRows)
                 queue.Dequeue();
 
-            if (Input.GetKeyDown(KeyCode.C))
+            if (Input.GetKeyDown(KeyCode.F5))
             {
                 enableLogger();
             }

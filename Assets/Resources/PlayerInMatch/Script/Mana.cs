@@ -17,7 +17,7 @@ public class Mana : MonoBehaviour
         set
         {
             number = value;
-            textMeshPro.text = "Mana: " + number.ToString();
+            textMeshPro.text = number.ToString();
         }
     
     }

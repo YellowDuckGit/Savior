@@ -272,6 +272,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         set
         {
             _normalAvatar = value;
+            OnPropertyChanged(nameof(NormalAvatar));
         }
     }
     public override Material InDeckAvatar

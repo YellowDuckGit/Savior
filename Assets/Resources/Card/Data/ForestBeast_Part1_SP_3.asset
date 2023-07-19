@@ -18,26 +18,27 @@ MonoBehaviour:
   <SpellType>k__BackingField: 1
   <Description>k__BackingField: Grant +2|+1 and Dominate to 2 allies in this round
   <CardType>k__BackingField: 1
-  <Avatar>k__BackingField: {fileID: 2100000, guid: 1ac27d0fcde76e549a6d7b3c1d7fb7c7,
-    type: 2}
   <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 1
+  <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 2cc074a43691b93409d806f51284a357, type: 2}
+  <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 77cdcb36d5ac44a499e369de5affbd45, type: 2}
+  <InBoardAvatar>k__BackingField: {fileID: 0}
+  <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: d80348244736cf5449643dd735617ce1, type: 3}
+  <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 34119c41d9704984ba4e3063fca88d44, type: 3}
   CardEffect:
   - rid: 3819367381030141960
   references:
     version: 2
     RefIds:
     - rid: 3819367381030141960
-      type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon,
-        asm: Assembly-CSharp}
+      type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
         - rid: 3819367381030141963
         - rid: 3819367381030141969
     - rid: 3819367381030141963
-      type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject,
-        asm: Assembly-CSharp}
+      type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject, asm: Assembly-CSharp}
       data:
         selectTargets:
         - target:
@@ -46,8 +47,7 @@ MonoBehaviour:
           - rid: 3819367381030141966
           - rid: 3819367381030141967
     - rid: 3819367381030141964
-      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         owner: 1
         cardPosition: 4
@@ -57,13 +57,11 @@ MonoBehaviour:
           rid: 3819367381030141965
         match: {fileID: 0}
     - rid: 3819367381030141965
-      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         monsterOptions: []
     - rid: 3819367381030141966
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
         Attack: 2
@@ -77,8 +75,7 @@ MonoBehaviour:
           rid: 3819367381030141968
         InTurn: 1
     - rid: 3819367381030141968
-      type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain,
-        asm: Assembly-CSharp}
+      type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
       data:
         _IsCharming: 0
         _IsTreating: 0
@@ -86,8 +83,7 @@ MonoBehaviour:
         _IsBlockAttack: 0
         _IsBlockDefend: 0
     - rid: 3819367381030141969
-      type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject,
-        asm: Assembly-CSharp}
+      type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject, asm: Assembly-CSharp}
       data:
         selectTargets:
         - target:
@@ -96,8 +92,7 @@ MonoBehaviour:
           - rid: 3819367381030141972
           - rid: 3819367381030141973
     - rid: 3819367381030141970
-      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         owner: 1
         cardPosition: 4
@@ -107,13 +102,11 @@ MonoBehaviour:
           rid: 3819367381030141971
         match: {fileID: 0}
     - rid: 3819367381030141971
-      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget,
-        asm: Assembly-CSharp}
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
         monsterOptions: []
     - rid: 3819367381030141972
-      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect,
-        asm: Assembly-CSharp}
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
         Attack: 2
@@ -127,8 +120,7 @@ MonoBehaviour:
           rid: 3819367381030141974
         InTurn: 1
     - rid: 3819367381030141974
-      type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain,
-        asm: Assembly-CSharp}
+      type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
       data:
         _IsCharming: 0
         _IsTreating: 0

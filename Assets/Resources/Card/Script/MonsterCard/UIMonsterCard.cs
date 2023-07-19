@@ -356,13 +356,11 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                         // Gán giá trị của thuộc tính CardType của nguồn cho thuộc tính CardType của đích
                         this.CardType = source.CardType;
                         break;
-                    // Nếu thuộc tính là Avatar
-                    case nameof(Avatar):
+                    case nameof(NormalAvatar):
                         // Gán giá trị của thuộc tính Avatar của nguồn cho thuộc tính Avatar của đích
                         this.Avatar = source.NormalAvatar;
-
+                        print("Gan NormalAvatar");
                         break;
-                    // Nếu thuộc tính là RarityCard
                     case nameof(RarityCard):
                         // Gán giá trị của thuộc tính RarityCard của nguồn cho thuộc tính RarityCard của đích
                         this.RarityCard = source.RarityCard;

@@ -146,10 +146,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
         /*
          * Regist function process for local event
          */
-        //this.RegisterListener(EventID.OnMoveCardToSummonZone, param => MoveCardToSummonZoneEvent((string)param));
-        //this.RegisterListener(EventID.OnMoveCardToFightZone, param => MoveCardToFightZoneEvent((string)param));
-        //this.RegisterListener(EventID.OnSummonMonster, param => SummonCardEvent(param as SummonArgs));
-        //this.RegisterListener(EventID.OnMoveCardInTriggerSpell, param => MoveCardInTriggerSpellEvent(param as MoveCardInTriggerSpellArgs));
+        this.RegisterListener(EventID.OnMoveCardToSummonZone, param => MoveCardToSummonZoneEvent((string)param));
+        this.RegisterListener(EventID.OnMoveCardToFightZone, param => MoveCardToFightZoneEvent((string)param));
+        this.RegisterListener(EventID.OnSummonMonster, param => SummonCardEvent(param as SummonArgs));
+        this.RegisterListener(EventID.OnMoveCardInTriggerSpell, param => MoveCardInTriggerSpellEvent(param as MoveCardInTriggerSpellArgs));
         StartCoroutine(InitalGameProcess());
     }
 

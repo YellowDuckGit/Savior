@@ -264,16 +264,14 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     #region Animation 
     public void EnterCard()
     {
-        print("PlayeHover");
-        Controller.PlayHover();
-
+        if((this.CardTarget.Position == CardPosition.InHand))
+            Controller.PlayHover();
     }
 
     public void UnEnterCard()
     {
-        print("UnEnterCard");
-        Controller.PlayUnHover();
-
+        if ((this.CardTarget.Position == CardPosition.InHand))
+            Controller.PlayUnHover();
     }
 
     public bool FocusCard()

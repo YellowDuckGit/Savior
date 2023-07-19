@@ -1,0 +1,132 @@
+# Blender MTL File: 'None'
+# Material Count: 10
+
+newmtl aiStandardSurface1.002
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface1_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface1_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface1_Metallic.png
+
+newmtl aiStandardSurface10.001
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface10_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface10_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface10_Metallic.png
+
+newmtl aiStandardSurface11.001
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface12_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface12_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface12_Metallic.png
+
+newmtl aiStandardSurface12.001
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface11_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface11_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface11_Metallic.png
+
+newmtl aiStandardSurface2.003
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface2_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface2_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface2_Metallic.png
+
+newmtl aiStandardSurface3.002
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface3_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface3_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface3_Metallic.png
+
+newmtl aiStandardSurface4.001
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface4_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface4_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface4_Metallic.png
+
+newmtl aiStandardSurface6.002
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface6_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface6_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface6_Metallic.png
+
+newmtl aiStandardSurface8.001
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface8_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface8_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface8_Metallic.png
+
+newmtl aiStandardSurface9.001
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface9_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface9_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Display\\Display_low_aiStandardSurface9_Metallic.png
