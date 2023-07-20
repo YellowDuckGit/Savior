@@ -166,7 +166,7 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
                     this.RegionCard = source.RegionCard;
                     break;
                 case nameof(NormalAvatar):
-                    this.NormalAvatar = source.NormalAvatar;
+                    this.Avatar = source.NormalAvatar;
                     break;
                 case nameof(InDeckAvatar):
                     this.InDeckAvatar = source.InDeckAvatar;
