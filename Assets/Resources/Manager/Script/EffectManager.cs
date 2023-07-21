@@ -1560,9 +1560,16 @@ public class EffectManager : MonoBehaviourPun
                         {
                             if(cardBase.CardPlayer == MatchManager.instance.LocalPlayer)
                             {
-                                yield return StartCoroutine(ExecuteActions(data.register, data.Actions));
+                                if(cardBase.Position != CardPosition.InGraveyard)
+                                {
+                                    yield return StartCoroutine(ExecuteActions(data.register, data.Actions));
 
-                                yield return StartCoroutine(RemoveIfOneTime(datas, data));
+                                    yield return StartCoroutine(RemoveIfOneTime(datas, data));
+                                }
+                                else
+                                {
+                                    yield return new WaitUntil(() => datas.Remove(data));
+                                }
                             }
                             else
                             {
