@@ -113,6 +113,15 @@ public static class CommonFunction
             a.IsBlockAttack == b.IsBlockAttack &&
             a.IsBlockDefend == b.IsBlockDefend;
     }
+    public static int IntegerLerp(int fromValue, int toValue, float t)
+    {
+        t = Mathf.Clamp01(t);
+
+
+        int result = Mathf.RoundToInt(fromValue + (toValue - fromValue) * t);
+
+        return result;
+    }
 }
 public static class ListExtensions
 {
@@ -318,6 +327,8 @@ public static class ListExtensions
                 };
         }
     }
+
+  
 }
 public static class DebugHelper
 {

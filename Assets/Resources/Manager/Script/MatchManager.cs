@@ -394,10 +394,13 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //yield return StartCoroutine(UIMatchManager.instance.flipUI());
 
         //provide initial resource
-        yield return StartCoroutine(ProvideHP(initialHP, bluePlayer));
-        yield return StartCoroutine(ProvideHP(initialHP, redPlayer));
-        yield return StartCoroutine(ProvideMP(initialMana, bluePlayer));
-        yield return StartCoroutine(ProvideMP(initialMana, redPlayer));
+        SetLimitHP(initialHP, bluePlayer);
+        SetLimitHP(initialHP, redPlayer);
+        SetLimitMP(initialMana, bluePlayer);
+        SetLimitMP(initialMana, redPlayer);
+
+
+
 
         yield return StartCoroutine(Next());
         //draw amout of card when start match
@@ -543,8 +546,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
 
         //provide Mana
-        yield return StartCoroutine(ProvideMP(1, bluePlayer));
-        yield return StartCoroutine(ProvideMP(1, redPlayer));
+        ProvideMP(1, bluePlayer);
+        ProvideMP(1, redPlayer);
+
+        ProvideHP(initialHP, bluePlayer);
+        ProvideHP(initialHP, redPlayer);
 
         print(this.debug("Change Tokken at new round", new
         {
@@ -825,21 +831,32 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// Provide HP for player
     /// </summary>
     /// <returns></returns>
-    IEnumerator ProvideHP(int amount, CardPlayer cardPlayer)
+    /// 
+
+    public void SetLimitHP(int amount, CardPlayer cardPlayer)
     {
         //Provide HP Step
         cardPlayer.hp.Limit += amount;
-        yield return null;
+    }
+
+    public void SetLimitMP(int amount, CardPlayer cardPlayer)
+    {
+        //Provide HP Step
+        cardPlayer.mana.Limit += amount;
+    }
+
+    void ProvideHP(int amount, CardPlayer cardPlayer)
+    {
+        cardPlayer.mana.Number += amount;
     }
     /// <summary>
     /// Provide MP for player
     /// </summary>
     /// <returns></returns>
-    IEnumerator ProvideMP(int amount, CardPlayer cardPlayer)
+    void ProvideMP(int amount, CardPlayer cardPlayer)
     {
-        //Provide HP Step
-        cardPlayer.mana.Limit += amount;
-        yield return null;
+        cardPlayer.hp.Number += amount;
+
     }
     #endregion
 
