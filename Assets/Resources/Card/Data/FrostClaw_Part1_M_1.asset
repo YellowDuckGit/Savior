@@ -47,6 +47,7 @@ MonoBehaviour:
       data:
         EventID: 15
         LifeTime: 1
+        WhenDie: 0
         Actions:
         - rid: 1073283051609128962
         - rid: 4170877821461463041
@@ -76,6 +77,6 @@ MonoBehaviour:
       type: {class: CreateCard, ns: Assets.GameComponent.Card.Logic.Effect.CreateCard, asm: Assembly-CSharp}
       data:
         pitch: []
-        CardTarget: {fileID: 11400000, guid: d263a8480b11a6c4b8e7e62738e1dd49, type: 2}
+        CardTarget: {fileID: 11400000, guid: 41299358343df1749a5668bec7122bb3, type: 2}
         owner: 1
         CardPosition: 2

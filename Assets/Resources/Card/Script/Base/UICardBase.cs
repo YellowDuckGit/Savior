@@ -112,6 +112,14 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         }
         set
         {
+            if (value)
+            {
+                EnterCard();
+            }
+            else
+            {
+                UnEnterCard();
+            }
             _isSelected = value;
         }
     }
@@ -124,14 +132,14 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         }
         set
         {
-            if(value)
-            {
-                EnterCard();
-            }
-            else
-            {
-                UnEnterCard();
-            }
+            //if(value)
+            //{
+            //    EnterCard();
+            //}
+            //else
+            //{
+            //    UnEnterCard();
+            //}
             _isEnter = value;
         }
     }

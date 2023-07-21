@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit_FX_Liquid Red
+  m_Name: Unlit_FX_Liquid HP Red
   m_Shader: {fileID: 4800000, guid: b9c2c9bd3dd0a5e449e2bbd1dae9e7b2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -33,10 +33,10 @@ Material:
     - _Freq: 13.12
     - _Line: 0
     - _LineSmooth: 0
-    - _RimPower: 4
+    - _RimPower: 10
     m_Colors:
     - _FoamColor: {r: 1, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 0.3193932, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 0.72075474, b: 0.72075474, a: 1}
+    - _Tint: {r: 0.16981131, g: 0, b: 0, a: 1}
     - _TopColor: {r: 0.3207547, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

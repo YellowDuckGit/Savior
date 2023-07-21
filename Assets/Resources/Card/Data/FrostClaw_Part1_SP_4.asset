@@ -25,7 +25,32 @@ MonoBehaviour:
   <InBoardAvatar>k__BackingField: {fileID: 0}
   <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: f0f9dbdd222fba8429f814c7bb78493d, type: 3}
   <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: e8d1f6b2c8ce8944b8dec7b0e65d50e2, type: 3}
-  CardEffect: []
+  CardEffect:
+  - rid: 3530786280913240068
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3530786280913240068
+      type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 3530786280913240069
+    - rid: 3530786280913240069
+      type: {class: SpecifyAction, ns: Assets.GameComponent.Card.Logic.Actions.Specify, asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 3530786280913240070
+        Effects:
+        - rid: 3530786280913240071
+    - rid: 3530786280913240070
+      type: {class: SpecifyAction/SpecifyType/SpecifyCardPlayer, ns: Assets.GameComponent.Card.Logic.Actions.Specify, asm: Assembly-CSharp}
+      data:
+        side: 1
+    - rid: 3530786280913240071
+      type: {class: CreateCard, ns: Assets.GameComponent.Card.Logic.Effect.CreateCard, asm: Assembly-CSharp}
+      data:
+        pitch: []
+        CardTarget: {fileID: 11400000, guid: b0c84a52d1f59254a802b54e17bda2b2, type: 2}
+        owner: 1
+        CardPosition: 4

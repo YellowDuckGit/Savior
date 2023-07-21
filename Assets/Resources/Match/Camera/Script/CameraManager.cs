@@ -23,10 +23,6 @@ public class CameraManager : MonoBehaviour
     public MMF_Player BlueCameraFeedBacks;
     public MMF_Player RedCameraFeedBacks;
 
-    public CinemachineVirtualCamera BlueCardCamera;
-    public CinemachineVirtualCamera RedCardCamera;
-
-
     //[SerializeField] Button B_Normal;
     //[SerializeField] Button B_Board;
     //[SerializeField] Button B_Hand;
@@ -60,7 +56,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void SwitchCamera(ChanelCamera chanel, Transform Card = null)
+    public void SwitchCamera(ChanelCamera chanel, CardBase Card = null)
     {
         lastChannel = presentChannel;
         presentChannel = (int)chanel;
@@ -91,7 +87,9 @@ public class CameraManager : MonoBehaviour
                     mMF_Feedbacks[(int)ChanelCamera.SkipTurn].Play(Vector3.zero, 1f);
                     break;
                 case ChanelCamera.Card:
-                    BlueCardCamera.Follow = Card;
+                    MMF_CinemachineTransition mMF_CinemachineTransition = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Card];
+                    CinemachineVirtualCamera virtualCamera = mMF_CinemachineTransition.TargetVirtualCamera;
+                    virtualCamera.Follow = Card.transform;
                     mMF_Feedbacks[(int)ChanelCamera.Card].Play(Vector3.zero, 1f);
                     break;
             }
@@ -119,7 +117,9 @@ public class CameraManager : MonoBehaviour
                     mMF_Feedbacks[(int)ChanelCamera.SkipTurn].Play(Vector3.zero, 1f);
                     break;
                 case ChanelCamera.Card:
-                    RedCardCamera.Follow = Card;
+                     MMF_CinemachineTransition mMF_CinemachineTransition = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Card];
+                    CinemachineVirtualCamera virtualCamera = mMF_CinemachineTransition.TargetVirtualCamera;
+                    virtualCamera.Follow = Card.transform;
                     mMF_Feedbacks[(int)ChanelCamera.Card].Play(Vector3.zero, 1f);
                     break;
             }

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit_FX_Liquid Blue
+  m_Name: Unlit_FX_Liquid Mana Red
   m_Shader: {fileID: 4800000, guid: b9c2c9bd3dd0a5e449e2bbd1dae9e7b2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -33,10 +33,10 @@ Material:
     - _Freq: 8
     - _Line: 0
     - _LineSmooth: 0
-    - _RimPower: 4
+    - _RimPower: 10
     m_Colors:
     - _FoamColor: {r: 0.03268242, g: 0, b: 1, a: 1}
-    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 0, g: 0.019644806, b: 0.5566038, a: 1}
+    - _RimColor: {r: 0.72075474, g: 0.7390659, b: 1, a: 1}
+    - _Tint: {r: 0, g: 0.0066436003, b: 0.18867922, a: 1}
     - _TopColor: {r: 0.0009248842, g: 0, b: 0.23584908, a: 1}
   m_BuildTextureStacks: []
