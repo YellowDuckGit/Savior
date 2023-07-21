@@ -66,7 +66,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         get
         {
-            if (_OppnentPlayer != null)
+            if(_OppnentPlayer != null)
             {
                 return _OppnentPlayer;
             }
@@ -132,7 +132,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         //DontDestroyOnLoad(gameObject);
-        if (instance != null && instance != this)
+        if(instance != null && instance != this)
         {
             UnityEngine.Debug.LogError("MatchManager have 2");
             Destroy(gameObject);
@@ -160,7 +160,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public void StoreGainedAttributeAction(string attributeName)
     {
-        if (!AttributeGained.ContainsKey(round))
+        if(!AttributeGained.ContainsKey(round))
         {
             AttributeGained[round].Add(attributeName);
         }
@@ -191,7 +191,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         player.mana.Number -= card.Cost;
         yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(card));
 
-        if (card != null)
+        if(card != null)
         {
             card.transform.SetParent(null);
             card.gameObject.SetActive(false); //destroy spell card after use
@@ -200,7 +200,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         /*
          * just local player get and excute effect first, after that async player opposite
          */
-        if (card.SpellType == SpellType.Slow)
+        if(card.SpellType == SpellType.Slow)
         {
             SwitchTurnAction();
         }
@@ -240,15 +240,15 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         localPlayerSide = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.K_PlayerSide.key].ToString();
 
-        if (localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+        if(localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
             LocalPlayer = PhotonNetwork.Instantiate("BluePlayer", positionBlue, Quaternion.Euler(rotationBlue)).GetComponent<CardPlayer>();
         }
-        else if (localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+        else if(localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
         {
             LocalPlayer = PhotonNetwork.Instantiate("RedPlayer", positionRed, Quaternion.Euler(rotationRed)).GetComponent<CardPlayer>();
         }
-        yield return null;
+        yield return new WaitUntil(() => redPlayer != null && bluePlayer != null);
     }
     /// <summary>
     /// Set data all zone from player side (CardPlayer, MatchManager)
@@ -262,13 +262,13 @@ public class MatchManager : MonoBehaviourPunCallbacks
             NumberSummonZone = bluePlayer.summonZones.Count
         }));
 
-        foreach (SummonZone summonZone in bluePlayer.summonZones)
+        foreach(SummonZone summonZone in bluePlayer.summonZones)
         {
             summonZone.player = bluePlayer;
             summonZone.matchManager = this;
         }
 
-        foreach (FightZone fightZone in bluePlayer.fightZones)
+        foreach(FightZone fightZone in bluePlayer.fightZones)
         {
             fightZone.player = bluePlayer;
             fightZone.matchManager = this;
@@ -282,13 +282,13 @@ public class MatchManager : MonoBehaviourPunCallbacks
             playerNotNull = redPlayer != null,
             NumberSummonZone = redPlayer.summonZones.Count
         }));
-        foreach (SummonZone summonZone in redPlayer.summonZones)
+        foreach(SummonZone summonZone in redPlayer.summonZones)
         {
             summonZone.player = redPlayer;
             summonZone.matchManager = this;
         }
 
-        foreach (FightZone fightZone in redPlayer.fightZones)
+        foreach(FightZone fightZone in redPlayer.fightZones)
         {
             fightZone.player = redPlayer;
             fightZone.matchManager = this;
@@ -323,10 +323,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         yield return StartCoroutine(PlayerInit());
 
-
-
-        yield return new WaitUntil(() => redPlayer != null && bluePlayer != null);
-
         PlayerSetTokken();
 
         SetUpField();
@@ -360,13 +356,13 @@ public class MatchManager : MonoBehaviourPunCallbacks
         _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
 
         //upload local instancd deck to custom room properties
-        if (localPlayerSide == K_PlayerSide.Red)
+        if(localPlayerSide == K_PlayerSide.Red)
         {
             _myRoomCustomProperties[K_Player.OrderInstanceCardRed] = string.Join("@", redPlayer.deck.GetAll().Select(card => card.photonView.ViewID));
             print(this.debug("send Template (Red): \n" + _myRoomCustomProperties[K_Player.OrderInstanceCardRed]));
             PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
         }
-        else if (localPlayerSide == K_PlayerSide.Blue)
+        else if(localPlayerSide == K_PlayerSide.Blue)
         {
             _myRoomCustomProperties[K_Player.OrderInstanceCardBlue] = string.Join("@", bluePlayer.deck.GetAll().Select(card => card.photonView.ViewID));
             print(this.debug("send Template (Blue): \n" + _myRoomCustomProperties[K_Player.OrderInstanceCardBlue]));
@@ -405,12 +401,12 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         yield return StartCoroutine(Next());
         //draw amout of card when start match
-        if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+        if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
             yield return StartCoroutine(DrawPhase(5, bluePlayer));
 
         }
-        else if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+        else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
         {
             yield return StartCoroutine(DrawPhase(5, redPlayer));
         }
@@ -424,12 +420,12 @@ public class MatchManager : MonoBehaviourPunCallbacks
         yield return new WaitUntil(() => PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(K_Player.OrderInstanceCardBlue) && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(K_Player.OrderInstanceCardRed));
 
         List<int> oppositeDeckOrder = null;
-        if (localPlayerSide == K_PlayerSide.Red)
+        if(localPlayerSide == K_PlayerSide.Red)
         {
             var deckOrder = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.OrderInstanceCardBlue].ToString().Split('@');
             oppositeDeckOrder = deckOrder.Select(int.Parse).ToList();
         }
-        else if (localPlayerSide == K_PlayerSide.Blue)
+        else if(localPlayerSide == K_PlayerSide.Blue)
         {
             var deckOrder = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.OrderInstanceCardRed].ToString().Split('@');
             oppositeDeckOrder = deckOrder.Select(int.Parse).ToList();
@@ -450,7 +446,15 @@ public class MatchManager : MonoBehaviourPunCallbacks
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         var requestComplete = PhotonNetwork.RaiseEvent((byte)RaiseEvent.NEXT_STEP, datas, raiseEventOptions, SendOptions.SendUnreliable);
 
-        yield return new WaitUntil(() => requestComplete && OpponentPlayer.isNEXT_STEP && LocalPlayer.isNEXT_STEP);
+        yield return new WaitUntil(() =>
+        {
+            print(this.debug("wait next", new
+            {
+                local = OpponentPlayer.isNEXT_STEP,
+                opponent = LocalPlayer.isNEXT_STEP
+            }));
+            return requestComplete && OpponentPlayer.isNEXT_STEP && LocalPlayer.isNEXT_STEP;
+        });
 
         OpponentPlayer.isNEXT_STEP = false;
         LocalPlayer.isNEXT_STEP = false;
@@ -475,13 +479,13 @@ public class MatchManager : MonoBehaviourPunCallbacks
             yield return StartCoroutine(BeginRound());
             yield return StartCoroutine(MiddleRound());
             yield return StartCoroutine(EndRound());
-        } while (!isEndMatch);
+        } while(!isEndMatch);
         yield return null;
     }
     IEnumerator EndMatch()
     {
         print(this.debug("End Match"));
-        switch (FindMatchSystem.instance.gameMode)
+        switch(FindMatchSystem.instance.gameMode)
         {
             case GameMode.Normal:
                 yield return StartCoroutine(ProvideReward(false));
@@ -529,11 +533,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
             MatchManager.instance.localPlayerSide
         }));
 
-        if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+        if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
             yield return StartCoroutine(DrawPhase(1, bluePlayer));
         }
-        else if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+        else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
         {
             yield return StartCoroutine(DrawPhase(1, redPlayer));
         }
@@ -550,7 +554,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
          * at the first round not change tokken by using default tokken (Blue attack first)
          * at the another round when new round then 2 player change tokken
          */
-        if (round > 1)
+        if(round > 1)
             ChangeToken();
 
         /*
@@ -576,7 +580,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
 
         SetRightToAttack();
-        if (!AttributeGained.ContainsKey(round))
+        if(!AttributeGained.ContainsKey(round))
         {
             {
                 AttributeGained.Add(round, new List<string>());
@@ -630,7 +634,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 redSkip = redPlayer.isSkipTurn,
                 blueSkip = bluePlayer.isSkipTurn
             }));
-        } while (!isNextRound() && !isEndMatch); //run until 2 player skip turn or end match
+        } while(!isNextRound() && !isEndMatch); //run until 2 player skip turn or end match
         ResetSkipTurn();
         yield return null;
     }
@@ -645,7 +649,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         /*
          * SetUp UI for player
          */
-        if (localPlayerSide.Equals(turnPresent))
+        if(localPlayerSide.Equals(turnPresent))
         {
             //UIMatchManager.instance.Turn = "Your Turn";
             //UIMatchManager.instance.GetACT_SkipTurn.interactable = true;
@@ -736,7 +740,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     public CardPlayer getCurrenPlayer()
     {
-        if (turnPresent == K_PlayerSide.Red)
+        if(turnPresent == K_PlayerSide.Red)
             return redPlayer;
 
         return bluePlayer;
@@ -750,7 +754,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         print(this.debug());
         //check who is current player then set the tokken attack to the player 
-        if (bluePlayer != null && redPlayer != null)
+        if(bluePlayer != null && redPlayer != null)
         {
             bluePlayer.tokken = GameTokken.Attack; //blue player alway set attack tokken first
             redPlayer.tokken = GameTokken.Defend;
@@ -778,7 +782,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             blueTokken = Enum.GetName(typeof(GameTokken), bluePlayer.tokken),
             redTokken = Enum.GetName(typeof(GameTokken), redPlayer.tokken)
         }));
-        if (bluePlayer != null && redPlayer != null)
+        if(bluePlayer != null && redPlayer != null)
         {
             ((bluePlayer.tokken, bluePlayer.isAttackAvaliable), (redPlayer.tokken, redPlayer.isAttackAvaliable)) = bluePlayer.tokken == GameTokken.Attack ? ((GameTokken.Defend, false), (GameTokken.Attack, true)) : ((GameTokken.Attack, true), (GameTokken.Defend, false));
             print(this.debug("After change tokken", new
@@ -851,11 +855,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         int eloBlue = Int32.Parse(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloBlue].ToString());
         int eloRed = Int32.Parse(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloRed].ToString());
 
-        if (isBlueWin)
+        if(isBlueWin)
         {
-            if (localPlayerSide.Equals(K_PlayerSide.Blue)) //win
+            if(localPlayerSide.Equals(K_PlayerSide.Blue)) //win
             {
-                switch (FindMatchSystem.instance.gameMode)
+                switch(FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
                         rewardID = rewardWinNormalID;
@@ -866,9 +870,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
                         break;
                 }
             }
-            else if (localPlayerSide.Equals(K_PlayerSide.Red)) //lose
+            else if(localPlayerSide.Equals(K_PlayerSide.Red)) //lose
             {
-                switch (FindMatchSystem.instance.gameMode)
+                switch(FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
                         rewardID = rewardLoseNormalID;
@@ -881,11 +885,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        else if (isRedWin)
+        else if(isRedWin)
         {
-            if (localPlayerSide.Equals(K_PlayerSide.Blue)) //lose
+            if(localPlayerSide.Equals(K_PlayerSide.Blue)) //lose
             {
-                switch (FindMatchSystem.instance.gameMode)
+                switch(FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
                         rewardID = rewardLoseNormalID;
@@ -896,9 +900,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
                         break;
                 }
             }
-            else if (localPlayerSide.Equals(K_PlayerSide.Red)) //win
+            else if(localPlayerSide.Equals(K_PlayerSide.Red)) //win
             {
-                switch (FindMatchSystem.instance.gameMode)
+                switch(FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
                         rewardID = rewardWinNormalID;
@@ -911,7 +915,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (rewardID != "")
+        if(rewardID != "")
         {
             StartCoroutine(PlayfabManager.instance.BuyItems(catalog: "Reward", storeId: "BS1", new List<ItemPurchaseRequest>()
             {
@@ -920,11 +924,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
 
         //set UI
-        if (localPlayerSide.Equals(K_PlayerSide.Blue))
+        if(localPlayerSide.Equals(K_PlayerSide.Blue))
         {
             //yield return StartCoroutine(UIMatchManager.instance.setResultMatch(isBlueWin, isRanked, 2));
         }
-        else if (localPlayerSide.Equals(K_PlayerSide.Red))
+        else if(localPlayerSide.Equals(K_PlayerSide.Red))
         {
             //yield return StartCoroutine(UIMatchManager.instance.setResultMatch(isRedWin, isRanked, 2));
         }
@@ -933,19 +937,19 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
     public void ResultMatch(WinCondition winCondition)
     {
-        if (!isEndMatch)
+        if(!isEndMatch)
         {
             print("Wincondition");
             isEndMatch = true;
-            switch (winCondition)
+            switch(winCondition)
             {
                 case WinCondition.EnemyLoseAllHp:
-                    if (redPlayer.hp.Number <= 0)
+                    if(redPlayer.hp.Number <= 0)
                     {
                         isBlueWin = true;
                         isRedWin = false;
                     }
-                    else if (bluePlayer.hp.Number <= 0)
+                    else if(bluePlayer.hp.Number <= 0)
                     {
                         isBlueWin = false;
                         isRedWin = true;
@@ -970,11 +974,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
             eventName = Enum.GetName(typeof(RaiseEvent), (byte)obj.Code),
             code = obj.Code
         }));
-        switch ((RaiseEvent)obj.Code)
+        switch((RaiseEvent)obj.Code)
         {
             case RaiseEvent.NEXT_STEP:
                 {
-                    if (args.senderPlayerSide != localPlayerSide)
+                    if(args.senderPlayerSide != localPlayerSide)
                     {
                         StartCoroutine(OpponentPlayer.NextStepAction(args.isNEXT_STEP));
                     }
@@ -1019,10 +1023,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
                         zoneRequest = zoneRequest
                     }));
 
-                    if (zoneRequest != null)
+                    if(zoneRequest != null)
                     {
                         MonsterCard card = null;
-                        switch ((CardPosition)args.cardPosition)
+                        switch((CardPosition)args.cardPosition)
                         {
                             case CardPosition.InDeck:
                                 card = zoneRequest.player.deck.PeekWithPhoton(args.cardID);
@@ -1050,7 +1054,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
                             card
                         }));
 
-                        if (card != null)
+                        if(card != null)
                         {
                             print(this.debug("", new
                             {
@@ -1076,12 +1080,12 @@ public class MatchManager : MonoBehaviourPunCallbacks
             case RaiseEvent.MoveCardInTriggerSpell:
                 {
                     CardPlayer player = args.playerSide == K_PlayerSide.Red ? redPlayer : bluePlayer;
-                    if (player != null)
+                    if(player != null)
                     {
                         object card = player.hand.PeekWithPhoton(args.cardID);
                         /*zoneRequest.player.hand.GetAllCardInHand().Find(a => a.photonView.ViewID.Equals(args.cardID));*/
 
-                        if (card != null && card is SpellCard spellCard)
+                        if(card != null && card is SpellCard spellCard)
                         {
                             StartCoroutine(MoveCardInTriggerSpellAction(player, spellCard));
                         }
@@ -1104,7 +1108,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             card.CardPlayer.side,
             isSpecialSummon
         }));
-        if (zoneRequest != null && card != null)
+        if(zoneRequest != null && card != null)
         {
             StartCoroutine(SummonCardAction(zoneRequest, card, isSpecialSummon));
         }
@@ -1129,7 +1133,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //TODO: check condition summon
         //TODO: summon
         //TODO: raise even for oppoence player to update UI
-        if (args.card == null || args.summonZone.isFilled())
+        if(args.card == null || args.summonZone.isFilled())
         {
             print(this.debug("not valid card or summon zone is fill", new
             {
@@ -1144,7 +1148,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             args.summonZone.player.mana.Number
         }));
         //tru mana
-        if (!args.isSpecialSummon && args.card.Cost > args.summonZone.player.mana.Number)
+        if(!args.isSpecialSummon && args.card.Cost > args.summonZone.player.mana.Number)
         {
             print(this.debug("not enough mana to summon"));
             return false;
@@ -1187,7 +1191,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         zoneRequest.SetMonsterCard(card);
         zoneRequest.isSelected = false;
-        if (!isSpecialSummon)
+        if(!isSpecialSummon)
             zoneRequest.player.mana.Number -= card.Cost;
         /*
          * just local player get and excute effect first, after that async player opposite
@@ -1206,7 +1210,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public void AttackEvent()
     {
         print("OnclickAttack");
-        if (LocalPlayer.tokken == GameTokken.Attack)
+        if(LocalPlayer.tokken == GameTokken.Attack)
         {
             object[] datas = new object[] { localPlayerSide };
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
@@ -1260,7 +1264,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
          * when attack Event have been processed 
          * set denfense Event to local player
          */
-        if (LocalPlayer.tokken == GameTokken.Defend)
+        if(LocalPlayer.tokken == GameTokken.Defend)
         {
             /*
              * Change the skip button to defense button
@@ -1345,11 +1349,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         {
             playerSide
         }));
-        if (playerSide.Equals(K_PlayerSide.Blue))
+        if(playerSide.Equals(K_PlayerSide.Blue))
         {
             bluePlayer.isSkipTurn = true;
         }
-        else if (playerSide.Equals(K_PlayerSide.Red))
+        else if(playerSide.Equals(K_PlayerSide.Red))
         {
             redPlayer.isSkipTurn = true;
         }
@@ -1361,22 +1365,22 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region *LOCAL* Event - Action
     private void MoveCardToSummonZoneEvent(string playerSide)
     {
-        if (playerSide.Equals(localPlayerSide))
+        if(playerSide.Equals(localPlayerSide))
         {
-            if (localPlayerSide.Equals(K_PlayerSide.Blue))
+            if(localPlayerSide.Equals(K_PlayerSide.Blue))
             {
                 int count = bluePlayer.fightZones.FindAll(a => a.monsterCard != null).Count;
                 print("Number Card in Fight Field: " + count);
-                if (count == 0)
+                if(count == 0)
                 {
                     SetSkipAction();
                 }
             }
-            else if (localPlayerSide.Equals(K_PlayerSide.Red))
+            else if(localPlayerSide.Equals(K_PlayerSide.Red))
             {
                 int count = redPlayer.fightZones.FindAll(a => a.monsterCard != null).Count;
                 print("Number Card in Fight Field: " + count);
-                if (count == 0)
+                if(count == 0)
                 {
                     SetSkipAction();
                 }
@@ -1386,11 +1390,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     private void MoveCardToFightZoneEvent(string playerSide)
     {
-        if (playerSide.Equals(localPlayerSide) && isRightToDefense(playerSide))
+        if(playerSide.Equals(localPlayerSide) && isRightToDefense(playerSide))
         {
             SetDefenseAction();
         }
-        else if (playerSide.Equals(localPlayerSide) && isRightToAttack(playerSide))
+        else if(playerSide.Equals(localPlayerSide) && isRightToAttack(playerSide))
         {
             SetAttackAction();
         }
@@ -1400,7 +1404,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region Functions Check State
     public bool isPlayerTurn(string playerSide)
     {
-        if (turnPresent.Equals(playerSide))
+        if(turnPresent.Equals(playerSide))
         {
             return true;
         }
@@ -1410,11 +1414,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public bool isRightToAttack(string playerSide)
     {
-        if (playerSide.Equals(K_PlayerSide.Blue))
+        if(playerSide.Equals(K_PlayerSide.Blue))
         {
             return bluePlayer.tokken == GameTokken.Attack && bluePlayer.isAttackAvaliable;
         }
-        else if (playerSide.Equals(K_PlayerSide.Red))
+        else if(playerSide.Equals(K_PlayerSide.Red))
         {
             return redPlayer.tokken == GameTokken.Attack && redPlayer.isAttackAvaliable;
         }
@@ -1424,11 +1428,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public bool isRightToDefense(string playerSide)
     {
-        if (playerSide.Equals(K_PlayerSide.Blue))
+        if(playerSide.Equals(K_PlayerSide.Blue))
         {
             return bluePlayer.tokken == GameTokken.Defend;
         }
-        else if (playerSide.Equals(K_PlayerSide.Red))
+        else if(playerSide.Equals(K_PlayerSide.Red))
         {
             return redPlayer.tokken == GameTokken.Defend;
         }
@@ -1486,7 +1490,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             localPlayerSide
         }));
         //UI
-        if (LocalPlayer.tokken == GameTokken.Attack)
+        if(LocalPlayer.tokken == GameTokken.Attack)
         {
             //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Attack";
             UIMatchManager.instance.RightAttack();
@@ -1528,16 +1532,16 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     void ClearAttackField(string playerSide)
     {
-        if (playerSide.Equals(K_PlayerSide.Blue))
+        if(playerSide.Equals(K_PlayerSide.Blue))
         {
-            foreach (FightZone fightZone in bluePlayer.fightZones)
+            foreach(FightZone fightZone in bluePlayer.fightZones)
             {
-                if (fightZone.monsterCard != null && !fightZone.monsterCard.Position.Equals(CardPosition.InGraveyard))
+                if(fightZone.monsterCard != null && !fightZone.monsterCard.Position.Equals(CardPosition.InGraveyard))
                 {
                     //int indexFightZone = bluePlayer.fightZones.IndexOf(fightZone);
                     //int indexSummonZone = indexFightZone;
                     SummonZone summonZone = bluePlayer.summonZones.FirstOrDefault(zone => !zone.isFilled() && !zone.isSelected);
-                    if (summonZone != null)
+                    if(summonZone != null)
                         summonZone.RaiseMoveCardFromAttackFieldToSummonField(fightZone, fightZone.monsterCard);
                     else
                         Debug.LogError(this.debug("not any summon empty"));
@@ -1549,16 +1553,16 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        else if (playerSide.Equals(K_PlayerSide.Red))
+        else if(playerSide.Equals(K_PlayerSide.Red))
         {
-            foreach (FightZone fightZone in redPlayer.fightZones)
+            foreach(FightZone fightZone in redPlayer.fightZones)
             {
-                if (fightZone.monsterCard != null && !fightZone.monsterCard.Position.Equals(CardPosition.InGraveyard))
+                if(fightZone.monsterCard != null && !fightZone.monsterCard.Position.Equals(CardPosition.InGraveyard))
                 {
                     //int indexFightZone = redPlayer.fightZones.IndexOf(fightZone);
                     //int indexSummonZone = indexFightZone;
                     SummonZone summonZone = redPlayer.summonZones.FirstOrDefault(zone => !zone.isFilled() && !zone.isSelected);
-                    if (summonZone != null)
+                    if(summonZone != null)
                         summonZone.RaiseMoveCardFromAttackFieldToSummonField(fightZone, fightZone.monsterCard);
                     else
                         Debug.LogError(this.debug("not any summon empty"));
@@ -1573,9 +1577,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     void AttackZoneOpposite(List<FightZone> attackZones, List<FightZone> defenseZones)
     {
-        foreach (FightZone attackZone in attackZones)
+        foreach(FightZone attackZone in attackZones)
         {
-            if (attackZone.monsterCard != null)
+            if(attackZone.monsterCard != null)
             {
                 int indexAttackZone = attackZones.IndexOf(attackZone);
                 MonsterCard monsterAttack = attackZone.monsterCard;
@@ -1584,7 +1588,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 MonsterCard monsterDefense = defenseZone.GetMonsterCard();
 
                 //true if defense zone opposite exist monster card
-                if (monsterDefense != null)
+                if(monsterDefense != null)
                 {
                     monsterAttack.attack(monsterDefense);
                     monsterDefense.attack(monsterAttack);
@@ -1645,7 +1649,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     {
         //UI_roomID.text = "";
         print("LeftRoom");
-        if (PhotonNetwork.IsConnected)
+        if(PhotonNetwork.IsConnected)
         {
             print("Connected");
             PhotonNetwork.LoadLevel("Home");
