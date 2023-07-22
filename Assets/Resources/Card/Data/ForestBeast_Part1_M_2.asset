@@ -19,8 +19,8 @@ MonoBehaviour:
   <Hp>k__BackingField: 1
   <Description>k__BackingField: When I'm summoned, give me +2|0 and  Dominate in
     this round
-  <CardType>k__BackingField: 1
-  <RarityCard>k__BackingField: 2
+  <CardType>k__BackingField: 0
+  <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
@@ -32,7 +32,46 @@ MonoBehaviour:
   <InBoardAvatar>k__BackingField: {fileID: 0}
   <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 14b51d94002c239449ed15193f1294a8, type: 3}
   <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 1804b6adf58faec498ec156613647cd4, type: 3}
-  CardEffects: []
+  CardEffects:
+  - rid: 3819367292752625664
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3819367292752625664
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 3819367292752625665
+    - rid: 3819367292752625665
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 3819367292752625666
+        Effects:
+        - rid: 3819367292752625667
+        - rid: 3819367292752625668
+    - rid: 3819367292752625666
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
+    - rid: 3819367292752625667
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
+      data:
+        pitch: []
+        Attack: 2
+        Hp: 0
+        InTurn: 1
+    - rid: 3819367292752625668
+      type: {class: Gain, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
+      data:
+        pitch: []
+        _Gain:
+          rid: 3819367292752625669
+        InTurn: 1
+    - rid: 3819367292752625669
+      type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
+      data:
+        _IsCharming: 0
+        _IsTreating: 0
+        _IsDominating: 1
+        _IsBlockAttack: 0
+        _IsBlockDefend: 0

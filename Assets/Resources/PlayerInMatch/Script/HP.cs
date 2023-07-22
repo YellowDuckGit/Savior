@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class HP : MonoBehaviour
 {
-    int number;
+    int number = 0;
     int limit;
     [SerializeField] TextMeshProUGUI textMeshPro;
+    [SerializeField] Liquid liquid;
 
     private void Start()
     {
@@ -22,8 +23,9 @@ public class HP : MonoBehaviour
         }
         set
         {
+            StartCoroutine(IntegerLerpCoroutine(number, value, 2f));
             number = value;
-            textMeshPro.text = "HP: " + number.ToString();
+
             if (number <= 0)
             {
                 MatchManager.instance.ResultMatch(WinCondition.EnemyLoseAllHp);
@@ -41,7 +43,28 @@ public class HP : MonoBehaviour
         set
         {
             limit = value;
-            Number = limit;
+
+        }
+    }
+
+    private IEnumerator IntegerLerpCoroutine(int fromValue, int toValue, float duration)
+    {
+        float elapsedTime = 0;
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+
+            int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
+
+
+            textMeshPro.text = result.ToString();
+
+            if (toValue != 0)
+                liquid.CompensateShapeAmount = result / toValue;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
     }
 

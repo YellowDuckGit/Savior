@@ -69,7 +69,10 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
     public IEnumerator SetupPlayer()
     {
         print(this.debug());
-        if(photonView.IsMine)
+        print("flag"+ MatchManager.instance.blueSide.name);
+        print(MatchManager.instance.redSide.name);
+
+        if (photonView.IsMine)
         {
             print(this.debug("Gain player side IsMine", new
             {
@@ -83,8 +86,11 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
                 side = K_Player.K_PlayerSide.Blue;
 
                 //set parent local player
-                this.gameObject.transform.parent = GameObject.Find(MatchManager.instance.blueSideGameObjectName).transform;
-                matchManager = gameObject.GetComponentInParent<MatchManager>();
+                GameObject sideG = GameObject.Find(MatchManager.instance.blueSide.name);
+                gameObject.transform.parent = sideG.transform;
+                matchManager = sideG.transform.parent.GetComponent<MatchManager>();
+        
+
                 matchManager.bluePlayer = this;
                 summonZones = this.gameObject.transform.parent.GetComponentsInChildren<SummonZone>().ToList();
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
@@ -105,9 +111,10 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
                 name = "RedPlayer";
                 side = K_Player.K_PlayerSide.Red;
 
-                //set parent local player
-                this.gameObject.transform.parent = GameObject.Find(MatchManager.instance.redSideGameObjectName).transform;
-                matchManager = gameObject.GetComponentInParent<MatchManager>();
+                GameObject sideG = GameObject.Find(MatchManager.instance.redSide.name);
+                gameObject.transform.parent = sideG.transform;
+                matchManager = sideG.transform.parent.GetComponent<MatchManager>();
+           
                 matchManager.redPlayer = this;
                 summonZones = this.gameObject.transform.parent.GetComponentsInChildren<SummonZone>().ToList();
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
@@ -137,8 +144,11 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
                 name = "RedPlayer";
                 side = K_Player.K_PlayerSide.Red;
 
-                this.gameObject.transform.parent = GameObject.Find(MatchManager.instance.redSideGameObjectName).transform;
-                matchManager = gameObject.GetComponentInParent<MatchManager>();
+                GameObject sideG = GameObject.Find(MatchManager.instance.redSide.name);
+                gameObject.transform.parent = sideG.transform;
+                matchManager = sideG.transform.parent.GetComponent<MatchManager>();
+          
+
                 matchManager.redPlayer = this;
                 summonZones = this.gameObject.transform.parent.GetComponentsInChildren<SummonZone>().ToList();
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();
@@ -157,8 +167,12 @@ public class CardPlayer : MonoBehaviourPun, IPunObservable, ISelectManagerTarget
                 name = "BluePlayer";
                 side = K_Player.K_PlayerSide.Blue;
 
-                this.gameObject.transform.parent = GameObject.Find(MatchManager.instance.blueSideGameObjectName).transform;
-                matchManager = gameObject.GetComponentInParent<MatchManager>();
+
+                GameObject sideG = GameObject.Find(MatchManager.instance.blueSide.name);
+                gameObject.transform.parent = sideG.transform;
+                matchManager = sideG.transform.parent.GetComponent<MatchManager>();
+           
+
                 matchManager.bluePlayer = this;
                 summonZones = this.gameObject.transform.parent.GetComponentsInChildren<SummonZone>().ToList();
                 fightZones = this.gameObject.transform.parent.GetComponentsInChildren<FightZone>().ToList();

@@ -68,7 +68,7 @@ using Unity.VisualScripting;
 public class EffectManager : MonoBehaviourPun
 {
     public static EffectManager Instance;
-    public Dictionary<EventID, List<(object register, List<AbstractAction> Actions, LifeTime lifetime)>> EventEffectDispatcher = new();
+    public Dictionary<EventID, List<(object register, List<AbstractAction> Actions, LifeTime lifetime, WhenDie WhenDie)>> EventEffectDispatcher = new();
 
     public EffectStatus status = EffectStatus.none;
 
@@ -190,7 +190,8 @@ public class EffectManager : MonoBehaviourPun
 
                 if(cardBase is SpellCard spellCard)
                 {
-                    Destroy(spellCard.gameObject); //destroy spell card after use
+                    spellCard.transform.SetParent(null);
+                    spellCard.gameObject.SetActive(false); //destroy spell card after use
                 }
             }//else not monster card then use without doing any effect
         } //else continue;
@@ -988,7 +989,7 @@ public class EffectManager : MonoBehaviourPun
                                         zone.isSelected = true;
                                         print(this.debug());
                                         zone.SetMonsterCard(monsterCard);
-
+                                        yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(monsterCard));
                                         Debug.Log(this.debug("End call to SummonCardEvent"));
                                     }
                                     else
@@ -1539,24 +1540,46 @@ public class EffectManager : MonoBehaviourPun
         yield return null;
     }
 
-    private IEnumerator ExecuteOnEndRound(MatchManager matchManager)
+    public IEnumerator ExecuteOnEndRound(MatchManager matchManager)
     {
         print(this.debug());
-        status = EffectStatus.running;
+
         if(EventEffectDispatcher.ContainsKey(EventID.OnEndRound))
         {
             var datas = EventEffectDispatcher[EventID.OnEndRound];
             if(datas != null && datas.Count > 0)
             {
-                for(int i = 0; i < datas.Count; i++)
+                List<(object register, List<AbstractAction>, LifeTime, WhenDie)> removelist = new List<(object register, List<AbstractAction>, LifeTime, WhenDie)>();
+                for(int i = datas.Count - 1; i >= 0; i--)
                 {
+                    status = EffectStatus.running;
                     var data = datas[i];
                     if(data.register != null && data.Actions != null && data.Actions.Count > 0)
                     {
-                        yield return StartCoroutine(ExecuteActions(data.register, data.Actions));
-                        if(data.lifetime == LifeTime.OneTime)
+                        if(data.register is CardBase cardBase)
                         {
-                            datas.Remove(data);
+                            if(cardBase.CardPlayer == MatchManager.instance.LocalPlayer)
+                            {
+                                if(cardBase.Position != CardPosition.InGraveyard)
+                                {
+                                    yield return StartCoroutine(ExecuteActions(data.register, data.Actions));
+
+                                    yield return StartCoroutine(RemoveIfOneTime(datas, data));
+                                }
+                                else
+                                {
+                                    yield return new WaitUntil(() => datas.Remove(data));
+                                }
+                            }
+                            else
+                            {
+                                print(this.debug("player is not the owner of card registed for after summon just watting"));
+                                yield return new WaitUntil(() => this.status != EffectStatus.running);
+                                print(this.debug("Status at effect after summon done", new
+                                {
+                                    status
+                                }));
+                            }
                         }
                     }
                     else
@@ -1589,6 +1612,30 @@ public class EffectManager : MonoBehaviourPun
         yield return null;
     }
 
+    private IEnumerator RemoveIfOneTime(List<(object register, List<AbstractAction> Actions, LifeTime lifetime, WhenDie WhenDie)> datas, (object register, List<AbstractAction> Actions, LifeTime lifetime, WhenDie WhenDie) data)
+    {
+        if(datas.Contains(data))
+        {
+            if(data.lifetime == LifeTime.OneTime)
+            {
+                print(this.debug("remove on end round", new
+                {
+                    data.register,
+                    data.Actions.Count
+                }));
+                yield return new WaitUntil(() => datas.Remove(data));
+            }
+        }
+        else
+        {
+            Debug.LogError(this.debug("data not contains datas", new
+            {
+                data.register
+            }));
+        }
+        yield return null;
+    }
+
     private IEnumerator ExecuteOnStartRound(MatchManager matchManager)
     {
         print(this.debug());
@@ -1601,27 +1648,34 @@ public class EffectManager : MonoBehaviourPun
                 for(int i = 0; i < datas.Count; i++)
                 {
                     var data = datas[i];
-                    if(data.register != null && data.Actions != null && data.Actions.Count > 0)
+                    if(data.WhenDie == WhenDie.RemoveEffect && data.register is MonsterCard card && card.Position == CardPosition.InGraveyard)
                     {
-                        yield return StartCoroutine(ExecuteActions(data.register, data.Actions));
-                        if(data.lifetime == LifeTime.OneTime)
-                        {
-                            datas.Remove(data);
-                        }
+                        print(this.debug("vong if xac dinh la pola vao hom"));
                     }
                     else
                     {
-
-                        Debug.LogError(this.debug("Data null OnEndRound ", new
+                        if(data.register != null && data.Actions != null && data.Actions.Count > 0)
                         {
-                            register = data.register,
-                        }));
-
-                        Debug.LogError(this.debug("Data null OnEndRound ", new
+                            yield return StartCoroutine(ExecuteActions(data.register, data.Actions));
+                            if(data.lifetime == LifeTime.OneTime)
+                            {
+                                datas.Remove(data);
+                            }
+                        }
+                        else
                         {
-                            ActionsCount = data.Actions
-                        }));
-                        yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
+
+                            Debug.LogError(this.debug("Data null OnEndRound ", new
+                            {
+                                register = data.register,
+                            }));
+
+                            Debug.LogError(this.debug("Data null OnEndRound ", new
+                            {
+                                ActionsCount = data.Actions
+                            }));
+                            yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
+                        }
                     }
                 }
             }
@@ -1680,7 +1734,7 @@ public class EffectManager : MonoBehaviourPun
     }
     private void Start()
     {
-        this.RegisterListener(EventID.OnEndRound, param => StartCoroutine(ExecuteOnEndRound(param as MatchManager)));
+        //this.RegisterListener(EventID.OnEndRound, param => StartCoroutine(ExecuteOnEndRound(param as MatchManager)));
         this.RegisterListener(EventID.OnStartRound, param => StartCoroutine(ExecuteOnStartRound(param as MatchManager)));
         this.RegisterListener(EventID.OnCardDamaged, param => StartCoroutine(OnCardDamaged(param as MonsterCard)));
     }

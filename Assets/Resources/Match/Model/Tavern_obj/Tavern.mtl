@@ -1,0 +1,41 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl aiStandardSurface1
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Tavern\\Tavern_low_mặt bàn_BaseColor.png
+map_Ns Tavern\\Tavern_low_mặt bàn_Roughness.png
+refl Tavern\\Tavern_low_mặt bàn_Metallic.png
+
+newmtl aiStandardSurface2
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Tavern\\Tavern_low_khung sắt_BaseColor.png
+map_Ns Tavern\\Tavern_low_khung sắt_Roughness.png
+refl Tavern\\Tavern_low_khung sắt_Metallic.png
+
+newmtl aiStandardSurface3
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Tavern\\Tavern_low_chân bàn_BaseColor.png
+map_Ns Tavern\\Tavern_low_chân bàn_Roughness.png
+refl Tavern\\Tavern_low_chân bàn_Metallic.png

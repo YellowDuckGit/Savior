@@ -8,6 +8,6 @@ public class SwitchTurn : MonoBehaviour
 
     void OnMouseDown()
     {
-        UIMatchManager.instance.SkipTurn();
+        UIMatchManager.instance.ClickSkipTurnModel();
     }
 }

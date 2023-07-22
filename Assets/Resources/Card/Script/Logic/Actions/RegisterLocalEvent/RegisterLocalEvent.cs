@@ -21,12 +21,18 @@ namespace Assets.GameComponent.Card.Logic.RegisterLocalEvent
     {
         LifeTime, OneTime
     }
+
+    public enum WhenDie
+    {
+        Default, RemoveEffect
+    }
     [SRName("Logic/RegisterLocalEvent")]
 
     public class RegisterLocalEvent : AbstractAction
     {
         public EventID EventID;
         public LifeTime LifeTime;
+        public WhenDie WhenDie;
         [SerializeReference]
         [SRLogicCard(typeof(SelectSelf), typeof(Have.Have))]
 
@@ -39,21 +45,21 @@ namespace Assets.GameComponent.Card.Logic.RegisterLocalEvent
             {
                 Event = EventID.ToString()
             }));
-            if (!instance.EventEffectDispatcher.ContainsKey(EventID)) 
+            if(!instance.EventEffectDispatcher.ContainsKey(EventID))
             {
                 Debug.Log(this.debug($"Regist new key {EventID}", new
                 {
                     register,
                     Actions.Count
                 }));
-                instance.EventEffectDispatcher.Add(EventID, new List<(object register, List<AbstractAction>, LifeTime)> {
-                (register, Actions, LifeTime)
+                instance.EventEffectDispatcher.Add(EventID, new List<(object register, List<AbstractAction>, LifeTime, WhenDie)> {
+                (register, Actions, LifeTime, WhenDie)
                 });
             }
             else
             {
                 Debug.Log(this.debug($"Regist add {register} to key {EventID}"));
-                instance.EventEffectDispatcher[EventID].Add((register, Actions, LifeTime));
+                instance.EventEffectDispatcher[EventID].Add((register, Actions, LifeTime, WhenDie));
             }
         }
 

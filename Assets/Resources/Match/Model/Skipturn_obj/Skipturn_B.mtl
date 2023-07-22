@@ -1,0 +1,28 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl aiStandardSurface17
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Skipturn\\Skipturn_low_Thân_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Skipturn\\Skipturn_low_Thân_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Skipturn\\Skipturn_low_Thân_Metallic.png
+
+newmtl aiStandardSurface2.002
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:\\Props_for_Phus_Game\\Textures_all\\Skipturn\\Skipturn_low_đế đèn_BaseColor.png
+map_Ns E:\\Props_for_Phus_Game\\Textures_all\\Skipturn\\Skipturn_low_đế đèn_Roughness.png
+refl E:\\Props_for_Phus_Game\\Textures_all\\Skipturn\\Skipturn_low_đế đèn_Metallic.png

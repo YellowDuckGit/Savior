@@ -48,6 +48,7 @@ MonoBehaviour:
       data:
         EventID: 16
         LifeTime: 0
+        WhenDie: 0
         Actions:
         - rid: 4170877821461463053
     - rid: 4170877821461463053
@@ -68,7 +69,7 @@ MonoBehaviour:
         cardPosition: 2
         Rarity: 0
         region: 0
-        target: {fileID: 11400000, guid: d263a8480b11a6c4b8e7e62738e1dd49, type: 2}
+        target: {fileID: 11400000, guid: 41299358343df1749a5668bec7122bb3, type: 2}
     - rid: 4170877821461463062
       type: {class: SpecifyAction, ns: Assets.GameComponent.Card.Logic.Actions.Specify, asm: Assembly-CSharp}
       data:

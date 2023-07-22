@@ -181,7 +181,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -5276675292705164224}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -216,7 +217,8 @@ MonoBehaviour:
   spacingZ: 0.1
   custom_StartAngleOffset: 90
   RadiusSpace: 10
-  LayoutElements: []
+  LayoutElements:
+  - {fileID: 6510958314301855902}
   ElementDimensions: {x: 1, y: 0.002, z: 1}
   Spacing: 0
   Style: 0
@@ -231,7 +233,8 @@ MonoBehaviour:
   SecondaryAlignmentAxis: 1
   LayoutAxis: 1
   SecondaryLayoutAxis: 1
-  ElementRotations: []
+  ElementRotations:
+  - {x: 0, y: 0, z: 0, w: 1}
   StartPositionOffset: {x: 0, y: 0, z: 0}
   SpiralFactor: 0
   PrimaryAlignment: 0

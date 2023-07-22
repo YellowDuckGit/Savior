@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPOOutline;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public interface IUICardBase
         get; set;
     }
 
-    public GameObject UIOutline
+    public Outlinable UIOutline
     {
         get; set;
     }

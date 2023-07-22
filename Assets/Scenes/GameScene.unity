@@ -80315,8 +80315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41eae213ac1de34ca1415e74a1dc9d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterCardPrefab: {fileID: -4312212746381258581, guid: cb9c9a3bfe331f04a909d8bd9fc06d4e, type: 3}
-  SpellCardPrefab: {fileID: -4312212746381258581, guid: 30eb83a8263a1f04583c395913082857, type: 3}
+  MonsterCardPrefab: {fileID: 5283219395115742526, guid: cb9c9a3bfe331f04a909d8bd9fc06d4e, type: 3}
+  SpellCardPrefab: {fileID: 1626027962554290506, guid: 30eb83a8263a1f04583c395913082857, type: 3}
   packContainer: {fileID: 463539338}
   cardContainer: {fileID: 1217717293}
   card3DInInventories: []

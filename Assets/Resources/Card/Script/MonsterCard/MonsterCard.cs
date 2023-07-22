@@ -1,5 +1,4 @@
-﻿
-using Assets.GameComponent.Card.CardComponents.Script;
+﻿using Assets.GameComponent.Card.CardComponents.Script;
 using Assets.GameComponent.Card.CardComponents.Script.UI;
 using Assets.GameComponent.Card.Logic.Effect;
 using Assets.GameComponent.Card.LogicCard;
@@ -168,7 +167,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             //onPositionChange?.Invoke(value);
         }
     }
- 
+
     public int Attack
     {
         get
@@ -273,6 +272,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         set
         {
             _normalAvatar = value;
+            OnPropertyChanged(nameof(NormalAvatar));
         }
     }
     public override Material InDeckAvatar
@@ -399,6 +399,10 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         get; set;
     }
 
+    public bool IsInTurn
+    {
+        get; set;
+    }
 
     #endregion
 
@@ -786,7 +790,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.Append($"[MONSTER] {Name}{{{Cost}}} {Attack}|{Hp}");
+        builder.Append($"[MONSTER] {Name}{{{Cost}}} {Attack}|{Hp} [{photonView.ViewID}]");
         //IEffectAttributes effectAttributes = this;
         //builder.AppendLine(this.debug("-", new
         //{
@@ -815,7 +819,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
             {
                 //get player, hand, deck
-                GameObject side = GameObject.Find(MatchManager.instance.redSideGameObjectName);
+                GameObject side = GameObject.Find(MatchManager.instance.redSide.name);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
                 Hand = CardPlayer.GetComponentInChildren<Hand>();
                 Deck = CardPlayer.GetComponentInChildren<Deck>();
@@ -831,7 +835,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 //get player, hand, deck
-                GameObject side = GameObject.Find(MatchManager.instance.blueSideGameObjectName);
+                GameObject side = GameObject.Find(MatchManager.instance.blueSide.name);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
                 Hand = CardPlayer.GetComponentInChildren<Hand>();
                 Deck = CardPlayer.GetComponentInChildren<Deck>();
@@ -852,7 +856,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             {
                 //set parent
                 //get player, hand, deck
-                GameObject side = GameObject.Find(MatchManager.instance.blueSideGameObjectName);
+                GameObject side = GameObject.Find(MatchManager.instance.blueSide.name);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
                 Hand = CardPlayer.GetComponentInChildren<Hand>();
                 Deck = CardPlayer.GetComponentInChildren<Deck>();
@@ -871,7 +875,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
             else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             {
                 //get player, hand, deck
-                GameObject side = GameObject.Find(MatchManager.instance.redSideGameObjectName);
+                GameObject side = GameObject.Find(MatchManager.instance.redSide.name);
                 CardPlayer = side.transform.GetComponentInChildren<CardPlayer>();
                 Hand = CardPlayer.GetComponentInChildren<Hand>();
                 Deck = CardPlayer.GetComponentInChildren<Deck>();

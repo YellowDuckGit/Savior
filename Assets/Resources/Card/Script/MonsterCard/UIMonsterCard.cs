@@ -1,4 +1,5 @@
 ﻿using Card;
+using EPOOutline;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -166,7 +167,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         {
             get; set;
         }
-        public override GameObject UIOutline
+        public override Outlinable UIOutline
         {
             get => _outline; set => _outline = value;
         }
@@ -213,7 +214,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                     this.UIAttack = canvas.transform.Find(nameof(Attack)).GetComponent<TextMeshProUGUI>();
                     this.UIHp = canvas.transform.Find(nameof(Hp)).GetComponent<TextMeshProUGUI>();
                     this.UIAvatar = transform.Find(nameof(Avatar)).GetComponent<MeshRenderer>();
-                    this.UIOutline = transform.Find("OutlineCard")?.gameObject;
+                    this.UIOutline = transform.Find("OuterCard")?.gameObject.GetComponent<Outlinable>();
 
                     CardTarget = gameObject.GetComponent<MonsterCard>();
                     if(CardTarget != null)
@@ -310,7 +311,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             this.IsForcus = false;
             //change card from hand to summon zone 
             fightZone.SetMonsterCard(CardTarget);
-            this.UIOutline.SetActive(false);
+            this.UIOutline.enabled = false;
         }
 
 
@@ -355,13 +356,11 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                         // Gán giá trị của thuộc tính CardType của nguồn cho thuộc tính CardType của đích
                         this.CardType = source.CardType;
                         break;
-                    // Nếu thuộc tính là Avatar
-                    case nameof(Avatar):
+                    case nameof(NormalAvatar):
                         // Gán giá trị của thuộc tính Avatar của nguồn cho thuộc tính Avatar của đích
                         this.Avatar = source.NormalAvatar;
-
+                        print("Gan NormalAvatar");
                         break;
-                    // Nếu thuộc tính là RarityCard
                     case nameof(RarityCard):
                         // Gán giá trị của thuộc tính RarityCard của nguồn cho thuộc tính RarityCard của đích
                         this.RarityCard = source.RarityCard;

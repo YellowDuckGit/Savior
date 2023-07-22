@@ -45,7 +45,15 @@ public class UIMatchManager : MonoBehaviour
     [SerializeField] MMF_Player SkipTurnRed;
     [SerializeField] MMF_Player SkipTurnBlue;
 
+    [SerializeField] MMF_Player ATKRed;
+    [SerializeField] MMF_Player ATKBlue;
+
+    [SerializeField] MMF_Player DefenseRed;
+    [SerializeField] MMF_Player DefenseBlue;
+
     public bool SkipTurn_Interactive = true;
+
+    [SerializeField] MatchManager.PlayerAction phaseUI;
 
     //[SerializeField] TextMeshProUGUI T_RightAttack;
     //[SerializeField] TextMeshProUGUI T_ACT_SkipTurn;
@@ -56,6 +64,15 @@ public class UIMatchManager : MonoBehaviour
     //[Header("Button Event")]
     //[Space(5)]
     //[SerializeField] Button ACT_SkipTurn;
+
+    public MMFeedbacksSequencer MMFeedbacksSequencerAttackRed;
+    public MMFeedbacksSequencer MMFeedbacksSequencerAttackBlue;
+    public MMFeedbacksSequencer MMFeedbacksSequencerDefendRed;
+    public MMFeedbacksSequencer MMFeedbacksSequencerDefendBlue;
+
+    private EnumDefine.GameTokken lastRedTokken = EnumDefine.GameTokken.None;
+    private EnumDefine.GameTokken lastBlueTokken = EnumDefine.GameTokken.None;
+
 
     private void Awake()
     {
@@ -103,6 +120,7 @@ public class UIMatchManager : MonoBehaviour
 
     public void Turn(string turn)
     {
+        print("Turn");
         if (K_Player.K_PlayerSide.Blue.Equals(turn))
         {
             lightBlue.PlayFeedbacks();
@@ -112,50 +130,130 @@ public class UIMatchManager : MonoBehaviour
         }
     }
 
-    public void SkipTurn()
+    public void ClickSkipTurnModel()
     {
         if (SkipTurn_Interactive)
         {
-            if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+            switch (phaseUI)
             {
-                print("SkipTurnBlue.PlayFeedbacks();");
-                SkipTurnBlue.PlayFeedbacks();
+                case MatchManager.PlayerAction.SkipTurn:
+                    if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+                    {
+                        print("SkipTurnBlue.PlayFeedbacks();");
+                        SkipTurnBlue.PlayFeedbacks();
+                    }
+                    else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
+                    {
+                        print("SkipTurnRed.PlayFeedbacks();");
+                        SkipTurnRed.PlayFeedbacks();
+                    }
+                    break;
+                case MatchManager.PlayerAction.Attack:
+                    if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+                    {
+                        print("ATKBlue.PlayFeedbacks();");
+                        ATKBlue.PlayFeedbacks();
+                    }
+                    else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
+                    {
+                        print("ATKRed.PlayFeedbacks();");
+                        ATKRed.PlayFeedbacks();
+                    }
+                    break;
+                case MatchManager.PlayerAction.Defend:
+                    if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+                    {
+                        print("DefenseBlue.PlayFeedbacks();");
+                        DefenseBlue.PlayFeedbacks();
+                    }
+                    else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
+                    {
+                        print("DefenseRed.PlayFeedbacks();");
+                        DefenseRed.PlayFeedbacks();
+                    }
+                    break;
             }
-            else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
-            {
-                print("SkipTurnRed.PlayFeedbacks();");
-                SkipTurnRed.PlayFeedbacks();
-            }
+          
         }
     }
 
     public void setEventSkipTurn(UnityAction function)
     {
+        phaseUI = MatchManager.PlayerAction.SkipTurn;
+
         print("setEventSkipTurn");
         if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
         {
-
-            MMF_Events mMF_PlayerEvents = new MMF_Events();
-
+            MMF_Events mMF_PlayerEvents = SkipTurnBlue.GetFeedbackOfType<MMF_Events>(MMF_Player.AccessMethods.Last,0);
+            mMF_PlayerEvents.PlayEvents.RemoveAllListeners();
             UnityEvent ev2 = new UnityEvent();
             ev2.AddListener(() => function());
             mMF_PlayerEvents.PlayEvents = ev2;
 
-            SkipTurnBlue.AddFeedback(mMF_PlayerEvents);
             SkipTurnBlue.Initialization();
         }
         else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
         {
 
-            MMF_Events mMF_PlayerEvents = new MMF_Events();
-
+            MMF_Events mMF_PlayerEvents = SkipTurnRed.GetFeedbackOfType<MMF_Events>(MMF_Player.AccessMethods.Last, 0);
+            mMF_PlayerEvents.PlayEvents.RemoveAllListeners();
             UnityEvent ev2 = new UnityEvent();
             ev2.AddListener(() => function());
             mMF_PlayerEvents.PlayEvents = ev2;
 
-            SkipTurnRed.AddFeedback(mMF_PlayerEvents);
             SkipTurnRed.Initialization();
 
+        }
+    }
+
+    public void setEventAtk(UnityAction function)
+    {
+        phaseUI = MatchManager.PlayerAction.Attack;
+
+        print("setEventAtk");
+        if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+        {
+            MMF_Events mMF_PlayerEvents = ATKBlue.GetFeedbackOfType<MMF_Events>(MMF_Player.AccessMethods.Last, 0);
+            mMF_PlayerEvents.PlayEvents.RemoveAllListeners();
+            UnityEvent ev2 = new UnityEvent();
+            ev2.AddListener(() => function());
+            mMF_PlayerEvents.PlayEvents = ev2;
+            ATKBlue.Initialization();
+        }
+        else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
+        {
+            MMF_Events mMF_PlayerEvents = ATKRed.GetFeedbackOfType<MMF_Events>(MMF_Player.AccessMethods.Last, 0);
+            mMF_PlayerEvents.PlayEvents.RemoveAllListeners();
+            UnityEvent ev2 = new UnityEvent();
+            ev2.AddListener(() => function());
+            mMF_PlayerEvents.PlayEvents = ev2;
+            ATKRed.Initialization();
+        }
+    }
+
+    public void setEventDefense(UnityAction function)
+    {
+        phaseUI = MatchManager.PlayerAction.Defend;
+
+        print("setEventDefense");
+        if (K_Player.K_PlayerSide.Blue.Equals(MatchManager.instance.localPlayerSide))
+        {
+            MMF_Events mMF_PlayerEvents = DefenseBlue.GetFeedbackOfType<MMF_Events>(MMF_Player.AccessMethods.Last, 0);
+            mMF_PlayerEvents.PlayEvents.RemoveAllListeners();
+            UnityEvent ev2 = new UnityEvent();
+            ev2.AddListener(() => function());
+            mMF_PlayerEvents.PlayEvents = ev2;
+            DefenseBlue.Initialization();
+        }
+        else if (K_Player.K_PlayerSide.Red.Equals(MatchManager.instance.localPlayerSide))
+        {
+
+            MMF_Events mMF_PlayerEvents = DefenseRed.GetFeedbackOfType<MMF_Events>(MMF_Player.AccessMethods.Last, 0);
+            mMF_PlayerEvents.PlayEvents.RemoveAllListeners();
+            UnityEvent ev2 = new UnityEvent();
+            ev2.AddListener(() => function());
+            mMF_PlayerEvents.PlayEvents = ev2;
+            DefenseRed.Initialization();
         }
     }
 
@@ -187,6 +285,30 @@ public class UIMatchManager : MonoBehaviour
     //    get { return T_ACT_SkipTurn.text; }
     //    set { this.T_ACT_SkipTurn.text = value; }
     //}
+
+  
+
+    public void ChangeTokken()
+    {
+        if(MatchManager.instance.redPlayer.tokken == EnumDefine.GameTokken.Attack)
+        {
+            MMFeedbacksSequencerAttackRed.PlaySequence();
+        }else if (MatchManager.instance.redPlayer.tokken == EnumDefine.GameTokken.Defend)
+        {
+            MMFeedbacksSequencerDefendRed.PlaySequence();
+        }
+
+        if (MatchManager.instance.bluePlayer.tokken == EnumDefine.GameTokken.Attack)
+        {
+            MMFeedbacksSequencerAttackBlue.PlaySequence();
+        }
+        else if (MatchManager.instance.bluePlayer.tokken == EnumDefine.GameTokken.Defend)
+        {
+            MMFeedbacksSequencerDefendBlue.PlaySequence();
+        }
+
+
+    }
 
     string ResultMatch
     {

@@ -54,8 +54,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.70017767, y: 0.012479251, z: 1.0159178}
-  m_Center: {x: -0.0011329651, y: 0.002405651, z: 0.0024294853}
+  m_Size: {x: 0.70017767, y: 0.0011890077, z: 1.0159178}
+  m_Center: {x: -0.0011329651, y: -0.000031014322, z: 0.0024294853}
 --- !u!114 &5263831191243616249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +173,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7d37daefb7948f04ca6947c12ae39850, type: 2}
+  - {fileID: 2100000, guid: 2bc82fe357b7f564db3a0b14603c14be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -226,7 +226,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7350744737771663114}
-  - component: {fileID: 2992528730296101832}
   m_Layer: 10
   m_Name: FightZone
   m_TagString: Untagged
@@ -252,27 +251,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2992528730296101832
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8635552488443680262}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.70017767, y: 0.012479251, z: 1.0159178}
-  m_Center: {x: -0.0011329651, y: 0.002405651, z: 0.0024294853}
 --- !u!1 &9138767211173124160
 GameObject:
   m_ObjectHideFlags: 0

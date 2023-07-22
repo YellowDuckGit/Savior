@@ -273,11 +273,6 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         print("DeckCode : " + deckCode);
         List<string> listCardID = deckCode.Split('%').ToList();
         print("Desk before: \n" + string.Join(",", listCardID.ToArray()));
-        if(listCardID != null)
-        {
-            listCardID.Shuffle();
-        }
-        print("Desk after: \n" + string.Join(",", listCardID.ToArray()));
 
         foreach(string str in listCardID)
         {
@@ -335,7 +330,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
             }
             else
             {
-                print(this.debug("Not found type of card data"));
+                Debug.LogError(this.debug("Not found type of card data"));
             }
             yield return new WaitUntil(() => MatchManager.instance.LocalPlayer.initialCardPlace.onReady());
         }
@@ -396,6 +391,54 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
 
     }
 
+    public IEnumerator SetOrderInstanceCard(List<int> oppositeDeckOrder)
+    {
+        print(this.debug("Template: \n" + string.Join("\n", oppositeDeckOrder)));
+        print(this.debug("Before sort: \n" + string.Join("\n", _cards.Select(card => card.photonView.ViewID)), new
+        {
+            _cards.Count,
+            Full
+        }));
+
+        //order with PhotonViewID of card follow oppositeDeckOrder parameter
+        for(int i = 0; i < oppositeDeckOrder.Count; i++)
+        {
+            var card = _cards.FirstOrDefault(a => a.photonView.ViewID == oppositeDeckOrder[i]);
+
+            if(card != null)
+            {
+                if(card != _cards[i])
+                {
+                    print(this.debug("Swap:", new
+                    {
+                        index = i,
+                        id = oppositeDeckOrder[i],
+                        cardSwap = card,
+                        cardSwapIndex = _cards.IndexOf(card),
+                        cardBeingSwap = _cards[i],
+                    }));
+                    //swap
+                    var temp = _cards[i];
+                    _cards[_cards.IndexOf(card)] = temp;
+                    _cards[i] = card;
+                }
+                else
+                {
+                    print(this.debug("equal not swap"));
+                }
+            }
+            else
+            {
+                Debug.LogError(this.debug("Not found card photon id ", new
+                {
+                    id = oppositeDeckOrder[i]
+                }));
+            }
+        }
+        print(this.debug("After sort: \n" + string.Join("\n", _cards.Select(card => card.photonView.ViewID))));
+        yield return null;
+    }
+
     public Vector3 PositionInitialCardInDeck
     {
         private set
@@ -414,7 +457,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         get
         {
-            return _cards.Count == CollectionManager.instance.LimitNumberCardInDeck;
+            return _cards.Count == CollectionManager.instance.LimitNumberCardInDeck && _cards.TrueForAll(card => card != null && card.IsReady);
         }
     }
 }

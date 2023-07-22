@@ -47,14 +47,14 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
 
                     public override void Execute<T, U>(List<U> source, Func<T, int> GetValue)
                     {
-                        for (int i = source.Count - 1; i >= 0; i--)
+                        for(int i = source.Count - 1; i >= 0; i--)
                         {
                             var target = source[i];
                             int input = GetValue((T)target);
 
                             bool flag = false;
 
-                            switch (comepare)
+                            switch(comepare)
                             {
                                 case compareType.equal:
                                     flag = input == number;
@@ -78,7 +78,7 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
                                     Debug.Log("Not found compare type");
                                     break;
                             }
-                            if (!flag)
+                            if(!flag)
                             {
                                 source.RemoveAt(i);
                             }
@@ -97,7 +97,7 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
                         public override void Execute<T, U>(List<U> source, Func<T, int> GetValue)
                         {
                             // Check if the source list is empty
-                            if (source == null || source.Count == 0)
+                            if(source == null || source.Count == 0)
                             {
                                 // Throw an exception or return
                                 throw new ArgumentException("Source list cannot be empty");
@@ -108,13 +108,13 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
                             List<T> highestItems = new List<T>();
 
                             // Loop through the source list
-                            foreach (T item in source)
+                            foreach(T item in source)
                             {
                                 // Get the value of the current item using the GetValue function
                                 int value = GetValue(item);
 
                                 // Compare the value with the highest value so far
-                                if (value > highestValue)
+                                if(value > highestValue)
                                 {
                                     // Update the highest value and clear the list of items with the highest value
                                     highestValue = value;
@@ -122,7 +122,7 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
                                 }
 
                                 // If the value is equal to the highest value, add the item to the list of items with the highest value
-                                if (value == highestValue)
+                                if(value == highestValue)
                                 {
                                     highestItems.Add(item);
                                 }
@@ -148,7 +148,7 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
                         public override void Execute<T, U>(List<U> source, Func<T, int> GetValue)
                         {
                             // Check if the source list is empty
-                            if (source == null || source.Count == 0)
+                            if(source == null || source.Count == 0)
                             {
                                 // Throw an exception or return
                                 throw new ArgumentException("Source list cannot be empty");
@@ -159,13 +159,13 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
                             List<T> lowestItems = new List<T>();
 
                             // Loop through the source list
-                            foreach (T item in source)
+                            foreach(T item in source)
                             {
                                 // Get the value of the current item using the GetValue function
                                 int value = GetValue(item);
 
                                 // Compare the value with the lowest value so far
-                                if (value < lowestValue)
+                                if(value < lowestValue)
                                 {
                                     // Update the lowest value and clear the list of items with the lowest value
                                     lowestValue = value;
@@ -173,7 +173,7 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
                                 }
 
                                 // If the value is equal to the lowest value, add the item to the list of items with the lowest value
-                                if (value == lowestValue)
+                                if(value == lowestValue)
                                 {
                                     lowestItems.Add(item);
                                 }
@@ -197,17 +197,37 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
                     public bool _IsDominating;
                     public bool _IsBlockAttack;
                     public bool _IsBlockDefend;
+                    public bool _IsInTurn;
 
 
-                    public bool IsCharming { get => _IsCharming; set => _IsCharming = value; }
-                    public bool IsTreating { get => _IsTreating; set => _IsTreating = value; }
-                    public bool IsDominating { get => _IsDominating; set => _IsDominating = value; }
-                    public bool IsBlockAttack { get => _IsBlockAttack; set => _IsBlockAttack = value; }
-                    public bool IsBlockDefend { get => _IsBlockDefend; set => _IsBlockDefend = value; }
+                    public bool IsCharming
+                    {
+                        get => _IsCharming; set => _IsCharming = value;
+                    }
+                    public bool IsTreating
+                    {
+                        get => _IsTreating; set => _IsTreating = value;
+                    }
+                    public bool IsDominating
+                    {
+                        get => _IsDominating; set => _IsDominating = value;
+                    }
+                    public bool IsBlockAttack
+                    {
+                        get => _IsBlockAttack; set => _IsBlockAttack = value;
+                    }
+                    public bool IsBlockDefend
+                    {
+                        get => _IsBlockDefend; set => _IsBlockDefend = value;
+                    }
+                    public bool IsInTurn
+                    {
+                        get => _IsInTurn; set => _IsInTurn = value;
+                    }
 
                     public void Execute<T, U>(List<U> source) where T : IEffectAttributes, U
                     {
-                        for (int i = source.Count - 1; i >= 0; i--)
+                        for(int i = source.Count - 1; i >= 0; i--)
                         {
                             var target = (IEffectAttributes)source[i];
 
@@ -215,7 +235,7 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Target
 
                             bool flag = target.isEqualsAttibutes(this);
 
-                            if (!flag)
+                            if(!flag)
                             {
                                 source.RemoveAt(i);
                             }

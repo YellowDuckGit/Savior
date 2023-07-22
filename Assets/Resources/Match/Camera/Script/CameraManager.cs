@@ -23,10 +23,6 @@ public class CameraManager : MonoBehaviour
     public MMF_Player BlueCameraFeedBacks;
     public MMF_Player RedCameraFeedBacks;
 
-    public CinemachineVirtualCamera BlueCardCamera;
-    public CinemachineVirtualCamera RedCardCamera;
-
-
     //[SerializeField] Button B_Normal;
     //[SerializeField] Button B_Board;
     //[SerializeField] Button B_Hand;
@@ -60,7 +56,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void SwitchCamera(ChanelCamera chanel, Transform Card = null)
+    public void SwitchCamera(ChanelCamera chanel, CardBase Card = null)
     {
         lastChannel = presentChannel;
         presentChannel = (int)chanel;
@@ -91,7 +87,9 @@ public class CameraManager : MonoBehaviour
                     mMF_Feedbacks[(int)ChanelCamera.SkipTurn].Play(Vector3.zero, 1f);
                     break;
                 case ChanelCamera.Card:
-                    BlueCardCamera.Follow = Card;
+                    MMF_CinemachineTransition mMF_CinemachineTransition = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Card];
+                    CinemachineVirtualCamera virtualCamera = mMF_CinemachineTransition.TargetVirtualCamera;
+                    virtualCamera.Follow = Card.transform;
                     mMF_Feedbacks[(int)ChanelCamera.Card].Play(Vector3.zero, 1f);
                     break;
             }
@@ -119,7 +117,9 @@ public class CameraManager : MonoBehaviour
                     mMF_Feedbacks[(int)ChanelCamera.SkipTurn].Play(Vector3.zero, 1f);
                     break;
                 case ChanelCamera.Card:
-                    RedCardCamera.Follow = Card;
+                     MMF_CinemachineTransition mMF_CinemachineTransition = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Card];
+                    CinemachineVirtualCamera virtualCamera = mMF_CinemachineTransition.TargetVirtualCamera;
+                    virtualCamera.Follow = Card.transform;
                     mMF_Feedbacks[(int)ChanelCamera.Card].Play(Vector3.zero, 1f);
                     break;
             }
@@ -182,35 +182,35 @@ public class CameraManager : MonoBehaviour
 
         if (K_Player.K_PlayerSide.Blue.Equals(Player))
         {
-            MMF_Player camera = cardPlayer.gameObject.transform.Find("Camera_Blue").GetComponent<MMF_Player>();
-            CameraManager.instance.BlueCameraFeedBacks = camera;
-            //CameraManager.instance.BlueCardCamera = camera.gameObject.transform.Find("CardCamera").GetComponent<CinemachineVirtualCamera>();
+            //MMF_Player camera = cardPlayer.gameObject.transform.Find("Camera_Blue").GetComponent<MMF_Player>();
+            //CameraManager.instance.BlueCameraFeedBacks = camera;
+
+
             print("Camera_Blue");
 
             int a = startChanelBlue;
-            for(int i =0; i<camera.transform.childCount; i++)
+            for(int i =0; i< BlueCameraFeedBacks.transform.childCount; i++)
             {
-                camera.transform.GetChild(i).GetComponent<MMCinemachinePriorityListener>().Channel = a;
+                BlueCameraFeedBacks.transform.GetChild(i).GetComponent<MMCinemachinePriorityListener>().Channel = a;
                 a++;
-               print(camera.transform.GetChild(i).gameObject.name);
+               print(BlueCameraFeedBacks.transform.GetChild(i).gameObject.name);
             }
 
-            AnimationCardManager.instance.CreateAniamtionCamera(ref camera, startChanelBlue);
+            AnimationCardManager.instance.CreateAniamtionCamera(ref BlueCameraFeedBacks, startChanelBlue);
         }
         else if (K_Player.K_PlayerSide.Red.Equals(Player))
         {
-            MMF_Player camera = cardPlayer.gameObject.transform.Find("Camera_Red").GetComponent<MMF_Player>();
-            CameraManager.instance.RedCameraFeedBacks = camera;
-            //CameraManager.instance.RedCardCamera = camera.gameObject.transform.Find("CardCamera").GetComponent<CinemachineVirtualCamera>();
+            //MMF_Player camera = cardPlayer.gameObject.transform.Find("Camera_Red").GetComponent<MMF_Player>();
+            //CameraManager.instance.RedCameraFeedBacks = camera;
             print("Camera_Red");
 
             int a = startChanelRed;
-            for (int i = 0; i < camera.transform.childCount; i++)
+            for (int i = 0; i < RedCameraFeedBacks.transform.childCount; i++)
             {
-                camera.transform.GetChild(i).GetComponent<MMCinemachinePriorityListener>().Channel = a;
+                RedCameraFeedBacks.transform.GetChild(i).GetComponent<MMCinemachinePriorityListener>().Channel = a;
                 a++;
             }
-            AnimationCardManager.instance.CreateAniamtionCamera(ref camera, startChanelRed);
+            AnimationCardManager.instance.CreateAniamtionCamera(ref RedCameraFeedBacks, startChanelRed);
 
         }
     }

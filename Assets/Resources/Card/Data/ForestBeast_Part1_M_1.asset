@@ -25,7 +25,7 @@ MonoBehaviour:
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
-  <IsBlockDefend>k__BackingField: 0
+  <IsBlockDefend>k__BackingField: 1
   <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 0f9462db7738eef46ad92e43c03194af, type: 2}
   <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 686eaa24730e1044ba6bdf5db4e95600, type: 2}
   <InBoardAvatar>k__BackingField: {fileID: 0}

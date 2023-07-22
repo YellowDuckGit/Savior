@@ -18,7 +18,7 @@ MonoBehaviour:
   <SpellType>k__BackingField: 1
   <Description>k__BackingField: Deal 1 to anyting
   <CardType>k__BackingField: 2
-  <RarityCard>k__BackingField: 1
+  <RarityCard>k__BackingField: 0
   <RegionCard>k__BackingField: 0
   <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 937a31d91cd2d224cb739bb431f80aac, type: 2}
   <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 208ec88f9f650eb4b9921d7f693e42b5, type: 2}
@@ -30,24 +30,24 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1073283199762432001
+      type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject, asm: Assembly-CSharp}
+      data:
+        selectTargets:
+        - target:
+            rid: 1073283199762432002
+          Effects:
+          - rid: 1073283199762432003
+    - rid: 1073283199762432002
+      type: {class: AnyTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.AnyTarget, asm: Assembly-CSharp}
+    - rid: 1073283199762432003
+      type: {class: Dame, ns: , asm: Assembly-CSharp}
+      data:
+        pitch: []
+        number: 1
     - rid: 4170877791328534528
       type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
         Card: {fileID: 0}
         Actions:
-        - rid: 4170877820874784771
-    - rid: 4170877820874784771
-      type: {class: SelectTarget, ns: Assets.GameComponent.Card.Logic.TargetObject, asm: Assembly-CSharp}
-      data:
-        selectTargets:
-        - target:
-            rid: 4170877820874784772
-          Effects:
-          - rid: 4170877820874784773
-    - rid: 4170877820874784772
-      type: {class: AnyTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.AnyTarget, asm: Assembly-CSharp}
-    - rid: 4170877820874784773
-      type: {class: Dame, ns: , asm: Assembly-CSharp}
-      data:
-        pitch: []
-        number: 1
+        - rid: 1073283199762432001

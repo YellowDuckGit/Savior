@@ -1,3 +1,4 @@
+using Assets.GameComponent.Manager;
 using Card;
 using ExitGames.Client.Photon;
 using Photon.Pun;
@@ -275,6 +276,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
             card.Position = CardPosition.InHand;
 
             CreateParentSortingForCard(card);
+            SelectManager.Instance.CheckSelectAble(MatchManager.instance);
             //card.gameObject.transform.parent = this.gameObject.transform;
         }
     }
@@ -283,6 +285,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         _cards.Remove(card);
         RemoveParentSortingForCard(card);
+        SelectManager.Instance.CheckSelectAble(MatchManager.instance);
     }
     #endregion
 
