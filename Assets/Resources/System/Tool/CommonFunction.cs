@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 //using static Assets.GameComponent.Card.Logic.TargetObject.SelectTargetObject;
@@ -122,6 +123,8 @@ public static class CommonFunction
 
         return result;
     }
+
+
 }
 public static class ListExtensions
 {

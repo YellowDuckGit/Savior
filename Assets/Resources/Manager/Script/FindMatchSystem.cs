@@ -503,6 +503,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.StartMatch)
             {
                 Debug.Log("UI START");
+
                 //UIManager.instance.TurnOnMatchingScene();
                 //UIManager.instance.UI_StartMatch(true);
                 //UIManager.instance.UI_ConfirmMatchmaking(false);
@@ -680,8 +681,21 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         }
         else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.StartMatch))
         {
-            if(PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.LocalPlayer.CustomProperties[K_PlayerSide.key].ToString().Equals(K_PlayerSide.Red))
             {
+                _myRoomCustomProperties[K_Player.EloRed] = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo].ToString();
+                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+            }
+            else if (PhotonNetwork.LocalPlayer.CustomProperties[K_PlayerSide.key].ToString().Equals(K_PlayerSide.Blue))
+            {
+                _myRoomCustomProperties[K_Player.EloBlue] = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo].ToString();
+                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+            }
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                
+
                 print("TwoPLayerReady");
                 PhotonNetwork.LoadLevel("MatchScene");
             }

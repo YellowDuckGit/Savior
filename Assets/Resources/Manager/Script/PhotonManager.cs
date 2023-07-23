@@ -29,7 +29,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        
+        Application.targetFrameRate = 60;
     }
 
     // Update is called once per frame
@@ -53,16 +53,28 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("OnConnectedToServer");
         //SceneManager.LoadScene("Home");
 
-        if (UIManager.instance.isSignIn || UIManager.instance.isSignUp)
+        if (isAuthented)
         {
-            isAuthented = true;
-            StartCoroutine(GameData.instance.LoadingGameProcess());
+            if (UIManager.instance.isWatingMatch)
+            {
+                UIManager.instance.TurnOnChooseDeckScene();
+            }
+            //else if (UIManager.instance.isHome)
+            //{
+            //    StartCoroutine(GameData.instance.LoadingGameProcess());
 
+            //}
         }
-        else if (UIManager.instance.isWatingMatch)
+        else
         {
-            UIManager.instance.TurnOnChooseDeckScene();
+            if (UIManager.instance.isSignIn || UIManager.instance.isSignUp)
+            {
+                isAuthented = true;
+                StartCoroutine(GameData.instance.LoadingGameProcess());
+
+            }
         }
+
     }
 
 

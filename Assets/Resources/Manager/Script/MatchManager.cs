@@ -51,6 +51,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
     private CardPlayer _LocalPlayer;
     private CardPlayer _OppnentPlayer;
 
+    public float EloResult;
+
     public CardPlayer LocalPlayer
     {
         get
@@ -110,14 +112,14 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region Match Setting
     [SerializeField] int numberCardDrawBeginMatch = 1;
 
-    [SerializeField] int minMana = 0;
-    [SerializeField] int maxMana = 10;
+    public int minMana = 0;
+    public int maxMana = 10;
     [SerializeField] int initialMana = 0;
     [SerializeField] int manaIncreasePerRound = 1;
 
 
-    [SerializeField] int minHP = 0;
-    [SerializeField] int maxHP = 1000;
+    public int minHP = 0;
+    public int maxHP = 20;
     [SerializeField] int initialHP = 20;
 
     /// <summary>
@@ -319,7 +321,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     IEnumerator BeginMatch()
     {
         print(this.debug($"Begin Match"));
-        //UIMatchManager.instance.TurnLoadingScene(true);
+        UIMatchManager.instance.TurnLoadingScene(true);
 
         yield return StartCoroutine(PlayerInit());
 
@@ -396,8 +398,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //provide initial resource
         SetLimitHP(initialHP, bluePlayer);
         SetLimitHP(initialHP, redPlayer);
-        SetLimitMP(initialMana, bluePlayer);
-        SetLimitMP(initialMana, redPlayer);
+  
+
+        ProvideHP(initialHP, bluePlayer);
+        ProvideHP(initialHP, redPlayer);
 
 
 
@@ -415,6 +419,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
 
         yield return new WaitForSeconds(3);
+
         UIMatchManager.instance.TurnLoadingScene(false);
     }
 
@@ -499,7 +504,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("Home");
+        SceneManager.LoadScene("GameScene");
         yield return null;
     }
     #endregion
@@ -548,9 +553,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //provide Mana
         ProvideMP(1, bluePlayer);
         ProvideMP(1, redPlayer);
+        SetLimitMP(1, bluePlayer);
+        SetLimitMP(1, redPlayer);
 
-        ProvideHP(initialHP, bluePlayer);
-        ProvideHP(initialHP, redPlayer);
 
         print(this.debug("Change Tokken at new round", new
         {
@@ -709,7 +714,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         var DefensePlayer = GetDefensePlayer();
 
         AttackZoneOpposite(AttackPlayer.fightZones, DefensePlayer.fightZones);
-        ClearAttackField(localPlayerSide);
+        StartCoroutine(ClearAttackField(localPlayerSide));
         SetSkipAction();
         gamePhase = GamePhase.Normal;
         this.PostEvent(EventID.EndAttackAndDefensePhase, this);
@@ -836,18 +841,18 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public void SetLimitHP(int amount, CardPlayer cardPlayer)
     {
         //Provide HP Step
-        cardPlayer.hp.Limit += amount;
+        cardPlayer.hp.Limit = amount;
     }
 
     public void SetLimitMP(int amount, CardPlayer cardPlayer)
     {
         //Provide HP Step
-        cardPlayer.mana.Limit += amount;
+        cardPlayer.mana.Limit+= amount;
     }
 
     void ProvideHP(int amount, CardPlayer cardPlayer)
     {
-        cardPlayer.mana.Number += amount;
+        cardPlayer.hp.Number += amount;
     }
     /// <summary>
     /// Provide MP for player
@@ -855,7 +860,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     void ProvideMP(int amount, CardPlayer cardPlayer)
     {
-        cardPlayer.hp.Number += amount;
+        cardPlayer.mana.Number = cardPlayer.mana.Limit + amount; 
 
     }
     #endregion
@@ -863,11 +868,16 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region Function with resource for player
     IEnumerator ProvideReward(bool isRanked)
     {
+        print("ProvideReward");
         string rewardWinRankedID = "B1";
         string rewardWinNormalID = "B2";
         string rewardLoseRankedID = "B1.1";
         string rewardLoseNormalID = "B2.2";
         string rewardID = "";
+
+        print(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloBlue].ToString());
+        print(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloRed].ToString());
+
 
         int eloBlue = Int32.Parse(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloBlue].ToString());
         int eloRed = Int32.Parse(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloRed].ToString());
@@ -943,11 +953,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //set UI
         if(localPlayerSide.Equals(K_PlayerSide.Blue))
         {
-            //yield return StartCoroutine(UIMatchManager.instance.setResultMatch(isBlueWin, isRanked, 2));
+            yield return StartCoroutine(UIMatchManager.instance.setResultMatch(isBlueWin, isRanked, 2));
         }
         else if(localPlayerSide.Equals(K_PlayerSide.Red))
         {
-            //yield return StartCoroutine(UIMatchManager.instance.setResultMatch(isRedWin, isRanked, 2));
+            yield return StartCoroutine(UIMatchManager.instance.setResultMatch(isRedWin, isRanked, 2));
         }
 
         yield return null;
@@ -1547,8 +1557,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
 
 
-    void ClearAttackField(string playerSide)
+    IEnumerator ClearAttackField(string playerSide)
     {
+        yield return new WaitForSeconds(3f);
+
         if(playerSide.Equals(K_PlayerSide.Blue))
         {
             foreach(FightZone fightZone in bluePlayer.fightZones)
@@ -1609,6 +1621,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 {
                     monsterAttack.attack(monsterDefense);
                     monsterDefense.attack(monsterAttack);
+
+                    this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterDefense , monsterAttack));
+                    this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterAttack, monsterDefense));
                 }
                 else //attack to hp player
                 {
@@ -1618,8 +1633,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
             }
         }
     }
-
-
 
     void SetSkipAction()
     {

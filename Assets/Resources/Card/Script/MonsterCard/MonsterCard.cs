@@ -4,6 +4,7 @@ using Assets.GameComponent.Card.Logic.Effect;
 using Assets.GameComponent.Card.LogicCard;
 using Assets.GameComponent.Card.LogicCard.ListLogic.Effect;
 using Card;
+using DG.Tweening;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -707,9 +708,10 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
     public void MoveCardIntoNewParent(Transform parentTransform)
     {
         this.transform.parent = parentTransform;
-        this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+        //this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+        this.transform.DOLocalMove(new Vector3(0f, 0f, 0f), 0.3f, false);
 
-        if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+        if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             transform.Rotate(0f, 180f, 0f);
     }
     #endregion
