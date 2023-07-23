@@ -169,7 +169,7 @@ public class AnimationCardManager : MonoBehaviour
         scale.AnimateScaleTarget = targetAnimated;
         scale.Mode = MMF_Scale.Modes.Additive;
 
-        scale.FeedbackDuration = 0.2f;
+        scale.FeedbackDuration = 1f;
         scale.RemapCurveZero = 0f;
         scale.RemapCurveOne = 0.02f;
 
@@ -305,15 +305,14 @@ public class AnimationCardManager : MonoBehaviour
         string name = "FB_GetDamage";
 
         MMF_Player mMF_Player = CreateMMF_PlayerContainer(targetAnimated, name, false);
-    
-       
 
-        MMPositionShaker shake = new MMPositionShaker();
+
+        MMPositionShaker shake = targetAnimated.AddComponent<MMPositionShaker>();
         shake.Mode = MMPositionShaker.Modes.Transform;
         shake.TargetTransform = targetAnimated.transform;
 
-        shake.ShakeSpeed = 25;
-        shake.ShakeRange = 0.2f;
+        shake.ShakeSpeed = 20;
+        shake.ShakeRange = 0.1f;
         shake.ShakeMainDirection = new Vector3(0f, 0f, -1f);
 
         shake.UseAttenuation = true;
@@ -321,6 +320,19 @@ public class AnimationCardManager : MonoBehaviour
 
         MMF_PositionShake shake1 = new MMF_PositionShake();
         shake1.TargetShaker = shake;
+
+
+
+        shake1.ShakeSpeed = 20;
+        shake1.ShakeRange = 0.1f;
+        shake1.ShakeMainDirection = new Vector3(0.01f, 0f, 0f);
+
+        shake1.UseAttenuation = true;
+        shake1.AttenuationCurve = GetDamage_curve;
+
+        shake1.DirectionalNoiseStrengthMin = new Vector3(0.25f, 0f, 0.25f);
+        shake1.DirectionalNoiseStrengthMax = new Vector3(0.25f, 0f, 0.25f);
+
 
         mMF_Player.AddFeedback(shake1);
         mMF_Player.Initialization();

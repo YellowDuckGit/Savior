@@ -57,7 +57,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     // Implementing the Add method
     public void Add(CardBase item)
     {
-        if(_cards.Count < CollectionManager.instance.LimitNumberCardInDeck)
+        if (_cards.Count < CollectionManager.instance.LimitNumberCardInDeck)
         {
             _cards.Add(item);
 
@@ -140,7 +140,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public void AddRange(ICollection<CardBase> cards)
     {
         // Loop through the cards and add each one to the _cards field
-        foreach(CardBase card in cards)
+        foreach (CardBase card in cards)
         {
             _cards.Add(card);
         }
@@ -157,7 +157,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public CardBase Draw()
     {
         // Check if the list is null or empty
-        if(_cards == null || _cards.Count == 0)
+        if (_cards == null || _cards.Count == 0)
         {
             //// Throw an exception or return null
             //throw new InvalidOperationException("The list of cards is empty.");
@@ -173,10 +173,10 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public List<CardBase> Draw(int count, bool random = false)
     {
         List<CardBase> cards = new List<CardBase>();
-        if(random)
+        if (random)
         {
             Random rnd = new Random();
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 int j = rnd.Next(0, _cards.Count);
                 CardBase card = _cards[j];
@@ -186,7 +186,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         }
         else
         {
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 CardBase card = _cards[0];
                 _cards.RemoveAt(0);
@@ -274,18 +274,18 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         List<string> listCardID = deckCode.Split('%').ToList();
         print("Desk before: \n" + string.Join(",", listCardID.ToArray()));
 
-        foreach(string str in listCardID)
+        foreach (string str in listCardID)
         {
-            if(!string.IsNullOrEmpty(str))
+            if (!string.IsNullOrEmpty(str))
             {
                 string[] arr = str.Split(':');
                 string id = arr[0];
                 int amount = Int32.Parse(arr[1]);
 
-                for(int i = 0; i < amount; i++)
+                for (int i = 0; i < amount; i++)
                 {
                     ICardData data = listMonsterDataInGame.First(a => a.Id.Equals(id));
-                    if(data != null)
+                    if (data != null)
                         cardDatas.Add(data);
                 }
             }
@@ -300,9 +300,11 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         cardDatas.Shuffle();
 
-        foreach(var cardData in cardDatas)
+        int count = 0;
+        foreach (var cardData in cardDatas)
         {
-            if(cardData is IMonsterData monsterData)
+            print($"create card {++count}");
+            if (cardData is IMonsterData monsterData)
             {
                 var CreateMonster = new CreateCard
                 {
@@ -315,7 +317,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
                     side = CreateMonster.owner
                 }, MatchManager.instance.LocalPlayer));
             }
-            else if(cardData is ISpellData)
+            else if (cardData is ISpellData)
             {
                 var CreateSpell = new CreateCard
                 {
@@ -401,13 +403,13 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         }));
 
         //order with PhotonViewID of card follow oppositeDeckOrder parameter
-        for(int i = 0; i < oppositeDeckOrder.Count; i++)
+        for (int i = 0; i < oppositeDeckOrder.Count; i++)
         {
             var card = _cards.FirstOrDefault(a => a.photonView.ViewID == oppositeDeckOrder[i]);
 
-            if(card != null)
+            if (card != null)
             {
-                if(card != _cards[i])
+                if (card != _cards[i])
                 {
                     print(this.debug("Swap:", new
                     {

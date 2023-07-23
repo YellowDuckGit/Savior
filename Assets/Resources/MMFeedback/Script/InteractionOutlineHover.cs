@@ -5,16 +5,18 @@ using UnityEngine;
 
 public class InteractionOutlineHover : MonoBehaviour
 {
-    public Outlinable outline;
+    public List<Outlinable> outlines;
 
     private void OnMouseEnter()
     {
-        outline.enabled = true;
+        outlines.ForEach(a=>a.enabled = true);
     }
 
     private void OnMouseExit()
     {
-        outline.enabled = false;
+        outlines.ForEach(a => a.enabled = false);
 
     }
+
+
 }

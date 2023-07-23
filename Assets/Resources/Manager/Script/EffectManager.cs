@@ -895,7 +895,7 @@ public class EffectManager : MonoBehaviourPun
                     }
                     else
                     {
-                        print(this.debug(" create card not avaiable"));
+                        print(this.debug("create card not avaiable"));
                     }
                 }
 
@@ -961,7 +961,7 @@ public class EffectManager : MonoBehaviourPun
                             }));
                             createdCard.Parents = CardOwner.hand;
                             CardOwner.hand.Add(createdCard);
-                            createdCard.gameObject.transform.parent = CardOwner.hand.gameObject.transform;
+                            //createdCard.gameObject.transform.parent = CardOwner.hand.gameObject.transform;
                             //CardOwner.hand.ScaleCardInHand();
                             //CardOwner.hand.SortPostionRotationCardInHand();
                             break;

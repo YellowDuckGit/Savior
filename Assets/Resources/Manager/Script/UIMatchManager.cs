@@ -364,16 +364,16 @@ public class UIMatchManager : MonoBehaviour
         if (win)
         {
             if(isRank)
-                ResultMatch = "Your Win\n+250 Coin\n+10 Elo";
+                ResultMatch = "Your Win\n+1500 Coin\n "+ MatchManager.instance.EloResult +" Elo";
             else
-            ResultMatch = "Your Win"; 
+            ResultMatch = "Your Win\n+1500 Coin"; 
         }
         else
         {
             if(isRank)
-                ResultMatch = "Your Lose";
+                ResultMatch = "Your Lose\n+500 Coin" + MatchManager.instance.EloResult +" Elo";
             else
-            ResultMatch = "Your Lose";
+            ResultMatch = "Your Lose\n+500 Coin";
         }
 
         yield return new WaitForSeconds(showTime);
@@ -381,7 +381,7 @@ public class UIMatchManager : MonoBehaviour
 
     public void TurnLoadingScene(bool turn)
     {
-        //PanelLoading.SetActive(turn);
+        PanelLoading.SetActive(turn);
     }
     #endregion
 

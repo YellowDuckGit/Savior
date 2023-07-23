@@ -46,5 +46,6 @@ public enum EventID
     OnRightClickCard,
     OnCardDamaged,
     OnStartMatch,
-    OnEndMatch
+    OnEndMatch,
+    OnCardAttack,
 }

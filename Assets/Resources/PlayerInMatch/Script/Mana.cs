@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Mana : MonoBehaviour
 {
-    int limit;
+    int limit = 0;
     int number = 0;
     [SerializeField] TextMeshProUGUI textMeshPro;
     [SerializeField] Liquid liquid;
@@ -23,11 +23,11 @@ public class Mana : MonoBehaviour
         }
         set
         {
-
             //textMeshPro.text = number.ToString();
             //StartCoroutine(IntegerLerpCoroutine(number, value, 2f));
+            print("Mana Number: " + value);
 
-            StartCoroutine(IntegerLerpCoroutine(number, value, 2f));
+            StartCoroutine(IntegerLerpCoroutine(number, value, 1f));
             number = value;
         }
     
@@ -47,6 +47,8 @@ public class Mana : MonoBehaviour
 
     private IEnumerator IntegerLerpCoroutine(int fromValue, int toValue, float duration)
     {
+        StartCoroutine(FloatLerpCoroutine(fromValue, toValue, duration));
+
         float elapsedTime = 0;
 
         while (elapsedTime < duration)
@@ -56,12 +58,47 @@ public class Mana : MonoBehaviour
             int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
             textMeshPro.text = result.ToString();
 
-            if (toValue != 0)
-                liquid.CompensateShapeAmount = result / toValue;
+            //if (toValue != 0)
+            //    liquid.CompensateShapeAmount = (float)result / (float)MatchManager.instance.maxMana;
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        
+     
+    }
+
+    private IEnumerator FloatLerpCoroutine(float fromValue, float toValue, float duration)
+    {
+        float elapsedTime = 0;
+
+        float a = fromValue / MatchManager.instance.maxMana;
+
+        float b = toValue / MatchManager.instance.maxMana;
+
+        print("a: " + a);
+        print("b: " + b);
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+
+            float result = (Mathf.Lerp(a, b, t));
+
+            print("result: " + result.ToString());
+
+            liquid.CompensateShapeAmount = result;
+
+            print("CompensateShapeAmount: " + liquid.CompensateShapeAmount);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        print("CompensateShapeAmount: " + liquid.CompensateShapeAmount);
+
+        liquid.CompensateShapeAmount =  b;
     }
 
     public void DisplayLiquid()

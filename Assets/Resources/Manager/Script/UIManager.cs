@@ -387,7 +387,14 @@ public class UIManager : MonoBehaviour
 
         #endregion
 
-        TurnOn(SceneType.SignIn, true); //Default
+        if(PlayfabManager.instance.isAuthented == false)
+        {
+            TurnOn(SceneType.SignIn, true); //Default
+        }
+        else
+        {
+            StartCoroutine(GameData.instance.LoadingGameProcess());
+        }
     }
 
 

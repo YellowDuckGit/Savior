@@ -59,6 +59,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public void Add(CardBase item)
     {
         _cards.Add(item);
+        CreateParentSortingForCard(item);
     }
 
     // Implementing the Clear method
@@ -104,17 +105,21 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         Random rnd = new Random();
         int index = rnd.Next(0, _cards.Count);
         _cards.Insert(index, item);
+        CreateParentSortingForCard(item);
+
     }
 
     // Implementing the Remove method
     public bool Remove(CardBase item)
     {
+        RemoveParentSortingForCard(item);
         return _cards.Remove(item);
     }
 
     // Implementing the RemoveAt method
     public void RemoveAt(int index)
     {
+        RemoveParentSortingForCard(_cards[index]);
         _cards.RemoveAt(index);
     }
 
@@ -165,6 +170,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         CardBase card = _cards[0];
         _cards.RemoveAt(0);
+        RemoveParentSortingForCard(card);
         return card;
     }
     //draw many card
@@ -179,6 +185,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
                 int j = rnd.Next(0, _cards.Count);
                 CardBase card = _cards[j];
                 _cards.RemoveAt(j);
+                RemoveParentSortingForCard(card);
                 cards.Add(card);
             }
         }
@@ -189,6 +196,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
                 CardBase card = _cards[0];
                 _cards.RemoveAt(0);
                 cards.Add(card);
+                RemoveParentSortingForCard(card);
             }
         }
         return cards;
@@ -199,6 +207,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         CardBase card = _cards[index];
         _cards.RemoveAt(index);
+        RemoveParentSortingForCard(card);
         return card;
     }
 
@@ -206,6 +215,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public CardBase Draw(CardBase card)
     {
         _cards.Remove(card);
+        RemoveParentSortingForCard(card);
         return card;
     }
 
@@ -214,6 +224,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         CardBase card = _cards.Find(c => c.Name == name);
         _cards.Remove(card);
+        RemoveParentSortingForCard(card);
         return card;
     }
 
@@ -222,6 +233,8 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         CardBase card = _cards.OrderByDescending(c => c.Cost).First();
         _cards.Remove(card);
+        RemoveParentSortingForCard(card);
+
         return card;
     }
 
@@ -230,6 +243,8 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         CardBase card = _cards.Where(c => c is MonsterCard).OrderByDescending(c => ((MonsterCard)c).Attack).First();
         _cards.Remove(card);
+        RemoveParentSortingForCard(card);
+
         return card;
     }
 

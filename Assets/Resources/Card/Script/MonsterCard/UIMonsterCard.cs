@@ -1,4 +1,5 @@
-﻿using Card;
+﻿using Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget;
+using Card;
 using EPOOutline;
 using System;
 using System.Collections;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace Assets.GameComponent.Card.CardComponents.Script.UI
 {
@@ -28,6 +30,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
+                
                 _uiAttack = value;
             }
         }
@@ -78,7 +81,8 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
-                UIHp.text = value.ToString();
+                StartCoroutine(HPLerpCoroutine(Hp, value, 2f));
+
             }
         }
         // Property for Attack with getter and setter
@@ -90,7 +94,8 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
-                UIAttack.text = value.ToString();
+                StartCoroutine(ATKLerpCoroutine(Attack, value, 2f));
+
             }
         }
 
@@ -244,6 +249,12 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             this.RegisterListener(EventID.OnMoveToFightZone, (param) => OnMoveToFightZone(param as MoveToFightZoneArgs));
             this.RegisterListener(EventID.OnMoveToSummonZone, (param) => OnMoveToSummonZone(param as MoveToSummonZoneArgs));
             this.RegisterListener(EventID.OnMoveToGraveyard, (param) => OnMoveToGraveyard(param as MoveToGraveyardArgs));
+            this.RegisterListener(EventID.OnCardDamaged, (param) => AnimationGetDamged(param as MonsterCard));
+            this.RegisterListener(EventID.OnMoveToGraveyard, (param) => AnimationDie(param as MonsterCard));
+            this.RegisterListener(EventID.OnCardAttack, (param) => AnimationAtk(param as AnimationAttackArgs));
+
+
+
         }
 
         private void SelectCardChange(bool value) => _ = value ? SelectCard() : UnSelectCard()/*OnClickOnCard()*/;
@@ -254,14 +265,16 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             {
                 if(monsterCard == CardTarget)
                 {
-                    this.MoveToGraveyardAction();
+                    StartCoroutine(MoveToGraveyardAction());
                 }
             }
 
 
         }
-        private void MoveToGraveyardAction()
+        public IEnumerator MoveToGraveyardAction()
         {
+            yield return new WaitForSeconds(3);
+
             this.IsSelected = false;
             this.IsForcus = false;
             this.Interactable = false;
@@ -271,6 +284,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             CardTarget.RemoveCardFormParentPresent();
             CardTarget.MoveCardIntoNewParent(CardTarget.CardPlayer.graveyard.transform);
         }
+
 
         private void OnMoveToSummonZone(MoveToSummonZoneArgs args)
         {
@@ -313,7 +327,6 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             fightZone.SetMonsterCard(CardTarget);
             this.UIOutline.enabled = false;
         }
-
 
         //public void updateAttack(int Attack) => this.UIAttack.text = Attack.ToString();
         //public void updateHp(int Hp) => this.UIHp.text = Hp.ToString();
@@ -394,6 +407,76 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
         }
 
+        private void AnimationGetDamged(MonsterCard args)
+        {
+            if (args is MonsterCard monsterCard && args == CardTarget)
+            {
+                controller.PlayGetDame();
+            }
+        }
 
+        private void AnimationDie(MonsterCard args)
+        {
+            if (args is MonsterCard monsterCard && CardTarget == args)
+            {
+                controller.PlayDestroyCard();
+            }
+        }
+
+        private void AnimationAtk(AnimationAttackArgs args)
+        {
+            if (CardTarget == args.own)
+            {
+                print("AnimationAtk");
+                controller.PlayATKCard(args.own.transform,args.opponnet.transform);
+            }
+            else
+            {
+                print("controller.Card != args.own");
+
+            }
+        }
+
+
+        private IEnumerator HPLerpCoroutine(int fromValue, int toValue, float duration)
+        {
+            float elapsedTime = 0;
+
+            while (elapsedTime < duration)
+            {
+                float t = elapsedTime / duration;
+
+                int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
+
+                UIHp.text = result.ToString();
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            UIHp.text = toValue.ToString();
+
+        }
+
+        private IEnumerator ATKLerpCoroutine(int fromValue, int toValue, float duration)
+        {
+            float elapsedTime = 0;
+
+            while (elapsedTime < duration)
+            {
+                float t = elapsedTime / duration;
+
+                int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
+
+                UIAttack.text = result.ToString();
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            UIAttack.text = toValue.ToString();
+        }
     }
+
+
 }

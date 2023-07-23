@@ -133,7 +133,8 @@ public class Liquid : MonoBehaviour
                 comp = (worldPos - new Vector3(0, GetLowestPoint(), 0));
             }
 
-            pos = worldPos - transform.position - new Vector3(0, fillAmount - (comp.y * CompensateShapeAmount), 0);
+            //pos = worldPos - transform.position - new Vector3(0, fillAmount - (comp.y * CompensateShapeAmount), 0);
+            pos = worldPos - transform.position - new Vector3(0, fillAmount - ( CompensateShapeAmount), 0);
         }
         else
         {

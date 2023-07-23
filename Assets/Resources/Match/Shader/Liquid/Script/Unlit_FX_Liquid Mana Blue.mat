@@ -29,8 +29,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amplitude: 0.15
-    - _Freq: 8
+    - _Amplitude: 0.442
+    - _Freq: 14.74
     - _Line: 0
     - _LineSmooth: 0
     - _RimPower: 10

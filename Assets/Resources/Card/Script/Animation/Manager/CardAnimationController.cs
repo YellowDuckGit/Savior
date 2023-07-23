@@ -50,14 +50,17 @@ public class CardAnimationController : MonoBehaviour
         mMF_Player.PlayFeedbacks();
     }
 
-    public void PlayATKCard(Transform Opponent)
+    public void PlayATKCard(Transform own ,Transform Opponent)
     {
-        MMF_Player mMF_Player = AnimationCardManager.instance.CreateAnimationFB_ATK(Card, Opponent);
+       
+        MMF_Player mMF_Player = AnimationCardManager.instance.CreateAnimationFB_ATK(own, Opponent);
         mMF_Player.PlayFeedbacks();
+        print("PlayATKCard");
     }
-    public void PlayDestroyCard(Transform Opponent)
+    public void PlayDestroyCard()
     {
         MMF_DestroyCard.PlayFeedbacks();
+        print("PlayDestroyCard");
     }
 
     public void PlayHover()
@@ -85,5 +88,7 @@ public class CardAnimationController : MonoBehaviour
     public void PlayGetDame()
     {
         MMF_GetDamage.PlayFeedbacks();
+        print("PlayGetDame");
+
     }
 }
