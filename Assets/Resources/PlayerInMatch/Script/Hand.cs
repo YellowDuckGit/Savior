@@ -15,10 +15,10 @@ using Random = System.Random;
 
 public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
 {
-    private int MaxholdNumber;
+    private const int MaxholdNumber = 8;
 
-    //[SerializeField]
-    public List<CardBase> _cards = new();
+    [SerializeField]
+    private List<CardBase> _cards = new();
 
     [SerializeField]
     private Deck deck;
@@ -39,27 +39,55 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     // Implementing the Count property
     public int Count
     {
-        get { return _cards.Count; }
+        get
+        {
+            return _cards.Count;
+        }
     }
 
     // Implementing the IsReadOnly property
     public bool IsReadOnly
     {
-        get { return false; }
+        get
+        {
+            return false;
+        }
     }
 
     // Implementing the indexer
     public CardBase this[int index]
     {
-        get { return _cards[index]; }
-        set { _cards[index] = value; }
+        get
+        {
+            return _cards[index];
+        }
+        set
+        {
+            _cards[index] = value;
+        }
     }
 
     // Implementing the Add method
     public void Add(CardBase item)
     {
-        _cards.Add(item);
-        CreateParentSortingForCard(item);
+        Debug.Log(this.debug($"Add card to hand {item}", new
+        {
+            count = this.Count,
+            max = MaxholdNumber
+        }));
+        if(this.Count < MaxholdNumber)
+        {
+            _cards.Add(item);
+            SelectManager.Instance.CheckSelectAble(MatchManager.instance);
+            item.Parents = this;
+            CreateParentSortingForCard(item);
+        }
+        else
+        {
+            Debug.Log(this.debug($"Hand hold to reach max number card, discard {item}"));
+            item.Discard();
+        }
+
     }
 
     // Implementing the Clear method
@@ -132,9 +160,9 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public void AddRange(ICollection<CardBase> cards)
     {
         // Loop through the cards and add each one to the _cards field
-        foreach (CardBase card in cards)
+        foreach(CardBase card in cards)
         {
-            _cards.Add(card);
+            this.Add(card);
         }
     }
 
@@ -154,7 +182,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         // Use a random number generator
         System.Random rng = new Random();
         // Loop through the list from the last element to the first
-        for (int i = _list.Count - 1; i > 0; i--)
+        for(int i = _list.Count - 1; i > 0; i--)
         {
             // Pick a random index between 0 and i
             int j = rng.Next(i + 1);
@@ -177,10 +205,10 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public List<CardBase> Draw(int count, bool random = false)
     {
         List<CardBase> cards = new List<CardBase>();
-        if (random)
+        if(random)
         {
             Random rnd = new Random();
-            for (int i = 0; i < count; i++)
+            for(int i = 0; i < count; i++)
             {
                 int j = rnd.Next(0, _cards.Count);
                 CardBase card = _cards[j];
@@ -191,7 +219,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         }
         else
         {
-            for (int i = 0; i < count; i++)
+            for(int i = 0; i < count; i++)
             {
                 CardBase card = _cards[0];
                 _cards.RemoveAt(0);
@@ -264,15 +292,15 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
 
     private void NetworkingClient_EventReceived(EventData obj)
     {
-        if ((RaiseEvent)obj.Code == RaiseEvent.DRAW_CARD_EVENT)
+        if((RaiseEvent)obj.Code == RaiseEvent.DRAW_CARD_EVENT)
         {
             object[] datas = (object[])obj.CustomData;
             int amount = (int)datas[0];
             int photonViewID = (int)datas[1];
             CardPlayer player = this.gameObject.GetComponentInParent<CardPlayer>();
-            if (photonViewID.Equals(player.photonView.ViewID))
+            if(photonViewID.Equals(player.photonView.ViewID))
             {
-                for (int i = 0; i < amount; i++)
+                for(int i = 0; i < amount; i++)
                 {
                     DrawCard();
                 }
@@ -285,13 +313,11 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
     void DrawCard()
     {
         var card = deck.Draw();
-        if (card != null)
+        if(card != null)
         {
-            _cards.Add(card);
-            card.Position = CardPosition.InHand;
-
-            CreateParentSortingForCard(card);
-            SelectManager.Instance.CheckSelectAble(MatchManager.instance);
+            //card.Position = CardPosition.InHand;
+            this.Add(card);
+            //CreateParentSortingForCard(card);
             //card.gameObject.transform.parent = this.gameObject.transform;
         }
     }
@@ -311,7 +337,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
 
         Card.transform.parent = parentCard.transform;
         Card.transform.position = Vector3.zero;
-        Card.transform.rotation = Quaternion.Euler(90f,0f,0f);
+        Card.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
     }
 
     public void RemoveParentSortingForCard(CardBase Card)

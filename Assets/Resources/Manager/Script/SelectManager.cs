@@ -252,7 +252,7 @@ namespace Assets.GameComponent.Manager
 
             void revokeSelectCardOnHand()
             {
-                player.hand._cards.ForEach(card =>
+                player.hand.GetAllCardInHand().ForEach(card =>
                 {
                     card.IsSelected = false; //if card selected, remote selected
                     card.IsSelectAble = false;    //revoke selectable in hand
@@ -307,7 +307,7 @@ namespace Assets.GameComponent.Manager
             print(this.debug("Revoke select for player", new
             {
                 player.side,
-                numberCardInHand = player.hand._cards.Count,
+                numberCardInHand = player.hand.Count,
             }));
         }
 #nullable enable
@@ -323,7 +323,7 @@ namespace Assets.GameComponent.Manager
                 case CardPosition.InGraveyard:
                     break;
                 case CardPosition.InHand:
-                    listcard = player.hand._cards.Where(monsterCard => monsterCard != null).Select(monsterCard => monsterCard as CardBase).ToList();
+                    listcard = player.hand.GetAllCardInHand().Where(monsterCard => monsterCard != null).Select(monsterCard => monsterCard as CardBase).ToList();
                     break;
                 case CardPosition.InFightField:
                     listcard = player.fightZones.Where(zone => zone.monsterCard != null).Select(zone => zone.monsterCard as CardBase).ToList();

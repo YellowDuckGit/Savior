@@ -136,7 +136,11 @@ public class EffectManager : MonoBehaviourPun
     }
 
     #region Condition
-
+    /// <summary>
+    /// play card without check condition
+    /// </summary>
+    /// <param name="register"></param>
+    /// <returns></returns>
     public IEnumerator OnAfterSummon(object register)
     {
         print(this.debug("Status at start after summon", new
@@ -197,8 +201,13 @@ public class EffectManager : MonoBehaviourPun
         } //else continue;
         yield return null;
     }
-
-    public IEnumerator OnBeforeSummon(object register, Action summonAction)
+    /// <summary>
+    /// Check condition before play card
+    /// </summary>
+    /// <param name="register"></param>
+    /// <param name="callBackAction"></param>
+    /// <returns></returns>
+    public IEnumerator OnBeforeSummon(object register, Action callBackAction)
     {
         /*
          * some thing onBefore summon action just running on local
@@ -234,7 +243,6 @@ public class EffectManager : MonoBehaviourPun
                     {
                         NumberAction = Actions.Count,
                     }));
-
                     yield return StartCoroutine(ExecuteActions(register, Actions)); //excute all action
                 }
                 else
@@ -251,7 +259,7 @@ public class EffectManager : MonoBehaviourPun
                 if(status == EffectStatus.success)
                 {
                     print(this.debug("Before summon success summon monster)"));
-                    summonAction(); //summon the monster
+                    callBackAction(); //summon the monster
                 }
                 else
                 {
@@ -264,8 +272,8 @@ public class EffectManager : MonoBehaviourPun
             }
             else
             {
-                print(this.debug("not monster card"));
-                summonAction(); //use the card 
+                print(this.debug("target selected not be card"));
+                callBackAction(); //use the card 
             }
         }
         else
@@ -274,7 +282,7 @@ public class EffectManager : MonoBehaviourPun
             /*
              * if the register have not been regis for event before summon do as normal
              */
-            summonAction(); //summon the monster
+            callBackAction(); //summon the monster
         }
         yield return null;
     }
