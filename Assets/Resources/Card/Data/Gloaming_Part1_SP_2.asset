@@ -15,7 +15,7 @@ MonoBehaviour:
   <Id>k__BackingField: Gloaming_Part1_SP_2
   <Name>k__BackingField: Heart's Spirits
   <Cost>k__BackingField: 3
-  <SpellType>k__BackingField: 1
+  <SpellType>k__BackingField: 2
   <Description>k__BackingField: Choose a unit to Charming
   <CardType>k__BackingField: 2
   <RarityCard>k__BackingField: 1
@@ -64,6 +64,7 @@ MonoBehaviour:
         pitch: []
         _Gain:
           rid: 1073283052834127890
+        InTurn: 0
     - rid: 1073283052834127890
       type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
       data:

@@ -18,9 +18,9 @@ MonoBehaviour:
   <Attack>k__BackingField: 2
   <Hp>k__BackingField: 2
   <Description>k__BackingField: Grant Domiate to an ally in hand
-  <CardType>k__BackingField: 0
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 1
+  <CardType>k__BackingField: 1
+  <RarityCard>k__BackingField: 2
+  <RegionCard>k__BackingField: 2
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 0
