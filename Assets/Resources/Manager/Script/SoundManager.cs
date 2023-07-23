@@ -28,6 +28,8 @@ public class SoundManager : MonoBehaviour
     public MMF_Player ClickNormal;
     public MMF_Player ClickBack;
     public MMF_Player Background_FindMatch;
+    public MMF_Player OpenPack;
+    public MMF_Player Click_Payment;
 
     #endregion
 
@@ -60,6 +62,17 @@ public class SoundManager : MonoBehaviour
     {
         print("PLAY BACKGROUND FIND MATCH SOUND");
         Background_FindMatch.PlayFeedbacks();
+    }
+
+    public void PlayOpenPack()
+    {
+        print("PLAY OPEN PACK SOUND");
+        OpenPack.PlayFeedbacks();
+    }
+    public void PlayClick_Payment()
+    {
+        print("PLAY CLICK PAYMENT SOUND");
+        Click_Payment.PlayFeedbacks();
     }
     #endregion
 }

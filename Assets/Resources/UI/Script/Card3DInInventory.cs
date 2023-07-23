@@ -72,6 +72,7 @@ public class Card3DInInventory : MonoBehaviour
     public void OnMouseDown()
     {
         flip();
+        SoundManager.instance.PlayOpenPack();
 
     }
 

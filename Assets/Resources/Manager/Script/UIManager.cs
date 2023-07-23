@@ -344,6 +344,8 @@ public class UIManager : MonoBehaviour
             print("click to buy pack");
             StartCoroutine(PlayfabManager.instance.BuyPack(GameData.instance.itemPurchaseRequests));
             PopupPackDetailed.SetActive(false);
+
+            SoundManager.instance.PlayClick_Payment();
         });
         ACT_Store_CancelPack.onClick.AddListener(() => PopupPackDetailed.SetActive(false));
 
@@ -352,6 +354,8 @@ public class UIManager : MonoBehaviour
             print("click to buy deck");
             StartCoroutine(PlayfabManager.instance.BuyItems("Card", "DS1", GameData.instance.itemPurchaseRequests, "MC"));
             PopupDeckDetailed.SetActive(false);
+
+            SoundManager.instance.PlayClick_Payment();
         });
         ACT_Store_CancelDeck.onClick.AddListener(() => PopupDeckDetailed.SetActive(false));
 
@@ -360,6 +364,8 @@ public class UIManager : MonoBehaviour
             print("click to buy card");
             StartCoroutine(PlayfabManager.instance.BuyItems("Card", "CS1", GameData.instance.itemPurchaseRequests, "MC"));
             PanelCardDetails.SetActive(false);
+
+            SoundManager.instance.PlayClick_Payment();
         });
 
         ACT_NormalMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Normal; GameMode = "Normal"; });
