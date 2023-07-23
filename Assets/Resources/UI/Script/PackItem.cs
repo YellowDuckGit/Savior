@@ -53,6 +53,8 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            //SOUND
+            SoundManager.instance.PlayClick_Normal();
             //truyen droptableid of data -> getdroptable()
             StartCoroutine(LoadDataDropTable());
             print("onpointerclick");

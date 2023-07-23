@@ -329,7 +329,10 @@ public class UIManager : MonoBehaviour
         switchSceneWaitingMatch.ForEach(a => a.onClick.AddListener(() => TurnOnWatingMatchScene()));
         switchSceneOpenPack.ForEach(a => a.onClick.AddListener(() => TurnOnOpenPackScene()));
 
-        switchSceneBack.ForEach(a => a.onClick.AddListener(() => TurnOnBackScene()));
+        switchSceneBack.ForEach(a => a.onClick.AddListener(() => {
+            TurnOnBackScene();
+            SoundManager.instance.PlayClick_Back();
+        }));
 
 
         ACT_Login.onClick.AddListener(() => PlayfabManager.instance.Login(loginUsername.text, loginPassword.text));
@@ -429,6 +432,9 @@ public class UIManager : MonoBehaviour
                             UIManager.instance.loginMessage.transform.parent.gameObject.SetActive(false);
                         }
 
+                        //SOUND MANAGER
+                        SoundManager.instance.PlayBackground_Login();
+
                     }
                     isSignIn = turn;
 
@@ -511,6 +517,8 @@ public class UIManager : MonoBehaviour
                         // TUTORIAL
                         TutorialManager.instance.PlayTutorialChain();
 
+                        //SOUND
+                        SoundManager.instance.PLayBackground_Home();
                     }
                     isHome = turn;
 
@@ -788,6 +796,7 @@ public class UIManager : MonoBehaviour
                     if (turn)
                     {
                         TurnOffSceneAlreadyShow();
+                        SoundManager.instance.PLayBackground_FindMatch();
                     }
                     isWatingMatch = turn;
                     foreach (GameObject obj in WatingMatchScene)

@@ -62,6 +62,8 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
     }
     public void OnPointerClick(PointerEventData eventData)
     {
+        //SOUND
+        SoundManager.instance.PlayClick_Normal();
         //deckitem in Playscene
         if (UIManager.instance.isCollection_Decks) //DeckItem in collection
         {
@@ -85,6 +87,8 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
 
             // TUTORIAL
             TutorialManager.instance.PlayTutorialChain();
+
+         
         }else if (UIManager.instance.isChooseDeckPVF)
         {
             UIManager.instance.LoadSeletedDeck(this.transform,UIManager.instance.CollectionDeckPVF_PlayScene,UIManager.instance.SelectFramePVF);

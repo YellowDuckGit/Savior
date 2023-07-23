@@ -70,7 +70,10 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         UIManager.instance.Button_NormalMode.onClick.AddListener(() => OnClickNormalMode());
         UIManager.instance.Button_RankedMode.onClick.AddListener(() => OnClickRankedMode());
         UIManager.instance.Button_FindMatch.onClick.AddListener(() => OnClickFindMatch());
-        UIManager.instance.Button_AcceptMatch.onClick.AddListener(() => OnClickAcceptMatch());
+        UIManager.instance.Button_AcceptMatch.onClick.AddListener(() => {
+            OnClickAcceptMatch();
+            SoundManager.instance.PlayClick_Normal();
+        });
         //UIManager.instance.Button_DelineMatch.onClick.AddListener(() => OnClickDeclineMatch());
         UIManager.instance.Button_StopFind.onClick.AddListener(() => OnClickStopFindMatch());
 

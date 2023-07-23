@@ -70,6 +70,8 @@ public class CardInInventory : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        //SOUND
+        SoundManager.instance.PlayClick_Normal();
         if (eventData.button == PointerEventData.InputButton.Left)
         {
          
