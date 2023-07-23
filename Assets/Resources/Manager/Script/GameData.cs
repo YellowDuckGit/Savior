@@ -114,9 +114,6 @@ public class GameData : MonoBehaviour
 
         yield return StartCoroutine(LoadDeck());
 
-        yield return StartCoroutine(PlayfabManager.instance.CalElo(false,0,0));
-
-
         //Load Price of Card
         yield return StartCoroutine(LoadingCardPrice());
         

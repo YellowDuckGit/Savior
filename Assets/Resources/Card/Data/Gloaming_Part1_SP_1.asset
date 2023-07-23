@@ -15,7 +15,7 @@ MonoBehaviour:
   <Id>k__BackingField: Gloaming_Part1_SP_1
   <Name>k__BackingField: Demonic Bats
   <Cost>k__BackingField: 2
-  <SpellType>k__BackingField: 1
+  <SpellType>k__BackingField: 2
   <Description>k__BackingField: Deal to a unit equal number of times you've been 
     Charmed enemy in this round
   <CardType>k__BackingField: 2
@@ -95,3 +95,4 @@ MonoBehaviour:
           _IsDominating: 0
           _IsBlockAttack: 0
           _IsBlockDefend: 0
+          _IsInTurn: 0

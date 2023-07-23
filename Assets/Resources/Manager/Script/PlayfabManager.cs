@@ -534,7 +534,7 @@ public class PlayfabManager : MonoBehaviour
             Rn = 0;
         }
 
-        MatchManager.instance.EloResult = Rn-eloPlayer;
+        MatchManager.instance.EloResult = Rn - eloPlayer;
 
         yield return StartCoroutine(SubmitScore(Rn));
     }

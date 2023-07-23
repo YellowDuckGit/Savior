@@ -617,7 +617,7 @@ GameObject:
   - component: {fileID: 1704646710887480623}
   - component: {fileID: 3332539835144497222}
   m_Layer: 11
-  m_Name: MonsterCard_Prefab 1
+  m_Name: MonsterCard_Prefab_Old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

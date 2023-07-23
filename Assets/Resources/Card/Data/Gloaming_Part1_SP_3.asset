@@ -15,7 +15,7 @@ MonoBehaviour:
   <Id>k__BackingField: Gloaming_Part1_SP_3
   <Name>k__BackingField: Dark Tomb
   <Cost>k__BackingField: 5
-  <SpellType>k__BackingField: 1
+  <SpellType>k__BackingField: 2
   <Description>k__BackingField: Deal 4 to a unit if it's Charmed
   <CardType>k__BackingField: 2
   <RarityCard>k__BackingField: 3
@@ -68,6 +68,7 @@ MonoBehaviour:
           _IsDominating: 0
           _IsBlockAttack: 0
           _IsBlockDefend: 0
+          _IsInTurn: 0
     - rid: 1073283052834127896
       type: {class: Dame, ns: , asm: Assembly-CSharp}
       data:

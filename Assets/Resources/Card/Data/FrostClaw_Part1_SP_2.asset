@@ -19,7 +19,7 @@ MonoBehaviour:
   <Description>k__BackingField: Deal 5 to anything
   <CardType>k__BackingField: 2
   <RarityCard>k__BackingField: 3
-  <RegionCard>k__BackingField: 0
+  <RegionCard>k__BackingField: 1
   <NormalAvatar>k__BackingField: {fileID: 2100000, guid: a05dda4eb9a3d9a44b62265daeaa978d, type: 2}
   <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: db6f46231db836a449cbe24cca81c21b, type: 2}
   <InBoardAvatar>k__BackingField: {fileID: 0}

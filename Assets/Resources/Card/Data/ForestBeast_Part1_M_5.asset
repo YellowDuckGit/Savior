@@ -19,9 +19,9 @@ MonoBehaviour:
   <Hp>k__BackingField: 3
   <Description>k__BackingField: Grant Dominate. If enemy BackBone has  10 or more,
     give me +3|0
-  <CardType>k__BackingField: 0
-  <RarityCard>k__BackingField: 0
-  <RegionCard>k__BackingField: 1
+  <CardType>k__BackingField: 1
+  <RarityCard>k__BackingField: 3
+  <RegionCard>k__BackingField: 2
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 1
