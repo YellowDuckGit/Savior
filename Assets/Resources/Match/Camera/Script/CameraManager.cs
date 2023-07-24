@@ -78,6 +78,14 @@ public class CameraManager : MonoBehaviour
                     mMF_Feedbacks[(int)ChanelCamera.Board].Play(Vector3.zero, 1f);
                     break;
                 case ChanelCamera.Hand:
+                    MMF_CinemachineTransition mMF_CinemachineTransition1 = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Hand];
+                    CinemachineVirtualCamera virtualCamera1 = mMF_CinemachineTransition1.TargetVirtualCamera;
+                    //virtualCamera1.Follow = Card.transform;
+                    if(Card != null)
+                    {
+                        virtualCamera1.LookAt = Card.transform;
+                    }
+
                     mMF_Feedbacks[(int)ChanelCamera.Hand].Play(Vector3.zero, 1f);
                     break;
                 case ChanelCamera.MP_HP:

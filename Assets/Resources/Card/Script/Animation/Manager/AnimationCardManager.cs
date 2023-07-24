@@ -29,11 +29,22 @@ public class AnimationCardManager : MonoBehaviour
     public AnimationCurve ATK_curveScaleYDestination;
     public AnimationCurve ATK_curveScaleZDestination;
 
+    public AnimationCurve ATK_BackPositionZRed;
+    public AnimationCurve ATK_BackPositionZBlue;
+    public AnimationCurve ATK_BackPositionY;
+
+
+
     [Header("Destroy Card")]
     public AnimationCurve Destroy_curve;
 
     [Header("Hover Card")]
-    public AnimationCurve Hover_curve;
+
+    public AnimationCurve Hover_curveY;
+
+    public LayoutGroup3D redHand;
+    public LayoutGroup3D blueHand;
+
 
     [Header("Get Damage")]
     public AnimationCurve GetDamage_curve;
@@ -159,48 +170,79 @@ public class AnimationCardManager : MonoBehaviour
         return mMF_Player;
     }
 
-    public MMF_Player CreateAnimationFB_ATK(Transform targetAnimated, Transform targetOpponent)
+    public MMF_Player CreateAnimationFB_ATK(CardBase targetAnimated, CardBase targetOpponent)
     {
         string name = "FB_ATK";
 
-        MMF_Player mMF_Player = CreateMMF_PlayerContainer(targetAnimated, name, true);
+        MMF_Player mMF_Player = CreateMMF_PlayerContainer(targetAnimated.transform, name, true);
 
-        MMF_Scale scale = new MMF_Scale();
-        scale.AnimateScaleTarget = targetAnimated;
-        scale.Mode = MMF_Scale.Modes.Additive;
+        //MMF_Scale scale = new MMF_Scale();
+        //scale.AnimateScaleTarget = targetAnimated.transform;
+        //scale.Mode = MMF_Scale.Modes.Additive;
 
-        scale.FeedbackDuration = 1f;
-        scale.RemapCurveZero = 0f;
-        scale.RemapCurveOne = 0.02f;
+        //scale.FeedbackDuration = 0.2f;
+        //scale.RemapCurveZero = 0f;
+        //scale.RemapCurveOne = 0.02f;
 
-        scale.AnimateX = true;
-        scale.AnimateY = true;
-        scale.AnimateZ = true;
-        scale.AnimateScaleTweenX = new MMTweenType(ATK_curveScaleXDestination);
-        scale.AnimateScaleTweenY = new MMTweenType(ATK_curveScaleYDestination);
-        scale.AnimateScaleTweenZ = new MMTweenType(ATK_curveScaleZDestination);
-        scale.AnimateScaleX = ATK_curveScaleXDestination;
-        scale.AnimateScaleX = ATK_curveScaleYDestination;
-        scale.AnimateScaleX = ATK_curveScaleZDestination;
+        //scale.AnimateX = true;
+        //scale.AnimateY = true;
+        //scale.AnimateZ = true;
+        //scale.AnimateScaleTweenX = new MMTweenType(ATK_curveScaleXDestination);
+        //scale.AnimateScaleTweenY = new MMTweenType(ATK_curveScaleYDestination);
+        //scale.AnimateScaleTweenZ = new MMTweenType(ATK_curveScaleZDestination);
+        //scale.AnimateScaleX = ATK_curveScaleXDestination;
+        //scale.AnimateScaleX = ATK_curveScaleYDestination;
+        //scale.AnimateScaleX = ATK_curveScaleZDestination;
+        //mMF_Player.AddFeedback(scale);
 
-        //scale.AnimateScaleTweenZ = new MMTweenType(curveScaleDestination);
-        //scale.AnimateScaleZ = curveScaleDestination;
 
-        mMF_Player.AddFeedback(scale);
 
-        MMF_HoldingPause pause1 = new MMF_HoldingPause();
-        pause1.PauseDuration = 0.2f;
-        mMF_Player.AddFeedback(pause1);
+        //MMF_Position position = new MMF_Position();
+        //position.AnimatePositionTarget = targetAnimated.gameObject;
+
+        //position.Mode = MMF_Position.Modes.AlongCurve;
+        //position.FeedbackDuration = 0.2f;
+        //position.RemapCurveZero = 0f;
+        //position.RemapCurveOne = 0.2f;
+
+        //position.AnimateX = false;
+        //position.AnimateY = false;
+        //position.AnimateZ = true;
+
+        //if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
+        //{
+        //    position.AnimatePositionTweenZ = new MMTweenType(ATK_BackPositionZBlue);
+        //    position.AnimatePositionCurveZ = ATK_BackPositionZBlue;
+        //}
+        //else if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
+        //{
+        //    position.AnimatePositionTweenZ = new MMTweenType(ATK_BackPositionZRed);
+        //    position.AnimatePositionCurveZ = ATK_BackPositionZRed;
+        //}
+
+
+        //position.AnimatePositionTweenY = new MMTweenType(ATK_BackPositionY);
+        //position.AnimatePositionCurveY = ATK_BackPositionY;
+
+        //position.InitialPositionTransform = targetAnimated.transform;
+        //position.InitialPosition = new Vector3(0f, 0f, 0f);
+
+        //mMF_Player.AddFeedback(position);
+
+
+
+        //MMF_HoldingPause pause1 = new MMF_HoldingPause();
+        //pause1.PauseDuration = 0.4f;
+        //mMF_Player.AddFeedback(pause1);
 
         MMF_DestinationTransform mMFeedbackDestinationTransform = new MMF_DestinationTransform();
-        mMFeedbackDestinationTransform.TargetTransform = targetAnimated;
-        mMFeedbackDestinationTransform.ForceOrigin = false;
-        mMFeedbackDestinationTransform.Destination = targetOpponent;
+        mMFeedbackDestinationTransform.TargetTransform = targetAnimated.transform;
+        mMFeedbackDestinationTransform.Destination = targetOpponent.transform;
 
         mMFeedbackDestinationTransform.SeparatePositionCurve = true;
         mMFeedbackDestinationTransform.AnimatePositionTween = new MMTweenType(curveDestination);
         mMFeedbackDestinationTransform.GlobalAnimationCurve = curveDestination;
-        mMFeedbackDestinationTransform.Duration = 0.2f;
+        mMFeedbackDestinationTransform.Duration = 0.6f;
 
         mMFeedbackDestinationTransform.AnimatePositionX = true;
         mMFeedbackDestinationTransform.AnimatePositionY = true;
@@ -213,8 +255,8 @@ public class AnimationCardManager : MonoBehaviour
         mMFeedbackDestinationTransform.AnimateScaleY = false;
         mMFeedbackDestinationTransform.AnimateScaleZ = false;
 
-        mMF_Player.AddFeedback(mMFeedbackDestinationTransform);
-
+        mMF_Player.AddFeedback(mMFeedbackDestinationTransform);   
+        
         mMF_Player.Initialization();
 
         return mMF_Player;
@@ -251,51 +293,86 @@ public class AnimationCardManager : MonoBehaviour
 
     }
 
-    public MMF_Player CreateAnimationFB_Hover(Transform targetAnimated)
+    public MMF_Player CreateAnimationFB_Hover(CardBase targetAnimated)
     {
         string name = "FB_HoverCard";
 
-        MMF_Player mMF_Player = CreateMMF_PlayerContainer(targetAnimated, name, false);
-
+        MMF_Player mMF_Player = CreateMMF_PlayerContainer(targetAnimated.transform, name, false);
         MMF_Position position = new MMF_Position();
         position.AnimatePositionTarget = targetAnimated.gameObject;
-
         position.Mode = MMF_Position.Modes.AlongCurve;
         position.FeedbackDuration = 0.2f;
         position.RemapCurveZero = 0f;
-        position.RemapCurveOne = 0.4f;
-
-        position.AnimateX = false;
+        position.RemapCurveOne = 0.5f;
+        position.AnimateX = true;
         position.AnimateY = true;
-        position.AnimateZ = false;
+        position.AnimateZ = true;
+        position.AnimatePositionTweenY = new MMTweenType(Hover_curveY);
+        position.AnimatePositionCurveY = Hover_curveY;
 
-        position.AnimatePositionTweenY = new MMTweenType(Hover_curve);
-        position.AnimatePositionCurveY = Hover_curve;
+        if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
+        {
+            AnimationCurve curve = new AnimationCurve(new Keyframe[2] {new Keyframe(0,0), new Keyframe(1,-0.2f)});
+            position.AnimatePositionTweenX = new MMTweenType(curve);
+            position.AnimatePositionCurveX = curve;
+            position.AnimatePositionTweenZ = new MMTweenType(curve);
+            position.AnimatePositionCurveZ = curve;
+        }
+        else if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
+        {
+            AnimationCurve curve = new AnimationCurve(new Keyframe[2] { new Keyframe(0, 0), new Keyframe(1, 0.2f) });
+            position.AnimatePositionTweenX = new MMTweenType(curve);
+            position.AnimatePositionCurveX = curve;
+            position.AnimatePositionTweenZ = new MMTweenType(curve);
+            position.AnimatePositionCurveZ = curve;
+        }
 
         position.InitialPositionTransform = targetAnimated.transform;
         position.InitialPosition = new Vector3(0f, 0f, 0f);
-
         mMF_Player.AddFeedback(position);
 
-        //MMF_Rotation rotation = new MMF_Rotation();
-        //rotation.AnimateRotationTarget = targetAnimated;
 
-        //rotation.Mode = MMF_Rotation.Modes.Additive;
-        //rotation.FeedbackDuration = 0.2f;
-        //rotation.RemapCurveZero = 0f;
-        //rotation.RemapCurveOne = 1f;
+        MMF_Events event1 = new MMF_Events();
+        UnityEvent ev1 = new UnityEvent();
 
-        //rotation.AnimateX = false;
-        //rotation.AnimateY = true;
-        //rotation.AnimateZ = false;
+        if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
+        {
+            if (blueHand == null) blueHand = targetAnimated.CardPlayer.hand.gameObject.GetComponent<LayoutGroup3D>();
+            ev1.AddListener(() => blueHand.RebuildLayout());
+        }
+        else if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
+        {
+            if (redHand == null) redHand = targetAnimated.CardPlayer.hand.gameObject.GetComponent<LayoutGroup3D>();
+            ev1.AddListener(() => redHand.RebuildLayout());
+        }
+        event1.PlayEvents = ev1;
+        mMF_Player.AddFeedback(event1);
 
-        //rotation.AnimateRotationTweenY = new MMTweenType(Hover_curve);
-        //rotation.AnimateRotationY = Hover_curve;
+        //MMF_Pause pause1 = new MMF_Pause();
+        //pause1.PauseDuration = 0.5f;
+        //mMF_Player.AddFeedback(pause1);
 
-        //mMF_Player.AddFeedback(position);
 
+        MMF_Rotation rotation = new MMF_Rotation();
+        rotation.RotationSpace = Space.World;
+        rotation.AnimateRotationTarget = targetAnimated.transform.parent.transform;
+        rotation.Mode = MMF_Rotation.Modes.ToDestination;
 
+        if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
+        {
+            rotation.DestinationAngles = new Vector3(0, 180, 0);
+        }
+        else if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
+        {
+            rotation.DestinationAngles = new Vector3(0, 0, 0);
+        }
+       
+        mMF_Player.AddFeedback(rotation);
         mMF_Player.Initialization();
+
+
+        rotation.Timing.MMFeedbacksDirectionCondition = MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenForwards;
+        event1.Timing.MMFeedbacksDirectionCondition = MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenBackwards;
 
         return mMF_Player;
     }

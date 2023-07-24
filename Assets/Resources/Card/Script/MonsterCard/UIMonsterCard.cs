@@ -81,7 +81,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
-                StartCoroutine(HPLerpCoroutine(Hp, value, 2f));
+                StartCoroutine(HPLerpCoroutine(Hp, value, 1f));
 
             }
         }
@@ -94,7 +94,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
-                StartCoroutine(ATKLerpCoroutine(Attack, value, 2f));
+                StartCoroutine(ATKLerpCoroutine(Attack, value, 1f));
 
             }
         }
@@ -428,7 +428,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             if (CardTarget == args.own)
             {
                 print("AnimationAtk");
-                controller.PlayATKCard(args.own.transform,args.opponnet.transform);
+                controller.PlayATKCard(args.own,args.opponnet);
             }
             else
             {

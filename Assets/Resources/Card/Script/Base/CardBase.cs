@@ -270,6 +270,18 @@ public abstract class CardBase : MonoBehaviourPun, IPunObservable, ICardBase, IN
             RightClickCard();
         }
     }
+
+    private void OnMouseOver()
+    {
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            print("GetMouseButtonDown");
+            this.PostEvent(EventID.OnRightClickHoverCard, this);
+        }
+    }
+
+
     protected void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         PropertyChanged?.Invoke(this, e);

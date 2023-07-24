@@ -713,8 +713,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
         var AttackPlayer = GetAttackPlayer();
         var DefensePlayer = GetDefensePlayer();
 
-        AttackZoneOpposite(AttackPlayer.fightZones, DefensePlayer.fightZones);
-        StartCoroutine(ClearAttackField(localPlayerSide));
+        yield return StartCoroutine(AttackZoneOpposite(AttackPlayer.fightZones, DefensePlayer.fightZones));
+        yield return StartCoroutine(ClearAttackField(localPlayerSide));
         SetSkipAction();
         gamePhase = GamePhase.Normal;
         this.PostEvent(EventID.EndAttackAndDefensePhase, this);
@@ -1604,7 +1604,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
     }
 
-    void AttackZoneOpposite(List<FightZone> attackZones, List<FightZone> defenseZones)
+    IEnumerator AttackZoneOpposite(List<FightZone> attackZones, List<FightZone> defenseZones)
     {
         foreach(FightZone attackZone in attackZones)
         {
@@ -1619,14 +1619,20 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 //true if defense zone opposite exist monster card
                 if(monsterDefense != null)
                 {
-                    monsterAttack.attack(monsterDefense);
-                    monsterDefense.attack(monsterAttack);
-
                     this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterDefense , monsterAttack));
+                    yield return new WaitForSeconds(0.6f);
+                    monsterAttack.attack(monsterDefense);
+
+                    yield return new WaitForSeconds(0.6f);
+
+
                     this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterAttack, monsterDefense));
+                    yield return new WaitForSeconds(0.6f);
+                    monsterDefense.attack(monsterAttack);
                 }
                 else //attack to hp player
                 {
+                    //animation missing || attack to player
                     defenseZone.player.hp.decrease(monsterAttack.Attack);
                 }
 

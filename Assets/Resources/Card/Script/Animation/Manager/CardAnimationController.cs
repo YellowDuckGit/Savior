@@ -3,7 +3,9 @@ using MoreMountains.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR;
 
 public class CardAnimationController : MonoBehaviour
@@ -24,8 +26,7 @@ public class CardAnimationController : MonoBehaviour
     [Space(10)]
     [Header("Properties")]
 
-    public Transform Card;
-    public Transform OpponentTest;
+    public CardBase Card;
 
     //public Transform Hand;
     //[Space(10)]
@@ -36,26 +37,32 @@ public class CardAnimationController : MonoBehaviour
     private MMF_Player MMF_GetDamage;
     private MMF_Player MMF_Hover;
 
+    private static bool isHoverCardAnimation = false;
+
     private void Start()
     {
-        MMF_DestroyCard = AnimationCardManager.instance.CreateAnimationFB_Destroy(Card);
-        MMF_GetDamage = AnimationCardManager.instance.CreateAnimationFB_GetDamage(Card);
-        
+        MMF_DestroyCard = AnimationCardManager.instance.CreateAnimationFB_Destroy(Card.transform);
+        MMF_GetDamage = AnimationCardManager.instance.CreateAnimationFB_GetDamage(Card.transform);
+        this.RegisterListener(EventID.OnRightClickHoverCard, (param) => rightClickHover(param as CardBase));
 
     }
 
     public void PlayDrawCard(Transform hand)
     {
-        MMF_Player mMF_Player = AnimationCardManager.instance.CreateAnimationFB_DrawCard(Card, hand);
+        MMF_Player mMF_Player = AnimationCardManager.instance.CreateAnimationFB_DrawCard(Card.transform, hand);
         mMF_Player.PlayFeedbacks();
     }
 
-    public void PlayATKCard(Transform own ,Transform Opponent)
+    public void PlayATKCard(CardBase own , CardBase Opponent)
     {
-       
+        print("AnimationATK: "+own.Name + "ATK "+ Opponent.Name);
         MMF_Player mMF_Player = AnimationCardManager.instance.CreateAnimationFB_ATK(own, Opponent);
         mMF_Player.PlayFeedbacks();
-        print("PlayATKCard");
+    }
+
+    public void Test()
+    {
+
     }
     public void PlayDestroyCard()
     {
@@ -71,8 +78,21 @@ public class CardAnimationController : MonoBehaviour
         MMF_Hover.StopFeedbacks();
         MMF_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
         MMF_Hover.PlayFeedbacks();
-
+        isHoverCardAnimation = true;
     }
+
+    public void rightClickHover(CardBase card)
+    {
+        print("rightClickHover");
+
+        if (card.Position.Equals(CardPosition.InHand))
+        {
+            if(isHoverCardAnimation)
+            CameraManager.instance.SwitchCamera(CameraManager.ChanelCamera.Hand, card);
+        }
+    }
+
+
 
     public void PlayUnHover()
     {
@@ -82,13 +102,30 @@ public class CardAnimationController : MonoBehaviour
         MMF_Hover.StopFeedbacks();
         MMF_Hover.Direction = MMFeedbacks.Directions.BottomToTop;
         MMF_Hover.PlayFeedbacks();
+
+        isHoverCardAnimation = false;
+
+        StartCoroutine(DelayUnHoverSwitchCamera(2));
     }
-      
+
 
     public void PlayGetDame()
     {
         MMF_GetDamage.PlayFeedbacks();
         print("PlayGetDame");
+    }
 
+    public IEnumerator DelayHoverSwitchCamera(float seccond, CardBase card= null)
+    {
+        yield return new WaitForSeconds(seccond);
+        CameraManager.instance.SwitchCamera(CameraManager.ChanelCamera.Hand, card);
+    }
+
+    public IEnumerator DelayUnHoverSwitchCamera(float seccond)
+    {
+        yield return new WaitForSeconds(seccond);
+        
+        if(!isHoverCardAnimation)
+        CameraManager.instance.SwitchCamera(CameraManager.ChanelCamera.Normal);
     }
 }
