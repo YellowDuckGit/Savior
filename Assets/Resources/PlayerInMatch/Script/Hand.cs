@@ -77,6 +77,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         }));
         if(this.Count < MaxholdNumber)
         {
+            //SFX: DrawCard
             _cards.Add(item);
             SelectManager.Instance.CheckSelectAble(MatchManager.instance);
             item.Parents = this;

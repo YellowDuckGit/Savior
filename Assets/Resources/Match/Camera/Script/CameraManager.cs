@@ -58,6 +58,8 @@ public class CameraManager : MonoBehaviour
 
     public void SwitchCamera(ChanelCamera chanel, CardBase Card = null)
     {
+
+        //SFX: Swtich cam
         lastChannel = presentChannel;
         presentChannel = (int)chanel;
         print("lastChannel: " + lastChannel);

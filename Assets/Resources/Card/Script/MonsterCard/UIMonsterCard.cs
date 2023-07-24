@@ -1,6 +1,7 @@
 ﻿using Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget;
 using Card;
 using EPOOutline;
+using MoreMountains.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -292,6 +293,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             {
                 if(monsterCard == CardTarget)
                 {
+                    //SFX: Summon Monster
                     this.MoveToSummonZoneAction(args.fightZone, args.summonZone);
                 }
             }
@@ -411,6 +413,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         {
             if (args is MonsterCard monsterCard && args == CardTarget)
             {
+                //SFX: CardGetDame
                 controller.PlayGetDame();
             }
         }
@@ -419,6 +422,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         {
             if (args is MonsterCard monsterCard && CardTarget == args)
             {
+                //SFX: DestroyCard
                 controller.PlayDestroyCard();
             }
         }
