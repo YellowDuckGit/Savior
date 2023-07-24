@@ -1,5 +1,4 @@
 ﻿using Assets.GameComponent.Card.CardComponents.Script.UI;
-using Assets.GameComponent.Card.Logic.ConditionTrigger.Round;
 using EPOOutline;
 using System;
 using System.Collections;
@@ -193,6 +192,8 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     {
         Interactable = false;
     }
+
+
     public void OnMouseEnter()
     {
         this.PostEvent(EventID.OnEnterCard, this);
@@ -264,13 +265,13 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     #region Animation 
     public void EnterCard()
     {
-        if((this.CardTarget.Position == CardPosition.InHand))
+        if(CardTarget.photonView.IsMine && (this.CardTarget.Position == CardPosition.InHand))
             Controller.PlayHover();
     }
 
     public void UnEnterCard()
     {
-        if ((this.CardTarget.Position == CardPosition.InHand))
+        if (CardTarget.photonView.IsMine && (this.CardTarget.Position == CardPosition.InHand))
             Controller.PlayUnHover();
     }
 

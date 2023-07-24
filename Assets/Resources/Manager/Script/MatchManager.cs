@@ -191,20 +191,28 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         player.spellZone.SpellCard = card;
         player.mana.Number -= card.Cost;
+
         yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(card));
+
+        yield return new WaitForSeconds(0.5f);
+
+        /*
+         * just local player get and excute effect first, after that async player opposite
+         */
+        Debug.Log(this.debug("Used card spell", new
+        {
+            card.SpellType
+        }));
+
+        if(card.SpellType == SpellType.Slow)
+        {
+            SwitchTurnAction();
+        }
 
         if(card != null)
         {
             card.transform.SetParent(null);
             card.gameObject.SetActive(false); //destroy spell card after use
-        }
-
-        /*
-         * just local player get and excute effect first, after that async player opposite
-         */
-        if(card.SpellType == SpellType.Slow)
-        {
-            SwitchTurnAction();
         }
         yield return null;
     }
@@ -713,8 +721,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
         var AttackPlayer = GetAttackPlayer();
         var DefensePlayer = GetDefensePlayer();
 
-        AttackZoneOpposite(AttackPlayer.fightZones, DefensePlayer.fightZones);
-        StartCoroutine(ClearAttackField(localPlayerSide));
+        yield return StartCoroutine(AttackZoneOpposite(AttackPlayer.fightZones, DefensePlayer.fightZones));
+        yield return StartCoroutine(ClearAttackField(localPlayerSide));
         SetSkipAction();
         gamePhase = GamePhase.Normal;
         this.PostEvent(EventID.EndAttackAndDefensePhase, this);
@@ -1604,7 +1612,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
     }
 
-    void AttackZoneOpposite(List<FightZone> attackZones, List<FightZone> defenseZones)
+    IEnumerator AttackZoneOpposite(List<FightZone> attackZones, List<FightZone> defenseZones)
     {
         foreach(FightZone attackZone in attackZones)
         {
@@ -1619,14 +1627,20 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 //true if defense zone opposite exist monster card
                 if(monsterDefense != null)
                 {
-                    monsterAttack.attack(monsterDefense);
-                    monsterDefense.attack(monsterAttack);
-
                     this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterDefense , monsterAttack));
+                    yield return new WaitForSeconds(0.6f);
+                    monsterAttack.attack(monsterDefense);
+
+                    yield return new WaitForSeconds(0.6f);
+
+
                     this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterAttack, monsterDefense));
+                    yield return new WaitForSeconds(0.6f);
+                    monsterDefense.attack(monsterAttack);
                 }
                 else //attack to hp player
                 {
+                    //animation missing || attack to player
                     defenseZone.player.hp.decrease(monsterAttack.Attack);
                 }
 

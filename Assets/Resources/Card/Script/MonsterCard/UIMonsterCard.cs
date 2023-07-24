@@ -1,6 +1,7 @@
 ﻿using Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget;
 using Card;
 using EPOOutline;
+using MoreMountains.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -81,7 +82,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
-                StartCoroutine(HPLerpCoroutine(Hp, value, 2f));
+                StartCoroutine(HPLerpCoroutine(Hp, value, 1f));
 
             }
         }
@@ -94,7 +95,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
-                StartCoroutine(ATKLerpCoroutine(Attack, value, 2f));
+                StartCoroutine(ATKLerpCoroutine(Attack, value, 1f));
 
             }
         }
@@ -292,6 +293,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             {
                 if(monsterCard == CardTarget)
                 {
+                    //SFX: Summon Monster
                     this.MoveToSummonZoneAction(args.fightZone, args.summonZone);
                 }
             }
@@ -411,6 +413,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         {
             if (args is MonsterCard monsterCard && args == CardTarget)
             {
+                //SFX: CardGetDame
                 controller.PlayGetDame();
             }
         }
@@ -419,6 +422,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         {
             if (args is MonsterCard monsterCard && CardTarget == args)
             {
+                //SFX: DestroyCard
                 controller.PlayDestroyCard();
             }
         }
@@ -428,7 +432,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             if (CardTarget == args.own)
             {
                 print("AnimationAtk");
-                controller.PlayATKCard(args.own.transform,args.opponnet.transform);
+                controller.PlayATKCard(args.own,args.opponnet);
             }
             else
             {

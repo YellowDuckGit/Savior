@@ -192,6 +192,31 @@ public abstract class CardBase : MonoBehaviourPun, IPunObservable, ICardBase, IN
         this.PostEvent(EventID.OnRightClickCard, this);
     }
 
+    public void Discard()
+    {
+        if(Parents != null)
+        {
+            if(Parents is IList list)
+            {
+                list.Remove(this);
+            }
+            else if(Parents is IDictionary dictionary)
+            {
+                dictionary.Remove(this.Id);
+            }
+            else
+            {
+                Debug.LogError(this.debug("can not find type of parents"));
+            }
+        }
+        else
+        {
+            Debug.LogError(this.debug("parents is null"));
+        }
+        this.gameObject.SetActive(false);
+        this.transform.parent = null;
+    }
+
     public abstract void SetupCard();
     public abstract IEnumerator LoadCardFromData();
     public abstract void RegistLocalEvent();
@@ -270,6 +295,18 @@ public abstract class CardBase : MonoBehaviourPun, IPunObservable, ICardBase, IN
             RightClickCard();
         }
     }
+
+    private void OnMouseOver()
+    {
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            print("GetMouseButtonDown");
+            this.PostEvent(EventID.OnRightClickHoverCard, this);
+        }
+    }
+
+
     protected void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         PropertyChanged?.Invoke(this, e);

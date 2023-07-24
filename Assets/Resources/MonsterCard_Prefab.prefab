@@ -200,8 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa0edabf0f6c6b4daa531567cd6abcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Card: {fileID: 2999282732062864027}
-  OpponentTest: {fileID: 0}
+  Card: {fileID: 6312175045517974260}
 --- !u!1 &669094162127249541
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,7 +610,6 @@ GameObject:
   - component: {fileID: 7854024635089110259}
   - component: {fileID: 4045619418753517574}
   - component: {fileID: 5473541717293128656}
-  - component: {fileID: 3982697681198538779}
   - component: {fileID: 2502600675540925206}
   - component: {fileID: 6312175045517974260}
   - component: {fileID: 1704646710887480623}
@@ -760,21 +758,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   UpdateMode: 0
   MinDistanceToGoal: 0.1
---- !u!114 &3982697681198538779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3333463101881318725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbd72272bfff01b49af922088678668a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FeedBack_Hover: {fileID: 0}
-  FeedBack_UnHover: {fileID: 0}
-  TurnOn: 0
 --- !u!114 &2502600675540925206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -910,8 +893,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.55, y: 6.583}
-  m_SizeDelta: {x: 5.314, y: 0.832}
+  m_AnchoredPosition: {x: -0.947, y: 6.583}
+  m_SizeDelta: {x: 5.684, y: 0.832}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2093267133552433027
 CanvasRenderer:
@@ -2090,8 +2073,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7300995184935097597}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.76, y: 0.05, z: -4.36}
-  m_LocalScale: {x: 0.61596, y: 1, z: 0.07232001}
+  m_LocalPosition: {x: 0.934, y: 0.05, z: -4.36}
+  m_LocalScale: {x: 0.6960185, y: 1, z: 0.07232001}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2999282732062864027}

@@ -29,6 +29,7 @@ public class HP : MonoBehaviour
 
             if (number <= 0)
             {
+                //SFX: Out of Blood Tube
                 MatchManager.instance.ResultMatch(WinCondition.EnemyLoseAllHp);
             }
         }

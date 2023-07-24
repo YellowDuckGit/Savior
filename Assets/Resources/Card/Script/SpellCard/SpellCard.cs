@@ -383,10 +383,9 @@ public class SpellCard : CardBase, ISpellCard
         InDeckAvatar = source.InDeckAvatar;
         InDeckAvatar2D = source.InDeckAvatar2D;
         InBoardAvatar = source.InBoardAvatar;
-        NormalAvatar = source.NormalAvatar;
-
         RarityCard = source.RarityCard;
         RegionCard = source.RegionCard;
+        SpellType = source.SpellType;
 
         if(source.CardEffect != null)
         {

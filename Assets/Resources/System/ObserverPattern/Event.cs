@@ -48,4 +48,5 @@ public enum EventID
     OnStartMatch,
     OnEndMatch,
     OnCardAttack,
+    OnRightClickHoverCard,
 }
