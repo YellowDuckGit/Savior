@@ -1,5 +1,4 @@
 ﻿using Assets.GameComponent.Card.CardComponents.Script.UI;
-using Assets.GameComponent.Card.Logic.ConditionTrigger.Round;
 using EPOOutline;
 using System;
 using System.Collections;

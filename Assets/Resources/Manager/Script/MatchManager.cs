@@ -191,20 +191,28 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         player.spellZone.SpellCard = card;
         player.mana.Number -= card.Cost;
+
         yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(card));
+
+        yield return new WaitForSeconds(0.5f);
+
+        /*
+         * just local player get and excute effect first, after that async player opposite
+         */
+        Debug.Log(this.debug("Used card spell", new
+        {
+            card.SpellType
+        }));
+
+        if(card.SpellType == SpellType.Slow)
+        {
+            SwitchTurnAction();
+        }
 
         if(card != null)
         {
             card.transform.SetParent(null);
             card.gameObject.SetActive(false); //destroy spell card after use
-        }
-
-        /*
-         * just local player get and excute effect first, after that async player opposite
-         */
-        if(card.SpellType == SpellType.Slow)
-        {
-            SwitchTurnAction();
         }
         yield return null;
     }
