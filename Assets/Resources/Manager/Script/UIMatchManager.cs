@@ -366,7 +366,9 @@ public class UIMatchManager : MonoBehaviour
             if(isRank)
                 ResultMatch = "Your Win\n+1500 Coin\n "+ MatchManager.instance.EloResult +" Elo";
             else
-            ResultMatch = "Your Win\n+1500 Coin"; 
+            ResultMatch = "Your Win\n+1500 Coin";
+
+            //SFX: Victory
         }
         else
         {
@@ -374,6 +376,8 @@ public class UIMatchManager : MonoBehaviour
                 ResultMatch = "Your Lose\n+500 Coin" + MatchManager.instance.EloResult +" Elo";
             else
             ResultMatch = "Your Lose\n+500 Coin";
+
+            //SFX: Defeat
         }
 
         yield return new WaitForSeconds(showTime);
