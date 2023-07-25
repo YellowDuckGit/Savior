@@ -38,6 +38,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1073283350988062747
+      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptHp, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        value:
+          rid: 1073283350988062748
+    - rid: 1073283350988062748
+      type: {class: AbstractTarget/AbstractTargetDataType/AbstractTargetDataTypeValue/ValueNumber, ns: Assets.GameComponent.Card.Logic.TargetObject.Target, asm: Assembly-CSharp}
+      data:
+        comepare: 4
+        number: 3
     - rid: 3530786395931541504
       type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
@@ -98,9 +108,10 @@ MonoBehaviour:
     - rid: 3530786395931541518
       type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
       data:
-        monsterOptions: []
+        monsterOptions:
+        - rid: 1073283350988062747
     - rid: 3530786395931541519
       type: {class: Dame, ns: , asm: Assembly-CSharp}
       data:
         pitch: []
-        number: 0
+        number: 1
