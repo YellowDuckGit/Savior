@@ -81,6 +81,7 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
             _cards.Add(item);
             SelectManager.Instance.CheckSelectAble(MatchManager.instance);
             item.Parents = this;
+            item.Position = CardPosition.InHand;
             CreateParentSortingForCard(item);
         }
         else

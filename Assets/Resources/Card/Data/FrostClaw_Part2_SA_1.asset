@@ -33,7 +33,74 @@ MonoBehaviour:
   <InBoardAvatar>k__BackingField: {fileID: 0}
   <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 7fad46eff8444a4459c1f9e3e58fa6a2, type: 3}
   <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 54df05ed0d7edbf4592f8e5c8d6bf3fa, type: 3}
-  CardEffects: []
+  CardEffects:
+  - rid: 3530786395931541504
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3530786395931541504
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 3530786395931541512
+    - rid: 3530786395931541512
+      type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent, asm: Assembly-CSharp}
+      data:
+        EventID: 15
+        LifeTime: 0
+        WhenDie: 0
+        Actions:
+        - rid: 3530786395931541513
+    - rid: 3530786395931541513
+      type: {class: Have, ns: Assets.GameComponent.Card.Logic.Have, asm: Assembly-CSharp}
+      data:
+        _not: 0
+        circle: 0
+        comepare: 2
+        number: 1
+        target:
+          rid: 3530786395931541515
+        Actions:
+        - rid: 3530786395931541514
+    - rid: 3530786395931541514
+      type: {class: SelectMulti, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi, asm: Assembly-CSharp}
+      data:
+        multiTargetType:
+          rid: 3530786395931541517
+    - rid: 3530786395931541515
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        owner: 2
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        CardType:
+          rid: 3530786395931541516
+        match: {fileID: 0}
+    - rid: 3530786395931541516
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        monsterOptions: []
+    - rid: 3530786395931541517
+      type: {class: SelectMulti/MultiTargetType/MultiTargetCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi, asm: Assembly-CSharp}
+      data:
+        target:
+          owner: 2
+          cardPosition: 4
+          Rarity: 0
+          region: 0
+          CardType:
+            rid: 3530786395931541518
+          match: {fileID: 0}
+        Effects:
+        - rid: 3530786395931541519
+    - rid: 3530786395931541518
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        monsterOptions: []
+    - rid: 3530786395931541519
+      type: {class: Dame, ns: , asm: Assembly-CSharp}
+      data:
+        pitch: []
+        number: 0
