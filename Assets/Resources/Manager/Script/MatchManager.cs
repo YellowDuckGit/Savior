@@ -429,6 +429,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(3);
 
         UIMatchManager.instance.TurnLoadingScene(false);
+
+        SoundManager.instance.PlayBackground_Match();
     }
 
     private IEnumerator SyncOppositePlayerDeck()
@@ -673,6 +675,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
             //UIMatchManager.instance.Turn = "Your Turn";
             //UIMatchManager.instance.GetACT_SkipTurn.interactable = true;
 
+            // SFX: Your Turn
+            SoundManager.instance.PlayYourTurn();
             UIMatchManager.instance.Turn(turnPresent);
             UIMatchManager.instance.SkipTurn_Interactive = true;
         }
@@ -726,6 +730,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         SetSkipAction();
         gamePhase = GamePhase.Normal;
         this.PostEvent(EventID.EndAttackAndDefensePhase, this);
+
         yield return null;
     }
     #endregion
@@ -1528,11 +1533,15 @@ public class MatchManager : MonoBehaviourPunCallbacks
         if(LocalPlayer.tokken == GameTokken.Attack)
         {
             //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Attack";
+            // SFX: Your Attack
+            SoundManager.instance.PlayYourAttack();
             UIMatchManager.instance.RightAttack();
         }
         else
         {
             //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Defense";
+            // SFX: Your Defense
+            SoundManager.instance.PlayYourDefense();
             UIMatchManager.instance.RightAttack();
         }
 

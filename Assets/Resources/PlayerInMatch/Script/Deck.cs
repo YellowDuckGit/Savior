@@ -166,6 +166,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
         // Otherwise, proceed as before
         CardBase card = _cards[0];
         _cards.RemoveAt(0);
+        SoundManager.instance.PlayDrawCard();
         return card;
     }
 
@@ -193,6 +194,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
                 cards.Add(card);
             }
         }
+        SoundManager.instance.PlayDrawCard();
         return cards;
     }
 
@@ -201,6 +203,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         CardBase card = _cards[index];
         _cards.RemoveAt(index);
+        SoundManager.instance.PlayDrawCard();
         return card;
     }
 
@@ -208,6 +211,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     public CardBase Draw(CardBase card)
     {
         _cards.Remove(card);
+        SoundManager.instance.PlayDrawCard();
         return card;
     }
 
@@ -216,6 +220,7 @@ public class Deck : MonoBehaviourPun, IList<CardBase>, IPunObservable
     {
         CardBase card = _cards.Find(c => c.Name == name);
         _cards.Remove(card);
+        SoundManager.instance.PlayDrawCard();
         return card;
     }
 

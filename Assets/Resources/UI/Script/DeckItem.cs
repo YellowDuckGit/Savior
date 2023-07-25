@@ -32,7 +32,7 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
             this.data = value;
             //text_DeckName.text = this.data.deckName;
 
-            // Avatar
+            //Avatar
             //string idSavaior = data.ListCardID.FirstOrDefault(a => a.Contains("SA"));
 
             //if (idSavaior != null)

@@ -70,10 +70,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         UIManager.instance.Button_NormalMode.onClick.AddListener(() => OnClickNormalMode());
         UIManager.instance.Button_RankedMode.onClick.AddListener(() => OnClickRankedMode());
         UIManager.instance.Button_FindMatch.onClick.AddListener(() => OnClickFindMatch());
-        UIManager.instance.Button_AcceptMatch.onClick.AddListener(() => {
-            OnClickAcceptMatch();
-            SoundManager.instance.PlayClick_Normal();
-        });
+        UIManager.instance.Button_AcceptMatch.onClick.AddListener(() => OnClickAcceptMatch());
         //UIManager.instance.Button_DelineMatch.onClick.AddListener(() => OnClickDeclineMatch());
         UIManager.instance.Button_StopFind.onClick.AddListener(() => OnClickStopFindMatch());
 
@@ -460,6 +457,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                     _myRoomCustomProperties[K_Room.K_RoomState.key] = K_Room.K_RoomState.Ready;
                     PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
                     Debug.Log("Player Join Room -> Ready");
+
                     break;
                 }
                 else if(RoomGameMode == ((int)GameMode.PlayWithFriend).ToString())
@@ -496,9 +494,9 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 //UIManager.instance.UI_ConfirmMatchmaking(true);
                 //UIManager.instance.UI_WaitingOppenent(false);
 
-                //SFX: Notify Found Match
                 UIManager.instance.WatingAcceptMatch(true);
                 coroutine = StartCoroutine(TimeoutWaitingAccept());
+
 
             }
             else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.StartMatch)

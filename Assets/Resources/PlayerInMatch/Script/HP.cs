@@ -31,6 +31,9 @@ public class HP : MonoBehaviour
             {
                 //SFX: Out of Blood Tube
                 MatchManager.instance.ResultMatch(WinCondition.EnemyLoseAllHp);
+
+                //SOUND
+                SoundManager.instance.PlayOutBlood();
             }
         }
 

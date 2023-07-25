@@ -293,8 +293,8 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             {
                 if(monsterCard == CardTarget)
                 {
-                    //SFX: Summon Monster
                     this.MoveToSummonZoneAction(args.fightZone, args.summonZone);
+
                 }
             }
 
@@ -415,6 +415,9 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             {
                 //SFX: CardGetDame
                 controller.PlayGetDame();
+
+                //SOUND
+                SoundManager.instance.PlayGetDame();
             }
         }
 
@@ -424,11 +427,17 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             {
                 //SFX: DestroyCard
                 controller.PlayDestroyCard();
+
+                //SOUND
+                SoundManager.instance.PlayDestroyCard();
             }
         }
 
         private void AnimationAtk(AnimationAttackArgs args)
         {
+
+            //SOUND
+            SoundManager.instance.PlayBattle();
             if (CardTarget == args.own)
             {
                 print("AnimationAtk");

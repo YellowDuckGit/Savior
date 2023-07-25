@@ -31,9 +31,30 @@ public class SoundManager : MonoBehaviour
     public MMF_Player OpenPack;
     public MMF_Player Click_Payment;
 
+    // IN MATCH
+    public MMF_Player DrawCard;
+    public MMF_Player Battle;
+    public MMF_Player OutBlood;
+
+    public MMF_Player SummonMonster;
+    public MMF_Player CardGetDame;
+    public MMF_Player DestroyCard;
+    public MMF_Player SkipTurn;
+
+    public MMF_Player FoundMatch;
+    public MMF_Player SwitchCam;
+
+    public MMF_Player Victory;
+    public MMF_Player Defeat;
+
+    public MMF_Player Background_Match;
+
+    public MMF_Player YourTurn;
+    public MMF_Player YourAttack;
+    public MMF_Player YourDefense;
     #endregion
 
-    #region PLAY SOUND
+    #region PLAY SOUND UI
     public void PlayBackground_Login()
     {
         print("PLAY BACKGROUND LOGIN SOUND");
@@ -73,6 +94,84 @@ public class SoundManager : MonoBehaviour
     {
         print("PLAY CLICK PAYMENT SOUND");
         Click_Payment.PlayFeedbacks();
+    }
+    #endregion
+
+    #region PLAY SOUND IN MATCH
+    public void PlayYourTurn()
+    {
+        print("PLAY YOUR TURN SOUND");
+        YourTurn.PlayFeedbacks();
+    }
+    public void PlayYourAttack()
+    {
+        print("PLAY YOUR ATTACK SOUND");
+        YourAttack.PlayFeedbacks();
+    }
+    public void PlayYourDefense()
+    {
+        print("PLAY YOUR DEFENSE SOUND");
+        YourDefense.PlayFeedbacks();
+    }
+    public void PlayDrawCard()
+    {
+        print("PLAY DRAW CARD SOUND");
+        DrawCard.PlayFeedbacks();
+    }
+    public void PlayBattle()
+    {
+        print("PLAY BATTLE SOUND");
+        Battle.PlayFeedbacks();
+    }
+    public void PlayOutBlood()
+    {
+        print("PLAY OUT BLOOD SOUND");
+        OutBlood.PlayFeedbacks();
+    }
+    public void PlaySummonMonster()
+    {
+        print("PLAY SUMMON MONSTER SOUND");
+        SummonMonster.PlayFeedbacks();
+    }
+    public void PlayGetDame()
+    {
+        print("PLAY GET DAME SOUND");
+        CardGetDame.PlayFeedbacks();
+    }
+    public void PlayDestroyCard()
+    {
+        print("PLAY DESTROY CARD SOUND");
+        DestroyCard.PlayFeedbacks();
+    }
+    public void PlaySkipTurn()
+    {
+        print("PLAY SKIP TURN SOUND");
+        SkipTurn.PlayFeedbacks();
+    }
+    public void PlayFoundMatch()
+    {
+        print("PLAY FOUND MATCH SOUND");
+        FoundMatch.PlayFeedbacks();
+    }
+    public void PlaySwitchCam()
+    {
+        print("PLAY SWITCH CAM SOUND");
+        SwitchCam.PlayFeedbacks();
+    }
+    public void PlayVictory()
+    {
+        print("PLAY VICTORY SOUND");
+        Victory.PlayFeedbacks();
+    }
+    public void PlayDefeat()
+    {
+        print("PLAY DEFEAT SOUND");
+        Defeat.PlayFeedbacks();
+    }
+    public void PlayBackground_Match()
+    {
+        print("PLAY BACKGROUND MATCH SOUND");
+        Background_Match.PlayFeedbacks();
     }
     #endregion
 }
