@@ -5684,7 +5684,7 @@ MonoBehaviour:
   CustomSortingCard: 1
   spacingZ: -0.02
   custom_StartAngleOffset: 90
-  RadiusSpace: 4
+  RadiusSpace: 3.8
   LayoutElements: []
   ElementDimensions: {x: 1, y: 1, z: 1}
   Spacing: 0

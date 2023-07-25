@@ -298,6 +298,7 @@ public class AnimationCardManager : MonoBehaviour
         string name = "FB_HoverCard";
 
         MMF_Player mMF_Player = CreateMMF_PlayerContainer(targetAnimated.transform, name, false);
+
         MMF_Position position = new MMF_Position();
         position.AnimatePositionTarget = targetAnimated.gameObject;
         position.Mode = MMF_Position.Modes.AlongCurve;

@@ -17,15 +17,13 @@ MonoBehaviour:
   <Cost>k__BackingField: 2
   <Attack>k__BackingField: 0
   <Hp>k__BackingField: 3
-  <Description>k__BackingField: 'Default: Start Round: Summon a Ice-Piece Abilities:
-    1. When I''ve seen you''ve played Frost Blade 3 times,  grant all Ice-Piece +1|+2
-    2. When I''ve seen you''ve played Frost Blade 5 times Round Start: Summon 2 Ice-Piece
-    instead 1 3. When you''ve played Ice-Piece 6 times, play Ice-Spear 6 times too'
+  <Description>k__BackingField: With each Frost Blade in hand, grant me +1|+1. After
+    that, kill the strongest enemy
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 4
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
-  <IsTreating>k__BackingField: 0
+  <IsTreating>k__BackingField: 1
   <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
@@ -34,7 +32,59 @@ MonoBehaviour:
   <InBoardAvatar>k__BackingField: {fileID: 0}
   <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 47aec02d37b6ed2408d4127cc3676d23, type: 3}
   <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 3d8a53cbd5a88ee4b95347bcbbfe453b, type: 3}
-  CardEffects: []
+  CardEffects:
+  - rid: 1073283350988062737
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1073283350988062737
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 1073283350988062738
+        - rid: 1073283350988062745
+    - rid: 1073283350988062738
+      type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073283350988062739
+        Effects:
+        - rid: 1073283350988062740
+    - rid: 1073283350988062739
+      type: {class: SelectSelf/SelfType/SelfCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
+    - rid: 1073283350988062740
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
+      data:
+        pitch:
+        - pitchType:
+            rid: 1073283350988062741
+        Attack: 1
+        Hp: 1
+        InTurn: 0
+    - rid: 1073283350988062741
+      type: {class: AbstractEffect/EffectPitch/PitchType/PitchCount, ns: Assets.GameComponent.Card.LogicCard, asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 1073283350988062744
+    - rid: 1073283350988062744
+      type: {class: SpecifyAction/SpecifyType/SpecifyCard, ns: Assets.GameComponent.Card.Logic.Actions.Specify, asm: Assembly-CSharp}
+      data:
+        owner: 1
+        cardPosition: 2
+        Rarity: 0
+        region: 0
+        target: {fileID: 11400000, guid: 41299358343df1749a5668bec7122bb3, type: 2}
+    - rid: 1073283350988062745
+      type: {class: SelectStrongest, ns: Assets.GameComponent.Card.Logic.TargetObject.Select, asm: Assembly-CSharp}
+      data:
+        owner: 2
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        Effects:
+        - rid: 1073283350988062746
+    - rid: 1073283350988062746
+      type: {class: DestroyObject, ns: Assets.GameComponent.Card.Logic.Effect.Destroy, asm: Assembly-CSharp}
+      data:
+        pitch: []

@@ -39,13 +39,13 @@ public class LayoutGroup3D : MonoBehaviour
     [Space(10)]
     [Header("Custom")]
     [SerializeField]
-    private bool CustomSortingCard = true;
+    public bool CustomSortingCard = true;
     [SerializeField]
-    private float spacingZ = 0.1f;
+    public float spacingZ = 0.1f;
     [SerializeField]
-    private float custom_StartAngleOffset = 90;
+    public float custom_StartAngleOffset = 90;
     [SerializeField]
-    private float RadiusSpace = 10;
+    public float RadiusSpace = 10;
     [Space(10)]
 
     [HideInInspector]
@@ -504,7 +504,7 @@ public class LayoutGroup3D : MonoBehaviour
 
             if (CustomSortingCard && Application.IsPlaying(gameObject))
             {
-                LayoutElements[i].transform.DOLocalMove(pos + StartPositionOffset,0.5f,false);
+                LayoutElements[i].transform.DOLocalMove(pos + StartPositionOffset,0.2f,false);
             }else
                 LayoutElements[i].localPosition = pos + StartPositionOffset;
 

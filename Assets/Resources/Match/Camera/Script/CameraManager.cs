@@ -19,6 +19,8 @@ public class CameraManager : MonoBehaviour
     public int presentChannel = 0;
     public int lastChannel = 0;
 
+
+
     // Start is called before the first frame update
     public MMF_Player BlueCameraFeedBacks;
     public MMF_Player RedCameraFeedBacks;
@@ -158,6 +160,14 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    public void LookAtHand(CardBase card)
+    {
+        List<MMF_Feedback> mMF_Feedbacks = BlueCameraFeedBacks.FeedbacksList;
+
+        MMF_CinemachineTransition mMF_CinemachineTransition = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Card];
+        CinemachineVirtualCamera virtualCamera = mMF_CinemachineTransition.TargetVirtualCamera;
+        virtualCamera.Follow = card.transform;
+    }
     public void OnclickSwitchCameraNormal()
     {
         SwitchCamera(ChanelCamera.Normal,null);
