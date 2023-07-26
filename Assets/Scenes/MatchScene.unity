@@ -13836,7 +13836,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 23.140917
     OrthographicSize: 5
-    NearClipPlane: 5
+    NearClipPlane: 1
     FarClipPlane: 30
     Dutch: 0
     ModeOverride: 0
@@ -23953,7 +23953,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 23.140917
     OrthographicSize: 5
-    NearClipPlane: 5
+    NearClipPlane: 1
     FarClipPlane: 30
     Dutch: 0
     ModeOverride: 0
@@ -35941,7 +35941,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 17
+  m_Priority: 10
   m_StandbyUpdate: 0
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
@@ -40774,7 +40774,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 35.983395
     OrthographicSize: 5
-    NearClipPlane: 5
+    NearClipPlane: 1
     FarClipPlane: 30
     Dutch: 0
     ModeOverride: 0
@@ -50923,7 +50923,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 35.983395
     OrthographicSize: 5
-    NearClipPlane: 5
+    NearClipPlane: 1
     FarClipPlane: 30
     Dutch: 0
     ModeOverride: 0
