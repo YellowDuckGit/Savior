@@ -79,10 +79,14 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         {
             //SFX: DrawCard
             _cards.Add(item);
+            item.Position = CardPosition.InHand;
             SelectManager.Instance.CheckSelectAble(MatchManager.instance);
             item.Parents = this;
             item.Position = CardPosition.InHand;
             CreateParentSortingForCard(item);
+
+            //SOUND
+            SoundManager.instance.PlayDrawCard();
         }
         else
         {

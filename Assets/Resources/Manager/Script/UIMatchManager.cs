@@ -377,6 +377,7 @@ public class UIMatchManager : MonoBehaviour
             ResultMatch = "Your Win\n+1500 Coin";
 
             //SFX: Victory
+            SoundManager.instance.PlayVictory();
         }
         else
         {
@@ -386,6 +387,8 @@ public class UIMatchManager : MonoBehaviour
             ResultMatch = "Your Lose\n+500 Coin";
 
             //SFX: Defeat
+            SoundManager.instance.PlayDefeat();
+
         }
 
         yield return new WaitForSeconds(showTime);

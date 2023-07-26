@@ -23,6 +23,8 @@ public class SwitchCamera : MonoBehaviour
                     if (chanel == ChanelCamera.Card)
                         CameraManager.instance.SwitchCamera(chanel, card);
                 }
+                // SOUND
+                SoundManager.instance.PlaySwitchCam();
             }
             else
             {

@@ -17,12 +17,8 @@ MonoBehaviour:
   <Cost>k__BackingField: 6
   <Attack>k__BackingField: 3
   <Hp>k__BackingField: 5
-  <Description>k__BackingField: "M\u1EB7c \u0111\u1ECBnh: Xuy\xEAn th\u1EA5u. Kh\u1EA3
-    n\u0103ng: 1. Khi t\u1EA5n c\xF4ng c\xE1c \u0111\u1ED3ng minh giao chi\u1EBFn
-    +2/0 trong round n\xE0y. 2. Khi tri\u1EC7u h\u1ED3i, tri\u1EC7u h\u1ED3i 2 k\u1EBB
-    s\u0103n m\u1ED3i t\u1EADp s\u1EF1 3. Khi m\xE1u c\u1EE7a k\u1EBB \u0111\u1ECBch
-    b\xE9 h\u01A1n 10. Hi sinh ta \u0111\u1EC3 g\xE2y 5 s\xE1t th\u01B0\u01A1ng l\xEAn
-    nh\xE0 ch\xEDnh \u0111\u1ED1i th\u1EE7"
+  <Description>k__BackingField: When I'm summoned, grant +2|0 to all ally on summon
+    field
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 4
   <RegionCard>k__BackingField: 2
@@ -36,7 +32,43 @@ MonoBehaviour:
   <InBoardAvatar>k__BackingField: {fileID: 0}
   <NormalAvatar2D>k__BackingField: {fileID: 21300000, guid: 16cba3eb65249044fa704e9468f803c5, type: 3}
   <InDeckAvatar2D>k__BackingField: {fileID: 21300000, guid: 130e000ca066302409dea923ecaf8d69, type: 3}
-  CardEffects: []
+  CardEffects:
+  - rid: 1073283350988062720
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1073283350988062720
+      type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
+      data:
+        Card: {fileID: 0}
+        Actions:
+        - rid: 1073283350988062721
+    - rid: 1073283350988062721
+      type: {class: SelectMulti, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi, asm: Assembly-CSharp}
+      data:
+        multiTargetType:
+          rid: 1073283350988062722
+    - rid: 1073283350988062722
+      type: {class: SelectMulti/MultiTargetType/MultiTargetCard, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Multi, asm: Assembly-CSharp}
+      data:
+        target:
+          owner: 1
+          cardPosition: 4
+          Rarity: 0
+          region: 0
+          CardType:
+            rid: 1073283350988062723
+          match: {fileID: 0}
+        Effects:
+        - rid: 1073283350988062724
+    - rid: 1073283350988062723
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        monsterOptions: []
+    - rid: 1073283350988062724
+      type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
+      data:
+        pitch: []
+        Attack: 2
+        Hp: 0
+        InTurn: 0

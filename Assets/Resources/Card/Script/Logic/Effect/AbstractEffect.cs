@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static Assets.GameComponent.Card.Logic.Actions.Specify.SpecifyAction.SpecifyType;
 
 namespace Assets.GameComponent.Card.LogicCard
 {
@@ -44,7 +45,7 @@ namespace Assets.GameComponent.Card.LogicCard
                 public class PitchCount : PitchType
                 {
                     [SerializeReference]
-                    [SRLogicCard(typeof(CardTarget), typeof(PlayerTarget))]
+                    [SRLogicCard(typeof(CardTarget), typeof(PlayerTarget), typeof(SpecifyCard), typeof(SpecifyCardPlayer))]
                     public AbstractTarget target = null;
                     public override int GetPitch(object register, MatchManager instance)
                     {

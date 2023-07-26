@@ -169,6 +169,9 @@ public class SummonZone : MonoBehaviourPun, IPunObservable
             monsterCard.RemoveCardFormParentPresent();
             monsterCard.MoveCardIntoNewParent(transform);
             monsterCard.Position = CardPosition.InSummonField;
+
+            //SOUND
+            SoundManager.instance.PlaySummonMonster();
         }
         else
         {

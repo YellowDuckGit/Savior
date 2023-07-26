@@ -329,7 +329,8 @@ public class UIManager : MonoBehaviour
         switchSceneWaitingMatch.ForEach(a => a.onClick.AddListener(() => TurnOnWatingMatchScene()));
         switchSceneOpenPack.ForEach(a => a.onClick.AddListener(() => TurnOnOpenPackScene()));
 
-        switchSceneBack.ForEach(a => a.onClick.AddListener(() => {
+        switchSceneBack.ForEach(a => a.onClick.AddListener(() =>
+        {
             TurnOnBackScene();
             SoundManager.instance.PlayClick_Back();
         }));
@@ -396,7 +397,7 @@ public class UIManager : MonoBehaviour
 
         #endregion
 
-        if(PlayfabManager.instance.isAuthented == false)
+        if (PlayfabManager.instance.isAuthented == false)
         {
             TurnOn(SceneType.SignIn, true); //Default
         }
@@ -1576,6 +1577,8 @@ public class UIManager : MonoBehaviour
         {
             if (!WaitingAcceptMatch.isTimerRunning)
             {
+                //SFX: Notify Found Match
+                SoundManager.instance.PlayFoundMatch();
                 WaitingAcceptMatch.StartTimer();
                 VFXTimer.SendEvent("OnPlay");
             }
