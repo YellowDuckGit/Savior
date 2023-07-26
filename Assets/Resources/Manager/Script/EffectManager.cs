@@ -64,6 +64,7 @@ using Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Special;
 using static Assets.GameComponent.Card.Logic.TargetObject.Target.AbstractTarget.AbstractTargetDataType.AbstractTargetDataTypeValue.ValueNumber;
 using UnityEngine.Windows;
 using Unity.VisualScripting;
+using System.Security.Policy;
 
 public class EffectManager : MonoBehaviourPun
 {
@@ -243,7 +244,17 @@ public class EffectManager : MonoBehaviourPun
                     {
                         NumberAction = Actions.Count,
                     }));
-                    yield return StartCoroutine(ExecuteActions(register, Actions)); //excute all action
+                    if(cardBase is MonsterCard monsterCard)
+                    {
+                        yield return StartCoroutine(ExecuteActions(monsterCard, Actions)); //excute all action
+                    }
+                    else if(cardBase is SpellCard)
+                    {
+                        if(CheckCardBeforPlay(cardBase))
+                            status = EffectStatus.success;
+                        else
+                            status = EffectStatus.fail;
+                    }
                 }
                 else
                 {
@@ -268,7 +279,6 @@ public class EffectManager : MonoBehaviourPun
                         status = status.ToString()
                     }));
                 }
-
             }
             else
             {
@@ -285,6 +295,89 @@ public class EffectManager : MonoBehaviourPun
             callBackAction(); //summon the monster
         }
         yield return null;
+    }
+
+
+
+    public bool CheckCardBeforPlay(CardBase cardbase)
+    {
+        bool flag = true;
+        if(cardbase is MonsterCard monster)
+        {
+            if(monster.LogicCard != null && monster.LogicCard.Length > 0)
+            {
+                for(int i = 0; i < monster.LogicCard.Length; i++)
+                {
+
+                    var conditon = monster.LogicCard[i];
+                    if(conditon != null)
+                    {
+                        var actions = conditon.Actions;
+                        if(actions != null && actions.Count > 0)
+                        {
+                            for(int j = 0; j < actions.Count; j++)
+                            {
+
+                                var action = actions[j];
+                                if(action is SelectTarget selectTarget) //get each action and execute it, here is select card
+                                {
+                                    print(this.debug("is SelectCardAction Action", new
+                                    {
+                                        actionName = action.GetType().Name
+                                    }));
+                                    var path = SelectManager.Instance.GetGraphPlayerSelectTarget(selectTarget);
+                                    flag = flag && path.Count > 0; //Check
+                                }
+                                else
+                                {
+                                    flag = false;
+                                    Debug.LogError(this.debug("Action dose not available in CheckCardBeforPlayCallback()"));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            flag = false;
+                            Debug.LogWarning(this.debug("Action is null", new
+                            {
+                                index = i
+                            }));
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning(this.debug("Condition is null", new
+                        {
+                            index = i
+                        }));
+                        flag = false;
+                    }
+                }
+            }
+            else
+            {
+                flag = false;
+                Debug.LogWarning(this.debug("Monster dose not contain any logic"));
+            }
+        }
+        else if(cardbase is SpellCard spell)
+        {
+        }
+        else
+        {
+            Debug.LogError(this.debug("Not card", new
+            {
+                cardbase.GetType().Name
+            }));
+            flag = false;
+
+        }
+        Debug.Log(this.debug("Return result after check", new
+        {
+            flag
+        }));
+
+        return flag;
     }
 
     private IEnumerator OnCardDamaged(MonsterCard monsterCard)
@@ -442,7 +535,7 @@ public class EffectManager : MonoBehaviourPun
                     }
                     else
                     {
-                        Debug.LogError(this.debug("condition false"));
+                        Debug.Log(this.debug("condition false"));
                         yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                     }
                 }
@@ -1887,6 +1980,65 @@ public class EffectManager : MonoBehaviourPun
         }
     }
 
+    public IEnumerator OnExecuteSpell(SpellCard spellCard)
+    {
+        print(this.debug("Status at start OnExecuteSpell", new
+        {
+            status
+        }));
 
+
+        print(this.debug("Start Execute spell", new
+        {
+            name = typeof(AfterSummon).Name,
+            register = spellCard.ToString()
+        }));
+     
+        status = EffectStatus.running;
+      
+        if(spellCard.CardPlayer == MatchManager.instance.LocalPlayer)
+        {
+            print(this.debug("player is the owner of card register for Execute spell"));
+
+            foreach(var logic in spellCard.LogicCard)
+            {
+                var Actions = logic.Actions; //get all action in after summon event
+                                             //var Actions = spellCard.LogicCard.Actions; //get all action in after summon event
+                print(this.debug("Object register", new
+                {
+                    NumberAction = Actions.Count,
+                }));
+
+                yield return StartCoroutine(ExecuteActions(spellCard, Actions)); //execute all action
+            }
+        }
+        else
+        {
+            print(this.debug("player is not the owner of card registed for Execute spell just watting"));
+            yield return new WaitUntil(() => this.status != EffectStatus.running);
+            print(this.debug("Status at effect Execute spell done", new
+            {
+                status
+            }));
+        }
+        if(this.status == EffectStatus.success)
+        {
+            spellCard.transform.SetParent(null);
+            spellCard.gameObject.SetActive(false); //destroy spell card after use
+        }
+        else
+        {
+            ReturnCardOnHand(spellCard);
+        }
+        yield return null;
+    }
+
+    private void ReturnCardOnHand(SpellCard spellCard)
+    {
+        Debug.Log(this.debug("ReturnCardOnHand"));
+        spellCard.RemoveCardFormParentPresent();
+        spellCard.MoveCardIntoNewParent(spellCard.CardPlayer.hand.transform);
+        spellCard.CardPlayer.hand.Add(spellCard);
+    }
 }
 #endregion

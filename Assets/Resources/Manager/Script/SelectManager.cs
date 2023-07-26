@@ -529,8 +529,6 @@ namespace Assets.GameComponent.Manager
             {
                 print(this.debug("does not enough condition to select all targets"));
             }
-
-
             yield return null;
         }
 

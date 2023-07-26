@@ -179,7 +179,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     }
     IEnumerator MoveCardInTriggerSpellAction(CardPlayer player, SpellCard card)
     {
-        print(this.debug());
+        print(this.debug("MoveCardInTriggerSpellAction"));
         card.IsSelected = false;
         //change card from hand to summon zone 
         var cardSelected = player.hand.Draw(card);
@@ -192,7 +192,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         player.spellZone.SpellCard = card;
         player.mana.Number -= card.Cost;
 
-        yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(card));
+        yield return StartCoroutine(EffectManager.Instance.OnExecuteSpell(card));
 
         yield return new WaitForSeconds(0.5f);
 
@@ -208,12 +208,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
         {
             SwitchTurnAction();
         }
-
-        if(card != null)
-        {
-            card.transform.SetParent(null);
-            card.gameObject.SetActive(false); //destroy spell card after use
-        }
+        //if(card != null)
+        //{
+        //    card.transform.SetParent(null);
+        //    card.gameObject.SetActive(false); //destroy spell card after use
+        //}
         yield return null;
     }
     private void OnEnable()

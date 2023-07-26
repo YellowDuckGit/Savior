@@ -99,5 +99,9 @@ public class TriggerSpell : MonoBehaviourPun
         }
         yield return null;
     }
-
+    public bool isFilled()
+    {
+        print(this.debug($"summon zone {name} children count: " + this.gameObject.transform.childCount));
+        return this.gameObject.transform.childCount > 0;
+    }
 }
