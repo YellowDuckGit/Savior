@@ -1496,7 +1496,7 @@ public class UIManager : MonoBehaviour
             virtualMoney.ForEach(a => a.text = result.ToString());
             //if (toValue != 0)
             //    liquid.CompensateShapeAmount = (float)result / (float)MatchManager.instance.maxMana;
-
+            SoundManager.instance.PlayCoinSound();
             elapsedTime += Time.deltaTime;
             yield return null;
         }

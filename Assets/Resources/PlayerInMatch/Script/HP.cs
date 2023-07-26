@@ -73,11 +73,13 @@ public class HP : MonoBehaviour
             {
                 textMeshPro.text = result.ToString();
                 //sound increase
+                SoundManager.instance.PlayPourMana();
             }
             else
             {
                 textMeshPro.text = result.ToString();
                 //sound decrease
+                SoundManager.instance.PlayPainful();
             }
 
             elapsedTime += Time.deltaTime;
