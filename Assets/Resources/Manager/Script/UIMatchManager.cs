@@ -64,6 +64,8 @@ public class UIMatchManager : MonoBehaviour
     [SerializeField] MMF_Player FB_Print_Defense;
     [SerializeField] MMF_Player FB_Print_YourTurn;
     [SerializeField] MMF_Player FB_Print_opponentsTurn;
+    [SerializeField] MMF_Player FB_UnPrint;
+
 
 
 
@@ -416,6 +418,11 @@ public class UIMatchManager : MonoBehaviour
     public void PrintYourDefense()
     {
        FB_Print_Defense.PlayFeedbacks();
+    }
+
+    public void UnPrint()
+    {
+        FB_UnPrint.PlayFeedbacks();
     }
 
     public void TurnLoadingScene(bool turn)

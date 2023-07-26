@@ -679,6 +679,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             SoundManager.instance.PlayYourTurn();
             UIMatchManager.instance.Turn(turnPresent);
             UIMatchManager.instance.SkipTurn_Interactive = true;
+            UIMatchManager.instance.PrintYourTurn();
         }
         else
         {
@@ -686,6 +687,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             //UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
             UIMatchManager.instance.Turn(turnPresent);
             UIMatchManager.instance.SkipTurn_Interactive = false;
+            UIMatchManager.instance.PrintopponnetTurn();
 
         }
         //TODO: check player can be summon or use card
@@ -1536,6 +1538,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             // SFX: Your Attack
             SoundManager.instance.PlayYourAttack();
             UIMatchManager.instance.RightAttack();
+            UIMatchManager.instance.PrintYourAttack();
         }
         else
         {
@@ -1543,6 +1546,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             // SFX: Your Defense
             SoundManager.instance.PlayYourDefense();
             UIMatchManager.instance.RightAttack();
+            UIMatchManager.instance.PrintYourDefense();
         }
 
         //if (localPlayerSide.Equals(K_PlayerSide.Blue))
