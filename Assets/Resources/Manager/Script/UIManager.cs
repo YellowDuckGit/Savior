@@ -584,6 +584,7 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "Select Game Mode";
                 }
 
                 if (isPlay)
