@@ -1239,7 +1239,7 @@ public class UIManager : MonoBehaviour
         private set
         {
             Coroutine a = null;
-            if (isLoadCoin)
+            if (isLoadCoin && a!= null)
             {
                 StopCoroutine(a);
                 isLoadCoin = false;
