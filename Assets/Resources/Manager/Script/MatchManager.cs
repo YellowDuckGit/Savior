@@ -189,24 +189,32 @@ public class MatchManager : MonoBehaviourPunCallbacks
         card.RemoveCardFormParentPresent();
         card.MoveCardIntoNewParent(player.spellZone.transform);
 
-        player.spellZone.SpellCard = card;
-        player.mana.Number -= card.Cost;
 
         yield return StartCoroutine(EffectManager.Instance.OnExecuteSpell(card));
-
-        yield return new WaitForSeconds(0.5f);
-
-        /*
-         * just local player get and excute effect first, after that async player opposite
-         */
-        Debug.Log(this.debug("Used card spell", new
+        if(EffectManager.Instance.status == EffectManager.EffectStatus.success)
         {
-            card.SpellType
-        }));
+            player.spellZone.SpellCard = card;
+            player.mana.Number -= card.Cost;
+            /*
+        * just local player get and excute effect first, after that async player opposite
+        */
+            Debug.Log(this.debug("Used card spell", new
+            {
+                card.SpellType
+            }));
+            if(card.SpellType == SpellType.Slow)
+            {
+                SwitchTurnAction();
+            }
+            yield return new WaitForSeconds(0.5f);
 
-        if(card.SpellType == SpellType.Slow)
+        }
+        else
         {
-            SwitchTurnAction();
+            Debug.Log(this.debug("Failed to use card spell", new
+            {
+                card
+            }));
         }
         //if(card != null)
         //{
@@ -427,7 +435,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(3);
 
-   
+
     }
 
     private IEnumerator SyncOppositePlayerDeck()
@@ -859,7 +867,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public void SetLimitMP(int amount, CardPlayer cardPlayer)
     {
         //Provide HP Step
-        cardPlayer.mana.Limit+= amount;
+        cardPlayer.mana.Limit += amount;
     }
 
     void ProvideHP(int amount, CardPlayer cardPlayer)
@@ -872,7 +880,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     void ProvideMP(int amount, CardPlayer cardPlayer)
     {
-        cardPlayer.mana.Number = cardPlayer.mana.Limit + amount; 
+        cardPlayer.mana.Number = cardPlayer.mana.Limit + amount;
 
     }
     #endregion
@@ -1635,7 +1643,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 //true if defense zone opposite exist monster card
                 if(monsterDefense != null)
                 {
-                    this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterDefense , monsterAttack));
+                    this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterDefense, monsterAttack));
                     yield return new WaitForSeconds(0.6f);
                     monsterAttack.attack(monsterDefense);
 
