@@ -463,7 +463,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                 int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
 
                 UIHp.text = result.ToString();
-
+                SoundManager.instance.PlayATKHP();
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
@@ -483,6 +483,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                 int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
 
                 UIAttack.text = result.ToString();
+                SoundManager.instance.PlayATKHP();
 
                 elapsedTime += Time.deltaTime;
                 yield return null;

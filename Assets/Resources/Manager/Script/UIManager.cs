@@ -1,6 +1,7 @@
 using Assets.GameComponent.UI.CreateDeck.UI.Script;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
+
 
 public enum SceneType
 {
@@ -249,6 +251,9 @@ public class UIManager : MonoBehaviour
     public bool isWatingMatch;
     public bool isMatchingMatch;
     public bool isOpenPack;
+
+    public bool isLoadCoin;
+
 
 
     //[Space(10)]
@@ -584,6 +589,7 @@ public class UIManager : MonoBehaviour
                     {
                         obj.SetActive(turn);
                     }
+                    HeaderTitle.title = "Select Game Mode";
                 }
 
                 if (isPlay)
@@ -1093,6 +1099,8 @@ public class UIManager : MonoBehaviour
         {
             VirtualMoney = GameData.instance.Coin.ToString();
         }
+
+
         print("END LOAD MONEY");
         yield return null;
     }
@@ -1228,7 +1236,19 @@ public class UIManager : MonoBehaviour
     public string VirtualMoney
     {
         get { return virtualMoney[0].text; }
-        private set { virtualMoney.ForEach(a => a.text = value); }
+        private set
+        {
+            Coroutine a = null;
+            if (isLoadCoin && a!= null)
+            {
+                StopCoroutine(a);
+                SoundManager.instance.StopCoinSound();
+                isLoadCoin = false;
+            }
+
+            isLoadCoin = true;
+            a = StartCoroutine(IntegerLerpCoroutine(Int32.Parse(virtualMoney[0].text), Int32.Parse(value), 2f));
+        }
     }
 
     public string UserName
@@ -1464,6 +1484,28 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region Other
+
+    private IEnumerator IntegerLerpCoroutine(int fromValue, int toValue, float duration)
+    {
+        float elapsedTime = 0;
+        if (!(isSignIn || isSignUp))
+        SoundManager.instance.PlayCoinSound();
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+
+            int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
+            virtualMoney.ForEach(a => a.text = result.ToString());
+            //if (toValue != 0)
+            //    liquid.CompensateShapeAmount = (float)result / (float)MatchManager.instance.maxMana;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        isLoadCoin = false;
+        SoundManager.instance.StopCoinSound();
+    }
+
+
     public void EnablePanelErrorMessage(bool enable, string mess = null)
     {
         TextMeshProUGUI text = PanelErrorMessage.GetComponentInChildren<TextMeshProUGUI>();

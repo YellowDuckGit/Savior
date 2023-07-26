@@ -86,7 +86,7 @@ public class CardAnimationController : MonoBehaviour
 
         if (isScaleHand)
         {
-            StartCoroutine(PlayAnimationHover(0.1f));
+            StartCoroutine(PlayAnimationHover(0f));
         }
         else
         {

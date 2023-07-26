@@ -24,7 +24,9 @@ public class HP : MonoBehaviour
         }
         set
         {
-            StartCoroutine(IntegerLerpCoroutine(number, value, 1f));
+            bool increase = value > this.number;
+
+            StartCoroutine(IntegerLerpCoroutine(number, value, 1f, increase));
             number = value;
 
             if (number <= 0)
@@ -52,7 +54,7 @@ public class HP : MonoBehaviour
         }
     }
 
-    private IEnumerator IntegerLerpCoroutine(int fromValue, int toValue, float duration)
+    private IEnumerator IntegerLerpCoroutine(int fromValue, int toValue, float duration, bool increase)
     {
         if (toValue != 0)
         {
@@ -67,9 +69,19 @@ public class HP : MonoBehaviour
 
             int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
 
+            if (increase)
+            {
+                textMeshPro.text = result.ToString();
+                //sound increase
+                SoundManager.instance.PlayPourMana();
+            }
+            else
+            {
+                textMeshPro.text = result.ToString();
+                //sound decrease
+                SoundManager.instance.PlayPainful();
+            }
 
-            textMeshPro.text = result.ToString();
-        
             elapsedTime += Time.deltaTime;
             yield return null;
         }
