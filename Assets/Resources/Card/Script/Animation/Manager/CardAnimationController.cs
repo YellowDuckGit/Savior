@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR;
+using static CameraManager;
 
 public class CardAnimationController : MonoBehaviour
 {
@@ -40,10 +41,8 @@ public class CardAnimationController : MonoBehaviour
     private MMF_Player MMF_Hover;
 
     private bool isHoverCardAnimation = false;
-    private bool lookingAt = false;
     private static bool isScaleHand = false;
     private static bool isHoverCard = false;
-    private static bool isHandCamera = false;
     private static float delayUnScale = 0.5f;
 
     private CardAnimation cardAnimation;
@@ -58,13 +57,7 @@ public class CardAnimationController : MonoBehaviour
 
     private void Update()
     {
-        //if (lookingAt && !isHoverCardAnimation && Input.GetMouseButtonDown(1))
-        //{
-        //    lookingAt = false;
-        //    isHandCamera = false;
-        //    CameraManager.instance.SwitchCamera(CameraManager.ChanelCamera.Normal);
-        //    StartCoroutine(ScaleHandDown());
-        //}
+    
     }
 
     public void PlayDrawCard(Transform hand)
@@ -96,7 +89,7 @@ public class CardAnimationController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(PlayAnimationHover(0.3f));
+            StartCoroutine(PlayAnimationHover(0.4f));
         }
 
     }
@@ -114,11 +107,19 @@ public class CardAnimationController : MonoBehaviour
         MMF_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
         MMF_Hover.PlayFeedbacks();
 
-        //if (isHandCamera)
-        //{
-        //    print("LookAtHand");
-        //    CameraManager.instance.LookAtHand(Card);
-        //}
+        if (CameraManager.instance.presentChannel == (int)ChanelCamera.Hand)
+        {
+            print("LookAtHand");
+            if (Card.CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
+            {
+                CameraManager.instance.LookAtBlueHand(Card);
+
+            }
+            else if (Card.CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
+            {
+                CameraManager.instance.LookAtRedHand(Card);
+            }
+        }
 
         isHoverCardAnimation = true;
         isHoverCard = true;
@@ -152,7 +153,7 @@ public class CardAnimationController : MonoBehaviour
         if (isHoverCardAnimation && !isScaleHand)
         {
             if (layoutGroup3D == null) layoutGroup3D = Card.CardPlayer.hand.GetComponent<LayoutGroup3D>();
-            layoutGroup3D.RadiusSpace = 4.5f;
+            layoutGroup3D.RadiusSpace = 5.5f;
             layoutGroup3D.RebuildLayout();
             isScaleHand = true;
         }
@@ -167,7 +168,7 @@ public class CardAnimationController : MonoBehaviour
         if (!isHoverCardAnimation && isScaleHand && !isHoverCard)
         {
             if (layoutGroup3D == null) layoutGroup3D = Card.CardPlayer.hand.GetComponent<LayoutGroup3D>();
-            layoutGroup3D.RadiusSpace = 3.8f;
+            layoutGroup3D.RadiusSpace = 4f;
             layoutGroup3D.RebuildLayout();
             isScaleHand = false;
         }
@@ -181,8 +182,6 @@ public class CardAnimationController : MonoBehaviour
             {
                 print("CameraManager.instance.SwitchCamera(CameraManager.ChanelCamera.Hand, card);");
                 CameraManager.instance.SwitchCamera(CameraManager.ChanelCamera.Hand, card);
-                lookingAt = true;
-                isHandCamera = true;
             }
         }
     }

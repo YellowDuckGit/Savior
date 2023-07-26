@@ -120,6 +120,14 @@ public class CameraManager : MonoBehaviour
                     mMF_Feedbacks[(int)ChanelCamera.Board].Play(Vector3.zero, 1f);
                     break;
                 case ChanelCamera.Hand:
+                    MMF_CinemachineTransition mMF_CinemachineTransition1 = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Hand];
+                    CinemachineVirtualCamera virtualCamera1 = mMF_CinemachineTransition1.TargetVirtualCamera;
+                    //virtualCamera1.Follow = Card.transform;
+                    if (Card != null)
+                    {
+                        virtualCamera1.LookAt = Card.transform;
+                    }
+
                     mMF_Feedbacks[(int)ChanelCamera.Hand].Play(Vector3.zero, 1f);
                     break;
                 case ChanelCamera.MP_HP:
@@ -149,6 +157,8 @@ public class CameraManager : MonoBehaviour
                     break;
                 case ChanelCamera.Board:
                 case ChanelCamera.Hand:
+                    SwitchCamera(ChanelCamera.Normal, null);
+                    break;
                 case ChanelCamera.MP_HP:
                 case ChanelCamera.SkipTurn:
                     SwitchCamera(ChanelCamera.Normal,null);
@@ -160,13 +170,26 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void LookAtHand(CardBase card)
+    public void LookAtBlueHand(CardBase card)
     {
+        print("LookAtBlueHand");
         List<MMF_Feedback> mMF_Feedbacks = BlueCameraFeedBacks.FeedbacksList;
-
         MMF_CinemachineTransition mMF_CinemachineTransition = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Card];
         CinemachineVirtualCamera virtualCamera = mMF_CinemachineTransition.TargetVirtualCamera;
-        virtualCamera.Follow = card.transform;
+        if (virtualCamera != null) print("virtualCamera");
+        virtualCamera.LookAt = card.transform;
+        mMF_Feedbacks[(int)ChanelCamera.Hand].Play(Vector3.zero, 1f);
+    }
+
+    public void LookAtRedHand(CardBase card)
+    {
+        print("LookAtRedHand");
+        List<MMF_Feedback> mMF_Feedbacks = RedCameraFeedBacks.FeedbacksList;
+        MMF_CinemachineTransition mMF_CinemachineTransition = (MMF_CinemachineTransition)mMF_Feedbacks[(int)ChanelCamera.Card];
+        CinemachineVirtualCamera virtualCamera = mMF_CinemachineTransition.TargetVirtualCamera;
+        if (virtualCamera != null) print("virtualCamera");
+        virtualCamera.LookAt = card.transform;
+        mMF_Feedbacks[(int)ChanelCamera.Hand].Play(Vector3.zero, 1f);
     }
     public void OnclickSwitchCameraNormal()
     {

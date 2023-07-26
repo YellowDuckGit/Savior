@@ -21,6 +21,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
 
         [SerializeField] //for debug
         private TextMeshProUGUI _uiAttack;
+     
         [SerializeField] //for debug
         private TextMeshProUGUI _uiHp;
         public TextMeshProUGUI UIAttack
@@ -173,7 +174,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         {
             get; set;
         }
-        public override Outlinable UIOutline
+        public List<Outlinable> UIOutline
         {
             get => _outline; set => _outline = value;
         }
@@ -220,7 +221,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                     this.UIAttack = canvas.transform.Find(nameof(Attack)).GetComponent<TextMeshProUGUI>();
                     this.UIHp = canvas.transform.Find(nameof(Hp)).GetComponent<TextMeshProUGUI>();
                     this.UIAvatar = transform.Find(nameof(Avatar)).GetComponent<MeshRenderer>();
-                    this.UIOutline = transform.Find("OuterCard")?.gameObject.GetComponent<Outlinable>();
+                    //this.UIOutline = transform.Find("OuterCard")?.gameObject.GetComponent<Outlinable>();
 
                     CardTarget = gameObject.GetComponent<MonsterCard>();
                     if(CardTarget != null)
@@ -327,7 +328,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             this.IsForcus = false;
             //change card from hand to summon zone 
             fightZone.SetMonsterCard(CardTarget);
-            this.UIOutline.enabled = false;
+            this.UIOutline.ForEach(a => a.enabled = false);
         }
 
         //public void updateAttack(int Attack) => this.UIAttack.text = Attack.ToString();

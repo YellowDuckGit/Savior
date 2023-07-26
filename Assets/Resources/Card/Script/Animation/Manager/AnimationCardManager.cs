@@ -304,7 +304,7 @@ public class AnimationCardManager : MonoBehaviour
         position.Mode = MMF_Position.Modes.AlongCurve;
         position.FeedbackDuration = 0.2f;
         position.RemapCurveZero = 0f;
-        position.RemapCurveOne = 0.5f;
+        position.RemapCurveOne = 0.6f;
         position.AnimateX = true;
         position.AnimateY = true;
         position.AnimateZ = true;

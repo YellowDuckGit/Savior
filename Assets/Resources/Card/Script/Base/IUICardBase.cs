@@ -24,10 +24,6 @@ public interface IUICardBase
         get; set;
     }
 
-    public Outlinable UIOutline
-    {
-        get; set;
-    }
     public bool Interactable
     {
         get; set;

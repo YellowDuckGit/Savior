@@ -757,6 +757,7 @@ namespace Assets.GameComponent.Manager
             do
             {
                 print(this.debug("Please select target"));
+                UIMatchManager.instance.PrintSelectTarget();
                 yield return new WaitUntil(() => targetSelected != null);
             } while(result.Contains(targetSelected));
             result.Add(targetSelected);

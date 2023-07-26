@@ -25,7 +25,7 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     [SerializeField] protected MeshRenderer _avatar;
     /*For debug*/
     [SerializeField] protected T _cardTarget;
-    protected Outlinable _outline;
+    [SerializeField] protected List<Outlinable> _outline;
 
     public abstract CardAnimationController Controller
     {
@@ -44,10 +44,6 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         get; set;
     }
     public abstract MeshRenderer UIAvatar
-    {
-        get; set;
-    }
-    public abstract Outlinable UIOutline
     {
         get; set;
     }
@@ -172,6 +168,7 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         }
     }
 
+
     public Vector3 OriginPostion;
     public Vector3 OriginRotation;
 
@@ -278,10 +275,10 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
     public bool FocusCard()
     {
         print($"FocusCard card {_cardTarget.Name}, ID: {_cardTarget.photonView.ViewID}");
-        if(this._outline != null)
+        if(this._outline.Count >0)
         {
             this._isForcus = true;
-            this._outline.enabled = true;
+            this._outline.ForEach(a=>a.enabled = true);
         }
         return this.IsForcus;
     }
@@ -292,7 +289,8 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         {
             this._isForcus = false;
             if(!_cardTarget.IsSelected)
-                this._outline.enabled = false;
+                this._outline.ForEach(a=>a.enabled = false);
+
         }
         return this.IsForcus;
     }
@@ -305,12 +303,13 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         {
             this._isSelected = true;
             //_card.IsSelected = true;
-            Renderer rend = this._outline.GetComponent<Renderer>();
-            originalColor = rend.material.color;
-            rend.material.color = new Color(0.5f, 1, 1);
-            this._outline.enabled = true;
+            //Renderer rend = this._outline.GetComponent<Renderer>();
+            //originalColor = rend.material.color;
+            //rend.material.color = new Color(0.5f, 1, 1);
+            this._outline.ForEach(a => a.enabled = true);
+
         }
-        return this._outline.isActiveAndEnabled;
+        return this._outline[0].isActiveAndEnabled;
     }
 
     public bool UnSelectCard()
@@ -320,11 +319,12 @@ public abstract class UICardBase<T> : MonoBehaviour, IUICardBase where T : CardB
         {
             this._isSelected = false;
             //_card.IsSelected = false;
-            Renderer rend = this._outline.GetComponent<Renderer>();
-            rend.material.color = originalColor;
-            this._outline.enabled = false;
+            //Renderer rend = this._outline.GetComponent<Renderer>();
+            //rend.material.color = originalColor;
+            this._outline.ForEach(a => a.enabled = false);
+
         }
-        return this._outline.isActiveAndEnabled;
+        return this._outline[0].isActiveAndEnabled;
     }
 
     #endregion

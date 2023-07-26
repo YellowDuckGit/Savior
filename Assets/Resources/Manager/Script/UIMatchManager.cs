@@ -59,6 +59,14 @@ public class UIMatchManager : MonoBehaviour
     //[SerializeField] TextMeshProUGUI T_ACT_SkipTurn;
     [SerializeField] TextMeshProUGUI T_ResultMatch;
 
+    [SerializeField] MMF_Player FB_Print_SelectTarget;
+    [SerializeField] MMF_Player FB_Print_Attack;
+    [SerializeField] MMF_Player FB_Print_Defense;
+    [SerializeField] MMF_Player FB_Print_YourTurn;
+    [SerializeField] MMF_Player FB_Print_opponentsTurn;
+
+
+
     //[Space(10)]
 
     //[Header("Button Event")]
@@ -381,6 +389,30 @@ public class UIMatchManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(showTime);
+    }
+
+    public void PrintSelectTarget()
+    {
+        FB_Print_SelectTarget.PlayFeedbacks();
+    }
+
+    public void PrintYourTurn()
+    {
+        FB_Print_YourTurn.PlayFeedbacks();
+    }
+    public void PrintopponnetTurn()
+    {
+        FB_Print_opponentsTurn.PlayFeedbacks();
+    }
+
+    public void PrintYourAttack()
+    {
+        FB_Print_Attack.PlayFeedbacks();
+    }
+
+    public void PrintYourDefense()
+    {
+       FB_Print_Defense.PlayFeedbacks();
     }
 
     public void TurnLoadingScene(bool turn)

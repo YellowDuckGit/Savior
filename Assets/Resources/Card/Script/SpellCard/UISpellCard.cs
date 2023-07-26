@@ -64,7 +64,7 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
     public Rarity RarityCard { get; set; }
     public RegionCard RegionCard { get; set; }
     public SpellType SpellType { get; set; }
-    public override Outlinable UIOutline { get => _outline; set => _outline = value; }
+
     public Material NormalAvatar
     {
         get;
@@ -105,7 +105,7 @@ public class UISpellCard : UICardBase<SpellCard>, ISpellData
                 this.UIDescription = canvas.transform.Find("Description Container").transform.Find("Description").transform.Find(nameof(Description)).GetComponent<TextMeshProUGUI>();
                 this.UICost = canvas.transform.Find(nameof(Cost)).GetComponent<TextMeshProUGUI>();
                 this.UIAvatar = transform.Find(nameof(Avatar)).GetComponent<MeshRenderer>();
-                this.UIOutline = transform.Find("OuterCard")?.gameObject.GetComponent<Outlinable>();
+                //this.UIOutline = transform.Find("OuterCard")?.gameObject.GetComponent<Outlinable>();
                 CardTarget = gameObject.GetComponent<SpellCard>();
                 if(CardTarget != null)
                 {
