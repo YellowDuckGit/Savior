@@ -118,6 +118,11 @@ public class SoundManager : MonoBehaviour
         print("PLAY COIN SOUND");
         Coin.PlayFeedbacks();
     }
+    public void StopCoinSound()
+    {
+        print("PLAY COIN SOUND");
+        Coin.StopFeedbacks();
+    }
     public void PlayPourMana()
     {
         print("PLAY POUR MANA SOUND");

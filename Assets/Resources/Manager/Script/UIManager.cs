@@ -1242,6 +1242,7 @@ public class UIManager : MonoBehaviour
             if (isLoadCoin && a!= null)
             {
                 StopCoroutine(a);
+                SoundManager.instance.StopCoinSound();
                 isLoadCoin = false;
             }
 
@@ -1487,7 +1488,8 @@ public class UIManager : MonoBehaviour
     private IEnumerator IntegerLerpCoroutine(int fromValue, int toValue, float duration)
     {
         float elapsedTime = 0;
-
+        if (!(isSignIn || isSignUp))
+        SoundManager.instance.PlayCoinSound();
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;
@@ -1496,11 +1498,11 @@ public class UIManager : MonoBehaviour
             virtualMoney.ForEach(a => a.text = result.ToString());
             //if (toValue != 0)
             //    liquid.CompensateShapeAmount = (float)result / (float)MatchManager.instance.maxMana;
-            SoundManager.instance.PlayCoinSound();
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         isLoadCoin = false;
+        SoundManager.instance.StopCoinSound();
     }
 
 
