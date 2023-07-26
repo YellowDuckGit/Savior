@@ -34,7 +34,7 @@ public class SoundManager : MonoBehaviour
     // IN MATCH
     public MMF_Player DrawCard;
     public MMF_Player Battle;
-    public MMF_Player OutBlood;
+    public MMF_Player OutBlood; // BREAK TUBE // GAME OVER
 
     public MMF_Player SummonMonster;
     public MMF_Player CardGetDame;
@@ -52,6 +52,11 @@ public class SoundManager : MonoBehaviour
     public MMF_Player YourTurn;
     public MMF_Player YourAttack;
     public MMF_Player YourDefense;
+
+    public MMF_Player PourMana;
+    public MMF_Player ATKHP;
+    public MMF_Player Coin;
+    public MMF_Player Painful;
     #endregion
 
     #region PLAY SOUND UI
@@ -98,6 +103,26 @@ public class SoundManager : MonoBehaviour
     #endregion
 
     #region PLAY SOUND IN MATCH
+    public void PlayPainful()
+    {
+        print("PLAY PAINFUL SOUND");
+        Painful.PlayFeedbacks();
+    }
+    public void PlayATKHP()
+    {
+        print("PLAY ATK HP SOUND");
+        ATKHP.PlayFeedbacks();
+    }
+    public void PlayCoinSound()
+    {
+        print("PLAY COIN SOUND");
+        Coin.PlayFeedbacks();
+    }
+    public void PlayPourMana()
+    {
+        print("PLAY POUR MANA SOUND");
+        PourMana.PlayFeedbacks();
+    }
     public void PlayYourTurn()
     {
         print("PLAY YOUR TURN SOUND");

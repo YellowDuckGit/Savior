@@ -89,7 +89,7 @@ public class Mana : MonoBehaviour
             print("result: " + result.ToString());
 
             liquid.CompensateShapeAmount = result;
-
+            SoundManager.instance.PlayPourMana();
             print("CompensateShapeAmount: " + liquid.CompensateShapeAmount);
 
             elapsedTime += Time.deltaTime;
