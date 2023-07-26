@@ -1534,7 +1534,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
         {
             //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Attack";
             // SFX: Your Attack
-            SoundManager.instance.PlayYourAttack();
             UIMatchManager.instance.RightAttack();
             UIMatchManager.instance.PrintYourAttack();
         }
@@ -1542,7 +1541,6 @@ public class MatchManager : MonoBehaviourPunCallbacks
         {
             //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Defense";
             // SFX: Your Defense
-            SoundManager.instance.PlayYourDefense();
             UIMatchManager.instance.RightAttack();
             UIMatchManager.instance.PrintYourDefense();
         }
