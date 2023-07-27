@@ -517,7 +517,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 //UIManager.instance.UI_WaitingOppenent(false);
 
                 if (PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.DeclineMatch)
-                    || PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.DeclineMatch){
+                    || PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.DeclineMatch)){
 
                         if ( gameMode.Equals(GameMode.Normal) || gameMode.Equals(GameMode.Rank))
                         {
