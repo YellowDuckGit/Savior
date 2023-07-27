@@ -41,6 +41,13 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
 
     void Start()
     {
+      
+    }
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+
         if (instance != null && instance != this)
         {
             Debug.LogError("ChatManager have 2");
@@ -50,11 +57,6 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
         {
             instance = this;
         }
-    }
-
-    private void Awake()
-    {
-     
     }
     private void OnDestroy()
     {

@@ -782,6 +782,7 @@ public class UIManager : MonoBehaviour
 
                         StartCoroutine(GameData.instance.LoadDeckItems(CollectionDeck_PlayScene));
                         TurnOffSceneAlreadyShow();
+                        GameData.instance.selectDeck = null;
                     }
                     isChooseDeck = turn;
                     foreach (GameObject obj in ChooseDeckScene)
@@ -805,9 +806,9 @@ public class UIManager : MonoBehaviour
                     if (turn)
                     {
                         //reset deck name
-
                         StartCoroutine(GameData.instance.LoadDeckItems(CollectionDeckPVF_PlayScene));
                         TurnOffSceneAlreadyShow();
+                        GameData.instance.selectDeck = null;
                     }
                     isChooseDeckPVF = turn;
                     foreach (GameObject obj in ChooseDeckScenePVF)
@@ -1112,10 +1113,8 @@ public class UIManager : MonoBehaviour
     {
         print("LOAD MONEY");
         yield return StartCoroutine(PlayfabManager.instance.GetVirtualCurrency());
-        foreach (var money in virtualMoney)
-        {
-            VirtualMoney = GameData.instance.Coin.ToString();
-        }
+
+        VirtualMoney = GameData.instance.Coin.ToString();
 
 
         print("END LOAD MONEY");
@@ -1255,16 +1254,19 @@ public class UIManager : MonoBehaviour
         get { return virtualMoney[0].text; }
         private set
         {
+            print("Int32.Parse(virtualMoney[0].text: " + Int32.Parse(virtualMoney[0].text) + "Int32.Parse(value): "+ Int32.Parse(value));
+
             Coroutine a = null;
-            if (isLoadCoin && a!= null)
+            if (isLoadCoin && a != null)
             {
                 StopCoroutine(a);
                 SoundManager.instance.StopCoinSound();
                 isLoadCoin = false;
+                print("Flag: Stop");
             }
 
             isLoadCoin = true;
-            a = StartCoroutine(IntegerLerpCoroutine(Int32.Parse(virtualMoney[0].text), Int32.Parse(value), 2f));
+            a = StartCoroutine(IntegerLerpCoroutine(Int32.Parse(virtualMoney[0].text), Int32.Parse(value), 4f));
         }
     }
 
@@ -1341,6 +1343,11 @@ public class UIManager : MonoBehaviour
     public TMP_InputField LoginUsername
     {
         get { return this.loginUsername; }
+    }
+
+    public TMP_InputField RegisterUsername
+    {
+        get { return this.regUsername; }
     }
 
     public GameObject RequestPanelContainer
@@ -1504,20 +1511,21 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator IntegerLerpCoroutine(int fromValue, int toValue, float duration)
     {
+        print("Flag: " + fromValue + " " + toValue);
         float elapsedTime = 0;
         if (!(isSignIn || isSignUp))
         SoundManager.instance.PlayCoinSound();
-        while (elapsedTime < duration)
+        while (elapsedTime <= duration)
         {
             float t = elapsedTime / duration;
 
-            int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
+            int result = (int)Mathf.Lerp(fromValue, toValue, t);
             virtualMoney.ForEach(a => a.text = result.ToString());
-            //if (toValue != 0)
-            //    liquid.CompensateShapeAmount = (float)result / (float)MatchManager.instance.maxMana;
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+        virtualMoney.ForEach(a => a.text = toValue.ToString());
+
         isLoadCoin = false;
         SoundManager.instance.StopCoinSound();
     }
@@ -1542,6 +1550,7 @@ public class UIManager : MonoBehaviour
     }
     public void EnableLoadingAPI(bool enable)
     {
+        if(LoadingAPIPanel != null)
         LoadingAPIPanel.SetActive(enable);
     }
 

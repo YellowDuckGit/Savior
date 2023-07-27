@@ -122,7 +122,8 @@ public class GameData : MonoBehaviour
         //yield return StartCoroutine(LoadDeck());
         #endregion
 
-        UIManager.instance.UserName = ChatManager.instance.nickName;
+        UIManager.instance.UserName = PlayerPrefs.GetString("USERNAME");
+        print("nickname: "+ PlayerPrefs.GetString("USERNAME")); 
 
         yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
 
@@ -912,7 +913,7 @@ public class GameData : MonoBehaviour
 
     public void SearchByText(string text)
     {
-        if (UIManager.instance.isCollection_Cards || UIManager.instance.isStoreCards)
+        if (UIManager.instance.isCollection_Cards || UIManager.instance.isStoreCards || UIManager.instance.isCreateDeck)
         {
             print("Call");
             List<CardInInventory> listShow = listCardInInventory.Where(a => a.CardItem.cardData.Name.ToLower().Contains(text.ToLower())).ToList();
