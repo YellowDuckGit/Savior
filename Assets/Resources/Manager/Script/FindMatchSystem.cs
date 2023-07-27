@@ -504,11 +504,11 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     {
         if(PhotonNetwork.InRoom)
         {
-            if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Waiting)
+            if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Waiting)
             {
                 Debug.Log("UI Waiting");
             }
-            else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Ready)
+            else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Ready)
             {
                 Debug.Log("UI READY");
 
@@ -516,10 +516,14 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 //UIManager.instance.UI_ConfirmMatchmaking(true);
                 //UIManager.instance.UI_WaitingOppenent(false);
 
-                if(gameMode.Equals(GameMode.Normal) || gameMode.Equals(GameMode.Rank))
-                {
-                    UIManager.instance.WatingAcceptMatch(true);
-                    coroutine = StartCoroutine(TimeoutWaitingAccept());
+                if (PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.DeclineMatch)
+                    || PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.DeclineMatch){
+
+                        if ( gameMode.Equals(GameMode.Normal) || gameMode.Equals(GameMode.Rank))
+                        {
+                            UIManager.instance.WatingAcceptMatch(true);
+                            coroutine = StartCoroutine(TimeoutWaitingAccept());
+                        }
                 }
 
             }

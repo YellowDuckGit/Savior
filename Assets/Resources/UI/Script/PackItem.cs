@@ -33,21 +33,23 @@ namespace Assets.GameComponent.UI.CreateDeck.UI.Script
             {
                 this.data = value;
 
-                // Avatar
-
+                ////Avatar
+                //data.cardItemsId.ForEach(a => print(a.ToString()));
                 //string idSavaior = data.cardItemsId.SingleOrDefault(a => a.Contains("SA"));
 
                 //if (idSavaior != null)
                 //{
-                //    CardItem cardItem = GameData.instance.listCardItem.SingleOrDefault(a=>a.cardData.Id == idSavaior);
-                //    avatar.sprite = cardItem.cardData.NormalAvatar2D;
+                //    ICardData carData = GameData.instance.listCardDataInGame.SingleOrDefault(a => a.Id.Equals(idSavaior));
+                //    if(carData != null)
+                //        avatar.sprite = carData.NormalAvatar2D;
                 //}
                 //else
                 //{
-                //    CardItem cardItem = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id == data.cardItemsId[0]);
-                //    avatar.sprite = cardItem.cardData.NormalAvatar2D;
+                //    ICardData carData = GameData.instance.listCardDataInGame.SingleOrDefault(a => a.Id == data.cardItemsId[0]);
+                //     if(carData != null)
+                //    avatar.sprite = carData.NormalAvatar2D;
                 //}
-                //
+
             }
         }
 
