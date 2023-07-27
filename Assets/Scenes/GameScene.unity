@@ -50227,8 +50227,8 @@ MonoBehaviour:
   SelectGameModeTutorial: {fileID: 746652483}
   ChooseDeckTutorial: {fileID: 309277582}
   FindMatchTutorial: {fileID: 1093109514}
-  PlayWithFriend: {fileID: 0}
-  PVFInHome: {fileID: 0}
+  PlayWithFriend: {fileID: 1627157636}
+  PVFInHome: {fileID: 1069801797}
   isPlayTutorial: 0
   isPlayTutorialChain: 1
   isSkip: 0
@@ -69560,29 +69560,105 @@ MonoBehaviour:
         m_Calls: []
   DebugActive: 0
   FeedbacksList:
-  - rid: 233948112812507166
-  - rid: 233948112812507151
-  - rid: 233948112812507152
-  - rid: 233948112812507153
-  - rid: 233948112812507154
-  - rid: 233948112812507155
-  - rid: 233948112812507156
-  - rid: 233948112812507161
-  - rid: 233948112812507162
-  - rid: 233948112812507163
-  - rid: 233948112812507164
-  KeepPlayModeChanges: 1
+  - rid: 233948112812507178
+  - rid: 233948112812507179
+  - rid: 233948112812507180
+  - rid: 233948112812507181
+  - rid: 233948112812507182
+  - rid: 233948112812507183
+  - rid: 233948112812507184
+  - rid: 233948112812507185
+  - rid: 233948112812507186
+  - rid: 233948112812507187
+  - rid: 233948112812507188
+  KeepPlayModeChanges: 0
   PerformanceMode: 0
   ForceStopFeedbacksOnDisable: 1
   PlayCount: 0
   references:
     version: 2
     RefIds:
-    - rid: 233948112812507151
+    - rid: 233948112812507178
+      type: {class: MMF_Pause, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
+      data:
+        Active: 1
+        UniqueID: 1488663579
+        Label: Pause
+        ChannelMode: 0
+        Channel: 0
+        MMChannelDefinition: {fileID: 0}
+        Chance: 100
+        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
+        Timing:
+          TimescaleMode: 0
+          ExcludeFromHoldingPauses: 0
+          ContributeToTotalDuration: 1
+          InitialDelay: 0
+          CooldownDuration: 0
+          InterruptsOnStop: 1
+          NumberOfRepeats: 0
+          RepeatForever: 0
+          DelayBetweenRepeats: 1
+          MMFeedbacksDirectionCondition: 0
+          PlayDirection: 0
+          ConstantIntensity: 0
+          UseIntensityInterval: 0
+          IntensityIntervalMin: 0
+          IntensityIntervalMax: 0
+          Sequence: {fileID: 0}
+          TrackID: 0
+          Quantized: 0
+          TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
+        RandomizeOutput: 0
+        RandomMultiplier: {x: 0.8, y: 1}
+        RandomizeDuration: 0
+        RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
+        Owner: {fileID: 1069801797}
+        DebugActive: 0
+        PauseDuration: 0.5
+        RandomizePauseDuration: 0
+        MinPauseDuration: 1
+        MaxPauseDuration: 3
+        RandomizeOnEachPlay: 1
+        ScriptDriven: 0
+        AutoResume: 0
+        AutoResumeAfter: 0.25
+    - rid: 233948112812507179
       type: {class: MMF_SetActive, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
       data:
         Active: 1
-        UniqueID: -1784385560
+        UniqueID: -1776823097
         Label: Set Active
         ChannelMode: 0
         Channel: 0
@@ -69657,11 +69733,11 @@ MonoBehaviour:
         StateOnReset: 1
         SetStateOnSkip: 0
         StateOnSkip: 1
-    - rid: 233948112812507152
+    - rid: 233948112812507180
       type: {class: MMF_SetActive, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
       data:
         Active: 1
-        UniqueID: 2078829982
+        UniqueID: -563814187
         Label: Set Active
         ChannelMode: 0
         Channel: 0
@@ -69736,11 +69812,11 @@ MonoBehaviour:
         StateOnReset: 1
         SetStateOnSkip: 0
         StateOnSkip: 1
-    - rid: 233948112812507153
+    - rid: 233948112812507181
       type: {class: MMF_TMPTextReveal, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks.TextMeshPro}
       data:
         Active: 1
-        UniqueID: 834291147
+        UniqueID: 1080792021
         Label: TMP Text Reveal
         ChannelMode: 0
         Channel: 0
@@ -69815,11 +69891,11 @@ MonoBehaviour:
         OnReveal:
           m_PersistentCalls:
             m_Calls: []
-    - rid: 233948112812507154
+    - rid: 233948112812507182
       type: {class: MMF_HoldingPause, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
       data:
         Active: 1
-        UniqueID: -172707565
+        UniqueID: -1679559267
         Label: Holding Pause
         ChannelMode: 0
         Channel: 0
@@ -69883,7 +69959,7 @@ MonoBehaviour:
         RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 1069801797}
         DebugActive: 0
-        PauseDuration: 1
+        PauseDuration: 1.5
         RandomizePauseDuration: 0
         MinPauseDuration: 1
         MaxPauseDuration: 3
@@ -69891,11 +69967,11 @@ MonoBehaviour:
         ScriptDriven: 0
         AutoResume: 0
         AutoResumeAfter: 0.25
-    - rid: 233948112812507155
+    - rid: 233948112812507183
       type: {class: MMF_TMPTextReveal, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks.TextMeshPro}
       data:
         Active: 1
-        UniqueID: -158438604
+        UniqueID: 1166245987
         Label: TMP Text Reveal
         ChannelMode: 0
         Channel: 0
@@ -69965,15 +70041,15 @@ MonoBehaviour:
         RevealMode: 0
         DurationMode: 1
         IntervalBetweenReveals: 0.05
-        RevealDuration: 5
+        RevealDuration: 6
         OnReveal:
           m_PersistentCalls:
             m_Calls: []
-    - rid: 233948112812507156
+    - rid: 233948112812507184
       type: {class: MMF_HoldingPause, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
       data:
         Active: 1
-        UniqueID: -897368979
+        UniqueID: -2086370288
         Label: Holding Pause
         ChannelMode: 0
         Channel: 0
@@ -70037,7 +70113,7 @@ MonoBehaviour:
         RemapRangeFalloff: {x: 0, y: 1}
         Owner: {fileID: 1069801797}
         DebugActive: 0
-        PauseDuration: 1
+        PauseDuration: 1.5
         RandomizePauseDuration: 0
         MinPauseDuration: 1
         MaxPauseDuration: 3
@@ -70045,11 +70121,11 @@ MonoBehaviour:
         ScriptDriven: 0
         AutoResume: 0
         AutoResumeAfter: 0.25
-    - rid: 233948112812507161
+    - rid: 233948112812507185
       type: {class: MMF_TMPTextReveal, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks.TextMeshPro}
       data:
         Active: 1
-        UniqueID: -1097600000
+        UniqueID: 1934202433
         Label: TMP Text Reveal
         ChannelMode: 0
         Channel: 0
@@ -70123,11 +70199,11 @@ MonoBehaviour:
         OnReveal:
           m_PersistentCalls:
             m_Calls: []
-    - rid: 233948112812507162
+    - rid: 233948112812507186
       type: {class: MMF_HoldingPause, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
       data:
         Active: 1
-        UniqueID: 807990162
+        UniqueID: 1172113991
         Label: Holding Pause
         ChannelMode: 0
         Channel: 0
@@ -70199,11 +70275,11 @@ MonoBehaviour:
         ScriptDriven: 0
         AutoResume: 0
         AutoResumeAfter: 0.25
-    - rid: 233948112812507163
+    - rid: 233948112812507187
       type: {class: MMF_SetActive, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
       data:
         Active: 1
-        UniqueID: 1377367031
+        UniqueID: -1183370442
         Label: Set Active
         ChannelMode: 0
         Channel: 0
@@ -70278,11 +70354,11 @@ MonoBehaviour:
         StateOnReset: 1
         SetStateOnSkip: 0
         StateOnSkip: 1
-    - rid: 233948112812507164
+    - rid: 233948112812507188
       type: {class: MMF_Events, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
       data:
         Active: 1
-        UniqueID: -1843156802
+        UniqueID: -143308696
         Label: Unity Events
         ChannelMode: 0
         Channel: 0
@@ -70370,82 +70446,6 @@ MonoBehaviour:
         ResetEvents:
           m_PersistentCalls:
             m_Calls: []
-    - rid: 233948112812507166
-      type: {class: MMF_Pause, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
-      data:
-        Active: 1
-        UniqueID: 969967095
-        Label: Pause
-        ChannelMode: 0
-        Channel: 0
-        MMChannelDefinition: {fileID: 0}
-        Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
-        Timing:
-          TimescaleMode: 0
-          ExcludeFromHoldingPauses: 0
-          ContributeToTotalDuration: 1
-          InitialDelay: 0
-          CooldownDuration: 0
-          InterruptsOnStop: 1
-          NumberOfRepeats: 0
-          RepeatForever: 0
-          DelayBetweenRepeats: 1
-          MMFeedbacksDirectionCondition: 0
-          PlayDirection: 0
-          ConstantIntensity: 0
-          UseIntensityInterval: 0
-          IntensityIntervalMin: 0
-          IntensityIntervalMax: 0
-          Sequence: {fileID: 0}
-          TrackID: 0
-          Quantized: 0
-          TargetBPM: 120
-        AutomatedTargetAcquisition:
-          Mode: 0
-          ChildIndex: 0
-        RandomizeOutput: 0
-        RandomMultiplier: {x: 0.8, y: 1}
-        RandomizeDuration: 0
-        RandomDurationMultiplier: {x: 0.5, y: 2}
-        UseRange: 0
-        RangeDistance: 5
-        UseRangeFalloff: 0
-        RangeFalloff:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 0
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        RemapRangeFalloff: {x: 0, y: 1}
-        Owner: {fileID: 1069801797}
-        DebugActive: 0
-        PauseDuration: 0.5
-        RandomizePauseDuration: 0
-        MinPauseDuration: 1
-        MaxPauseDuration: 3
-        RandomizeOnEachPlay: 1
-        ScriptDriven: 0
-        AutoResume: 0
-        AutoResumeAfter: 0.25
 --- !u!1 &1071096573
 GameObject:
   m_ObjectHideFlags: 0
@@ -101795,6 +101795,7 @@ MonoBehaviour:
   DebugActive: 0
   FeedbacksList:
   - rid: 233948112812507136
+  - rid: 233948112812507189
   - rid: 233948112812507137
   - rid: 233948112812507138
   - rid: 233948112812507139
@@ -102568,6 +102569,85 @@ MonoBehaviour:
         ResetEvents:
           m_PersistentCalls:
             m_Calls: []
+    - rid: 233948112812507189
+      type: {class: MMF_SetActive, ns: MoreMountains.Feedbacks, asm: MoreMountains.Feedbacks}
+      data:
+        Active: 1
+        UniqueID: 1414534514
+        Label: Set Active
+        ChannelMode: 0
+        Channel: 0
+        MMChannelDefinition: {fileID: 0}
+        Chance: 100
+        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
+        Timing:
+          TimescaleMode: 0
+          ExcludeFromHoldingPauses: 0
+          ContributeToTotalDuration: 1
+          InitialDelay: 0
+          CooldownDuration: 0
+          InterruptsOnStop: 1
+          NumberOfRepeats: 0
+          RepeatForever: 0
+          DelayBetweenRepeats: 1
+          MMFeedbacksDirectionCondition: 0
+          PlayDirection: 0
+          ConstantIntensity: 0
+          UseIntensityInterval: 0
+          IntensityIntervalMin: 0
+          IntensityIntervalMax: 0
+          Sequence: {fileID: 0}
+          TrackID: 0
+          Quantized: 0
+          TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
+        RandomizeOutput: 0
+        RandomMultiplier: {x: 0.8, y: 1}
+        RandomizeDuration: 0
+        RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
+        Owner: {fileID: 1627157636}
+        DebugActive: 0
+        TargetGameObject: {fileID: 1288495856}
+        SetStateOnInit: 0
+        StateOnInit: 1
+        SetStateOnPlay: 1
+        StateOnPlay: 0
+        SetStateOnStop: 0
+        StateOnStop: 1
+        SetStateOnReset: 0
+        StateOnReset: 1
+        SetStateOnSkip: 0
+        StateOnSkip: 1
 --- !u!1 &1627285667
 GameObject:
   m_ObjectHideFlags: 0
@@ -118613,6 +118693,18 @@ MonoBehaviour:
       - m_Target: {fileID: 469216423}
         m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Feedbacks
         m_MethodName: PlayFeedbacks
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 751268438}
+        m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
+        m_MethodName: PlayWithFriendTutorial
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
