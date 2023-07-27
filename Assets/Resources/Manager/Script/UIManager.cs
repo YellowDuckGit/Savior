@@ -555,6 +555,11 @@ public class UIManager : MonoBehaviour
 
                         //SOUND
                         SoundManager.instance.PLayBackground_Home();
+
+                        if(TutorialManager.instance.isPVF)
+                        {
+                            TutorialManager.instance.PlayPVFInHome();
+                        }
                     }
                     isHome = turn;
 
