@@ -504,7 +504,7 @@ public class LayoutGroup3D : MonoBehaviour
 
             if (CustomSortingCard && Application.IsPlaying(gameObject))
             {
-                LayoutElements[i].transform.DOLocalMove(pos + StartPositionOffset,0.2f,false);
+                LayoutElements[i].transform.DOLocalMove(pos + StartPositionOffset,0.1f,false);
             }else
                 LayoutElements[i].localPosition = pos + StartPositionOffset;
 

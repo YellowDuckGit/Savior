@@ -299,6 +299,22 @@ public class AnimationCardManager : MonoBehaviour
 
         MMF_Player mMF_Player = CreateMMF_PlayerContainer(targetAnimated.transform, name, false);
 
+        MMF_Rotation rotation = new MMF_Rotation();
+        rotation.RotationSpace = Space.World;
+        rotation.AnimateRotationTarget = targetAnimated.transform.parent.transform;
+        rotation.Mode = MMF_Rotation.Modes.ToDestination;
+
+        if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
+        {
+            rotation.DestinationAngles = new Vector3(0, 180, 0);
+        }
+        else if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
+        {
+            rotation.DestinationAngles = new Vector3(0, 0, 0);
+        }
+       
+        mMF_Player.AddFeedback(rotation);
+
         MMF_Position position = new MMF_Position();
         position.AnimatePositionTarget = targetAnimated.gameObject;
         position.Mode = MMF_Position.Modes.AlongCurve;
@@ -313,7 +329,7 @@ public class AnimationCardManager : MonoBehaviour
 
         if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
         {
-            AnimationCurve curve = new AnimationCurve(new Keyframe[2] {new Keyframe(0,0), new Keyframe(1,-0.2f)});
+            AnimationCurve curve = new AnimationCurve(new Keyframe[2] { new Keyframe(0, 0), new Keyframe(1, -0.2f) });
             position.AnimatePositionTweenX = new MMTweenType(curve);
             position.AnimatePositionCurveX = curve;
             position.AnimatePositionTweenZ = new MMTweenType(curve);
@@ -349,26 +365,12 @@ public class AnimationCardManager : MonoBehaviour
         event1.PlayEvents = ev1;
         mMF_Player.AddFeedback(event1);
 
-        //MMF_Pause pause1 = new MMF_Pause();
-        //pause1.PauseDuration = 0.5f;
-        //mMF_Player.AddFeedback(pause1);
+        MMF_Pause pause1 = new MMF_Pause();
+        pause1.PauseDuration = 0.2f;
+        mMF_Player.AddFeedback(pause1);
 
 
-        MMF_Rotation rotation = new MMF_Rotation();
-        rotation.RotationSpace = Space.World;
-        rotation.AnimateRotationTarget = targetAnimated.transform.parent.transform;
-        rotation.Mode = MMF_Rotation.Modes.ToDestination;
 
-        if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
-        {
-            rotation.DestinationAngles = new Vector3(0, 180, 0);
-        }
-        else if (targetAnimated.CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
-        {
-            rotation.DestinationAngles = new Vector3(0, 0, 0);
-        }
-       
-        mMF_Player.AddFeedback(rotation);
         mMF_Player.Initialization();
 
 
@@ -376,6 +378,18 @@ public class AnimationCardManager : MonoBehaviour
         event1.Timing.MMFeedbacksDirectionCondition = MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenBackwards;
 
         return mMF_Player;
+    }
+
+    public MMF_Player GetAnimationFB_Hover(CardBase targetAnimated)
+    {
+        string name = "FB_HoverCard";
+        Transform containerOld = targetAnimated.transform.Find("MMF_PlayerContainer").gameObject.transform.Find(name);
+        if(containerOld != null)
+        {
+            MMF_Player player = containerOld.GetComponent<MMF_Player>();
+            return player;
+        }
+        return null;
     }
 
     public MMF_Player CreateAnimationFB_GetDamage(Transform targetAnimated)

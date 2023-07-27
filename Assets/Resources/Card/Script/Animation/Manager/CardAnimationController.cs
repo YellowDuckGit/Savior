@@ -81,6 +81,7 @@ public class CardAnimationController : MonoBehaviour
 
     public void PlayHover()
     {
+        print("PlayHover");
         isHoverCardAnimation = true;
         isHoverCard = true;
 
@@ -90,7 +91,9 @@ public class CardAnimationController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(PlayAnimationHover(0.4f));
+            StartCoroutine(ScaleHandUp(0));
+            StartCoroutine(PlayAnimationHover(0.5f));
+
         }
 
     }
@@ -100,14 +103,21 @@ public class CardAnimationController : MonoBehaviour
 
         yield return new WaitForSeconds(seconds);
 
-        StartCoroutine(ScaleHandUp(0));
-
-        if (isHoverCard)
+        if (isHoverCardAnimation)
         {
             if (MMF_Hover == null)
                 MMF_Hover = AnimationCardManager.instance.CreateAnimationFB_Hover(Card);
             MMF_Hover.StopFeedbacks();
             MMF_Hover.Direction = MMFeedbacks.Directions.TopToBottom;
+  
+            MMF_Position mMF_Position = (MMF_Position)MMF_Hover.FeedbacksList.Find(a => a is MMF_Position);
+            if (mMF_Position != null)
+            {
+                print("change position");
+                mMF_Position.InitialPositionTransform = Card.transform.parent.transform;
+                mMF_Position.InitialPosition = new Vector3(0f, 0f, 0f);
+            }
+
             MMF_Hover.PlayFeedbacks();
 
             if (CameraManager.instance.presentChannel == (int)ChanelCamera.Hand)
@@ -124,25 +134,23 @@ public class CardAnimationController : MonoBehaviour
                 }
             }
         }
-      
+        yield return new WaitForSeconds(0.5f);
     }
 
     public void PlayUnHover()
     {
-
         isHoverCardAnimation = false;
         isHoverCard = false;
-
         StartCoroutine(PlayAnimationUnHover(0));
-    }
+        StartCoroutine(ScaleHandDown(2f));
 
+    }
 
     IEnumerator PlayAnimationUnHover(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        StartCoroutine(ScaleHandDown(2f));
 
-        if (!isHoverCard)
+        if (!isHoverCardAnimation)
         {
             if (MMF_Hover == null)
                 MMF_Hover = AnimationCardManager.instance.CreateAnimationFB_Hover(Card);
@@ -169,14 +177,15 @@ public class CardAnimationController : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
 
-      
-
-        if (!isHoverCardAnimation && isScaleHand && !isHoverCard)
+        if (!isHoverCard)
         {
+            Card.CardPlayer.hand.resetPositionCardInHand();
+
             if (layoutGroup3D == null) layoutGroup3D = Card.CardPlayer.hand.GetComponent<LayoutGroup3D>();
             layoutGroup3D.RadiusSpace = 4f;
             layoutGroup3D.RebuildLayout();
             isScaleHand = false;
+            
         }
     }
 

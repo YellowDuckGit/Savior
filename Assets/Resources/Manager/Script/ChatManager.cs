@@ -181,7 +181,7 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
                                 SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.RoomPVFCreated) + "|" + FriendRoomName);
                                 break;
                             case nameof(MessageType.DeclineRequest):
-                                nickNameFriendinvite = null;
+                                nickNameFriendinvite = "";
                                 print("DeclineRequest");
                                 break;
                             case nameof(MessageType.RoomPVFCreated):

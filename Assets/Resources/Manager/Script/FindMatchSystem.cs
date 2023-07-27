@@ -329,6 +329,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
     public void Confirm()
     {
+        print("Confirm");
         if(PhotonNetwork.IsMasterClient) //blue
         {
             PhotonNetwork.CurrentRoom.CustomProperties[K_Player.DeckBlue] = GameData.instance.selectDeck.Data.deckCode;

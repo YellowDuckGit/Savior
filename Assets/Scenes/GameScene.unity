@@ -3529,8 +3529,8 @@ MonoBehaviour:
           CooldownDuration: 0
           InterruptsOnStop: 1
           NumberOfRepeats: 0
-          RepeatForever: 0
-          DelayBetweenRepeats: 1
+          RepeatForever: 1
+          DelayBetweenRepeats: 0
           MMFeedbacksDirectionCondition: 0
           PlayDirection: 0
           ConstantIntensity: 0
@@ -3583,7 +3583,7 @@ MonoBehaviour:
         RandomSfx: []
         MinVolume: 1
         MaxVolume: 1
-        MinPitch: 1
+        MinPitch: 0.7
         MaxPitch: 1
         SfxAudioMixerGroup: {fileID: 0}
 --- !u!1 &61400764
@@ -16385,8 +16385,8 @@ MonoBehaviour:
           CooldownDuration: 0
           InterruptsOnStop: 1
           NumberOfRepeats: 0
-          RepeatForever: 0
-          DelayBetweenRepeats: 1
+          RepeatForever: 1
+          DelayBetweenRepeats: 0
           MMFeedbacksDirectionCondition: 0
           PlayDirection: 0
           ConstantIntensity: 0
@@ -16439,7 +16439,7 @@ MonoBehaviour:
         RandomSfx: []
         MinVolume: 1
         MaxVolume: 1
-        MinPitch: 1
+        MinPitch: 0.7
         MaxPitch: 1
         SfxAudioMixerGroup: {fileID: 0}
 --- !u!1 &290042793
@@ -91053,7 +91053,7 @@ MonoBehaviour:
   ACT_AcceptRequest: {fileID: 1089470559}
   ACT_DeclineRequest: {fileID: 607263295}
   ACT_LeftRoom: {fileID: 0}
-  ACT_Confirm: {fileID: 1089470559}
+  ACT_Confirm: {fileID: 1932736873}
   addFriendMessage: {fileID: 1359657803}
   friendContainer: {fileID: 1616921204}
   requestPanelContainer: {fileID: 892562402}
@@ -91192,14 +91192,11 @@ MonoBehaviour:
   switchSceneChooseDeckPVF: []
   switchSceneWaitingMatch:
   - {fileID: 1357530402}
-  - {fileID: 1932736873}
   switchSceneMatching:
   - {fileID: 1151835907}
   switchSceneOpenPack: []
   switchSceneBack:
   - {fileID: 1339494768}
-  - {fileID: 1759448697}
-  - {fileID: 1906393660}
   ACT_SaveDeck: {fileID: 1197898469}
   ACT_DeleteDeck: {fileID: 0}
   ACT_Store_BuyPack: {fileID: 1383166457}
@@ -105953,14 +105950,14 @@ PrefabInstance:
     - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2067699804}
+      objectReference: {fileID: 1391700398}
     - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlayFeedbacks
+      value: TurnOnPlayScene
       objectReference: {fileID: 0}
     - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Feedbacks
+      value: UIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -106059,17 +106056,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
---- !u!114 &1759448697 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
-  m_PrefabInstance: {fileID: 1759448696}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1759448698 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9133357358230030794, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
@@ -112341,16 +112327,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 50106762}
     m_Modifications:
     - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2067699804}
+      objectReference: {fileID: 1391700398}
     - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlayFeedbacks
+      value: TurnOnPlayScene
       objectReference: {fileID: 0}
     - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Feedbacks
+      value: UIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6012878618020795719, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
       propertyPath: m_Name
@@ -112445,17 +112439,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
---- !u!114 &1906393660 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3134049962257346890, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
-  m_PrefabInstance: {fileID: 1906393659}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1906393661 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9133357358230030794, guid: 969d7868a570cbe439bc8ea7e3105f6b, type: 3}
@@ -122307,7 +122290,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 228883081871450935, guid: 74468c815fe092d4ca5189e0a30ebbb2, type: 3}
       propertyPath: m_text
-      value: PLAY WITH FRIEND
+      value: Play with friend
       objectReference: {fileID: 0}
     - target: {fileID: 228883081871450935, guid: 74468c815fe092d4ca5189e0a30ebbb2, type: 3}
       propertyPath: m_fontAsset
@@ -122435,7 +122418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2663482167838310889, guid: 74468c815fe092d4ca5189e0a30ebbb2, type: 3}
       propertyPath: m_text
-      value: CONFIRM
+      value: Confirm
       objectReference: {fileID: 0}
     - target: {fileID: 2663482167838310889, guid: 74468c815fe092d4ca5189e0a30ebbb2, type: 3}
       propertyPath: m_fontAsset
@@ -122491,7 +122474,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676232634711636918, guid: 74468c815fe092d4ca5189e0a30ebbb2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4676232634711636918, guid: 74468c815fe092d4ca5189e0a30ebbb2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -122555,7 +122538,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6601388714080268682, guid: 74468c815fe092d4ca5189e0a30ebbb2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -98.696
+      value: -98.695984
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

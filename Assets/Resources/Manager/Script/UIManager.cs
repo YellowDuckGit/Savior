@@ -400,6 +400,23 @@ public class UIManager : MonoBehaviour
             TutorialManager.instance.Skip();
         });
 
+        
+
+        ACT_AcceptRequest.onClick.AddListener(() =>
+        {
+            ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.AcceptRequest) + "|" + "null");
+        });
+
+
+        ACT_DeclineRequest.onClick.AddListener(() =>
+        {
+            ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.DeclineRequest) + "|" + "null");
+        });
+
+        ACT_Confirm.onClick.AddListener(() =>
+        {
+            FindMatchSystem.instance.Confirm();
+        });
         #endregion
 
         if (PlayfabManager.instance.isAuthented == false)

@@ -1,6 +1,8 @@
 using Assets.GameComponent.Manager;
 using Card;
+using DG.Tweening;
 using ExitGames.Client.Photon;
+using MoreMountains.Feedbacks;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -10,6 +12,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.XR;
 using Random = System.Random;
 
@@ -344,6 +347,8 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         Card.transform.parent = parentCard.transform;
         Card.transform.position = Vector3.zero;
         Card.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+
+        //initHoverPosition();
     }
 
     public void RemoveParentSortingForCard(CardBase Card)
@@ -351,6 +356,38 @@ public class Hand : MonoBehaviourPun, IList<CardBase>, IPunObservable
         GameObject parentCard = Card.transform.parent.gameObject;
         Card.transform.parent = null;
         GameObject.Destroy(parentCard);
+    }
+
+    public void resetPositionCardInHand()
+    {
+        foreach (var card in GetAllCardInHand())
+        {
+            card.transform.DOLocalMove(Vector3.zero, 0.3f);
+        }
+    }
+
+    public void initHoverPosition()
+    {
+        print("initHoverPosition");
+        foreach (var card in GetAllCardInHand())
+        {
+            MMF_Player  MMF_Hover = AnimationCardManager.instance.GetAnimationFB_Hover(card);
+            if(MMF_Hover != null)
+            {
+                MMF_Position mMF_Position = (MMF_Position)MMF_Hover.FeedbacksList.Find(a => a is MMF_Position);
+                if (mMF_Position != null)
+                {
+                    print("change position");
+
+                    mMF_Position.InitialPositionTransform = card.transform;
+                    mMF_Position.InitialPosition = new Vector3(0f, 0f, 0f);
+                }
+                else
+                {
+                    Debug.LogError("NULL");
+                }
+            }
+        }
     }
     #region GET SET
     public List<CardBase> GetAllCardInHand()
