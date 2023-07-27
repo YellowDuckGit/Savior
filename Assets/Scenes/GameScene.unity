@@ -54551,6 +54551,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 844364402}
+  - component: {fileID: 844364403}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -54607,6 +54608,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &844364403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844364401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5154b2de5b8750242bc2f0276413fb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeSlider: {fileID: 839406586}
+  gameAudioSource: []
 --- !u!1 &850809343
 GameObject:
   m_ObjectHideFlags: 0
@@ -120963,6 +120978,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1727610396}
     m_Modifications:
+    - target: {fileID: 815017810343500047, guid: 40dbc0d09bb2f7946bea23324a327ca5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1350951313264986095, guid: 40dbc0d09bb2f7946bea23324a327ca5, type: 3}
       propertyPath: m_Enabled
       value: 1
