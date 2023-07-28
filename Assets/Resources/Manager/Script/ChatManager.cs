@@ -168,6 +168,7 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
                                     nickNameFriendinvite = sender;
                                     //popup
                                     UIManager.instance.RequestPanelContainer.SetActive(true);
+
                                 }else
                                 {
                                     Debug.LogError("Friend On Request Invite: "+nickNameFriendinvite);
@@ -184,6 +185,7 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
                                 break;
                             case nameof(MessageType.DeclineRequest):
                                 nickNameFriendinvite = "";
+                                PhotonNetwork.LeaveLobby();
                                 print("DeclineRequest");
                                 break;
                             case nameof(MessageType.RoomPVFCreated):

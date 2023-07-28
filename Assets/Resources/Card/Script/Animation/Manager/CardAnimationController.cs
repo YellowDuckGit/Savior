@@ -92,7 +92,7 @@ public class CardAnimationController : MonoBehaviour
         else
         {
             StartCoroutine(ScaleHandUp(0));
-            StartCoroutine(PlayAnimationHover(0.5f));
+            StartCoroutine(PlayAnimationHover(0.4f));
 
         }
 
@@ -114,9 +114,10 @@ public class CardAnimationController : MonoBehaviour
             if (mMF_Position != null)
             {
                 print("change position");
-                mMF_Position.InitialPositionTransform = Card.transform.parent.transform;
-                mMF_Position.InitialPosition = new Vector3(0f, 0f, 0f);
+                mMF_Position.InitialPositionTransform = Card.transform;
+                //mMF_Position.InitialPosition = Card.transform.position;
             }
+            yield return new WaitForSeconds(0.1f);
 
             MMF_Hover.PlayFeedbacks();
 
@@ -156,6 +157,14 @@ public class CardAnimationController : MonoBehaviour
                 MMF_Hover = AnimationCardManager.instance.CreateAnimationFB_Hover(Card);
             MMF_Hover.StopFeedbacks();
             MMF_Hover.Direction = MMFeedbacks.Directions.BottomToTop;
+
+            MMF_Position mMF_Position = (MMF_Position)MMF_Hover.FeedbacksList.Find(a => a is MMF_Position);
+            if (mMF_Position != null)
+            {
+                print("change position");
+                mMF_Position.InitialPositionTransform = Card.transform;
+                //mMF_Position.InitialPosition = Card.transform.position;
+            }
             MMF_Hover.PlayFeedbacks();
         }
     }

@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -103,6 +104,7 @@ public class FriendItem : MonoBehaviour
             FriendItemDropdown friendItemDropdown = a.GetComponent<FriendItemDropdown>();
              a.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => {
                  ChatManager.instance.SendDirectMessage(userName.text, nameof(MessageType.RequestPlay) +"|"+ "null");
+                 PhotonNetwork.JoinLobby(FindMatchSystem.instance.sqlLobby_N);
              });
             a.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => {
                 friendItemDropdown.RemoveFriendInList(userName.text);

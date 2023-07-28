@@ -1,6 +1,7 @@
 using Assets.GameComponent.UI.CreateDeck.UI.Script;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -404,6 +405,7 @@ public class UIManager : MonoBehaviour
 
         ACT_AcceptRequest.onClick.AddListener(() =>
         {
+            PhotonNetwork.JoinLobby(FindMatchSystem.instance.sqlLobby_N);
             ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.AcceptRequest) + "|" + "null");
         });
 
@@ -1666,6 +1668,10 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public void resetWaitingAcceptMatch()
+    {
+        WaitingAcceptMatch.ResetTimer();
+    }
 
     #endregion
 }

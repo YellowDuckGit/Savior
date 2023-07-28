@@ -1718,16 +1718,16 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         //UI_roomID.text = "";
-        print("LeftRoom");
-        if(PhotonNetwork.IsConnected)
-        {
-            print("Connected");
-            PhotonNetwork.LoadLevel("Home");
-        }
-        else
-        {
-            print("Not Connected");
-        }
+        //print("LeftRoom");
+        //if(PhotonNetwork.IsConnected)
+        //{
+        //    print("Connected");
+        //    PhotonNetwork.LoadLevel("Home");
+        //}
+        //else
+        //{
+        //    print("Not Connected");
+        //}
     }
 
     public override void OnConnectedToMaster()
