@@ -914,16 +914,25 @@ public class EffectManager : MonoBehaviourPun
 
     private IEnumerator ActionSpecify(object register, SpecifyAction specify)
     {
+        Debug.Log("C25F8");
         if(specify != null)
         {
+            Debug.LogFormat("C25F8-01 specify is not null = {0}", specify != null);
+
             Action ExecuteEffectQ = () => { print(this.debug("Execute Effect")); };
             if(specify.target is SpecifyCard cardSpecify)
             {
+                Debug.LogFormat("C25F8-01-01 specify.target is SpecifyCard = {0}", specify.target is SpecifyCard);
+
                 var cards = cardSpecify.Execute(MatchManager.instance);
                 if(cards != null && cards.Count > 0)
                 {
+                    Debug.Log("C25F8-01-01-01");
+
                     foreach(var card in cards)
                     {
+                        Debug.LogFormat("C25F8-01-01-01 cards[{0}]", cards.IndexOf(card));
+
                         ExecuteEffectQ += () =>
                         {
                             StartCoroutine(ExecuteEffects(register, specify.Effects,
@@ -940,16 +949,18 @@ public class EffectManager : MonoBehaviourPun
                 }
                 else
                 {
-                    print(this.debug("Not found any card"));
+                    Debug.Log("C25F8-01-01-02");
                     yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                 }
             }
-            else
-            if(specify.target is SpecifyCardPlayer cardPlayerSpecify)
+            else if(specify.target is SpecifyCardPlayer cardPlayerSpecify)
             {
+                Debug.LogFormat("C25F8-01-02 specify.target is SpecifyCardPlayer = {0}", specify.target is SpecifyCardPlayer);
+
                 var player = cardPlayerSpecify.Execute(MatchManager.instance);
                 if(player != null)
                 {
+                    Debug.LogFormat("C25F8-01-02-01");
                     ExecuteEffectQ += () =>
                     {
                         StartCoroutine(ExecuteEffects(register, specify.Effects,
@@ -963,26 +974,32 @@ public class EffectManager : MonoBehaviourPun
                 }
                 else
                 {
-                    print(this.debug("Not Found player"));
+                    Debug.LogFormat("C25F8-01-02-02");
                     yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                 }
             }
             else
             {
-                print(this.debug("Not set target for Specify Action"));
+                Debug.LogFormat("C25F8-01-03");
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
 
             if(ExecuteEffectQ != null)
             {
+                Debug.LogFormat("C25F8-01-04");
+
                 ExecuteEffectQ();
             }
             else
             {
-                print(this.debug("Effect null"));
+                Debug.LogFormat("C25F8-01-05");
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
 
+        }
+        else
+        {
+            Debug.LogFormat("C25F8-02 specify is not null = {0}", specify != null);
         }
         yield return null;
     }
@@ -993,45 +1010,39 @@ public class EffectManager : MonoBehaviourPun
 
     public IEnumerator CreateCard(CreateCard createCard, object target)
     {
-
+        Debug.Log("C25F12");
         if(createCard != null && target != null)
         {
-            print(this.debug("Create new card action", new
-            {
-                createCard.CardTarget,
-                createCard.owner,
-                createCard.CardPosition,
-            }));
+            Debug.LogFormat("C25F12-01 createCard is not null = {0},target is not null = {1} ", createCard != null, target != null);
+
             if(target is CardPlayer player)
             {
+                Debug.LogFormat("C25F12-01-01 target is CardPlayer = {0}", target is CardPlayer);
                 if(player == MatchManager.instance.LocalPlayer)
                 {
-                    print(this.debug("IE CreateCard", new
-                    {
-                        createCard,
-                        target
-                    }));
+                    Debug.LogFormat("C25F12-01-01-01 player is LocalPlayer = {0}", player == MatchManager.instance.LocalPlayer);
 
                     if(createCard != null && target != null)
                     {
-                        print(this.debug("1", new
-                        {
-                            createCard,
-                            target
-                        }));
+                        Debug.LogFormat("C25F12-01-01-01-01 createCard is not null = {0}, target is not null = {1}", createCard != null, target != null);
 
                         yield return new WaitUntil(() => createCard.GainEffect(target, this));
                     }
                     else
                     {
-                        print(this.debug("create card not avaiable"));
+                        Debug.LogFormat("C25F12-01-01-01-02 createCard is not null = {0}, target is not null = {1}", createCard != null, target != null);
                     }
+                }
+                else
+                {
+                    Debug.LogFormat("C25F12-01-01-02 player is LocalPlayer = {0}", player == MatchManager.instance.LocalPlayer);
                 }
 
                 CardBase createdCard = null;
 
                 if(player == MatchManager.instance.LocalPlayer)
                 {
+                    Debug.LogFormat("C25F12-01-01-03");
                     yield return new WaitUntil(() =>
                     {
                         createdCard = MatchManager.instance.LocalPlayer.initialCardPlace.Dequeue();
@@ -1041,6 +1052,8 @@ public class EffectManager : MonoBehaviourPun
                 }
                 else
                 {
+                    Debug.LogFormat("C25F12-01-01-04");
+
                     yield return new WaitUntil(() =>
                     {
                         createdCard = MatchManager.instance.OpponentPlayer.initialCardPlace.Dequeue();
@@ -1051,29 +1064,19 @@ public class EffectManager : MonoBehaviourPun
 
                 if(createdCard != null)
                 {
-                    print(this.debug($"{target} Create new card {createdCard}", new
-                    {
-                        createCard.CardTarget,
-                        createCard.owner,
-                        createCard.CardPosition,
-                    }));
 
                     CardPlayer CardOwner = player;
 
-                    print(this.debug("Card Owner", new
-                    {
-                        createdCard,
-                        createCard.CardPosition,
-                        CardOwner.side,
-                        player
-                    }));
                     createdCard.Position = createCard.CardPosition;
+
+                    Debug.LogFormat("C25F12-01-01-05 createdCard is not null = {0}, create at position = {1}", createdCard != null, createCard.CardPosition.ToString());
 
 
                     switch(createCard.CardPosition)
                     {
                         case CardPosition.Any:
                         case CardPosition.InDeck:
+                            Debug.LogFormat("C25F12-01-01-05-01 Create card in deck");
                             createdCard.Parents = CardOwner.deck;
                             //becom children of deck
                             createdCard.transform.parent = CardOwner.deck.transform;
@@ -1084,81 +1087,63 @@ public class EffectManager : MonoBehaviourPun
                             createdCard.transform.position = CardOwner.deck.PositionInitialCardInDeck;
                             break;
                         case CardPosition.InHand:
-                            print(this.debug("check hand", new
-                            {
-                                createdCard
-                            }));
+                            Debug.LogFormat("C25F12-01-01-05-02 Create card in hand");
+
                             createdCard.Parents = CardOwner.hand;
                             CardOwner.hand.Add(createdCard);
-                            //createdCard.gameObject.transform.parent = CardOwner.hand.gameObject.transform;
-                            //CardOwner.hand.ScaleCardInHand();
-                            //CardOwner.hand.SortPostionRotationCardInHand();
+
                             break;
                         case CardPosition.InFightField:
-
+                            Debug.LogFormat("C25F12-01-01-05-03 Create card in fight field");
                             break;
                         case CardPosition.InSummonField:
                             {
+                                Debug.LogFormat("C25F12-01-01-05-04 Create card in summon field");
                                 yield return new WaitUntil(() => createdCard.IsReady);
-                                Debug.Log(MatchManager.instance.debug("Create into summon field", new
-                                {
-                                    createdCard
-                                }));
+
                                 if(createdCard != null && createdCard is MonsterCard monsterCard)
                                 {
-                                    Debug.Log("CREATE CARD ~ CHECK POSITION");
+                                    Debug.LogFormat("C25F12-01-01-05-04-01 createdCard is not null = {0}, createdCard is MonsterCard = {1}", createdCard != null, createdCard is MonsterCard);
                                     SummonZone zone = CardOwner.summonZones.FirstOrDefault(zone => !zone.isFilled() && !zone.isSelected);
-                                    Debug.Log(MatchManager.instance.debug("Zone to put card into", new
-                                    {
-                                        zone
-                                    }));
 
                                     if(zone != null)
                                     {
+                                        Debug.LogFormat("C25F12-01-01-05-04-01-01 zone is not null = {0}", zone != null);
                                         zone.isSelected = true;
-                                        print(this.debug());
                                         zone.SetMonsterCard(monsterCard);
                                         yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(monsterCard));
-                                        Debug.Log(this.debug("End call to SummonCardEvent"));
                                     }
                                     else
                                     {
-                                        Debug.LogWarning("destroy object ~ not enough zone: " + createdCard);
+                                        Debug.LogFormat("C25F12-01-01-05-04-01-01 zone is not null = {0}, destroy object ~ not enough zone", zone != null);
                                         createdCard.gameObject.SetActive(false);
                                     }
                                 }
                                 else
                                 {
-                                    Debug.LogError(this.debug("Card not valid", new
-                                    {
-                                        createdCard
-                                    }));
+                                    Debug.LogFormat("C25F12-01-01-05-04-02 createdCard is not null = {0}, createdCard is MonsterCard = {1}", createdCard != null, createdCard is MonsterCard);
                                 }
                             }
                             break;
                         case CardPosition.InGraveyard:
+                            Debug.LogFormat("C25F12-01-01-05-05 Create card in summon field");
+
                             break;
                         case CardPosition.InTriggerSpellField:
                             {
+                                Debug.LogFormat("C25F12-01-01-05-06 Create card in summon field");
+
                                 yield return new WaitUntil(() => createdCard.IsReady);
-                                Debug.Log(MatchManager.instance.debug("Create into summon field", new
-                                {
-                                    createdCard
-                                }));
+
                                 if(createdCard != null && createdCard is SpellCard spellCard)
                                 {
-                                    Debug.Log("CREATE CARD ~ CHECK POSITION");
+                                    Debug.LogFormat("C25F12-01-01-05-06-01 createdCard is not null = {0}, createdCard is SpellCard = {1}", createdCard != null, createdCard is SpellCard);
+
                                     TriggerSpell zone = CardOwner.spellZone;
-                                    Debug.Log(MatchManager.instance.debug("Zone to put card into", new
-                                    {
-                                        zone
-                                    }));
 
                                     if(zone != null)
                                     {
-                                        //zone.isSelected = true;
-                                        print(this.debug());
-                                        //change card from hand to summon zone 
+                                        Debug.LogFormat("C25F12-01-01-05-06-01-01 zone is not null = {0}", zone != null);
                                         spellCard.Position = CardPosition.InTriggerSpellField;
 
                                         spellCard.RemoveCardFormParentPresent();
@@ -1168,130 +1153,133 @@ public class EffectManager : MonoBehaviourPun
                                         yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(spellCard));
                                         if(spellCard != null)
                                         {
+                                            Debug.LogFormat("C25F12-01-01-05-06-01-01-01 spell card is not null = {0}", spellCard != null);
                                             spellCard.gameObject.SetActive(false);
-                                            //Destroy(); //destroy spell card after use
                                         }
-                                        //yield return StartCoroutine(MatchManager.instance.SummonCardAction(zone, monsterCard, true));
-
-                                        //Debug.Log("zone target: " + zone.photonView.ViewID);
-                                        //Debug.Log(MatchManager.instance.debug("Start call to SummonCardEvent", new
-                                        //{
-                                        //    card = createdCard as MonsterCard,
-                                        //    summonZone = zone,
-                                        //    cardPosition = CardPosition.InDeck
-                                        //}));
-                                        //MatchManager.instance.SummonCardEvent(new SummonArgs
-                                        //{
-                                        //    card = createdCard as MonsterCard,
-                                        //    summonZone = zone,
-                                        //    cardPosition = CardPosition.InDeck,
-                                        //    isSpecialSummon = true
-                                        //});
-
-                                        Debug.Log(MatchManager.instance.debug("End call to Spell zone"));
-                                        //MatchManager.instance.ExecuteSummonCardAction(zone, Card as MonsterCard);
+                                        else
+                                        {
+                                            Debug.LogFormat("C25F12-01-01-05-06-01-01-02 spell card is not null = {0}", spellCard != null);
+                                        }
                                     }
                                     else
                                     {
-                                        Debug.LogWarning("destroy object ~ not enough zone: " + createdCard.Name);
+
+                                        Debug.LogFormat("C25F12-01-01-05-06-01-02 zone is not null = {0}, destroy object ~ not enough zone", zone != null);
                                         GameObject.Destroy(createdCard.gameObject);
                                     }
                                 }
                                 else
                                 {
-                                    Debug.Log("Card is NULL");
+                                    Debug.LogFormat("C25F12-01-01-05-06-02 createdCard is not null = {0}, createdCard is SpellCard = {1}", createdCard != null, createdCard is SpellCard);
                                 }
                             }
                             break;
                         default:
+                            Debug.LogFormat("C25F12-01-01-05-07 not found position");
                             break;
                     }
                     SelectManager.Instance.CheckSelectAble(MatchManager.instance);
                 }
                 else
                 {
-                    Debug.LogError(this.debug("None card created", new
-                    {
-                        target,
-                        createCard.cardCreated,
-                        createCard.CardTarget,
-                        createCard.owner,
-                        createCard.CardPosition,
-                    }
-                    ));
+                    Debug.LogFormat("C25F12-01-01-06 createdCard is not null = {0}", createdCard != null);
                 }
             }
+            else
+            {
+                Debug.LogFormat("C25F12-01-02 target is CardPlayer = {0}", target is CardPlayer);
+            }
         }
-
-
+        else
+        {
+            Debug.LogFormat("C25F12-02 createCard is not null = {0}, target is not null", createCard != null, target != null);
+        }
         yield return null;
     }
 
     //event action
     private IEnumerator BuffStats(BuffStats buffstarts, MonsterCard target)
     {
-        print(this.debug());
+        Debug.Log("C25F10");
         if(buffstarts != null)
         {
+            Debug.LogFormat("C25F10-01 buffstarts is not null = {0}", buffstarts != null);
             if(target != null)
             {
+                Debug.LogFormat("C25F10-01-01 target is not null = {0}", target != null);
                 buffstarts.GainEffect(target, this);
             }
             else
             {
+                Debug.LogFormat("C25F10-01-02 target is not null = {0}", target != null);
                 print(this.debug("target null"));
             }
         }
         else
         {
-            print(this.debug("buffstarts null"));
+            Debug.LogFormat("C25F10-02 buffstarts is not null = {0}", buffstarts != null);
         }
         yield return null;
     }
 
     private IEnumerator Dame(Dame dame, object target)
     {
-        print(this.debug());
+        Debug.Log("C25F13");
         if(dame != null)
         {
+            Debug.LogFormat("C25F13-01 dame is not null = {0}", dame != null);
+
             if(target != null)
             {
+                Debug.LogFormat("C25F13-01-01 target is not null = {0}", target != null);
+
                 if(target is CardPlayer player)
                 {
                     player.hp.Number -= dame.number;
+                    Debug.LogFormat("C25F13-01-01-01 target is CardPlayer = {0}, dame = {1}", target is CardPlayer, dame.number);
                 }
                 else if(target is MonsterCard card)
                 {
+                    Debug.LogFormat("C25F13-01-01-02 target is MonsterCard = {0}, dame = {1}", target is MonsterCard, dame.number);
                     card.Hp -= dame.number;
+                }
+                else
+                {
+                    Debug.LogFormat("C25F13-01-01-03 not found type of target");
                 }
             }
             else
             {
-                print(this.debug("target null"));
+                Debug.LogFormat("C25F13-01-02 target is not null = {0}", target != null);
             }
         }
         else
         {
-            print(this.debug("Dame null"));
+            Debug.LogFormat("C25F13-02 dame is not null = {0}", dame != null);
         }
-
         yield return null;
     }
 
     private IEnumerator DestroyObject(DestroyObject destroy, object target)
     {
+        Debug.Log("C25F14");
         if(destroy != null && target != null)
         {
+            Debug.LogFormat("C25F14-01 destroy is not null = {0}, target is not null = {1}", destroy != null, target != null);
+
             if(target is MonsterCard monster)
             {
-                print(this.debug($"Gain effect for {monster}"));
+                Debug.LogFormat("C25F14-01-01 target is MonsterCard");
                 destroy.GainEffect(monster, this);
-
+            }
+            else
+            {
+                Debug.LogFormat("C25F14-01-02 target is MonsterCard");
             }
         }
         else
         {
-            print(this.debug("not avaiable"));
+            Debug.LogFormat("C25F14-02 destroy is not null = {0}, target is not null = {1}", destroy != null, target != null);
         }
         yield return null;
     }
@@ -1572,14 +1560,17 @@ public class EffectManager : MonoBehaviourPun
     }
     private void Awake()
     {
-        //DontDestroyOnLoad(gameObject);
+        Debug.Log("C25F9");
+
         if(Instance != null && Instance != this)
         {
+            Debug.Log("C25F9-01");
             UnityEngine.Debug.LogError("EffectManager have 2");
             Destroy(gameObject);
         }
         else
         {
+            Debug.Log("C25F9-02");
             Instance = this;
         }
     }
@@ -1607,44 +1598,53 @@ public class EffectManager : MonoBehaviourPun
     }
     private IEnumerator EffectAction(AbstractEffect effect, AbstractTarget targetAbs, int targetPhotonID)
     {
-
+        Debug.Log("C25F15");
         if(effect != null)
         {
+            Debug.LogFormat("C25F15-01 effect is not null = {0}", effect != null);
+
             /*
              * get the target with the select object data and target ID
              */
             if(effect is BuffStats buffstarts)
             {
+                Debug.Log("C25F15-01-01 effect is BuffStats");
                 yield return BuffStats(buffstarts, GetTargetCard(targetAbs as CardTarget, targetPhotonID) as MonsterCard);
             }
             else if(effect is Dame dame)
             {
+                Debug.Log("C25F15-01-02 effect is Dame ");
                 yield return Dame(dame, GetTargetObject(targetAbs, targetPhotonID));
 
             }
             else if(effect is Gain gain)
             {
+                Debug.Log("C25F15-01-03 effect is Gain ");
                 yield return Gain(gain, GetTargetObject(targetAbs, targetPhotonID));
             }
             else if(effect is Heal heal)
             {
+                Debug.Log("C25F15-01-04 effect is Heal ");
                 yield return Heal(heal, GetTargetObject(targetAbs, targetPhotonID));
             }
             else if(effect is DestroyObject destroy)
             {
+                Debug.Log("C25F15-01-05 effect is DestroyObject ");
                 yield return DestroyObject(destroy, GetTargetObject(targetAbs, targetPhotonID));
             }
             else if(effect is CreateCard createCard)
             {
+                Debug.Log("C25F15-01-06 effect is CreateCard ");
                 yield return CreateCard(createCard, GetTargetObject(targetAbs, targetPhotonID));
             }
             else
             {
-                print(this.debug("Not found type of effect", new
-                {
-                    effect.GetType().Name
-                }));
+                Debug.Log("C25F15-01-07 do not found type of effect");
             }
+        }
+        else
+        {
+            Debug.LogFormat("C25F15-02 effect is not null = {0}", effect != null);
         }
 
         yield return null;
