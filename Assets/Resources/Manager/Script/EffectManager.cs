@@ -65,6 +65,7 @@ using static Assets.GameComponent.Card.Logic.TargetObject.Target.AbstractTarget.
 using UnityEngine.Windows;
 using Unity.VisualScripting;
 using System.Security.Policy;
+using MoreMountains.Tools;
 
 public class EffectManager : MonoBehaviourPun
 {
@@ -441,22 +442,32 @@ public class EffectManager : MonoBehaviourPun
 
     #region Actions
 
-
+    /// <summary>
+    /// Check request to execute action of card
+    /// </summary>
+    /// <testID>#C25F1</testID>
+    /// <param name="register"></param>
+    /// <param name="have"></param>
+    /// <returns></returns>
     public IEnumerator ActionHaveCondition(object register, Have have)
     {
+        Debug.Log("C25F1");
         int number = have.number;
         print(this.debug());
         bool isHave = false;
         Action ExecuteEffectQ = () => { print(this.debug("Execute Effect")); };
         if(have != null)
         {
+            Debug.LogFormat("C25F1-01");
             if(have.target != null)
             {
+                Debug.LogFormat("C25F1-01-01");
 
                 if(have.target is PlayerTarget targetPlayer)
                 {
                     var players = targetPlayer.Execute(MatchManager.instance);
                     isHave = false;
+                    Debug.LogFormat("C25F1-01-01-01 before comepare players.Count = {0}, isHave = {1}", players.Count, isHave);
                     switch(have.comepare)
                     {
                         case compareType.equal:
@@ -481,12 +492,16 @@ public class EffectManager : MonoBehaviourPun
                             Debug.Log("Not found compare type");
                             break;
                     }
+                    Debug.LogFormat("C25F1-01-01-01 after comepare players.Count = {0}, isHave = {1}", players.Count, isHave);
+
                     if(isHave ^ have._not)
                     {
+                        Debug.LogFormat("C25F1-01-01-01-01");
                         yield return StartCoroutine(ExecuteActions(register, have.Actions));
                     }
                     else
                     {
+                        Debug.LogFormat("C25F1-01-01-01-02");
                         yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                     }
                 }
@@ -499,6 +514,8 @@ public class EffectManager : MonoBehaviourPun
                     }));
                     //isHave = cards.Count > 0;
                     isHave = false;
+                    Debug.LogFormat("C25F1-01-01-02 before comepare cards.Count = {0}, isHave = {1}", cards.Count, isHave);
+
                     switch(have.comepare)
                     {
                         case compareType.equal:
@@ -523,6 +540,8 @@ public class EffectManager : MonoBehaviourPun
                             Debug.Log("Not found compare type");
                             break;
                     }
+                    Debug.LogFormat("C25F1-01-01-02 after comepare cards.Count = {0}, isHave = {1}", cards.Count, isHave);
+
                     print(this.debug("have action condition", new
                     {
                         cards.Count,
@@ -531,20 +550,22 @@ public class EffectManager : MonoBehaviourPun
                     }));
                     if(isHave ^ have._not)
                     {
+                        Debug.LogFormat("C25F1-01-01-02-01");
                         yield return StartCoroutine(ExecuteActions(register, have.Actions));
                     }
                     else
                     {
-                        Debug.Log(this.debug("condition false"));
+                        Debug.LogFormat("C25F1-01-01-02-02");
                         yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                     }
                 }
                 else if(have.target is SpecifyCardPlayer specifyCardPlayer)
                 {
-
+                    Debug.LogFormat("C25F1-01-01-03");
                 }
                 else if(have.target is CardTarget targetCard)
                 {
+                    Debug.LogFormat("C25F1-01-01-04");
                     var cards = targetCard.Execute(MatchManager.instance);
                     isHave = false;
                     switch(have.comepare)
@@ -589,41 +610,40 @@ public class EffectManager : MonoBehaviourPun
                 }
                 else
                 {
+                    Debug.LogFormat("C25F1-01-01-05");
                     print(this.debug("Can not find type target"));
                     yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                 }
             }
             else
             {
+                Debug.LogFormat("C25F1-01-02");
                 print(this.debug("Target in have null"));
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
         }
         else
         {
+            Debug.LogFormat("C25F1-02");
             print(this.debug("SelectTarget be null", new
             {
                 register
             }));
         }
-
         yield return null;
     }
 
     private IEnumerator ActionSelectTarget(object register, SelectSelf self)
     {
+        Debug.Log("C25F3");
 
         if(self.target is SelfCard selfCard)
         {
+            Debug.LogFormat("C25F3-01 is SelfCard = {0}", self.target is SelfCard);
+
             if(register is CardBase card)
             {
-                print(this.debug("Self Action", new
-                {
-                    card.CardOwner,
-                    card.Position,
-                    card.RarityCard,
-                    card.RegionCard
-                }));
+                Debug.LogFormat("C25F3-01-01");
 
                 yield return StartCoroutine(ExecuteEffects(register, self.Effects, new CardTarget
                 {
@@ -636,14 +656,17 @@ public class EffectManager : MonoBehaviourPun
             }
             else
             {
-                print(this.debug("Can not get cardbase"));
+                Debug.LogFormat("C25F3-01-02");
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
         }
         else if(self.target is SelfCardPlayer selfCardPlayer)
         {
+            Debug.LogFormat("C25F3-02");
+
             if(register is CardBase card)
             {
+                Debug.LogFormat("C25F3-02-01");
                 yield return StartCoroutine(ExecuteEffects(register, self.Effects, new PlayerTarget
                 {
                     side = CardOwner.You
@@ -651,45 +674,39 @@ public class EffectManager : MonoBehaviourPun
             }
             else
             {
-                print(this.debug("Can not get cardbase"));
+                Debug.LogFormat("C25F3-02-02");
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
         }
         else
         {
-            print(this.debug("Not found type target", new
-            {
-                type = self.target.GetType().Name
-            }));
+            Debug.LogFormat("C25F3-03");
             yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
         }
-
     }
 
     private IEnumerator ActionSelectTarget(object register, SelectTarget selectTarget)
     {
-        print(this.debug());
+        Debug.LogFormat("C25F4");
 
         if(selectTarget != null)
         {
+            Debug.Log("C25F4-01");
             Action ExecuteEffectQ = () => { print(this.debug("Execute Effect")); };
             List<(List<AbstractEffect>, AbstractTarget, object)> result = new();
             yield return StartCoroutine(SelectManager.Instance.SelectTargets(selectTarget, result));
 
-            print(this.debug("Player selectted:", new
-            {
-                result
-            }));
-            print(this.debug("Player selectted:", new
-            {
-                result.Count
-            }));
             if(result != null && result.Count > 0)
             {
+                Debug.LogFormat("C25F4-01-01 result not null = {0},  count = {1}", result != null, result.Count);
+
                 foreach((var effects, var absTarget, var target) in result)
                 {
+                    var index = result.IndexOf((effects, absTarget, target));
+                    Debug.LogFormat("C25F4-01-01 result[{0}])", index);
                     if(absTarget is CardTarget)
                     {
+                        Debug.LogFormat("C25F4-01-01-01 absTarget is CardTarget = {0}", absTarget is CardTarget);
                         ExecuteEffectQ += () =>
                         {
                             StartCoroutine(ExecuteEffects(register, effects, absTarget, (CardBase)target));
@@ -697,6 +714,7 @@ public class EffectManager : MonoBehaviourPun
                     }
                     else if(absTarget is PlayerTarget)
                     {
+                        Debug.LogFormat("C25F4-01-01-02 absTarget is PlayerTarget = {0}", absTarget is PlayerTarget);
                         ExecuteEffectQ += () =>
                         {
                             StartCoroutine(ExecuteEffects(register, effects, absTarget, (CardPlayer)target));
@@ -704,8 +722,11 @@ public class EffectManager : MonoBehaviourPun
                     }
                     else if(absTarget is AnyTarget)
                     {
+                        Debug.LogFormat("C25F4-01-01-03 absTarget is AnyTarget = {0}", absTarget is AnyTarget);
                         if(target is CardBase)
                         {
+                            Debug.LogFormat("C25F4-01-01-03-01 target is CardBase = {0}", target is CardBase);
+
                             ExecuteEffectQ += () =>
                             {
                                 StartCoroutine(ExecuteEffects(register, effects, absTarget, (CardBase)target));
@@ -713,6 +734,7 @@ public class EffectManager : MonoBehaviourPun
                         }
                         else if(target is CardPlayer)
                         {
+                            Debug.LogFormat("C25F4-01-01-03-02 target is CardPlayer = {0}", target is CardPlayer);
                             ExecuteEffectQ += () =>
                             {
                                 StartCoroutine(ExecuteEffects(register, effects, absTarget, (CardPlayer)target));
@@ -722,33 +744,31 @@ public class EffectManager : MonoBehaviourPun
                     }
                     else
                     {
-                        print(this.debug("Not set target for select Target"));
+                        Debug.LogFormat("C25F4-01-01-04");
                         yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                     }
                 }
             }
             else
             {
-                print(this.debug("Not any target selected"));
+                Debug.LogFormat("C25F4-01-02 result not null = {0},  count = {1}", result != null, result.Count);
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
 
             if(ExecuteEffectQ != null)
             {
+                Debug.LogFormat("C25F4-01-03");
                 ExecuteEffectQ();
             }
             else
             {
-                print(this.debug("Effect null"));
+                Debug.LogFormat("C25F4-01-04");
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
         }
         else
         {
-            print(this.debug("SelectTarget be null", new
-            {
-                register
-            }));
+            Debug.Log("C25F4-02");
             yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
         }
         yield return null;
@@ -756,12 +776,13 @@ public class EffectManager : MonoBehaviourPun
 
     private IEnumerator ActionSelectTarget(object register, SelectStrongest strongest)
     {
-        print(this.debug("SELECT STRONGEST"));
+        Debug.Log("C25F5");
         var strongestMonster = strongest.Execute(register, MatchManager.instance);
 
         if(strongestMonster != null)
         {
-            print(this.debug("EXECUTE STRONGEST EFF"));
+            Debug.LogFormat("C25F5-01 strongestMonster is not null = {0}", strongestMonster != null);
+
             yield return StartCoroutine(routine: ExecuteEffects(register, strongest.Effects, new CardTarget
             {
                 owner = strongest.owner,
@@ -772,22 +793,27 @@ public class EffectManager : MonoBehaviourPun
         }
         else
         {
-            print(this.debug("not found object strongest"));
+            Debug.LogFormat("C25F5-02 strongestMonster is not null = {0}", strongestMonster != null);
             yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
         }
     }
 
     private IEnumerator ActionSelectTarget(object register, SelectMulti multiSelect)
     {
-        print(this.debug());
+        Debug.Log("C25F6");
         Action ExecuteEffectQ = () => { print(this.debug("Execute Effect")); };
 
         if(multiSelect != null)
         {
+            Debug.LogFormat("C25F6-01 multiSelect is not null = {0}", multiSelect != null);
+
             if(multiSelect.multiTargetType != null)
             {
+                Debug.LogFormat("C25F6-01-01 multiSelect.multiTargetType is not null = {0}", multiSelect.multiTargetType != null);
                 if(multiSelect.multiTargetType is MultiTargetPlayer multiTargetPlayer)
                 {
+                    Debug.LogFormat("C25F6-01-01-01 multiTargetType is MultiTargetPlayer = {0}", multiSelect.multiTargetType is MultiTargetPlayer);
+
                     var playersTarget = new PlayerTarget
                     {
                         side = CardOwner.Any
@@ -795,12 +821,18 @@ public class EffectManager : MonoBehaviourPun
                     var players = playersTarget.Execute(MatchManager.instance);
                     if(players != null && players.Count > 0)
                     {
+                        Debug.LogFormat("C25F6-01-01-01-01 players not null ={0}, players count = {1}", players != null, players.Count);
                         foreach(var player in players)
                         {
+                            var index = players.IndexOf(player);
+                            Debug.LogFormat("C25F6-01-01-01-01 players[{0}])", index);
+
                             ExecuteEffectQ += () =>
                             {
                                 if(player == MatchManager.instance.LocalPlayer)
                                 {
+                                    Debug.LogFormat("C25F6-01-01-01-01-01 players[{0}] is local player = {1}", index, player == MatchManager.instance.LocalPlayer);
+
                                     StartCoroutine(ExecuteEffects(register, multiTargetPlayer.Effects, new PlayerTarget
                                     {
                                         side = CardOwner.You
@@ -808,6 +840,7 @@ public class EffectManager : MonoBehaviourPun
                                 }
                                 else
                                 {
+                                    Debug.LogFormat("C25F6-01-01-01-01-02 players[{0}] is not local player = {1}", index, player == MatchManager.instance.LocalPlayer);
                                     StartCoroutine(ExecuteEffects(register, multiTargetPlayer.Effects, new PlayerTarget
                                     {
                                         side = CardOwner.Opponent
@@ -818,22 +851,22 @@ public class EffectManager : MonoBehaviourPun
                     }
                     else
                     {
-                        print(this.debug("Not any target selected"));
+                        Debug.LogFormat("C25F6-01-01-01-02 players not null ={0}, players count = {1}", players != null, players.Count);
                         yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                     }
                 }
                 else if(multiSelect.multiTargetType is MultiTargetCard multiTargetCard)
                 {
+                    Debug.LogFormat("C25F6-01-01-02 multiTargetType is MultiTargetCard = {0}", multiSelect.multiTargetType is MultiTargetCard);
+
                     List<CardBase> cards = multiTargetCard.target.Execute(MatchManager.instance);
-                    print(this.debug("Select Card Target", new
-                    {
-                        cards.Count
-                    }));
                     if(cards != null && cards.Count > 0)
                     {
+                        Debug.LogFormat("C25F6-01-01-02-01 cards not null ={0}, cards count = {1}", cards != null, cards.Count);
                         //Select manager provide select action
                         foreach(var card in cards)
                         {
+                            Debug.LogFormat("C25F6-01-01-02-01 cards[{0}])", cards.IndexOf(card));
                             ExecuteEffectQ += () =>
                             {
                                 StartCoroutine(ExecuteEffects(register, multiTargetCard.Effects, multiTargetCard.target, card));
@@ -843,43 +876,38 @@ public class EffectManager : MonoBehaviourPun
                     }
                     else
                     {
-                        print(this.debug("Not any target selected"));
+                        Debug.LogFormat("C25F6-01-01-02-02 cards not null ={0}, cards count = {1}", cards != null, cards.Count);
                         yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
-
                     }
 
                 }
                 else
                 {
-                    print(this.debug("do not find type of multi select"));
+                    Debug.LogFormat("C25F6-01-01-03 do not find type of multi select");
                     yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
 
                 }
                 if(ExecuteEffectQ != null)
                 {
+                    Debug.LogFormat("C25F6-01-01-04");
                     ExecuteEffectQ();
                 }
                 else
                 {
-                    print(this.debug("Effect null"));
+                    Debug.LogFormat("C25F6-01-01-05");
                     yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                 }
             }
             else
             {
-                print(this.debug(" multi select type be null"));
+                Debug.LogFormat("C25F6-01-02 multiSelect.multiTargetType is not null = {0}", multiSelect.multiTargetType != null);
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
         }
         else
         {
-            print(this.debug("SelectTarget be null", new
-            {
-                register
-            }));
+            Debug.LogFormat("C25F6-02 multiSelect is not null = {0}", multiSelect != null);
             yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
-
-
         }
         yield return null;
     }
@@ -1415,12 +1443,12 @@ public class EffectManager : MonoBehaviourPun
 
     private IEnumerator ActionSelectTarget(object register, SelectWeakness weakness)
     {
-        print(this.debug("SELECT WEAKNESS"));
+        Debug.Log("C25F7");
         var strongestMonster = weakness.Execute(register, MatchManager.instance);
 
         if(strongestMonster != null)
         {
-            print(this.debug("EXECUTE STRONGEST EFF"));
+            Debug.LogFormat("C25F7-01 strongestMonster is not null = {0}", strongestMonster != null);
             yield return StartCoroutine(routine: ExecuteEffects(register, weakness.Effects, new CardTarget
             {
                 owner = weakness.owner,
@@ -1431,7 +1459,7 @@ public class EffectManager : MonoBehaviourPun
         }
         else
         {
-            print(this.debug("not found object strongest"));
+            Debug.LogFormat("C25F7-02 strongestMonster is not null = {0}", strongestMonster != null);
             yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
         }
     }
@@ -1538,27 +1566,8 @@ public class EffectManager : MonoBehaviourPun
     }
     private IEnumerator ActionRegisterLocalEvent(object register, RegisterLocalEvent registerLocalEvent)
     {
+        Debug.Log("C25F2");
         registerLocalEvent.Execute(register, this);
-
-        //if (register is CardBase cardBase)
-        //{
-        //    if (registerLocalEvent.EventID == EventID.OnEndRound)
-        //    {
-        //        //List<AbstractAction> abstractDatas = new List<AbstractAction>();
-        //        //abstractDatas.Add(new SelectSelf { Effects = registerLocalEvent.Effects });
-        //        //var abstracCondition = new End { Actions = abstractDatas };
-        //        //EffectRegistor(abstracCondition, register);
-        //    }
-        //    if (registerLocalEvent.EventID == EventID.OnCardDamaged)
-        //    {
-        //        registerLocalEvent.RegistEvent(register);
-
-        //        //List<AbstractAction> abstractDatas = new List<AbstractAction>();
-        //        //abstractDatas.Add(new SelectSelf { Effects = registerLocalEvent.Effects });
-        //        //var abstracCondition = new CardDamaged { Actions = abstractDatas };
-        //        //EffectRegistor(abstracCondition, register);
-        //    }
-        //}
         yield return null;
     }
     private void Awake()
@@ -1993,9 +2002,9 @@ public class EffectManager : MonoBehaviourPun
             name = typeof(AfterSummon).Name,
             register = spellCard.ToString()
         }));
-     
+
         status = EffectStatus.running;
-      
+
         if(spellCard.CardPlayer == MatchManager.instance.LocalPlayer)
         {
             print(this.debug("player is the owner of card register for Execute spell"));
