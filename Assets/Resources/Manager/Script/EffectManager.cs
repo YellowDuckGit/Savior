@@ -332,10 +332,6 @@ public class EffectManager : MonoBehaviourPun
                                 var action = actions[j];
                                 if(action is SelectTarget selectTarget) //get each action and execute it, here is select card
                                 {
-                                    print(this.debug("is SelectCardAction Action", new
-                                    {
-                                        actionName = action.GetType().Name
-                                    }));
                                     var path = SelectManager.Instance.GetGraphPlayerSelectTarget(selectTarget);
                                     flag = flag && path.Count > 0; //Check
                                 }
@@ -395,23 +391,18 @@ public class EffectManager : MonoBehaviourPun
     {
         Debug.LogFormat("C25F32 monsterCard is = {0}", monsterCard);
         status = EffectStatus.running;
-
+        Debug.LogFormat("C25F32 effect status = {0}", status.ToString());
         if(EventEffectDispatcher.ContainsKey(EventID.OnCardDamaged))
         {
-
+            Debug.LogFormat("C25F32-01 EventEffectDispatcher contain key EventID.OnCardDamaged = {0}", EventEffectDispatcher.ContainsKey(EventID.OnCardDamaged));
             var datas = EventEffectDispatcher[EventID.OnCardDamaged];
             if(datas != null && datas.Count > 0)
             {
+                Debug.LogFormat("C25F32-01-01 datas is not null = {0} datas count = {1}", datas != null, datas.Count);
                 var effectData = datas.FirstOrDefault(Item =>
                 {
                     if(Item.register is MonsterCard regisMonster)
                     {
-                        print(this.debug("Monster being damaged", new
-                        {
-                            result = regisMonster == monsterCard,
-                            regis = regisMonster,
-                            cardinput = monsterCard
-                        }));
                         return regisMonster == monsterCard;
                     }
                     print(this.debug("Not available for damaged"));
@@ -419,33 +410,27 @@ public class EffectManager : MonoBehaviourPun
                 }
                 );
 
-
                 if(effectData.register != null && effectData.Actions != null && effectData.Actions.Count > 0)
                 {
+                    Debug.LogFormat("C25F32-01-01-01 effectData is not null = {0}", effectData.register != null && effectData.Actions != null && effectData.lifetime != null && effectData.WhenDie != null);
                     yield return StartCoroutine(ExecuteActions(effectData.register, effectData.Actions));
                 }
                 else
                 {
-                    print(this.debug("Data null OnCardDamaged ", new
-                    {
-                        register = effectData.register,
-                    }));
-
-                    print(this.debug("Data null OnCardDamaged ", new
-                    {
-                        ActionsCount = effectData.Actions
-                    }));
+                    Debug.LogFormat("C25F32-01-01-02 effectData is not null = {0}", effectData.register != null && effectData.Actions != null && effectData.lifetime != null && effectData.WhenDie != null);
                     yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                 }
             }
             else
             {
+                Debug.LogFormat("C25F32-01-01 datas is not null = {0} datas count = {1}", datas != null, datas != null ? datas.Count : "null");
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
-                print(this.debug("No register for OnCardDamaged ", new
-                {
-                    datas
-                }));
             }
+        }
+        else
+        {
+            Debug.LogFormat("C25F32-02 EventEffectDispatcher contain key EventID.OnCardDamaged = {0}", EventEffectDispatcher.ContainsKey(EventID.OnCardDamaged));
+            yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
         }
         yield return null;
     }
@@ -520,10 +505,6 @@ public class EffectManager : MonoBehaviourPun
                 else if(have.target is SpecifyCard specifyCard)
                 {
                     var cards = specifyCard.Execute(MatchManager.instance);
-                    print(this.debug("Have Specify card", new
-                    {
-                        cards.Count
-                    }));
                     //isHave = cards.Count > 0;
                     isHave = false;
                     Debug.LogFormat("C25F1-01-01-02 before comepare cards.Count = {0}, isHave = {1}", cards.Count, isHave);
@@ -604,12 +585,6 @@ public class EffectManager : MonoBehaviourPun
                             Debug.Log("Not found compare type");
                             break;
                     }
-                    print(this.debug("have action condition", new
-                    {
-                        cards.Count,
-                        isHave,
-                        result = isHave ^ have._not
-                    }));
                     if(isHave ^ have._not)
                     {
                         yield return StartCoroutine(ExecuteActions(register, have.Actions));
@@ -637,10 +612,6 @@ public class EffectManager : MonoBehaviourPun
         else
         {
             Debug.LogFormat("C25F1-02");
-            print(this.debug("SelectTarget be null", new
-            {
-                register
-            }));
         }
         yield return null;
     }
@@ -1729,11 +1700,6 @@ public class EffectManager : MonoBehaviourPun
         {
             if(data.lifetime == LifeTime.OneTime)
             {
-                print(this.debug("remove on end round", new
-                {
-                    data.register,
-                    data.Actions.Count
-                }));
                 yield return new WaitUntil(() => datas.Remove(data));
             }
         }
@@ -1874,19 +1840,11 @@ public class EffectManager : MonoBehaviourPun
 
     IEnumerator UpdateEffectStatusEvent(EffectStatus status)
     {
-        print(this.debug("send Update effect status to", new
-        {
-            status
-        }));
         object[] datas = new object[] { (int)status };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent((byte)RaiseEvent.EFFECT_UPDATE_STATUS, datas, raiseEventOptions, SendOptions.SendUnreliable);
 
         yield return new WaitUntil(() => this.status == status);
-        print(this.debug("effect status update success", new
-        {
-            this.status
-        }));
         yield return null;
     }
     #region Setup
@@ -1973,18 +1931,6 @@ public class EffectManager : MonoBehaviourPun
 
     public IEnumerator OnExecuteSpell(SpellCard spellCard)
     {
-        print(this.debug("Status at start OnExecuteSpell", new
-        {
-            status
-        }));
-
-
-        print(this.debug("Start Execute spell", new
-        {
-            name = typeof(AfterSummon).Name,
-            register = spellCard.ToString()
-        }));
-
         status = EffectStatus.running;
 
         if(spellCard.CardPlayer == MatchManager.instance.LocalPlayer)
@@ -1993,12 +1939,7 @@ public class EffectManager : MonoBehaviourPun
 
             foreach(var logic in spellCard.LogicCard)
             {
-                var Actions = logic.Actions; //get all action in after summon event
-                                             //var Actions = spellCard.LogicCard.Actions; //get all action in after summon event
-                print(this.debug("Object register", new
-                {
-                    NumberAction = Actions.Count,
-                }));
+                var Actions = logic.Actions;
 
                 yield return StartCoroutine(ExecuteActions(spellCard, Actions)); //execute all action
             }
@@ -2007,10 +1948,6 @@ public class EffectManager : MonoBehaviourPun
         {
             print(this.debug("player is not the owner of card registed for Execute spell just watting"));
             yield return new WaitUntil(() => this.status != EffectStatus.running);
-            print(this.debug("Status at effect Execute spell done", new
-            {
-                status
-            }));
         }
         if(this.status == EffectStatus.success)
         {
