@@ -61,31 +61,30 @@ public class HP : MonoBehaviour
             StartCoroutine(FloatLerpCoroutine(fromValue, toValue, duration));
         }
 
-        float elapsedTime = 0;
 
+        if (increase)
+        {
+            SoundManager.instance.PlayPourMana();
+        }
+        else
+        {
+            SoundManager.instance.PlayPainful();
+        }
+        float elapsedTime = 0;
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;
 
             int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
-
-            if (increase)
-            {
-                textMeshPro.text = result.ToString();
-                //sound increase
-                SoundManager.instance.PlayPourMana();
-            }
-            else
-            {
-                textMeshPro.text = result.ToString();
-                //sound decrease
-                SoundManager.instance.PlayPainful();
-            }
-
+            textMeshPro.text = result.ToString();
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
+        if (increase)
+        {
+            SoundManager.instance.StopPourMana();
+        }
+       
         textMeshPro.text = toValue.ToString();
 
     }
@@ -107,10 +106,8 @@ public class HP : MonoBehaviour
             float t = elapsedTime / duration;
 
             float result = (Mathf.Lerp(a, b, t));
-            print("result: "+result.ToString());
 
             liquid.CompensateShapeAmount = result;
-            //liquid.CompensateShapeAmount += result;
 
             print("CompensateShapeAmount: " + liquid.CompensateShapeAmount);
 

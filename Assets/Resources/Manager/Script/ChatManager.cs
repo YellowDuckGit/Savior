@@ -41,6 +41,13 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
 
     void Start()
     {
+      
+    }
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+
         if (instance != null && instance != this)
         {
             Debug.LogError("ChatManager have 2");
@@ -50,11 +57,6 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
         {
             instance = this;
         }
-    }
-
-    private void Awake()
-    {
-     
     }
     private void OnDestroy()
     {
@@ -166,6 +168,7 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
                                     nickNameFriendinvite = sender;
                                     //popup
                                     UIManager.instance.RequestPanelContainer.SetActive(true);
+
                                 }else
                                 {
                                     Debug.LogError("Friend On Request Invite: "+nickNameFriendinvite);
@@ -181,7 +184,8 @@ public class ChatManager  : MonoBehaviour, IChatClientListener
                                 SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.RoomPVFCreated) + "|" + FriendRoomName);
                                 break;
                             case nameof(MessageType.DeclineRequest):
-                                nickNameFriendinvite = null;
+                                nickNameFriendinvite = "";
+                                PhotonNetwork.LeaveLobby();
                                 print("DeclineRequest");
                                 break;
                             case nameof(MessageType.RoomPVFCreated):

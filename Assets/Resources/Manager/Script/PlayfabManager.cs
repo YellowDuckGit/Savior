@@ -487,7 +487,7 @@ public class PlayfabManager : MonoBehaviour
             }
             else
             {
-                StartCoroutine(SubmitScore(100));
+                StartCoroutine(SubmitScore(0));
             }
 
             IsApiExecuting = false;
@@ -1030,7 +1030,16 @@ public class PlayfabManager : MonoBehaviour
 
     void AuthencatonSuccess()
     {
-        PlayerPrefs.SetString("USERNAME", UIManager.instance.LoginUsername.text);
+        string userName = "";
+
+        if (UIManager.instance.isSignIn)
+            userName = UIManager.instance.LoginUsername.text;
+        else if (UIManager.instance.isSignUp)
+        {
+            userName = UIManager.instance.RegisterUsername.text;
+        }
+
+        PlayerPrefs.SetString("USERNAME", userName);
 
         StartCoroutine(SetUserData("DeviceUniqueIdentifier", DeviceUniqueIdentifier));
         //connect
@@ -1039,8 +1048,6 @@ public class PlayfabManager : MonoBehaviour
         ChatManager.instance.ConnectoToPhotonChat();
         PhotonManager.instance.ConnectToMaster();
         isAuthented = true;
-
-
     }
 
     #endregion

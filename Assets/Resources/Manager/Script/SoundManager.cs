@@ -108,10 +108,22 @@ public class SoundManager : MonoBehaviour
         print("PLAY PAINFUL SOUND");
         Painful.PlayFeedbacks();
     }
+
+    public void StopPainful()
+    {
+        print("PLAY PAINFUL SOUND");
+        Painful.StopFeedbacks();
+    }
     public void PlayATKHP()
     {
         print("PLAY ATK HP SOUND");
         ATKHP.PlayFeedbacks();
+    }
+
+    public void StopATKHP()
+    {
+        print("PLAY ATK HP SOUND");
+        ATKHP.StopFeedbacks();
     }
     public void PlayCoinSound()
     {
@@ -127,6 +139,12 @@ public class SoundManager : MonoBehaviour
     {
         print("PLAY POUR MANA SOUND");
         PourMana.PlayFeedbacks();
+    }
+
+    public void StopPourMana()
+    {
+        print("PLAY POUR MANA SOUND");
+        PourMana.StopFeedbacks();
     }
     public void PlayYourTurn()
     {

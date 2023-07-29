@@ -83,8 +83,9 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
-                StartCoroutine(HPLerpCoroutine(Hp, value, 1f));
-
+                if (MatchManager.instance.phase == MatchManager.Phase.MiddleMatch)
+                    StartCoroutine(HPLerpCoroutine(Hp, value, 1f));
+                else UIHp.text = value.ToString();
             }
         }
         // Property for Attack with getter and setter
@@ -96,7 +97,9 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
             }
             set
             {
+                if(MatchManager.instance.phase == MatchManager.Phase.MiddleMatch)
                 StartCoroutine(ATKLerpCoroutine(Attack, value, 1f));
+                else UIAttack.text = value.ToString();
 
             }
         }
@@ -455,6 +458,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         private IEnumerator HPLerpCoroutine(int fromValue, int toValue, float duration)
         {
             float elapsedTime = 0;
+            SoundManager.instance.PlayATKHP();
 
             while (elapsedTime < duration)
             {
@@ -463,10 +467,10 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                 int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
 
                 UIHp.text = result.ToString();
-                SoundManager.instance.PlayATKHP();
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
+            SoundManager.instance.StopATKHP();
 
             UIHp.text = toValue.ToString();
 
@@ -475,7 +479,7 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
         private IEnumerator ATKLerpCoroutine(int fromValue, int toValue, float duration)
         {
             float elapsedTime = 0;
-
+            SoundManager.instance.PlayATKHP();
             while (elapsedTime < duration)
             {
                 float t = elapsedTime / duration;
@@ -483,12 +487,11 @@ namespace Assets.GameComponent.Card.CardComponents.Script.UI
                 int result = Mathf.RoundToInt(Mathf.Lerp(fromValue, toValue, t));
 
                 UIAttack.text = result.ToString();
-                SoundManager.instance.PlayATKHP();
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
-
+            SoundManager.instance.StopATKHP();
             UIAttack.text = toValue.ToString();
         }
     }

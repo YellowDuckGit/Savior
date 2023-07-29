@@ -30,22 +30,28 @@ public class DeckItem : MonoBehaviour, IPointerClickHandler
         {
             this.id = Id;
             this.data = value;
-            //text_DeckName.text = this.data.deckName;
+            text_DeckName.text = this.data.deckName;
 
-            //Avatar
+            ////Avatar
+            //data.setListCardItem();
+            //print("Flag");
+            //data.ListCardID.ForEach(a=>print(a.ToString()));
             //string idSavaior = data.ListCardID.FirstOrDefault(a => a.Contains("SA"));
 
             //if (idSavaior != null)
             //{
-            //    CardItem cardItem = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id == idSavaior);
-            //    avatar.sprite = cardItem.cardData.NormalAvatar2D;
+            //    print("idSavaior" + idSavaior.ToString());
+            //    ICardData carData = GameData.instance.listCardDataInGame.SingleOrDefault(a => a.Id.Equals(idSavaior));
+            //    if(carData != null)
+            //    avatar.sprite = carData.NormalAvatar2D;
             //}
             //else
             //{
-            //    CardItem cardItem = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id == data.ListCardID[0]);
-            //    avatar.sprite = cardItem.cardData.NormalAvatar2D;
+            //    ICardData carData = GameData.instance.listCardDataInGame.SingleOrDefault(a => a.Id == data.ListCardID[0]);
+            //    if (carData != null)
+            //        avatar.sprite = carData.NormalAvatar2D;
             //}
-            //
+
         }
     }
 

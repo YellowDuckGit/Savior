@@ -50,7 +50,7 @@ public class Mana : MonoBehaviour
         StartCoroutine(FloatLerpCoroutine(fromValue, toValue, duration));
 
         float elapsedTime = 0;
-
+        SoundManager.instance.PlayPourMana();
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;
@@ -64,9 +64,8 @@ public class Mana : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+        SoundManager.instance.StopPourMana();
 
-        
-     
     }
 
     private IEnumerator FloatLerpCoroutine(float fromValue, float toValue, float duration)
@@ -89,7 +88,6 @@ public class Mana : MonoBehaviour
             print("result: " + result.ToString());
 
             liquid.CompensateShapeAmount = result;
-            SoundManager.instance.PlayPourMana();
             print("CompensateShapeAmount: " + liquid.CompensateShapeAmount);
 
             elapsedTime += Time.deltaTime;

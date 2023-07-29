@@ -29,6 +29,9 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     //state properties
     private bool ConfirmStateRed = false;
     private bool ConfirmStateBlue = false;
+    private bool isSetConfirmRed = false;
+    private bool isSetConfirmBlue = false;
+    private bool isLoadLevel = false;
 
     //gamemode
     public GameMode gameMode;
@@ -79,6 +82,8 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         //EventSystem.current.SetSelectedGameObject(null);
         //EventSystem.current.SetSelectedGameObject(UIManager.instance.Button_NormalMode.gameObject);
         //OnClickNormalMode();
+        isLoadLevel = false;
+
     }
 
     public void ConnectToMaster()
@@ -98,7 +103,6 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
             UIManager.instance.TurnOnBackScene();
         }
     }
-
 
     #region Button Function
     //GameData.instance.selectDeck.Data.deckCode
@@ -131,21 +135,22 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
     void OnClickFindMatch()
     {
+        resetRequestAnswer();
 
-        if(GameData.instance.selectDeck != null)
+        if (GameData.instance.selectDeck != null)
         {
             print($"OnConnectedToMaster>> {(gameMode == GameMode.Normal ? "Normal" : "Rank")}");
             PhotonNetwork.JoinLobby(gameMode == GameMode.Normal ? sqlLobby_N : sqlLobby_R);
             StartCoroutine(FindRoom());
+            UIManager.instance.TurnOnWatingMatchScene();
         }
         else
         {
+            UIManager.instance.EnablePanelErrorMessage(true, "Please select deck to play");
             ///trigger UI
             //StartCoroutine(UIManager.instance.TurnOutline(UIManager.instance.SeletedDeckOutline, 0.5F, 2));
             //UIManager.instance.UI_FindMatch(true);
         }
-
-
     }
     public void OnClickAcceptMatch()
     {
@@ -289,7 +294,7 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     #region PVF
     public string CreatePlayWithFriendRoom()
     {
-
+        resetRequestAnswer();
         //string RoomName = CommonFunction.getNewId();
         string RoomName = "Room";
 
@@ -329,16 +334,37 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
     public void Confirm()
     {
-        if(PhotonNetwork.IsMasterClient) //blue
+        if(GameData.instance.selectDeck != null)
         {
-            PhotonNetwork.CurrentRoom.CustomProperties[K_Player.DeckBlue] = GameData.instance.selectDeck.Data.deckCode;
-            PhotonNetwork.CurrentRoom.CustomProperties[K_PlayerSide.Blue] = K_ConfirmState.AcceptMatch;
+            if(PhotonNetwork.IsMasterClient) //blue
+            {
+
+                _myPlayerCustomProperties[K_PlayerSide.key] = K_PlayerSide.Blue;
+                _myPlayerCustomProperties[K_Player.Elo] = GameData.instance.Elo;
+                PhotonNetwork.LocalPlayer.SetCustomProperties(_myPlayerCustomProperties);
+
+                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                _myRoomCustomProperties[K_Player.DeckBlue] = GameData.instance.selectDeck.Data.deckCode;
+                _myRoomCustomProperties[K_PlayerSide.Blue] = K_ConfirmState.AcceptMatch;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+            }
+            else //red
+            {
+                _myPlayerCustomProperties[K_PlayerSide.key] = K_PlayerSide.Red;
+                _myPlayerCustomProperties[K_Player.Elo] = GameData.instance.Elo;
+                PhotonNetwork.LocalPlayer.SetCustomProperties(_myPlayerCustomProperties);
+
+                _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+                _myRoomCustomProperties[K_Player.DeckRed] = GameData.instance.selectDeck.Data.deckCode;
+                _myRoomCustomProperties[K_PlayerSide.Red] = K_ConfirmState.AcceptMatch;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
+            }
         }
-        else //red
+        else
         {
-            PhotonNetwork.CurrentRoom.CustomProperties[K_Player.DeckRed] = GameData.instance.selectDeck.Data.deckCode;
-            PhotonNetwork.CurrentRoom.CustomProperties[K_PlayerSide.Red] = K_ConfirmState.AcceptMatch;
+            UIManager.instance.EnablePanelErrorMessage(true, "Please select deck to play");
         }
+
     }
     #endregion
     void resetPropertiesRoom()
@@ -356,7 +382,15 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         _myRoomCustomProperties[K_Player.DeckRed] = "";
         _myRoomCustomProperties[K_Player.EloRed] = "";
         _myRoomCustomProperties[K_Player.EloBlue] = "";
-        _myRoomCustomProperties["GameMode"] = "";
+
+        if (UIManager.instance.isWatingMatch)
+        {
+            _myRoomCustomProperties["GameMode"] = gameMode;
+        }
+        else
+        {
+            _myRoomCustomProperties["GameMode"] = "";
+        }
         PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
     }
 
@@ -462,8 +496,11 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 }
                 else if(RoomGameMode == ((int)GameMode.PlayWithFriend).ToString())
                 {
+                    resetRequestAnswer();
                     Debug.Log("GameMode PlayWithFriend");
                     UIManager.instance.TurnOnChooseDeckPVFScene();
+                    _myRoomCustomProperties[K_Room.K_RoomState.key] = K_Room.K_RoomState.Ready;
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
                     ChatManager.instance.SendDirectMessage(ChatManager.instance.nickNameFriendinvite, nameof(MessageType.JoinedRoom) + "|null");
                     break;
                 }
@@ -482,11 +519,11 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
     {
         if(PhotonNetwork.InRoom)
         {
-            if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Waiting)
+            if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Waiting)
             {
                 Debug.Log("UI Waiting");
             }
-            else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Ready)
+            else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.Ready)
             {
                 Debug.Log("UI READY");
 
@@ -494,9 +531,15 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 //UIManager.instance.UI_ConfirmMatchmaking(true);
                 //UIManager.instance.UI_WaitingOppenent(false);
 
-                UIManager.instance.WatingAcceptMatch(true);
-                coroutine = StartCoroutine(TimeoutWaitingAccept());
+                if (!(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.DeclineMatch)
+                    || PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.DeclineMatch))){
 
+                        if ( gameMode.Equals(GameMode.Normal) || gameMode.Equals(GameMode.Rank))
+                        {
+                            UIManager.instance.WatingAcceptMatch(true);
+                            coroutine = StartCoroutine(TimeoutWaitingAccept());
+                        }
+                }
 
             }
             else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.StartMatch)
@@ -506,25 +549,58 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 //UIManager.instance.TurnOnMatchingScene();
                 //UIManager.instance.UI_StartMatch(true);
                 //UIManager.instance.UI_ConfirmMatchmaking(false);
+                UIManager.instance.resetWaitingAcceptMatch();
 
             }
             else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.CancelMatch)
             {
                 Debug.Log("UI CANCLE");
                 UIManager.instance.WatingAcceptMatch(false);
+                UIManager.instance.resetWaitingAcceptMatch();
+
+            }
+            else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].ToString() == K_Room.K_RoomState.CloseRoom)
+            {
+                UIManager.instance.resetWaitingAcceptMatch();
             }
         }
     }
 
     void ConfirmState()
     {
+        if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.Waiting))
+        {
+            print("K_Room.K_RoomState.Waiting");
 
-        if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.Ready))
+        }
+        else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.Ready))
         {
             Debug.Log("Room Ready");
 
-            if(!PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.Waiting)
-               && !PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.Waiting))
+            if (PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.AcceptMatch))
+            {
+                //master client
+                ConfirmStateBlue = true;
+                isSetConfirmBlue = true;
+            }
+            else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.DeclineMatch))
+            {
+                ConfirmStateBlue = false;
+                isSetConfirmBlue = true;
+            }
+
+            if (PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.AcceptMatch))
+            {
+                ConfirmStateRed = true;
+                isSetConfirmRed = true;
+            }
+            else if (PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Red].Equals(K_Player.K_ConfirmState.DeclineMatch))
+            {
+                ConfirmStateRed = false;
+                isSetConfirmRed = true;
+            }
+
+            if (isSetConfirmBlue && isSetConfirmRed)
             {
 
                 if(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.K_PlayerSide.Blue].Equals(K_Player.K_ConfirmState.AcceptMatch))
@@ -546,7 +622,11 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                     ConfirmStateRed = false;
                 }
 
-                if(!ConfirmStateBlue && ConfirmStateRed)
+                print("ConfirmStateBlue: " + ConfirmStateBlue);
+                print("ConfirmStateRed: " + ConfirmStateRed);
+
+
+                if (!ConfirmStateBlue && ConfirmStateRed)
                 {
                     if(!PhotonNetwork.IsMasterClient)
                     {
@@ -587,9 +667,12 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 }
                 else if(ConfirmStateBlue && ConfirmStateRed)
                 {
+                    print("StartMatch");
+
                     //sysn to current room,because _myroomCustomProperties is local variable
                     _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-
+                    _myRoomCustomProperties[K_Player.EloBlue] = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo].ToString();
+                    _myRoomCustomProperties[K_Player.EloRed] = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo].ToString();
                     _myRoomCustomProperties[K_Room.K_RoomState.key] = K_Room.K_RoomState.StartMatch;
                     PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
                 }
@@ -598,7 +681,6 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         }
         else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.CancelMatch))
         {
-
             Debug.Log("Room Cancel");
             if(ConfirmStateBlue && !ConfirmStateRed)
             {
@@ -646,9 +728,11 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                     resetPlayerProperties();
                 }
             }
+            resetRequestAnswer();
         }
         else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.CloseRoom))
         {
+
             print("K_Room.K_RoomState.CloseRoom");
             if(PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.CurrentRoom.IsVisible)
             {
@@ -677,32 +761,37 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
                 Debug.Log("Leave");
                 PhotonNetwork.LeaveRoom();
             }
+            resetRequestAnswer();
+
         }
         else if(PhotonNetwork.CurrentRoom.CustomProperties[K_Room.K_RoomState.key].Equals(K_Room.K_RoomState.StartMatch))
         {
-            if (PhotonNetwork.LocalPlayer.CustomProperties[K_PlayerSide.key].ToString().Equals(K_PlayerSide.Red))
-            {
-                _myRoomCustomProperties[K_Player.EloRed] = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo].ToString();
-                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-            }
-            else if (PhotonNetwork.LocalPlayer.CustomProperties[K_PlayerSide.key].ToString().Equals(K_PlayerSide.Blue))
-            {
-                _myRoomCustomProperties[K_Player.EloBlue] = PhotonNetwork.LocalPlayer.CustomProperties[K_Player.Elo].ToString();
-                PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
-            }
 
             if (PhotonNetwork.IsMasterClient)
             {
-                
-
                 print("TwoPLayerReady");
+                //if (!isLoadLevel)
+                //{
+                //    isLoadLevel = true;
+                //    PhotonNetwork.LoadLevel("MatchScene");
+                //}
                 PhotonNetwork.LoadLevel("MatchScene");
             }
+            resetRequestAnswer();
+
         }
         //Debug.Log("RoomID: " + PhotonNetwork.CurrentRoom.Name + "\n Openn: " + PhotonNetwork.CurrentRoom.IsOpen + "\n Isvisiable: " + PhotonNetwork.CurrentRoom.IsVisible);
 
         //leave room when room close
 
+    }
+
+    void resetRequestAnswer()
+    {
+        ConfirmStateRed = false;
+        ConfirmStateBlue = false;
+        isSetConfirmRed = false;
+        isSetConfirmBlue = false;
     }
 
     #region Orther
@@ -815,7 +904,9 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
-        Debug.Log($"Lobby {PhotonNetwork.CurrentLobby.Name}, OnCreatedRoom() {PhotonNetwork.CurrentRoom.Name} Number Player({PhotonNetwork.CurrentRoom.PlayerCount})");
+        Debug.Log($"Lobby {PhotonNetwork.CurrentLobby.Name}");
+        Debug.Log($"OnCreatedRoom() {PhotonNetwork.CurrentRoom.Name} Number Player({PhotonNetwork.CurrentRoom.PlayerCount})");
+        Debug.Log($"Number Player({PhotonNetwork.CurrentRoom.PlayerCount})");
         //UIManager.instance.UI_WaitingOppenent(true);
     }
 
@@ -824,7 +915,9 @@ public class FindMatchSystem : MonoBehaviourPunCallbacks
         //UI_roomID.text = PhotonNetwork.CurrentRoom.Name;
         if(PhotonNetwork.CurrentRoom.PlayerCount == 2)
             StartCoroutine(PlayerOrtherJoinRoom());
-        Debug.Log($"Lobby {PhotonNetwork.CurrentLobby.Name}, JoinRoom {PhotonNetwork.CurrentRoom.Name} Number Player({PhotonNetwork.CurrentRoom.PlayerCount})");
+        Debug.Log($"Lobby {PhotonNetwork.CurrentLobby.Name}");
+        Debug.Log($"OnCreatedRoom() {PhotonNetwork.CurrentRoom.Name} Number Player({PhotonNetwork.CurrentRoom.PlayerCount})");
+        Debug.Log($"Number Player({PhotonNetwork.CurrentRoom.PlayerCount})");
     }
 
 

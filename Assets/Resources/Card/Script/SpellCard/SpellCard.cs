@@ -403,13 +403,21 @@ public class SpellCard : CardBase, ISpellCard
         this.transform.parent = null;
         this.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
     }
-    public void MoveCardIntoNewParent(Transform parentTransform)
+    public void MoveCardIntoNewParent(Transform parentTransform, bool stand)
     {
         this.transform.parent = parentTransform;
-        this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+        this.transform.localPosition = Vector3.zero;
+        this.transform.localScale =  new Vector3(0.065f, 0.065f, 0.0975f);
+        this.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
-        if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
-            transform.Rotate(0f, 180f, 0f);
+        if (!photonView.IsMine)
+        {
+            this.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+        }
+        //if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+        //    transform.Rotate(0f, 180f, 0f);
+
+        //if(stand) transform.Rotate(0f, 0f, 0f);
     }
 
     public override string ToString()

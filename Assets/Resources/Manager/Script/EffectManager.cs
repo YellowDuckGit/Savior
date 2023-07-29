@@ -1130,7 +1130,7 @@ public class EffectManager : MonoBehaviourPun
                                         spellCard.Position = CardPosition.InTriggerSpellField;
 
                                         spellCard.RemoveCardFormParentPresent();
-                                        spellCard.MoveCardIntoNewParent(zone.transform);
+                                        spellCard.MoveCardIntoNewParent(zone.transform,true);
 
                                         zone.SpellCard = spellCard;
                                         yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(spellCard));
@@ -1965,7 +1965,7 @@ public class EffectManager : MonoBehaviourPun
     {
         Debug.Log(this.debug("ReturnCardOnHand"));
         spellCard.RemoveCardFormParentPresent();
-        spellCard.MoveCardIntoNewParent(spellCard.CardPlayer.hand.transform);
+        spellCard.MoveCardIntoNewParent(spellCard.CardPlayer.hand.transform,false);
         spellCard.CardPlayer.hand.Add(spellCard);
     }
 }
