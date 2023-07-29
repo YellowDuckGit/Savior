@@ -83,26 +83,19 @@ public class EffectManager : MonoBehaviourPun
     }
     private void NetworkingClient_EventReceived(EventData obj)
     {
+        Debug.LogFormat("C25F28 obj code = {0}", obj.Code.ToString());
         var args = obj.GetData();
         switch((RaiseEvent)obj.Code)
         {
             case RaiseEvent.EFFECT_EXCUTE:
-
                 {
+                    Debug.Log("C25F28-01 RaiseEvent.EFFECT_EXCUTE");
                     // abstractEffect, selectTarget, targetType, targetID
                     var senderPlayerSide = args.senderPlayerSide as string;
                     var effect = args.abstractEffect as AbstractEffect;
                     var selectTarget = args.selectTarget as AbstractTarget;
                     var targetType = args.targetType as string;
                     var targetID = (int)args.targetID;
-
-                    print(this.debug("Effect async Execute", new
-                    {
-                        effect,
-                        selectTarget,
-                        targetType,
-                        targetID
-                    }));
                     /*
                      * the target player be equal is "You" then:
                      * in the localside of sender: target is "You"
@@ -110,31 +103,48 @@ public class EffectManager : MonoBehaviourPun
                      */
                     if(string.Compare(MatchManager.instance.LocalPlayer.side, senderPlayerSide, true) != 0)
                     {
+                        Debug.LogFormat("C25F28-01-01 compare local side with sender side = {0}", string.Compare(MatchManager.instance.LocalPlayer.side, senderPlayerSide, true) != 0);
                         if(selectTarget != null)
                         {
+                            Debug.LogFormat("C25F28-01-01-01 selectTarget is not null = {0}", selectTarget != null);
                             if(selectTarget is PlayerTarget selectPlayer)
                             {
+                                Debug.LogFormat("C25F28-01-01-01-01 selectTarget is PlayerTarget = {0}", selectTarget is PlayerTarget);
+                                Debug.LogFormat("C25F28-01-01-01-01 selectPlayer.side before swap = {0}", selectPlayer.side);
                                 selectPlayer.side = selectPlayer.side == CardOwner.You ? CardOwner.Opponent : CardOwner.You;
+                                Debug.LogFormat("C25F28-01-01-01-01 selectPlayer.side after swap = {0}", selectPlayer.side);
                             }
                             else if(selectTarget is CardTarget selectCard)
                             {
+                                Debug.LogFormat("C25F28-01-01-01-02 selectTarget is CardTarget = {0}", selectTarget is CardTarget);
+                                Debug.LogFormat("C25F28-01-01-01-02 selectCard.owner before swap = {0}", selectCard.owner);
                                 selectCard.owner = selectCard.owner == CardOwner.You ? CardOwner.Opponent : CardOwner.You;
+                                Debug.LogFormat("C25F28-01-01-01-02 selectCard.owner after swap = {0}", selectCard.owner);
+                            }
+                            else
+                            {
+                                Debug.LogFormat("C25F28-01-01-01-03 can not found type selectTarget");
                             }
                         }
+                        else
+                        {
+                            Debug.LogFormat("C25F28-01-01-01 selectTarget is not null = {0}", selectTarget != null);
+                        }
                     }
-
+                    else
+                    {
+                        Debug.LogFormat("C25F28-01-02 compare local side with sender side = {0}", string.Compare(MatchManager.instance.LocalPlayer.side, senderPlayerSide, true) != 0);
+                    }
                     StartCoroutine(EffectAction(effect, selectTarget, targetID));
                     break;
                 }
             case RaiseEvent.EFFECT_UPDATE_STATUS:
-                print(this.debug("update effect status", new
-                {
-                    status = Enum.GetName(typeof(EffectStatus), args.status)
-                }));
+                Debug.Log("C25F28-02 RaiseEvent.EFFECT_UPDATE_STATUS");
+                Debug.LogFormat("C25F28-02 befor effect status change = {0}", this.status);
                 this.status = args.status;
+                Debug.LogFormat("C25F28-02 after effect status change = {0}", this.status);
                 break;
-
-        };
+        }
     }
 
     #region Condition
@@ -145,17 +155,7 @@ public class EffectManager : MonoBehaviourPun
     /// <returns></returns>
     public IEnumerator OnAfterSummon(object register)
     {
-        print(this.debug("Status at start after summon", new
-        {
-            status
-        }));
-
-
-        print(this.debug("Start After summon", new
-        {
-            name = typeof(AfterSummon).Name,
-            register = register.ToString()
-        }));
+        Debug.LogFormat("C25F30 register = {0}", register);
 
         /*
          * if the register have been regis for event after summon excute effect
@@ -163,10 +163,12 @@ public class EffectManager : MonoBehaviourPun
          */
         if(isObjectRegised(typeof(AfterSummon).Name, register, out var abstractData))
         {
+            Debug.LogFormat("C25F30-01 register is registed for AfterSummon");
             status = EffectStatus.running;
+            Debug.LogFormat("C25F30-01 effect status = {0}", status.ToString());
             if(register is CardBase cardBase)
             {
-                print(this.debug("register is monster card"));
+                Debug.LogFormat("C25F30-01-01 register is CardBase");
                 /*
                   * card summoned be own by localPlayer
                   * then excute action and effect
@@ -174,33 +176,38 @@ public class EffectManager : MonoBehaviourPun
                   */
                 if(cardBase.CardPlayer == MatchManager.instance.LocalPlayer)
                 {
-                    print(this.debug("player is the owner of card register for after summon"));
-
+                    Debug.LogFormat("C25F30-01-01-01 card summoned be own by localPlayer");
                     var Actions = abstractData.Actions; //get all action in after summon event
-                    print(this.debug("Object register", new
-                    {
-                        NumberAction = Actions.Count,
-                    }));
-
+                    Debug.LogFormat("C25F30-01-01-01 Actions count = {0}", Actions.Count);
                     yield return StartCoroutine(ExecuteActions(register, Actions)); //execute all action
                 }
                 else
                 {
-                    print(this.debug("player is not the owner of card registed for after summon just watting"));
+                    Debug.LogFormat("C25F30-01-01-02 not card owner waiting effec status update, before effect status update = {0}", this.status);
                     yield return new WaitUntil(() => this.status != EffectStatus.running);
-                    print(this.debug("Status at effect after summon done", new
-                    {
-                        status
-                    }));
+                    Debug.LogFormat("C25F30-01-01-02 after effect status update = {0}", this.status);
+
                 }
 
                 if(cardBase is SpellCard spellCard)
                 {
+                    Debug.LogFormat("C25F30-01-01-03 card summoned is SpellCard = {0}", cardBase is SpellCard);
                     spellCard.transform.SetParent(null);
                     spellCard.gameObject.SetActive(false); //destroy spell card after use
                 }
-            }//else not monster card then use without doing any effect
-        } //else continue;
+            }
+            else
+            {
+                Debug.LogFormat("C25F30-01-02 register is not CardBase");
+                var Actions = abstractData.Actions; //get all action in after summon event
+                Debug.LogFormat("C25F30-01-02 Actions count = {0}", Actions.Count);
+                yield return StartCoroutine(ExecuteActions(register, Actions)); //execute all action
+            }
+        }
+        else
+        {
+            Debug.LogFormat("C25F30-02 register is not registed for AfterSummon");
+        }
         yield return null;
     }
     /// <summary>
@@ -214,25 +221,19 @@ public class EffectManager : MonoBehaviourPun
         /*
          * some thing onBefore summon action just running on local
          */
-        print(this.debug("Status at start Before summon", new
-        {
-            status
-        }));
-
-        print(this.debug("Start Before summon", new
-        {
-            name = typeof(BeforeSummon).Name,
-            register = register.ToString()
-        }));
+        Debug.LogFormat("C25F31 register = {0}", register);
         /*
          * if the register have been regis for event before summon (request for summon this monster) excute effect
          * else (not regist) summon monster without effect
          */
         if(isObjectRegised(typeof(BeforeSummon).Name, register, out var abstractData))
         {
+            Debug.LogFormat("C25F31-01 register is registed for BeforeSummon");
             status = EffectStatus.running;
+            Debug.LogFormat("C25F31-01 effect status = {0}", status.ToString());
             if(register is CardBase cardBase)
             {
+                Debug.LogFormat("C25F31-01-01 register is CardBase = {0}", register is CardBase);
                 /*
                  * card summoned be own by localPlayer
                  * then excute action and effect
@@ -240,56 +241,65 @@ public class EffectManager : MonoBehaviourPun
                  */
                 if(cardBase.CardPlayer == MatchManager.instance.LocalPlayer)
                 {
+                    Debug.LogFormat("C25F31-01-01-01 card summoned be own by localPlayer");
                     var Actions = abstractData.Actions; //get all action in after summon event
-                    print(this.debug("Object registed", new
-                    {
-                        NumberAction = Actions.Count,
-                    }));
+                    Debug.LogFormat("C25F31-01-01-01 Actions count = {0}", Actions.Count);
                     if(cardBase is MonsterCard monsterCard)
                     {
+                        Debug.LogFormat("C25F31-01-01-01-01 card summoned is MonsterCard = {0}", cardBase is MonsterCard);
                         yield return StartCoroutine(ExecuteActions(monsterCard, Actions)); //excute all action
                     }
                     else if(cardBase is SpellCard)
                     {
+                        Debug.LogFormat("C25F31-01-01-01-02 card summoned is SpellCard = {0}", cardBase is SpellCard);
                         if(CheckCardBeforPlay(cardBase))
+                        {
+                            Debug.LogFormat("C25F31-01-01-01-02-01 card can be play");
+                            Debug.LogFormat("C25F31-01-01-01-02-01 status = {0}", status.ToString());
                             status = EffectStatus.success;
+                            Debug.LogFormat("C25F31-01-01-01-02-01 status = {0}", status.ToString());
+
+                        }
                         else
+                        {
+                            Debug.LogFormat("C25F31-01-01-01-02-02 card can not be play");
+                            Debug.LogFormat("C25F31-01-01-01-02-02 status = {0}", status.ToString());
                             status = EffectStatus.fail;
+                            Debug.LogFormat("C25F31-01-01-01-02-02 status = {0}", status.ToString());
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogFormat("C25F31-01-01-01-03 can not find type of cardbase, card type = {0}", cardBase.GetType().Name);
                     }
                 }
                 else
                 {
-                    print(this.debug("not the owner"));
+                    Debug.LogFormat("C25F31-01-01-02 not card owner");
                 }
-                //else
-                //{
-                //    //yield return new WaitUntil(() => this.status != EffectStatus.running); //wait until Finish Event have been 
-                //}
                 /*
                  * get the result effect execute
                  */
+                Debug.LogFormat("C25F31-01-01 status = {0}", status.ToString());
                 if(status == EffectStatus.success)
                 {
-                    print(this.debug("Before summon success summon monster)"));
+                    Debug.LogFormat("C25F31-01-01-03 status = {0}, execute callback action", status.ToString());
                     callBackAction(); //summon the monster
                 }
                 else
                 {
-                    print(this.debug("Before summon fail (Can not summon the monster)", new
-                    {
-                        status = status.ToString()
-                    }));
+                    Debug.LogFormat("C25F31-01-01-04 status = {0}, can not summon the monster", status.ToString());
                 }
             }
             else
             {
-                print(this.debug("target selected not be card"));
+                Debug.LogFormat("C25F31-01-02 register is not CardBase");
                 callBackAction(); //use the card 
             }
         }
         else
         {
-            print(this.debug("Object does not regis"));
+            Debug.LogFormat("C25F31-02 register is not registed for BeforeSummon");
             /*
              * if the register have not been regis for event before summon do as normal
              */
@@ -383,10 +393,12 @@ public class EffectManager : MonoBehaviourPun
 
     private IEnumerator OnCardDamaged(MonsterCard monsterCard)
     {
-        print(this.debug());
+        Debug.LogFormat("C25F32 monsterCard is = {0}", monsterCard);
         status = EffectStatus.running;
+
         if(EventEffectDispatcher.ContainsKey(EventID.OnCardDamaged))
         {
+
             var datas = EventEffectDispatcher[EventID.OnCardDamaged];
             if(datas != null && datas.Count > 0)
             {
@@ -467,7 +479,7 @@ public class EffectManager : MonoBehaviourPun
                 {
                     var players = targetPlayer.Execute(MatchManager.instance);
                     isHave = false;
-                    Debug.LogFormat("C25F1-01-01-01 before comepare players.Count = {0}, isHave = {1}", players.Count, isHave);
+                    Debug.LogFormat("C25F1-01-01-01 have.target is PlayerTarget = {0}, players count = {1}, isHave = {2}", have.target is PlayerTarget, players.Count, isHave);
                     switch(have.comepare)
                     {
                         case compareType.equal:
@@ -618,9 +630,9 @@ public class EffectManager : MonoBehaviourPun
             else
             {
                 Debug.LogFormat("C25F1-01-02");
-                print(this.debug("Target in have null"));
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
             }
+
         }
         else
         {
@@ -1163,7 +1175,6 @@ public class EffectManager : MonoBehaviourPun
                                     }
                                     else
                                     {
-
                                         Debug.LogFormat("C25F12-01-01-05-06-01-02 zone is not null = {0}, destroy object ~ not enough zone", zone != null);
                                         GameObject.Destroy(createdCard.gameObject);
                                     }
@@ -1286,45 +1297,62 @@ public class EffectManager : MonoBehaviourPun
 
     private IEnumerator Gain(Gain gain, object target)
     {
+        Debug.Log("C25F22");
         if(gain != null && target != null)
         {
+            Debug.LogFormat("C25F22-01 gain is not null = {0}, target is not null = {1}", gain != null, target != null);
             if(target is MonsterCard monster)
             {
-                print(this.debug($"Gain effect for {monster}"));
+                Debug.LogFormat("C25F22-01-01 target is MonsterCard");
                 gain.GainEffect(monster, this);
+            }
+            else
+            {
+                Debug.LogFormat("C25F22-01-02 target not a MonsterCard");
             }
         }
         else
         {
-            print(this.debug("not avaiable"));
+            Debug.LogFormat("C25F22-02 gain is not null = {0}, target is not null = {1}", gain != null, target != null);
         }
         yield return null;
     }
-
     private IEnumerator Heal(Heal heal, object target)
     {
-        print(this.debug());
+        Debug.Log("C25F26");
         if(heal != null)
         {
+            Debug.LogFormat("C25F26-01 heal is not null = {0}", heal != null);
             if(target != null)
             {
+                Debug.LogFormat("C25F26-01-01 target is not null = {0}", target != null);
                 if(target is CardPlayer player)
                 {
+                    Debug.LogFormat("C25F26-01-01-01 target is CardPlayer = {0}", target is CardPlayer);
+                    Debug.LogFormat("C25F26-01-01-01 player hp before heal = {0}", player.hp.Number);
                     player.hp.Number += heal.number;
+                    Debug.LogFormat("C25F26-01-01-01 player hp after heal = {0}", player.hp.Number);
                 }
                 else if(target is MonsterCard card)
                 {
+                    Debug.LogFormat("C25F26-01-01-02 target is MonsterCard = {0}", target is MonsterCard);
+                    Debug.LogFormat("C25F26-01-01-02 card hp before heal = {0}", card.Hp);
                     card.Hp += heal.number;
+                    Debug.LogFormat("C25F26-01-01-02 card hp after heal = {0}", card.Hp);
+                }
+                else
+                {
+                    Debug.LogFormat("C25F26-01-01-03 can not found type target");
                 }
             }
             else
             {
-                print(this.debug("target null"));
+                Debug.LogFormat("C25F26-01-02 target is not null = {0}", target != null);
             }
         }
         else
         {
-            print(this.debug("Dame null"));
+            Debug.LogFormat("C25F26-02 heal is not null = {0}", heal != null);
         }
 
         yield return null;
@@ -1343,89 +1371,70 @@ public class EffectManager : MonoBehaviourPun
     }
     public IEnumerator ExecuteActions(object register, List<AbstractAction> Actions)
     {
+        Debug.Log("C25F17");
+        Debug.LogFormat("C25F17 Action count = {0}", Actions.Count);
         foreach(var action in Actions)
         {
+            Debug.LogFormat("C25F17 Actions[{0}]", Actions.IndexOf(action));
+
             if(action is SelectTarget selectTarget) //get each action and execute it, here is select card
             {
-                //TODO: fix
-                print(this.debug("is SelectCardAction Action", new
-                {
-                    actionName = action.GetType().Name
-                }));
+                Debug.LogFormat("C25F17-01 is SelectTarget Action = {0}", action is SelectTarget);
                 yield return StartCoroutine(ActionSelectTarget(register, selectTarget));
             }
             else if(action is SelectMulti multiSelect)
             {
-                print(this.debug("is SelectCardAction Action", new
-                {
-                    actionName = action.GetType().Name
-                }));
+                Debug.LogFormat("C25F17-02 is SelectMulti Action = {0}", action is SelectMulti);
                 yield return StartCoroutine(ActionSelectTarget(register, multiSelect));
             }
             else if(action is SelectSelf self)
             {
-                print(this.debug("Self target Action", new
-                {
-                    actionName = action.GetType().Name,
-                    register
-                }));
+                Debug.LogFormat("C25F17-03 is SelectSelf Action = {0}", action is SelectSelf);
                 yield return StartCoroutine(ActionSelectTarget(register, self));
             }
             else if(action is SelectStrongest strongest)
             {
-                print(this.debug("is SelectStrongest Action", new
-                {
-                    actionName = action.GetType().Name
-                }));
+                Debug.LogFormat("C25F17-04 is SelectStrongest Action = {0}", action is SelectStrongest);
                 yield return StartCoroutine(ActionSelectTarget(register, strongest));
             }
             else if(action is SelectWeakness weakness)
             {
-                print(this.debug("is SelectWeakness Action", new
-                {
-                    actionName = action.GetType().Name
-                }));
+                Debug.LogFormat("C25F17-05 is SelectWeakness Action = {0}", action is SelectWeakness);
                 yield return StartCoroutine(ActionSelectTarget(register, weakness));
             }
             else if(action is RegisterLocalEvent registerLocalEvent)
             {
-                print(this.debug("is RegisterLocalEvent Action", new
-                {
-                    actionName = action.GetType().Name
-                }));
+                Debug.LogFormat("C25F17-06 is RegisterLocalEvent Action = {0}", action is RegisterLocalEvent);
                 yield return StartCoroutine(ActionRegisterLocalEvent(register, registerLocalEvent));
             }
             else if(action is Have have)
             {
-                print(this.debug("is RegisterLocalEvent Action", new
-                {
-                    actionName = action.GetType().Name
-                }));
+                Debug.LogFormat("C25F17-07 is Have Action = {0}", action is Have);
                 yield return StartCoroutine(ActionHaveCondition(register, have));
             }
             else if(action is SpecifyAction specify)
             {
-                print(this.debug("is RegisterLocalEvent Action", new
-                {
-                    actionName = action.GetType().Name
-                }));
+                Debug.LogFormat("C25F17-08 is SpecifyAction Action = {0}", action is SpecifyAction);
                 yield return StartCoroutine(ActionSpecify(register, specify));
             }
             else
             {
+                Debug.LogFormat("C25F17-09 is not found type of action");
                 print(this.debug("Action dose not available"));
             }
         }
         /*
          * when player throw action have been execute all action then finish the effect process
          */
-        print(this.debug("End execute action", new
-        {
-            status = this.status.ToString()
-        }));
         if(this.status == EffectStatus.running)
         {
+            Debug.LogFormat("C25F17-10 before update status this.status = {0}", this.status);
             yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.success));
+            Debug.LogFormat("C25F17-10 after update status this.status = {0}", this.status);
+        }
+        else
+        {
+            Debug.LogFormat("C25F17-11 this.status = {0}", this.status);
         }
     }
 
@@ -1454,10 +1463,7 @@ public class EffectManager : MonoBehaviourPun
 
     public IEnumerator ExecuteEffectEvent<T>(AbstractEffect AbstractEffect, AbstractTarget targetAbs, T target) where T : MonoBehaviourPun
     {
-        print(this.debug("Excute an effect", new
-        {
-            AbstractEffect.GetType().Name
-        }));
+        Debug.Log("C25F18");
         var sender = MatchManager.instance.LocalPlayer.side;
         var effectType = AbstractEffect.GetType().Name;
         var effectData = JsonUtility.ToJson(AbstractEffect);
@@ -1468,79 +1474,78 @@ public class EffectManager : MonoBehaviourPun
         var selectTargetObjectType = targetAbs.GetType().Name;
         var selectTargetObjectJson = JsonUtility.ToJson(targetAbs);
         object[] datas = new object[] { sender, effectType, effectData, targetType, targetID, selectTargetObjectType, selectTargetObjectJson };
-        print(this.debug("Event photon EFFECT_EXCUTE", new
-        {
-            sender = datas[0] as string,
-            type = datas[1] as string, //type effect
-            json = datas[2] as string,// json string
+        Debug.LogFormat("C25F18 datas count = {0}\n " +
+            "sender= {1},\n effectType= {2},\n effectData= {3},\n targetType= {4},\n targetID= {5},\n selectTargetObjectType= {6},\n selectTargetObjectJson= {7}",
+            datas.Length, sender, effectType, effectData, targetType, targetID, selectTargetObjectType, selectTargetObjectJson);
 
-            targetType = datas[3] as string,//target type
-            targetID = (int)datas[4], //target photon id
-
-            selectType = datas[5] as string,
-            selectJson = datas[6] as string
-        }));
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         yield return new WaitUntil(() =>
         PhotonNetwork.RaiseEvent((byte)RaiseEvent.EFFECT_EXCUTE, datas, raiseEventOptions, SendOptions.SendUnreliable)
         );
-
     }
 
     public IEnumerator ExecuteEffects<T>(object register, List<AbstractEffect> effects, AbstractTarget TargetType, T targetForEffect) where T : MonoBehaviourPun
     {
+        Debug.LogFormat("C25F19 effects count = {0}", effects.Count);
         foreach(var effect in effects)
         {
+
             int pitchCount = 0;
+            Debug.LogFormat("C25F19 effects[{0}] = {1}, before change pitchCount = {2}", effects.IndexOf(effect), effect.GetType().Name, pitchCount);
             if(effect.pitch != null)
             {
+                Debug.LogFormat("C25F19-01 effect pitch is not null = {0}, effect pitch count = {1}", effect.pitch != null, effect.pitch.Length);
                 List<MonsterCard> cardList = new List<MonsterCard>();
 
                 for(int i = 0; i < effect.pitch.Length; i++)
                 {
+                    Debug.LogFormat("C25F19-01 effect.pitch[{0}]", i);
                     pitchCount += effect.pitch[i].pitchType.GetPitch(register, MatchManager.instance);
                 }
+                Debug.LogFormat("C25F19-01 after change pitchCount = {0}", pitchCount);
             }
-            print(this.debug("Pitch: ", new
-            {
-                pitchCount
-            }));
+
             do
             {
+                Debug.LogFormat("C25F19 execute effect repeat = {0}", pitchCount);
                 if(effect is BuffStats buffStats)
                 {
+                    Debug.LogFormat("C25F19-02 effect is BuffStarts");
                     yield return StartCoroutine(ExecuteEffectEvent(buffStats, TargetType, targetForEffect));
                 }
                 else if(effect is Dame dame)
                 {
+                    Debug.LogFormat("C25F19-03 effect is Dame");
                     yield return StartCoroutine(ExecuteEffectEvent(dame, TargetType, targetForEffect));
                 }
                 else if(effect is Gain gain)
                 {
+                    Debug.LogFormat("C25F19-04 effect is Gain");
                     yield return StartCoroutine(ExecuteEffectEvent(gain, TargetType, targetForEffect));
                 }
                 else if(effect is Heal heal)
                 {
+                    Debug.LogFormat("C25F19-05 effect is Heal");
                     yield return StartCoroutine(ExecuteEffectEvent(heal, TargetType, targetForEffect));
                 }
                 else if(effect is DestroyObject destroy)
                 {
+                    Debug.LogFormat("C25F19-06 effect is DestroyObject");
                     yield return StartCoroutine(ExecuteEffectEvent(destroy, TargetType, targetForEffect));
                 }
                 else if(effect is CreateCard createCard)
                 {
+                    Debug.LogFormat("C25F19-07 effect is CreateCard");
                     yield return StartCoroutine(ExecuteEffectEvent(createCard, TargetType, targetForEffect));
-                    print(this.debug("CREATE CARD SUCCESS"));
-                    //ExecuteEffectEvent(createCard, selectTargetObject, target);
-                    //StartCoroutine(EffectAction(effect, selectTarget, targetType, targetID));
                 }
                 else if(effect is TempStore tempStore)
                 {
+                    Debug.LogFormat("C25F19-08 effect is TempStore");
                     yield return StartCoroutine(TempStoreAction(tempStore, register, targetForEffect, this));
                 }
                 else
                 {
-                    print(this.debug("Not found type of effect"));
+                    Debug.LogFormat("C25F19-09 Not found type of effect");
                 }
             } while(--pitchCount > 0);
         }
@@ -1652,73 +1657,69 @@ public class EffectManager : MonoBehaviourPun
 
     public IEnumerator ExecuteOnEndRound(MatchManager matchManager)
     {
-        print(this.debug());
-
+        Debug.Log("C25F20");
         if(EventEffectDispatcher.ContainsKey(EventID.OnEndRound))
         {
+            Debug.LogFormat("C25F20-01 EventEffectDispatcher contain key EventID.OnEndround = {0}", EventEffectDispatcher.ContainsKey(EventID.OnEndRound));
             var datas = EventEffectDispatcher[EventID.OnEndRound];
             if(datas != null && datas.Count > 0)
             {
-                List<(object register, List<AbstractAction>, LifeTime, WhenDie)> removelist = new List<(object register, List<AbstractAction>, LifeTime, WhenDie)>();
+                Debug.LogFormat("C25F20-01-01 datas count = {0}", datas.Count);
                 for(int i = datas.Count - 1; i >= 0; i--)
                 {
                     status = EffectStatus.running;
                     var data = datas[i];
+                    Debug.LogFormat("C25F20-01-01 datas[{0}], EffectManger status = {1}", i, status.ToString());
                     if(data.register != null && data.Actions != null && data.Actions.Count > 0)
                     {
+                        Debug.LogFormat("C25F20-01-01-01 register not null = {0}, actions not null = {1}, actions count = {2}", data.register != null, data.Actions != null, data.Actions.Count);
                         if(data.register is CardBase cardBase)
                         {
+                            Debug.LogFormat("C25F20-01-01-01-01 register is CardBase = {0}", data.register is CardBase);
                             if(cardBase.CardPlayer == MatchManager.instance.LocalPlayer)
                             {
+                                Debug.LogFormat("C25F20-01-01-01-01-01 cardBase.CardPlayer == MatchManager.instance.LocalPlayer = {0}", cardBase.CardPlayer == MatchManager.instance.LocalPlayer);
                                 if(cardBase.Position != CardPosition.InGraveyard)
                                 {
+                                    Debug.LogFormat("C25F20-01-01-01-01-01-01 cardBase.Position is not in CardPosition.InGraveyard = {0}", cardBase.Position != CardPosition.InGraveyard);
                                     yield return StartCoroutine(ExecuteActions(data.register, data.Actions));
-
                                     yield return StartCoroutine(RemoveIfOneTime(datas, data));
                                 }
                                 else
                                 {
+                                    Debug.LogFormat("C25F20-01-01-01-01-01-02 cardBase.Position is in CardPosition.InGraveyard = {0}", cardBase.Position == CardPosition.InGraveyard);
                                     yield return new WaitUntil(() => datas.Remove(data));
                                 }
                             }
                             else
                             {
-                                print(this.debug("player is not the owner of card registed for after summon just watting"));
+                                Debug.LogFormat("C25F20-01-01-01-01-02 cardBase.CardPlayer != MatchManager.instance.LocalPlayer = {0}", cardBase.CardPlayer != MatchManager.instance.LocalPlayer);
                                 yield return new WaitUntil(() => this.status != EffectStatus.running);
-                                print(this.debug("Status at effect after summon done", new
-                                {
-                                    status
-                                }));
                             }
+                        }
+                        else
+                        {
+                            Debug.LogFormat("C25F20-01-01-01-02 register is CardBase = {0}", data.register is CardBase);
                         }
                     }
                     else
                     {
-
-                        Debug.LogError(this.debug("Data null OnEndRound ", new
-                        {
-                            register = data.register,
-                        }));
-
-                        Debug.LogError(this.debug("Data null OnEndRound ", new
-                        {
-                            ActionsCount = data.Actions
-                        }));
+                        Debug.LogFormat("C25F20-01-01-02 register not null = {0}, actions not null = {1}, actions count = {2}", data.register != null, data.Actions != null, data.Actions != null ? data.Actions.Count : "null");
                         yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                     }
                 }
             }
             else
             {
+                Debug.LogFormat("C25F20-01-02 datas count = {0}", datas != null ? datas.Count : "null");
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
-                Debug.Log(this.debug("No register for OnEndRound ", new
-                {
-                    datas
-                }));
                 EventEffectDispatcher.Remove(EventID.OnEndRound);
             }
         }
-
+        else
+        {
+            Debug.LogFormat("C25F20-02 EventEffectDispatcher contain key EventID.OnEndround = {0}", EventEffectDispatcher.ContainsKey(EventID.OnEndRound));
+        }
         yield return null;
     }
 
@@ -1748,42 +1749,43 @@ public class EffectManager : MonoBehaviourPun
 
     private IEnumerator ExecuteOnStartRound(MatchManager matchManager)
     {
-        print(this.debug());
         status = EffectStatus.running;
+        Debug.LogFormat("C25F21 effect status = {0}", status.ToString());
         if(EventEffectDispatcher.ContainsKey(EventID.OnStartRound))
         {
+            Debug.LogFormat("C25F21-01 EventEffectDispatcher contain key EventID.OnStartRound = {0}", EventEffectDispatcher.ContainsKey(EventID.OnStartRound));
             var datas = EventEffectDispatcher[EventID.OnStartRound];
             if(datas != null && datas.Count > 0)
             {
+                Debug.LogFormat("C25F21-01-01 datas is not null = {0},datas count = {1}", datas != null, datas.Count);
                 for(int i = 0; i < datas.Count; i++)
                 {
+                    Debug.LogFormat("C25F21-01-01 datas[{0}]", i);
                     var data = datas[i];
                     if(data.WhenDie == WhenDie.RemoveEffect && data.register is MonsterCard card && card.Position == CardPosition.InGraveyard)
                     {
-                        print(this.debug("vong if xac dinh la pola vao hom"));
+                        Debug.LogFormat("C25F21-01-01-01");
                     }
                     else
                     {
+                        Debug.LogFormat("C25F21-01-01-02");
                         if(data.register != null && data.Actions != null && data.Actions.Count > 0)
                         {
+                            Debug.LogFormat("C25F21-01-01-02-01 register not null = {0}, actions not null = {1}, actions count = {2}", data.register != null, data.Actions != null, data.Actions.Count);
                             yield return StartCoroutine(ExecuteActions(data.register, data.Actions));
                             if(data.lifetime == LifeTime.OneTime)
                             {
+                                Debug.LogFormat("C25F21-01-01-02-01-01 lifetime is LifeTime.OneTime = {0}", data.lifetime == LifeTime.OneTime);
                                 datas.Remove(data);
+                            }
+                            else
+                            {
+                                Debug.LogFormat("C25F21-01-01-02-01-02 lifetime is LifeTime.OneTime = {0}", data.lifetime == LifeTime.OneTime);
                             }
                         }
                         else
                         {
-
-                            Debug.LogError(this.debug("Data null OnEndRound ", new
-                            {
-                                register = data.register,
-                            }));
-
-                            Debug.LogError(this.debug("Data null OnEndRound ", new
-                            {
-                                ActionsCount = data.Actions
-                            }));
+                            Debug.LogFormat("C25F21-01-01-02-02 register not null = {0}, actions not null = {1}, actions count = {2}", data.register != null, data.Actions != null, data.Actions != null ? data.Actions.Count : "null");
                             yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
                         }
                     }
@@ -1791,16 +1793,15 @@ public class EffectManager : MonoBehaviourPun
             }
             else
             {
+                Debug.LogFormat("C25F21-01-02 datas is not null = {0},datas count = {1}", datas != null, datas != null ? datas.Count : "null");
                 yield return StartCoroutine(UpdateEffectStatusEvent(EffectStatus.fail));
-                Debug.LogError(this.debug("No register for OnStartRound ", new
-                {
-                    datas
-                }));
                 EventEffectDispatcher.Remove(EventID.OnStartRound);
-
             }
         }
-
+        else
+        {
+            Debug.LogFormat("C25F21-02 EventEffectDispatcher contain key EventID.OnStartRound = {0}", EventEffectDispatcher.ContainsKey(EventID.OnStartRound));
+        }
         yield return null;
     }
 
@@ -1902,42 +1903,31 @@ public class EffectManager : MonoBehaviourPun
     /// <param name="registor">can be player or card</param>
     public void EffectRegistor(AbstractCondition @event, object registor)
     {
-        print(this.debug());
+        Debug.LogFormat("C25F16 @event = {0}, register = {1}", @event.GetType().Name, registor.GetType().Name);
         string key = @event.GetType().Name;
         List<Tuple<AbstractCondition, object>> list;
+
         if(ObjectRegisteds.TryGetValue(key, out list))
         {
-            print(this.debug("Event registed, add registor", new
-            {
-                eventName = key,
-                registor = registor.ToString()
-            }));
+            Debug.LogFormat("C25F16-01 key ={0}, list count = {1}", key, list.Count);
             // The key already exists, add to the list
             list.Add(new Tuple<AbstractCondition, object>(@event, registor));
-            print(this.debug("add into keys,", new
-            {
-                key,
-                list.Count
-            }));
+            Debug.LogFormat("C25F16-01 list count after add = {0}", list.Count);
+
         }
         else
         {
-            print(this.debug("Event don't registed yet, create and add first registor", new
-            {
-                eventName = key,
-                registor = registor.ToString()
-            }));
+            Debug.LogFormat("C25F16-02 key ={0}, list is null = {1}", key, list != null);
+
             // The key does not exist, create a new list
             list = new List<Tuple<AbstractCondition, object>>
             {
                 new Tuple<AbstractCondition, object>(@event, registor)
             };
+            Debug.LogFormat("C25F16-02 create new list, list is null = {0}", list != null);
+
             ObjectRegisteds.Add(key, list);
-            print(this.debug("create keys,", new
-            {
-                key,
-                list.Count
-            }));
+            Debug.LogFormat("C25F16-02 key = {0}, list count after add = {1}", key, list.Count);
         }
     }
     //tool manager
@@ -1950,31 +1940,23 @@ public class EffectManager : MonoBehaviourPun
     /// <returns>is registor have been registed for event</returns>
     private bool isObjectRegised(string @event, object registor, out AbstractCondition condition)
     {
-        print(this.debug("check object regis for event", new
-        {
-            registor = registor.ToString()
-        }));
+        Debug.Log("C25F27");
         List<Tuple<AbstractCondition, object>> list;
         if(ObjectRegisteds.TryGetValue(@event, out list))
         {
+            Debug.LogFormat("C25F27-01 key = {0}, list count = {1}", @event, list.Count);
             // The key exists, check the list
             var tuple = list.FirstOrDefault(t => t.Item1.GetType().Name == @event && t.Item2 == registor);
             if(tuple != null)
             {
-
-
+                Debug.LogFormat("C25F27-01-01 tuple is not null = {0}, tuple.Item1 = {1}, tuple.Item2 = {2}", tuple != null, tuple.Item1.GetType().Name, tuple.Item2.GetType().Name);
                 // Found a matching tuple, assign the output parameter to its Item1
                 condition = tuple.Item1;
-                print(this.debug("Found a matching", new
-                {
-                    condition = condition.GetType().Name,
-                    registor = registor.ToString()
-                }));
                 return true;
             }
             else
             {
-                print(this.debug("No matching tuple, assign the output parameter to null"));
+                Debug.LogFormat("C25F27-01-02 tuple is not null = {0}", tuple != null);
                 // No matching tuple, assign the output parameter to null
                 condition = null;
                 return false;
@@ -1982,7 +1964,7 @@ public class EffectManager : MonoBehaviourPun
         }
         else
         {
-            print(this.debug("The key does not exist, assign the output parameter to null"));
+            Debug.LogFormat("C25F27-02 key = {0}, list is null = {1}", @event, list != null);
             // The key does not exist, assign the output parameter to null
             condition = null;
             return false;
