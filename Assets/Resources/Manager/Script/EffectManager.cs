@@ -1696,19 +1696,25 @@ public class EffectManager : MonoBehaviourPun
 
     private IEnumerator RemoveIfOneTime(List<(object register, List<AbstractAction> Actions, LifeTime lifetime, WhenDie WhenDie)> datas, (object register, List<AbstractAction> Actions, LifeTime lifetime, WhenDie WhenDie) data)
     {
+        Debug.Log("C25F35");
         if(datas.Contains(data))
         {
+            Debug.LogFormat("C25F35-01 data contains datas = {0}", datas.Contains(data));
             if(data.lifetime == LifeTime.OneTime)
             {
+                Debug.LogFormat("C25F35-01-01 data.lifetime = {0}", data.lifetime.ToString());
+                Debug.LogFormat("C25F35-01-01 datas count before remove = {0}", datas.Count);
                 yield return new WaitUntil(() => datas.Remove(data));
+                Debug.LogFormat("C25F35-01-01 datas count after remove = {0}", datas.Count);
+            }
+            else
+            {
+                Debug.LogFormat("C25F35-01-02 data.lifetime = {0}", data.lifetime.ToString());
             }
         }
         else
         {
-            Debug.LogError(this.debug("data not contains datas", new
-            {
-                data.register
-            }));
+            Debug.LogFormat("C25F35-02 data contains datas = {0}", datas.Contains(data));
         }
         yield return null;
     }
@@ -1780,14 +1786,21 @@ public class EffectManager : MonoBehaviourPun
 
     private object GetTargetObject(AbstractTarget selectTargetObject, int targetPhotonID)
     {
+        Debug.Log("C25F24");
         object target = null;
         if(selectTargetObject is CardTarget selectTargetCard)
         {
+            Debug.LogFormat("C25F24-01 selectTargetObject is CardTarget = {0}", selectTargetObject is CardTarget);
             target = GetTargetCard(selectTargetCard, targetPhotonID);
         }
         else if(selectTargetObject is PlayerTarget selectTargetPlayer)
         {
+            Debug.LogFormat("C25F24-02 selectTargetObject is PlayerTarget = {0}", selectTargetObject is PlayerTarget);
             target = GetTargetPlayer(selectTargetPlayer);
+        }
+        else
+        {
+            Debug.LogFormat("C25F24-03 can not find type of selectTargetObject = {0}", selectTargetObject.GetType().Name);
         }
         return target;
     }
@@ -1818,22 +1831,24 @@ public class EffectManager : MonoBehaviourPun
 
     private IEnumerator TempStoreAction<T>(TempStore tempStore, object register, T target, EffectManager effectManager)
     {
+        Debug.LogFormat("C25F37");
         if(register is MonoBehaviourPun pun)
         {
-            print(this.debug("Need an pun object Id to store "));
+            Debug.LogFormat("C25F37-01 register is MonoBehaviourPun = {0}", register is MonoBehaviourPun);
             TempStore.AddToStore(pun.photonView.ViewID, target);
             if(tempStore.Actions != null)
             {
+                Debug.LogFormat("C25F37-01-01 tempStore.Actions is not null = {0}", tempStore.Actions != null);
                 yield return StartCoroutine(ExecuteActions(register, tempStore.Actions));
             }
             else
             {
-                print(this.debug("Can not find actions"));
+                Debug.LogFormat("C25F37-01-02 tempStore.Actions is not null = {0}", tempStore.Actions != null);
             }
         }
         else
         {
-            print(this.debug("Need an pun object Id to store "));
+            Debug.LogFormat("C25F37-02 register is MonoBehaviourPun = {0}", register is MonoBehaviourPun);
         }
         yield return null;
     }
