@@ -28,7 +28,7 @@ public class PlayfabManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        if (instance != null && instance != this)
+        if(instance != null && instance != this)
         {
             Debug.LogError("PlayfabManager have 2");
             Destroy(gameObject);
@@ -89,16 +89,16 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
-                if (!UIManager.instance.LoginMessage.transform.parent.gameObject.activeSelf)
+                if(!UIManager.instance.LoginMessage.transform.parent.gameObject.activeSelf)
                     UIManager.instance.LoginMessage.transform.parent.gameObject.SetActive(true);
                 UIManager.instance.LoginMessage.text = "";
                 UIManager.instance.LoginMessage.text += "<align=center><b><size=200%>Login Failed</b><align=left><size=100%>\n";
 
-                if (error.ErrorDetails != null)
+                if(error.ErrorDetails != null)
                 {
-                    if (error.ErrorDetails.ContainsKey("Username"))
+                    if(error.ErrorDetails.ContainsKey("Username"))
                         error.ErrorDetails["Username"].ForEach(a => UIManager.instance.LoginMessage.text += "- " + a + "\n");
-                    if (error.ErrorDetails.ContainsKey("Password"))
+                    if(error.ErrorDetails.ContainsKey("Password"))
                         error.ErrorDetails["Password"].ForEach(a => UIManager.instance.LoginMessage.text += "- " + a + "\n");
                 }
                 else
@@ -124,7 +124,7 @@ public class PlayfabManager : MonoBehaviour
         registerRequest.Username = username;
         registerRequest.Password = password;
 
-        if (RePasssword.Equals(password))
+        if(RePasssword.Equals(password))
         {
             PlayFabClientAPI.RegisterPlayFabUser(registerRequest,
                 result =>
@@ -134,18 +134,18 @@ public class PlayfabManager : MonoBehaviour
                 },
                 error =>
                 {
-                    if (!UIManager.instance.RegisterMessage.transform.parent.gameObject.activeSelf)
+                    if(!UIManager.instance.RegisterMessage.transform.parent.gameObject.activeSelf)
                         UIManager.instance.RegisterMessage.transform.parent.gameObject.SetActive(true);
                     UIManager.instance.RegisterMessage.text = "";
                     UIManager.instance.RegisterMessage.text += "<align=center><b><size=200%>SignUp Failed</b><align=left><size=100%> \n";
 
-                    if (error.ErrorDetails != null)
+                    if(error.ErrorDetails != null)
                     {
-                        if (error.ErrorDetails.ContainsKey("Username"))
+                        if(error.ErrorDetails.ContainsKey("Username"))
                             error.ErrorDetails["Username"].ForEach(a => UIManager.instance.RegisterMessage.text += "- " + a + "\n");
-                        if (error.ErrorDetails.ContainsKey("Password"))
+                        if(error.ErrorDetails.ContainsKey("Password"))
                             error.ErrorDetails["Password"].ForEach(a => UIManager.instance.RegisterMessage.text += "- " + a + "\n");
-                        if (error.ErrorDetails.ContainsKey("Email"))
+                        if(error.ErrorDetails.ContainsKey("Email"))
                             error.ErrorDetails["Email"].ForEach(a => UIManager.instance.RegisterMessage.text += "- " + a + "\n");
                     }
                     else
@@ -159,7 +159,7 @@ public class PlayfabManager : MonoBehaviour
         }
         else
         {
-            if (!UIManager.instance.RegisterMessage.transform.parent.gameObject.activeSelf)
+            if(!UIManager.instance.RegisterMessage.transform.parent.gameObject.activeSelf)
                 UIManager.instance.RegisterMessage.transform.parent.gameObject.SetActive(true);
             UIManager.instance.RegisterMessage.text = "";
             UIManager.instance.RegisterMessage.text += "<align=center><b><size=200%>SignUp Failed</b><align=left><size=100%> \n";
@@ -192,14 +192,14 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
-                if (!UIManager.instance.RecoverMessage.transform.parent.gameObject.activeSelf)
+                if(!UIManager.instance.RecoverMessage.transform.parent.gameObject.activeSelf)
                     UIManager.instance.RecoverMessage.transform.parent.gameObject.SetActive(true);
                 UIManager.instance.RecoverMessage.text = "";
                 UIManager.instance.RecoverMessage.text += "<align=center><b><size=200%>Recovery Failed</b><align=left><size=100%> \n";
 
-                if (error.ErrorDetails != null)
+                if(error.ErrorDetails != null)
                 {
-                    if (error.ErrorDetails.ContainsKey("Email") && error.ErrorDetails["Email"].Count > 0)
+                    if(error.ErrorDetails.ContainsKey("Email") && error.ErrorDetails["Email"].Count > 0)
                         error.ErrorDetails["Email"].ForEach(a => UIManager.instance.RecoverMessage.text += "- " + a + "\n");
                 }
                 else
@@ -213,27 +213,35 @@ public class PlayfabManager : MonoBehaviour
     IEnumerator CheckIfSessionIsStillValid(string ID)
     {
         bool IsApiExecuting = true;
+        Debug.LogFormat("C30F9 ID = {0}, IsApiExecuting = {1}", ID, IsApiExecuting);
         PlayFabClientAPI.GetUserData(new PlayFab.ClientModels.GetUserDataRequest()
         {
         }, result =>
         {
-            Debug.Log("Got user data:");
-            if (result.Data == null || !result.Data.ContainsKey("DeviceUniqueIdentifier"))
+            Debug.LogFormat("C30F9-01 get the user data successed");
+            if(result.Data == null || !result.Data.ContainsKey("DeviceUniqueIdentifier"))
             {
                 //true
+                Debug.LogFormat("C30F9-01-01 result data is null = {0}, result data not contain key DeviceUniqueIdentifier = {1}", result.Data == null, !result.Data.ContainsKey("DeviceUniqueIdentifier"));
+                Debug.LogFormat("C30F9-01-01 AuthencatonSuccess");
                 AuthencatonSuccess();
             }
             else
             {
+                Debug.LogFormat("C30F9-01-02");
                 string data = result.Data["DeviceUniqueIdentifier"].Value;
-                if (data.Equals("Notyet") || data.Equals(ID))
+                Debug.LogFormat("C30F9-01-02 data = {0}", data);
+
+                if(data.Equals("Notyet") || data.Equals(ID))
                 {
+                    Debug.LogFormat("C30F9-01-02-01 user have been logout from another device or user loged in the same device");
                     AuthencatonSuccess();
                 }
                 else
                 {
+                    Debug.LogFormat("C30F9-01-02-02 user have been login from another device");
 
-                    if (!UIManager.instance.LoginMessage.transform.parent.gameObject.activeSelf)
+                    if(!UIManager.instance.LoginMessage.transform.parent.gameObject.activeSelf)
                         UIManager.instance.LoginMessage.transform.parent.gameObject.SetActive(true);
 
                     UIManager.instance.LoginMessage.text += "This account is logged in on other computer" + "\n";
@@ -244,14 +252,13 @@ public class PlayfabManager : MonoBehaviour
             }
 
             IsApiExecuting = false;
-
+            Debug.LogFormat("C30F9-01 IsApiExecuting = {0}", IsApiExecuting);
         }, (error) =>
         {
-            Debug.Log("Got error retrieving user data:");
             Debug.Log(error.GenerateErrorReport());
+            Debug.LogFormat("C30F9-02 get the user data failed, message = {0}", error.GenerateErrorReport());
         });
         yield return new WaitUntil(() => !IsApiExecuting);
-
     }
     #endregion
 
@@ -289,7 +296,7 @@ public class PlayfabManager : MonoBehaviour
         }, result =>
         {
             Debug.Log("Got user data:");
-            if (result.Data == null || !result.Data.ContainsKey(key))
+            if(result.Data == null || !result.Data.ContainsKey(key))
             {
                 Debug.Log("No " + key);
             }
@@ -315,24 +322,32 @@ public class PlayfabManager : MonoBehaviour
     #region Set-Get Data In Inventory
     public IEnumerator GetCards()
     {
-        print("GetCards");
         bool IsApiExecuting = true;
+        Debug.LogFormat("C30F15 IsApiExecuting = {0}", IsApiExecuting);
         PlayFab.ClientModels.GetUserInventoryRequest request = new PlayFab.ClientModels.GetUserInventoryRequest();
 
         List<string> listCard = new List<string>();
         PlayFabClientAPI.GetUserInventory(request, result =>
         {
-            foreach (var item in result.Inventory)
+            Debug.LogFormat("C30F15-01 get the user inventory successed, inventory item count = {0}", result.Inventory.Count);
+            foreach(var item in result.Inventory)
             {
-                if (item.CatalogVersion == "Card" && item.ItemClass == "Card")
+                Debug.LogFormat("C30F15-01 result.Inventory[{0}]", result.Inventory.IndexOf(item));
+                if(item.CatalogVersion == "Card" && item.ItemClass == "Card")
                 {
+                    Debug.LogFormat("C30F15-01-01 item CatalogVersion = {0}, item ItemClass = {1}", item.CatalogVersion, item.ItemClass);
                     int numberCard = (int)item.RemainingUses;
-                    if (numberCard < 4)
+                    Debug.LogFormat("C30F15-01-01 numberCard = {0}", numberCard);
+                    if(numberCard < 4)
                     {
+                        Debug.LogFormat("C30F15-01-01-01 numberCard < 4");
+                        Debug.LogFormat("C30F15-01-01-01 listCard count before add = {0}", listCard.Count);
                         listCard.Add(item.ItemId + ":" + numberCard);
+                        Debug.LogFormat("C30F15-01-01-01 listCard count after add = {0}", listCard.Count);
                     }
                     else
                     {
+                        Debug.LogFormat("C30F15-01-01-02 numberCard >= 4");
                         PlayFab.AdminModels.RevokeInventoryItemRequest request2 = new PlayFab.AdminModels.RevokeInventoryItemRequest()
                         {
                             ItemInstanceId = item.ItemInstanceId,
@@ -340,63 +355,69 @@ public class PlayfabManager : MonoBehaviour
                         };
                         PlayFabAdminAPI.RevokeInventoryItem(request2, result =>
                         {
+                            Debug.LogFormat("C30F15-01-01-02-01 revokeInventoryItem successed");
                             GrantItem("Card", item.ItemId, 3);
                             int numberOutlimit = numberCard - 3;
-                            print("Number Out Limit: "+numberOutlimit);
+                            Debug.LogFormat("C30F15-01-01-02-01 numberOutlimit = {0}", numberOutlimit);
 
                             CardItem a = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id.Equals(item.ItemId));
                             string itemID = "";
-                            if (a != null)
+                            if(a != null)
                             {
-                                switch (a.cardData.RarityCard)
+                                Debug.LogFormat("C30F15-01-01-02-01-01 value of a is not null = {0}", a != null);
+                                switch(a.cardData.RarityCard)
                                 {
                                     case Rarity.Normal:
+                                        Debug.LogFormat("C30F15-01-01-02-01-01-01 rarity = {0}", a.cardData.RarityCard);
                                         itemID = "NormalRefund";
                                         break;
                                     case Rarity.Elite:
+                                        Debug.LogFormat("C30F15-01-01-02-01-01-02 rarity = {0}", a.cardData.RarityCard);
                                         itemID = "EliteRefund";
                                         break;
                                     case Rarity.Epic:
+                                        Debug.LogFormat("C30F15-01-01-02-01-01-03 rarity = {0}", a.cardData.RarityCard);
                                         itemID = "EpicRefund";
                                         break;
                                     case Rarity.Legendary:
+                                        Debug.LogFormat("C30F15-01-01-02-01-01-04 rarity = {0}", a.cardData.RarityCard);
                                         itemID = "LegenRefund";
                                         break;
                                 }
-
+                                Debug.LogFormat("C30F15-01-01-02-01-01 itemID = {0}", itemID);
                                 GrantItem("Refund", itemID, numberOutlimit);
                             }
                             else
                             {
-                                Console.Error.WriteLine("ERROR");
+                                Debug.LogFormat("C30F15-01-01-02-01-02 value of a is not null = {0}", a != null);
+                                Debug.LogError("refund error");
                             }
-
-
-                            //
-
-
-
                         }, (error) =>
                         {
-                            Debug.Log("Got error retrieving user data:");
-                            Debug.Log(error.GenerateErrorReport());
+                            Debug.LogFormat("C30F15-01-01-02-02 revokeInventoryItem failed, message = {0}", error.GenerateErrorReport());
                         });
 
 
                     }
                     print("CARD INFO: " + item.ItemId + ": " + numberCard);
                 }
+                else
+                {
+                    Debug.LogFormat("C30F15-01-02 not catalog card and not card class");
+                }
             }
+            Debug.LogFormat("C30F15-01 listCard of GameData count before update= {0}", GameData.instance.listCard.Count);
             GameData.instance.listCard = listCard;
+            Debug.LogFormat("C30F15-01 listCard of GameData count after update= {0}", GameData.instance.listCard.Count);
             IsApiExecuting = false;
-
+            Debug.LogFormat("C30F15-01 IsApiExecuting = {0}", IsApiExecuting);
         }, (error) =>
         {
-            Debug.Log("Got error retrieving user data:");
-            Debug.Log(error.GenerateErrorReport());
+            Debug.LogFormat("C30F15-02 get the user inventory failed, message = {0}", error.GenerateErrorReport());
         });
 
         yield return new WaitUntil(() => !IsApiExecuting);
+        Debug.LogFormat("C30F15 End of GetCards");
     }
 
     public void GrantItem(string catalog, string itemID, int amount)
@@ -406,7 +427,7 @@ public class PlayfabManager : MonoBehaviour
         item1.ItemId = itemID;
         item1.PlayFabId = playFabId;
 
-        for (int i = 0; i < amount; i++)
+        for(int i = 0; i < amount; i++)
         {
             print("Add");
             itemGrants.Add(item1);
@@ -443,7 +464,8 @@ public class PlayfabManager : MonoBehaviour
                 Value = playerScore
             }
     }
-        }, result => {
+        }, result =>
+        {
             GameData.instance.Elo = playerScore;
             IsApiExecuting = false;
         }, (error) =>
@@ -479,7 +501,7 @@ public class PlayfabManager : MonoBehaviour
             {
                 List<PlayFab.ClientModels.StatisticValue> listStatisticValue;
                 listStatisticValue = result.Statistics;
-                foreach (PlayFab.ClientModels.StatisticValue statisticValue in listStatisticValue)
+                foreach(PlayFab.ClientModels.StatisticValue statisticValue in listStatisticValue)
                 {
                     print(statisticValue.StatisticName + " " + statisticValue.Value + " ");
                     GameData.instance.Elo = statisticValue.Value;
@@ -519,22 +541,41 @@ public class PlayfabManager : MonoBehaviour
         float K = 50; //hang so
         float B = 1.5f; ///hang so 
         float N = 0; //Chuoi thang
-        if (win) W = 1;
-        else W = 0;
 
-        We = (float)(1 / (1 + Math.Pow(10,(R0 - Rd) / C)));
-        int Rn = (int)(R0 + K * (W - We) + B*(N - 1));
+        Debug.LogFormat("C30F7 win = {0}, eloPlayer = {1}, eloOpponent ={2}", win, eloPlayer, eloOpponent);
 
-        print("We: "+We);
-        print("Rn :"+Rn);   
+
+        if(win)
+        {
+            Debug.LogFormat("C30F7-01 win = {0}", win);
+            W = 1;
+            Debug.LogFormat("C30F7-01 W = {0}", W);
+
+        }
+        else
+        {
+            Debug.LogFormat("C30F7-02 win = {0}", win);
+            W = 0;
+            Debug.LogFormat("C30F7-02 W = {0}", W);
+        }
+
+        We = (float)(1 / (1 + Math.Pow(10, (R0 - Rd) / C)));
+        int Rn = (int)(R0 + K * (W - We) + B * (N - 1));
+
+        Debug.LogFormat("C30F7 W = {0}, We = {1}, Rn = {2}, R0 = {3}, Rd = {4}, C = {5}, K = {6}, B = {7}, N = {8}", W, We, Rn, R0, Rd, C, K, B, N);
+
+
 
         //Incase Player have below 0 elo
         if(Rn < 0)
         {
+            Debug.LogFormat("C30F7-03 before change Rn = {0}", Rn);
             Rn = 0;
+            Debug.LogFormat("C30F7-03 after change Rn = {0}", Rn);
         }
-
+        Debug.LogFormat("C30F7 EloResult = {0}", MatchManager.instance.EloResult);
         MatchManager.instance.EloResult = Rn - eloPlayer;
+        Debug.LogFormat("C30F7 EloResult = {0}", MatchManager.instance.EloResult);
 
         yield return StartCoroutine(SubmitScore(Rn));
     }
@@ -600,26 +641,26 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.GetCatalogItems(new PlayFab.ClientModels.GetCatalogItemsRequest() { CatalogVersion = "Card" }, result =>
         {
             var catalogItem = result.Catalog;
-            foreach (var item in catalogItem)
+            foreach(var item in catalogItem)
             {
 
-                if (item.ItemClass == "Card")
+                if(item.ItemClass == "Card")
                 {
                     cards.Add(item.ItemId, item.VirtualCurrencyPrices["MC"].ToString());
                 }
-                else if (item.ItemClass == "Bundle")
+                else if(item.ItemClass == "Bundle")
                 {
 
                     var currency = item.VirtualCurrencyPrices["MC"];
                     var pack = new Data_Pack(item.ItemId, item.DisplayName, currency + "");
                     //bundles.Add(new Data_Pack(item.ItemId));
-                    if (item.Bundle != null)
+                    if(item.Bundle != null)
                     {
                         print($"Bundle name: {item.DisplayName} with price {item.VirtualCurrencyPrices}");
                         //sell pack (random card) -> droptables
-                        if (item.Bundle.BundledResultTables != null)
+                        if(item.Bundle.BundledResultTables != null)
                         {
-                            foreach (var x in item.Bundle.BundledResultTables)
+                            foreach(var x in item.Bundle.BundledResultTables)
                             {
                                 pack.dropTableId.Add(x);
                                 var dropTable = result.Catalog.FirstOrDefault(item => item.ItemId == x);
@@ -628,7 +669,7 @@ public class PlayfabManager : MonoBehaviour
                             }
                         }
                         // sell card item
-                        foreach (var x in item.Bundle.BundledItems)
+                        foreach(var x in item.Bundle.BundledItems)
                         {
                             pack.cardItemsId.Add(x);
                             print($"bundle({item.DisplayName}) add item data id : " + x); //card in droptable
@@ -636,14 +677,14 @@ public class PlayfabManager : MonoBehaviour
                     }
                     packs.Add(pack);
                 }
-                else if (item.ItemClass == "Deck")
+                else if(item.ItemClass == "Deck")
                 {
                     var currency = item.VirtualCurrencyPrices["MC"];
                     var deck = new Data_Deck(item.ItemId, item.DisplayName, currency.ToString());
-                    if (item.Bundle != null)
+                    if(item.Bundle != null)
                     {
                         print($"Bundle DECK name: {item.DisplayName}");
-                        foreach (var x in item.Bundle.BundledItems)
+                        foreach(var x in item.Bundle.BundledItems)
                         {
                             print($"({item.DisplayName}) deck add item data id : " + x); //card in droptable
                             deck.deckItemsId.Add(x);
@@ -714,8 +755,8 @@ public class PlayfabManager : MonoBehaviour
 
     private IEnumerator DefinePayment(string orderID, string currency, string providerName, List<ItemPurchaseRequest> itemPurchases)
     {
-        print("start define");
         bool IsApiExecuting = true;
+        Debug.LogFormat("C30F10 is IsApiExecuting = {0}", IsApiExecuting);
         var request2 = new PayForPurchaseRequest()
         {
             OrderId = orderID,
@@ -724,87 +765,94 @@ public class PlayfabManager : MonoBehaviour
         };
         PlayFabClientAPI.PayForPurchase(request2, result =>
         {
-            Debug.Log("PURCHASE STATUS: " + result.Status);
+            Debug.LogFormat("C30F10-01 status = {0}", result.Status);
             IsApiExecuting = false;
+            Debug.LogFormat("C30F10-01 IsApiExecuting = {0}", IsApiExecuting);
+
         }, (error) =>
         {
-            Debug.Log("Got error retrieving user data:");
-            Debug.Log(error.GenerateErrorReport());
+            Debug.LogFormat("C30F10-02 PayForPurchase error, message = {0}", error.GenerateErrorReport());
         });
 
         yield return new WaitUntil(() => !IsApiExecuting);
-
+        Debug.LogFormat("C30F10 is IsApiExecuting = {0}", IsApiExecuting);
         yield return StartCoroutine(FinishPurchase(orderID, itemPurchases));
-
     }
 
     private IEnumerator FinishPurchase(string orderID, List<ItemPurchaseRequest> itemPurchases)
     {
-        print("start finish");
         bool IsApiExecuting = true;
+        Debug.LogFormat("C30F14 orderID = {0}, itemPurchases count = {1}, IsApiExecuteing = {2}", orderID, itemPurchases.Count, IsApiExecuting);
         var request3 = new ConfirmPurchaseRequest() { OrderId = orderID };
         string deckName = "";
         Dictionary<string, int> dic = new Dictionary<string, int>();
         PlayFabClientAPI.ConfirmPurchase(request3, result =>
         {
-            result.Items.ForEach(x => Debug.Log("item name:  " + x.ItemId + ": " + x.RemainingUses));
-            print(result.Items.Count);
+            Debug.LogFormat("C30F14-01 Confirm Purchase success, number item purchased = {0}", result.Items.Count);
 
             //get pack item id
-
-            if (UIManager.instance.isStorePacks || UIManager.instance.isOpenPack)
+            if(UIManager.instance.isStorePacks || UIManager.instance.isOpenPack)
             {
-                //analysis Pack 
-                foreach (var item in itemPurchases)
-                {
-                    List<string> array = item.ItemId.Split(':').ToList();
-                    array.ForEach(a => print(a));
-                }
-
-
-
-
+                Debug.LogFormat("C30F14-01-01 player in store screen or in open pack screen");
                 //set list item open
                 UIManager.instance.FeedBackOpenPack.PlayFeedbacks();
-
+            }
+            else
+            {
+                Debug.LogFormat("C30F14-01-02 player in another screen do not play feedback");
             }
 
-            if (UIManager.instance.isStoreDecks)
+            if(UIManager.instance.isStoreDecks)
             {
+                Debug.LogFormat("C30F14-01-03 player in store deck screen");
                 var deckData = GameData.instance.listDeckDataInStore.Find(i => i.id == itemPurchases[0].ItemId);
-                foreach (var key in deckData.deckItemsId)
+                Debug.LogFormat("C30F14-01-03 deckItems count = {0}", deckData.deckItemsId.Count);
+                foreach(var key in deckData.deckItemsId)
                 {
-                    if (dic.ContainsKey(key))
+                    Debug.LogFormat("C30F14-01-03 deckData.deckItemsId[{0}]", deckData.deckItemsId.IndexOf(key));
+                    if(dic.ContainsKey(key))
                     {
                         dic[key]++;
+                        Debug.LogFormat("C30F14-01-03-01 dic[{0}] = {1}", key, dic[key]);
                     }
                     else
                     {
                         dic.Add(key, 1);
+                        Debug.LogFormat("C30F14-01-03-02 add new key dic[{0}] = {1}", key, dic[key]);
                     }
                 }
             }
+            else
+            {
+                Debug.LogFormat("C30F14-01-04 not in store deck screen");
+            }
 
-           
             IsApiExecuting = false;
+            Debug.LogFormat("C30F14-01 IsApiExecuting = {0}", IsApiExecuting);
         }, (error) =>
         {
-            Debug.Log("Got error retrieving user data:");
-            Debug.Log(error.GenerateErrorReport());
+            Debug.LogFormat("C30F14-02 Finish Purchase error, message = {0}", error.GenerateErrorReport());
         });
 
         yield return new WaitUntil(() => !IsApiExecuting);
+        Debug.LogFormat("C30F14 wait done");
         yield return new WaitForSeconds(2f);
-        if (UIManager.instance.isStoreDecks)
+        Debug.LogFormat("C30F14 wait done");
+
+        if(UIManager.instance.isStoreDecks)
         {
-            if (itemPurchases.Count == 1)
+            Debug.LogFormat("C30F14-03 player in store deck");
+            if(itemPurchases.Count == 1)
             {
                 deckName = UIManager.instance.DeckName;
-                print($"672 {deckName}");
+                Debug.LogFormat("C30F14-03-01 just one item need to purchases, deck name = {0}", deckName);
             }
             yield return StartCoroutine(CollectionManager.instance.CreateDeckFromStore(dic, deckName));
         }
-
+        else
+        {
+            Debug.LogFormat("C30F14-03-02 player in another screen");
+        }
         yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
         yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
     }
@@ -819,12 +867,15 @@ public class PlayfabManager : MonoBehaviour
     public IEnumerator BuyPack(List<ItemPurchaseRequest> itemPurchases)
     {
         int numberContentReturn = itemPurchases.Count;
-        foreach (ItemPurchaseRequest itemPurchase in itemPurchases)
+        Debug.LogFormat("C30F6 numberContentReturn = {0}", numberContentReturn);
+        foreach(ItemPurchaseRequest itemPurchase in itemPurchases)
         {
+            Debug.LogFormat("C30F6 itemPurchases[{0}]", itemPurchases.IndexOf(itemPurchase));
             var request = new PurchaseItemRequest() { StoreId = "BS1", ItemId = itemPurchase.ItemId, VirtualCurrency = "MC", Price = 3000 };
             PlayFabClientAPI.PurchaseItem(request, result =>
             {
                 List<string> array = result.Items[0].BundleContents;
+                Debug.LogFormat("C30F6-01 purchase have been finished");
                 array.ForEach(a => print(a));
                 GameData.instance.listCardOpenedInPack.Add(array);
                 numberContentReturn--;
@@ -833,8 +884,8 @@ public class PlayfabManager : MonoBehaviour
 
             }, (error) =>
             {
-                Debug.Log("Got error retrieving user data:");
                 Debug.Log(error.GenerateErrorReport());
+                Debug.LogFormat("C30F6-02 purchase process error message = {0}", error.GenerateErrorReport());
             });
         }
 
@@ -848,7 +899,7 @@ public class PlayfabManager : MonoBehaviour
     public IEnumerator GetDropTable(List<string> listTableId)
     {
 
-        foreach (string item in listTableId.Distinct().ToList())
+        foreach(string item in listTableId.Distinct().ToList())
         {
             print(item);
         }
@@ -863,7 +914,7 @@ public class PlayfabManager : MonoBehaviour
         PlayFabServerAPI.GetRandomResultTables(request, result =>
         {
             var tables = result.Tables;
-            foreach (var table in tables)
+            foreach(var table in tables)
             {
                 print($"Table name: {table.Key}");
                 print($"Table nodes: {table.Value.Nodes.Count}"); // node = item
@@ -892,6 +943,7 @@ public class PlayfabManager : MonoBehaviour
     public IEnumerator EvaluateRandomResultTable(string id)
     {
         bool IsApiExecuting = true;
+        Debug.LogFormat("C30F13 id = {0}, IsApiExecuting = {1}", id, IsApiExecuting);
         var request = new EvaluateRandomResultTableRequest
         {
             TableId = id
@@ -899,17 +951,17 @@ public class PlayfabManager : MonoBehaviour
 
         PlayFabServerAPI.EvaluateRandomResultTable(request, result =>
         {
+            Debug.LogFormat("C30F13-01 result.ResultItemId = {0}", result.ResultItemId);
             print(result.ResultItemId);
-
+            Debug.LogFormat("C30F13-01 IsApiExecuting = {0}", IsApiExecuting);
             IsApiExecuting = false;
-
+            Debug.LogFormat("C30F13-01 IsApiExecuting = {0}", IsApiExecuting);
         }, (error) =>
         {
-            Debug.Log("Got error retrieving user data:");
-            Debug.Log(error.GenerateErrorReport());
+            Debug.LogFormat("C30F13-02 error while retrieving user data, message = {0}", error.GenerateErrorReport());
         });
-        print("End EvaluateRandomResultTable()");
         yield return new WaitUntil(() => !IsApiExecuting);
+        Debug.LogFormat("C30F13 End EvaluateRandomResultTable");
     }
     public string DeviceUniqueIdentifier
     {
@@ -925,7 +977,7 @@ public class PlayfabManager : MonoBehaviour
     bool waitExitApplication()
     {
         print("wait");
-        if (isAuthented)
+        if(isAuthented)
         {
             StartCoroutine(SetUserData("DeviceUniqueIdentifier", "Notyet"));
             print("SetUserData");
@@ -954,32 +1006,39 @@ public class PlayfabManager : MonoBehaviour
 
     public void AddFriend(FriendIdType idType, string friendId)
     {
+        Debug.Log("C30F1");
         var request = new PlayFab.ClientModels.AddFriendRequest();
-        switch (idType)
+        Debug.LogFormat("C30F1 idType = {0}", idType);
+        switch(idType)
         {
             case FriendIdType.PlayFabId:
+                Debug.LogFormat("C30F1-01 friendId = {0}", friendId);
                 request.FriendPlayFabId = friendId;
                 break;
             case FriendIdType.Username:
+                Debug.LogFormat("C30F1-02 friendId = {0}", friendId);
                 request.FriendUsername = friendId;
                 break;
             case FriendIdType.DisplayName:
+                Debug.LogFormat("C30F1-03 friendId = {0}", friendId);
                 request.FriendTitleDisplayName = friendId;
                 break;
+            default:
+                Debug.LogFormat("C30F1-04 Do not find type of idType");
+                break;
         }
+        Debug.Log("C30F1");
         // Execute request and update friends when we are done
         PlayFabClientAPI.AddFriend(request, result =>
         {
-            Debug.Log("Friend added successfully!");
+            Debug.Log("C30F1-05 Friend added successfully");
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.SetActive(false);
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
             StartCoroutine(GameData.instance.LoadFriendItem());
-
             ChatManager.instance.SendDirectMessage(friendId, nameof(MessageType.AddFriend) + "|");
-
-
         }, (error) =>
         {
+            Debug.LogFormat("C30F1-06 add Friend fail error message = {0}", error.ErrorMessage);
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.SetActive(true);
             UIManager.instance.AddFriendMessage.text = error.ErrorMessage;
         });
@@ -990,7 +1049,7 @@ public class PlayfabManager : MonoBehaviour
         bool IsApiExecuting = true;
         PlayFab.ClientModels.FriendInfo friendInfo = GameData.instance.listFriendData.Find(friend => friend.Username.Equals(Username));
 
-        if (friendInfo != null)
+        if(friendInfo != null)
         {
             Debug.Log("remove" + friendInfo.FriendPlayFabId);
             PlayFabClientAPI.RemoveFriend(new PlayFab.ClientModels.RemoveFriendRequest
@@ -1024,19 +1083,36 @@ public class PlayfabManager : MonoBehaviour
     //    StartCoroutine(RemoveFriends());
     //}
 
-    void DisplayPlayFabError(PlayFabError error) { Debug.Log(error.GenerateErrorReport()); }
-    void DisplayError(string error) { Debug.LogError(error); }
+    void DisplayPlayFabError(PlayFabError error)
+    {
+        Debug.Log(error.GenerateErrorReport());
+    }
+    void DisplayError(string error)
+    {
+        Debug.LogError(error);
+    }
 
 
     void AuthencatonSuccess()
     {
+        Debug.Log("C30F3");
         string userName = "";
 
-        if (UIManager.instance.isSignIn)
-            userName = UIManager.instance.LoginUsername.text;
-        else if (UIManager.instance.isSignUp)
+        if(UIManager.instance.isSignIn)
         {
+            Debug.LogFormat("C30F3-01 isSignIn = {0}", UIManager.instance.isSignIn);
+            userName = UIManager.instance.LoginUsername.text;
+            Debug.LogFormat("C30F3-01 userName = {0}", userName);
+        }
+        else if(UIManager.instance.isSignUp)
+        {
+            Debug.LogFormat("C30F3-02 isSignUp = {0}", UIManager.instance.isSignUp);
             userName = UIManager.instance.RegisterUsername.text;
+            Debug.LogFormat("C30F3-02 userName = {0}", userName);
+        }
+        else
+        {
+            Debug.LogFormat("C30F3-03 Continue");
         }
 
         PlayerPrefs.SetString("USERNAME", userName);
@@ -1047,7 +1123,9 @@ public class PlayfabManager : MonoBehaviour
         //connect to chat
         ChatManager.instance.ConnectoToPhotonChat();
         PhotonManager.instance.ConnectToMaster();
+        Debug.LogFormat("C30F3 isAuthented = {0}", isAuthented);
         isAuthented = true;
+        Debug.LogFormat("C30F3 isAuthented = {0}", isAuthented);
     }
 
     #endregion
