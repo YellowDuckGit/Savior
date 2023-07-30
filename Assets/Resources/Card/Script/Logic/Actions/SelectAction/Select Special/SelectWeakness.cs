@@ -76,8 +76,15 @@ namespace Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Special
             if(Rarity != Rarity.Any)
             {
                 targets.RemoveAll(card => card.RarityCard.ToString().CompareTo(Rarity.ToString()) != 0);
+                if(targets.Count == 0)
+                {
+                    return null;
+                }
+                else if(targets.Count == 1)
+                {
+                    return targets[0] as MonsterCard;
+                }//else contiue
             }
-
 
             /*
              * Region filter
@@ -85,6 +92,14 @@ namespace Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Special
             if(region != RegionCard.Any)
             {
                 targets.RemoveAll(card => card.RegionCard.ToString().CompareTo(region.ToString()) != 0);
+                if(targets.Count == 0)
+                {
+                    return null;
+                }
+                else if(targets.Count == 1)
+                {
+                    return targets[0] as MonsterCard;
+                }//else contiue
             }
 
             var monsters = targets.Select(card => card as MonsterCard).ToList();
@@ -92,6 +107,14 @@ namespace Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Special
             if(registor is MonsterCard regisM)
             {
                 monsters.RemoveAll(monster => monster == regisM);
+                if(monsters.Count == 0)
+                {
+                    return null;
+                }
+                else if(monsters.Count == 1)
+                {
+                    return targets[0] as MonsterCard;
+                }//else contiue
             }
 
             int weaknessAtk = monsters.Min(x => x.Attack);
