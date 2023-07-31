@@ -133,26 +133,22 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        //DontDestroyOnLoad(gameObject);
+        Debug.Log("C28F5");
         if(instance != null && instance != this)
         {
-            UnityEngine.Debug.LogError("MatchManager have 2");
+            Debug.Log("C28F5-01 In if instance is different from null and this");
             Destroy(gameObject);
         }
         else
         {
+            Debug.Log("C28F5-02 In if instance isn't different from null and this");
             instance = this;
         }
     }
     private void Start()
     {
-        //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => SkipTurnEvent());
-        //UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
-
+        Debug.LogFormat("C28F57");
         turnPresent = K_PlayerSide.Blue;
-        /*
-         * Regist function process for local event
-         */
         this.RegisterListener(EventID.OnMoveCardToSummonZone, param => MoveCardToSummonZoneEvent((string)param));
         this.RegisterListener(EventID.OnMoveCardToFightZone, param => MoveCardToFightZoneEvent((string)param));
         this.RegisterListener(EventID.OnSummonMonster, param => SummonCardEvent(param as SummonArgs));
@@ -162,83 +158,78 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public void StoreGainedAttributeAction(string attributeName)
     {
+        Debug.LogFormat("C28F61");
         if(!AttributeGained.ContainsKey(round))
         {
+            Debug.LogFormat("C28F61-01");
             AttributeGained[round].Add(attributeName);
         }
-
     }
 
     public void MoveCardInTriggerSpellEvent(MoveCardInTriggerSpellArgs args)
     {
+        Debug.LogFormat("C28F30");
         object[] datas = new object[] { this.localPlayerSide, args.card.photonView.ViewID };
-
+        Debug.LogFormat("C28F30 LocalPlayerSide is {0}, view id of card is {1}", this.localPlayerSide, args.card.photonView.ViewID);
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent((byte)RaiseEvent.MoveCardInTriggerSpell, datas, raiseEventOptions, SendOptions.SendUnreliable);
-
     }
     IEnumerator MoveCardInTriggerSpellAction(CardPlayer player, SpellCard card)
     {
-        print(this.debug("MoveCardInTriggerSpellAction"));
+        Debug.LogFormat("C28F29");
         card.IsSelected = false;
-        //change card from hand to summon zone 
         var cardSelected = player.hand.Draw(card);
-        //player.hand.SortPostionRotationCardInHand();
         card.Position = CardPosition.InTriggerSpellField;
 
         card.RemoveCardFormParentPresent();
         card.MoveCardIntoNewParent(player.spellZone.transform);
 
-
         yield return StartCoroutine(EffectManager.Instance.OnExecuteSpell(card));
         if(EffectManager.Instance.status == EffectManager.EffectStatus.success)
         {
+            Debug.LogFormat("C28F29-01");
             player.spellZone.SpellCard = card;
             player.mana.Number -= card.Cost;
-            /*
-        * just local player get and excute effect first, after that async player opposite
-        */
-            Debug.Log(this.debug("Used card spell", new
-            {
-                card.SpellType
-            }));
+
+            Debug.LogFormat("C28F29-01 Used card is {0}", card);
+
             if(card.SpellType == SpellType.Slow)
             {
+                Debug.LogFormat("C28F29-01-01 card spell type is slow");
                 SwitchTurnAction();
             }
+            else
+            {
+                Debug.LogFormat("C28F29-01-02 card spell type isn't slow");
+            }
             yield return new WaitForSeconds(0.5f);
-
         }
         else
         {
-            Debug.Log(this.debug("Failed to use card spell", new
-            {
-                card
-            }));
+            Debug.LogFormat("C28F29-02 Failed to use card spell, card is {0}", card);
         }
-        //if(card != null)
-        //{
-        //    card.transform.SetParent(null);
-        //    card.gameObject.SetActive(false); //destroy spell card after use
-        //}
         yield return null;
     }
     private void OnEnable()
     {
+        Debug.LogFormat("C28F39");
         PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
     }
 
     private void OnDisable()
     {
+        Debug.LogFormat("C28F38");
         PhotonNetwork.NetworkingClient.EventReceived -= NetworkingClient_EventReceived;
     }
 
     public void OnclickLeftRoom()
     {
+        Debug.Log("C28F35");
     }
 
     public void OnclickSwitchScene()
     {
+        Debug.Log("C28F36");
     }
 
 
@@ -250,7 +241,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator PlayerInit()
     {
-        print(this.debug("PlayerInit", new
+        print(this.debug("C28F41 PlayerInit", new
         {
             PhotonNetwork.LocalPlayer.CustomProperties
         }));
@@ -259,10 +250,12 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         if(localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
+            Debug.LogFormat("C28F41-01 Local Player Side is Blue");
             LocalPlayer = PhotonNetwork.Instantiate("BluePlayer", positionBlue, Quaternion.Euler(rotationBlue)).GetComponent<CardPlayer>();
         }
         else if(localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
         {
+            Debug.LogFormat("C28F41-02 Local Player Side is Red");
             LocalPlayer = PhotonNetwork.Instantiate("RedPlayer", positionRed, Quaternion.Euler(rotationRed)).GetComponent<CardPlayer>();
         }
         yield return new WaitUntil(() => redPlayer != null && bluePlayer != null);
@@ -272,8 +265,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// </summary>
     void SetUpField()
     {
-        print(this.debug("SetUp Field"));
-        print(this.debug("Blue SM count", new
+        Debug.LogFormat("C28F54");  
+        print(this.debug("C28F54", new
         {
             playerNotNull = bluePlayer != null,
             NumberSummonZone = bluePlayer.summonZones.Count
@@ -281,12 +274,14 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         foreach(SummonZone summonZone in bluePlayer.summonZones)
         {
+            Debug.LogFormat("C28F54 summonZone in blue player summonzone is {0}", summonZone);
             summonZone.player = bluePlayer;
             summonZone.matchManager = this;
         }
 
         foreach(FightZone fightZone in bluePlayer.fightZones)
         {
+            Debug.LogFormat("C28F54 fightZone in blue player fightZones is {0}", fightZone);
             fightZone.player = bluePlayer;
             fightZone.matchManager = this;
         }
@@ -294,25 +289,26 @@ public class MatchManager : MonoBehaviourPunCallbacks
         bluePlayer.spellZone.player = bluePlayer;
         bluePlayer.spellZone.matchManager = this;
 
-        print(this.debug("Red SM count", new
+        print(this.debug("C28F54 Red SM count", new
         {
             playerNotNull = redPlayer != null,
             NumberSummonZone = redPlayer.summonZones.Count
         }));
         foreach(SummonZone summonZone in redPlayer.summonZones)
         {
+            Debug.LogFormat("C28F54 summonZone in red player summonzone is {0}", summonZone);
             summonZone.player = redPlayer;
             summonZone.matchManager = this;
         }
 
         foreach(FightZone fightZone in redPlayer.fightZones)
         {
+            Debug.LogFormat("C28F54 fightZone in red player fightZones is {0}", fightZone);
             fightZone.player = redPlayer;
             fightZone.matchManager = this;
         }
         redPlayer.spellZone.player = redPlayer;
         redPlayer.spellZone.matchManager = this;
-
     }
     #endregion
 
@@ -323,6 +319,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     private IEnumerator InitalGameProcess()
     {
+        Debug.Log("C28F22");
         yield return StartCoroutine(BeginMatch());
         yield return StartCoroutine(MiddleMatch());
         yield return StartCoroutine(EndMatch());
@@ -335,7 +332,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator BeginMatch()
     {
-        print(this.debug($"Begin Match"));
+        Debug.LogFormat("C28F6");
         UIMatchManager.instance.TurnLoadingScene(true);
 
         yield return StartCoroutine(PlayerInit());
@@ -344,27 +341,19 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         SetUpField();
 
-        string deckBlue = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.DeckBlue].ToString(); //get desk Serialize from photon custom property
+        string deckBlue = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.DeckBlue].ToString();
         string deckRed = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.DeckRed].ToString();
+        Debug.LogFormat("C28F6 deckBlue is: {0}, deckRed is: {1}", deckBlue, deckRed);
 
-        yield return StartCoroutine(bluePlayer.deck.getCardDataInDeck(deckBlue)); //Init desk in match for blue
+        yield return StartCoroutine(bluePlayer.deck.getCardDataInDeck(deckBlue));
 
-        yield return StartCoroutine(redPlayer.deck.getCardDataInDeck(deckRed)); //Init desk in match for red
-
-        /*
-         * Create and set up for each card in desk
-         */
+        yield return StartCoroutine(redPlayer.deck.getCardDataInDeck(deckRed));
 
         yield return StartCoroutine(LocalPlayer.deck.CreateMonsterCardsInDeckMatch());
 
-
         yield return new WaitUntil(() =>
         {
-            print(this.debug("Wait until all card in deck is created", new
-            {
-                blue = bluePlayer.deck.Count,
-                red = redPlayer.deck.Count
-            }));
+            Debug.LogFormat("C28F6 Check Deck of bluePlayer is Full: {0}, Check Deck of redplayer is full {1}", bluePlayer.deck.Full, redPlayer.deck.Full);
             return bluePlayer.deck.Full
              && redPlayer.deck.Full;
         });
@@ -372,43 +361,34 @@ public class MatchManager : MonoBehaviourPunCallbacks
         ExitGames.Client.Photon.Hashtable _myRoomCustomProperties = new ExitGames.Client.Photon.Hashtable();
         _myRoomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
 
-        //upload local instancd deck to custom room properties
         if(localPlayerSide == K_PlayerSide.Red)
         {
+            Debug.LogFormat("C28F6-01 localPlayerSide is Red");
             _myRoomCustomProperties[K_Player.OrderInstanceCardRed] = string.Join("@", redPlayer.deck.GetAll().Select(card => card.photonView.ViewID));
-            print(this.debug("send Template (Red): \n" + _myRoomCustomProperties[K_Player.OrderInstanceCardRed]));
+            Debug.LogFormat("C28F6-01 send Template (Red): {0} ", _myRoomCustomProperties[K_Player.OrderInstanceCardRed]));
             PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
         }
         else if(localPlayerSide == K_PlayerSide.Blue)
         {
+            Debug.LogFormat("C28F6-02 localPlayerSide is Blue");
             _myRoomCustomProperties[K_Player.OrderInstanceCardBlue] = string.Join("@", bluePlayer.deck.GetAll().Select(card => card.photonView.ViewID));
-            print(this.debug("send Template (Blue): \n" + _myRoomCustomProperties[K_Player.OrderInstanceCardBlue]));
+            Debug.LogFormat("C28F6-02 send Template (Blue): {0} ", _myRoomCustomProperties[K_Player.OrderInstanceCardBlue]));
             PhotonNetwork.CurrentRoom.SetCustomProperties(_myRoomCustomProperties);
         }
         else
         {
-            Debug.LogError("Local player side is not set");
+            Debug.LogFormat("C28F6-03 Local player side is not set");
         }
-
-        /*
-         * Sync opposite player's deck photon view id and card in deck
-         */
 
         yield return StartCoroutine(Next());
 
         yield return StartCoroutine(SyncOppositePlayerDeck());
 
-
-        //print string of card in desk with format <index>. <card> [id] \newline
         var deskBlue = bluePlayer.deck.GetAll();
-        print("BLUEDECK" + string.Join("\n", deskBlue.Select(c => string.Format("{0}. {1}", deskBlue.IndexOf(c), c))));
+        Debug.LogFormat("C28F6 BLUEDECK" + string.Join("\n", deskBlue.Select(c => string.Format("{0}. {1}", deskBlue.IndexOf(c), c))));
+
         var deskred = redPlayer.deck.GetAll();
-        print("REDDECK" + string.Join("\n", deskred.Select(c => string.Format("{0}. {1}", deskred.IndexOf(c), c))));
-
-        //yield return new WaitUntil(() => !bluePlayer.deck.cards.Any(a => a.BaseMonsterData == null)
-        //        && !redPlayer.deck.cards.Any(a => a.BaseMonsterData == null));
-
-        //yield return StartCoroutine(UIMatchManager.instance.flipUI());
+        Debug.LogFormat("C28F6 REDDECK" + string.Join("\n", deskred.Select(c => string.Format("{0}. {1}", deskred.IndexOf(c), c))));
 
         UIMatchManager.instance.TurnLoadingScene(false);
 
@@ -425,37 +405,39 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //draw amout of card when start match
         if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
+            Debug.LogFormat("C28F6-04 Draw amount of card when start match of blue player");
             yield return StartCoroutine(DrawPhase(5, bluePlayer));
 
         }
         else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
         {
+            Debug.LogFormat("C28F6-05 Draw amount of card when start match of red");
             yield return StartCoroutine(DrawPhase(5, redPlayer));
         }
-
         yield return new WaitForSeconds(3);
-
-
     }
 
     private IEnumerator SyncOppositePlayerDeck()
     {
+        Debug.LogFormat("C28F66");
         yield return new WaitUntil(() => PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(K_Player.OrderInstanceCardBlue) && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(K_Player.OrderInstanceCardRed));
 
         List<int> oppositeDeckOrder = null;
         if(localPlayerSide == K_PlayerSide.Red)
         {
+            Debug.LogFormat("C28F66-01 local player is red");
             var deckOrder = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.OrderInstanceCardBlue].ToString().Split('@');
             oppositeDeckOrder = deckOrder.Select(int.Parse).ToList();
         }
         else if(localPlayerSide == K_PlayerSide.Blue)
         {
+            Debug.LogFormat("C28F66-02 local player is red");
             var deckOrder = PhotonNetwork.CurrentRoom.CustomProperties[K_Player.OrderInstanceCardRed].ToString().Split('@');
             oppositeDeckOrder = deckOrder.Select(int.Parse).ToList();
         }
         else
         {
-            Debug.LogError("Local player side is not set");
+            Debug.LogError("C28F66-03 Local player side is not set");
         }
         yield return StartCoroutine(OpponentPlayer.deck.SetOrderInstanceCard(oppositeDeckOrder));
         CameraManager.instance.OnclickSwitchCameraNormal();
@@ -463,7 +445,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     private IEnumerator Next()
     {
-        print("Send next");
+        Debug.LogFormat("C28F34");
         LocalPlayer.isNEXT_STEP = true;
         object[] datas = new object[] { localPlayerSide, LocalPlayer.isNEXT_STEP };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
@@ -471,11 +453,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
         yield return new WaitUntil(() =>
         {
-            print(this.debug("wait next", new
-            {
-                local = OpponentPlayer.isNEXT_STEP,
-                opponent = LocalPlayer.isNEXT_STEP
-            }));
+            Debug.LogFormat("C28F34 local is {0}, opponent is {1}", LocalPlayer.isNEXT_STEP, OpponentPlayer.isNEXT_STEP, );
             return requestComplete && OpponentPlayer.isNEXT_STEP && LocalPlayer.isNEXT_STEP;
         });
 
@@ -489,35 +467,36 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator MiddleMatch()
     {
+        Debug.LogFormat("C28F27");
         UIMatchManager.instance.SkipTurn_Interactive = false;
         UIMatchManager.instance.setEventSkipTurn(SkipTurnEvent);
 
         yield return StartCoroutine(Next());
-
-        /*
-         * game loop until end match
-         */
+        int i = 0; 
         do
         {
+            Debug.LogFormat("C28F27 {0} times", ++i);
             yield return StartCoroutine(BeginRound());
             yield return StartCoroutine(MiddleRound());
             yield return StartCoroutine(EndRound());
         } while(!isEndMatch);
         yield return null;
     }
+
     IEnumerator EndMatch()
     {
-        print(this.debug("End Match"));
+        Debug.Log("C28F14");
         switch(FindMatchSystem.instance.gameMode)
         {
             case GameMode.Normal:
+                Debug.Log("C28F14-01 Game mode is normal");
                 yield return StartCoroutine(ProvideReward(false));
                 break;
             case GameMode.Rank:
+                Debug.Log("C28F14-02 Game mode is rank");
                 yield return StartCoroutine(ProvideReward(true));
                 break;
         }
-
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("GameScene");
         yield return null;
@@ -531,38 +510,24 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator BeginRound()
     {
-        /*/ 
-         * round number increase
-         * reset round attribute
-         * switch tokken
-         * switch turn
-         * draw 1 card for all player and increase mana
-         * start event start round
-         /*/
-
-
+        Debug.LogFormat("C28F7");
         round = round + 1; //increase round number
-
-
-        print(this.debug($"Begin Round {round}", new
-        {
-            round
-        }));
-
+        Debug.LogFormat("C28F7 Begin Round: {0}", round);
         gamePhase = GamePhase.Normal; //set game phase to defaut
-
-        print(this.debug("Local side", new
-        {
-            MatchManager.instance.localPlayerSide
-        }));
 
         if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
+            Debug.LogFormat("C28F7-01 Local side is blue player");
             yield return StartCoroutine(DrawPhase(1, bluePlayer));
         }
         else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
         {
+            Debug.LogFormat("C28F7-02 Local side is red player");
             yield return StartCoroutine(DrawPhase(1, redPlayer));
+        }
+        else
+        {
+            Debug.LogFormat("C28F7-03 Local side is not yet");
         }
 
         //provide Mana
@@ -571,49 +536,29 @@ public class MatchManager : MonoBehaviourPunCallbacks
         SetLimitMP(1, bluePlayer);
         SetLimitMP(1, redPlayer);
 
-
-        print(this.debug("Change Tokken at new round", new
-        {
-            round
-        }));
-        /*
-         * at the first round not change tokken by using default tokken (Blue attack first)
-         * at the another round when new round then 2 player change tokken
-         */
         if(round > 1)
-            ChangeToken();
-
-        /*
-         * in new round, the player have tokken attack is the player get turn first
-         */
-        print(this.debug("Set Player get first turn before", new
         {
-            round,
-            turnPresent,
-            bluePlayerTokken = (Enum.GetName(typeof(GameTokken), bluePlayer.tokken))
-        }));
+            Debug.LogFormat("C28F7-04 Change Token")
+            ChangeToken();
+        }
+
+        Debug.LogFormat("C28F7 Set Player get first TURN BEFORE include round: {0}, turnPresent: {1}", round, turnPresent);
 
         this.turnPresent = bluePlayer.tokken == GameTokken.Attack ? K_Player.K_PlayerSide.Blue : K_Player.K_PlayerSide.Red;
 
-        print(this.debug("Set Player get first turn after", new
-        {
-            round,
-            turnPresent,
-            bluePlayerTokken = (Enum.GetName(typeof(GameTokken), bluePlayer.tokken))
-        }));
+        Debug.LogFormat("C28F7 Set Player get first TURN AFTER include round: {0}, turnPresent: {1}", round, turnPresent);
 
         UIMatchManager.instance.ChangeTokken();
-
 
         SetRightToAttack();
         if(!AttributeGained.ContainsKey(round))
         {
+            Debug.LogFormat("C28F7-05")
             {
                 AttributeGained.Add(round, new List<string>());
             }
         }
 
-        //TODO: EVENT START ROUND
         this.PostEvent(EventID.OnStartRound, this);
     }
     /// <summary>
@@ -622,11 +567,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator MiddleRound()
     {
-        print(this.debug());
-        //get frist turn 
+        Debug.Log("C28F28");
         yield return StartCoroutine(TurnProcess());
-        print(this.debug("End Middle round"));
-
     }
     /// <summary>
     /// end a round
@@ -634,10 +576,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator EndRound()
     {
+        Debug.Log("C28F15");
         this.PostEvent(EventID.OnEndRound, this);
         yield return StartCoroutine(EffectManager.Instance.ExecuteOnEndRound(this));
         //TODO: Event end round
-        print(this.debug());
         yield return null;
     }
     #endregion
@@ -651,15 +593,18 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator TurnProcess()
     {
+        Debug.LogFormat("C28F67");
+        int i= 0;
         do
         {
+            Debug.LogFormat("C28F67 excute do while i = ", ++i);
             yield return StartCoroutine(StartTurn());
             yield return StartCoroutine(EndTurn());
             print(this.debug(null, new
             {
                 redSkip = redPlayer.isSkipTurn,
                 blueSkip = bluePlayer.isSkipTurn
-            }));
+            })); ;
         } while(!isNextRound() && !isEndMatch); //run until 2 player skip turn or end match
         ResetSkipTurn();
         yield return null;
@@ -667,20 +612,20 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     private bool isNextRound()
     {
+        Debug.LogFormat("C28F23");
+        Debug.LogFormat("C28F23 redPlayer is Skip Turn {0}, bluePlayer is skip Turn: {1}", redPlayer.isSkipTurn, bluePlayer.isSkipTurn);
         return redPlayer.isSkipTurn && bluePlayer.isSkipTurn;
     }
 
     IEnumerator StartTurn()
     {
-        /*
-         * SetUp UI for player
-         */
-        if(localPlayerSide.Equals(turnPresent))
-        {
-            //UIMatchManager.instance.Turn = "Your Turn";
-            //UIMatchManager.instance.GetACT_SkipTurn.interactable = true;
+        Debug.LogFormat("C28F60");
+        Debug.LogFormat("C28F60 local player side is ", localPlayerSide);
+        Debug.LogFormat("C28F60 turnPresent is ", turnPresent);
 
-            // SFX: Your Turn
+        if (localPlayerSide.Equals(turnPresent))
+        {
+            Debug.LogFormat("C28F60-01 local Player Side equal turn present");
             SoundManager.instance.PlayYourTurn();
             UIMatchManager.instance.Turn(turnPresent);
             UIMatchManager.instance.SkipTurn_Interactive = true;
@@ -688,23 +633,18 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            //UIMatchManager.instance.Turn = "Opponent turn";
-            //UIMatchManager.instance.GetACT_SkipTurn.interactable = false;
+            Debug.LogFormat("C28F60-02 local Player Side not equal turn present");
             UIMatchManager.instance.Turn(turnPresent);
             UIMatchManager.instance.SkipTurn_Interactive = false;
             UIMatchManager.instance.PrintopponnetTurn();
-
         }
-        //TODO: check player can be summon or use card
-        //TODO: Player can attack
-
-        //check player can summon card
         this.PostEvent(EventID.OnStartTurn, this);
         yield return StartCoroutine(WaitUntilPlayerSwitchTurn());
     }
 
     IEnumerator EndTurn()
     {
+        Debug.Log("C28F16");
         yield return null;
     }
 
@@ -720,6 +660,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     IEnumerator DrawPhase(int amount, CardPlayer player)
     {
+        Debug.LogFormat("C28F12");
         object[] datas = new object[] { amount, player.photonView.ViewID };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         var result = PhotonNetwork.RaiseEvent((byte)RaiseEvent.DRAW_CARD_EVENT, datas, raiseEventOptions, SendOptions.SendUnreliable);
@@ -728,16 +669,15 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     IEnumerator AttackAndDefensePhase()
     {
-        print(this.debug("Attack And Defense Phase"));
+        Debug.Log("C28F2");
         var AttackPlayer = GetAttackPlayer();
         var DefensePlayer = GetDefensePlayer();
-
+        Debug.LogFormat("C28F2 Get AttackPlayer fightZones : {0}, Get DefensePlayer fightZones: {1}", AttackPlayer.fightZones, DefensePlayer.fightZones);
         yield return StartCoroutine(AttackZoneOpposite(AttackPlayer.fightZones, DefensePlayer.fightZones));
         yield return StartCoroutine(ClearAttackField(localPlayerSide));
         SetSkipAction();
         gamePhase = GamePhase.Normal;
         this.PostEvent(EventID.EndAttackAndDefensePhase, this);
-
         yield return null;
     }
     #endregion
@@ -751,7 +691,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     public CardPlayer GetDefensePlayer()
     {
+        Debug.LogFormat("C28F20");
         CardPlayer DefensePlayer = redPlayer.tokken == GameTokken.Defend ? redPlayer : bluePlayer;
+        Debug.LogFormat("C28F20 Defense Player is {0}", DefensePlayer);
         return DefensePlayer;
     }
 
@@ -761,7 +703,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     public CardPlayer GetAttackPlayer()
     {
+        Debug.LogFormat("C28F18");
         CardPlayer AttackPlayer = redPlayer.tokken == GameTokken.Attack ? redPlayer : bluePlayer;
+        Debug.LogFormat("C28F18 Attack Player is {0}", AttackPlayer);
         return AttackPlayer;
     }
 
@@ -771,10 +715,18 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     public CardPlayer getCurrenPlayer()
     {
-        if(turnPresent == K_PlayerSide.Red)
+        Debug.LogFormat("C28F19");
+        Debug.LogFormat("C28F19 turnPresent is {0}", turnPresent);
+        if (turnPresent == K_PlayerSide.Red)
+        {
+            Debug.LogFormat("C28F19-01 turnPresent is red: ", turnPresent == K_PlayerSide.Red);
             return redPlayer;
-
-        return bluePlayer;
+        }
+        else
+        {
+            Debug.LogFormat("C28F19-02 turnPresent is blue: ", turnPresent == K_PlayerSide.Blue);
+            return bluePlayer;
+        }
     }
 
 
@@ -783,10 +735,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void PlayerSetTokken()
     {
-        print(this.debug());
+        Debug.LogFormat("C28F42");
         //check who is current player then set the tokken attack to the player 
         if(bluePlayer != null && redPlayer != null)
         {
+            Debug.LogFormat("C28F42-01 Set token success");
             bluePlayer.tokken = GameTokken.Attack; //blue player alway set attack tokken first
             redPlayer.tokken = GameTokken.Defend;
             bluePlayer.isAttackAvaliable = true;
@@ -794,13 +747,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            print(this.debug("Set tokken fail", new
-            {
-                isBluePlayerValid = bluePlayer != null,
-                isRedPlayerValid = redPlayer != null
-            }));
+            Debug.LogFormat("C28F42-02 Set token fail");
         }
-
     }
 
     /// <summary>
@@ -808,31 +756,17 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void ChangeToken()
     {
-        print(this.debug("Before change tokken", new
-        {
-            blueTokken = Enum.GetName(typeof(GameTokken), bluePlayer.tokken),
-            redTokken = Enum.GetName(typeof(GameTokken), redPlayer.tokken)
-        }));
+        Debug.LogFormat("C28F8");
         if(bluePlayer != null && redPlayer != null)
         {
+            Debug.LogFormat("C28F8-01 bluePlayer and redPlayer exist, start change Token");
             ((bluePlayer.tokken, bluePlayer.isAttackAvaliable), (redPlayer.tokken, redPlayer.isAttackAvaliable)) = bluePlayer.tokken == GameTokken.Attack ? ((GameTokken.Defend, false), (GameTokken.Attack, true)) : ((GameTokken.Attack, true), (GameTokken.Defend, false));
-            print(this.debug("After change tokken", new
-            {
-                blueTokken = Enum.GetName(typeof(GameTokken), bluePlayer.tokken),
-                redTokken = Enum.GetName(typeof(GameTokken), redPlayer.tokken)
-            }));
-
             UIMatchManager.instance.ChangeTokken();
         }
         else
         {
-            print(this.debug("change tokken fail", new
-            {
-                isBluePlayerValid = bluePlayer != null,
-                isRedPlayerValid = redPlayer != null
-            }));
+            Debug.LogFormat("C28F8-02 change tokken fail");
         }
-
     }
 
     /// <summary>
@@ -841,12 +775,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     private IEnumerator WaitUntilPlayerSwitchTurn()
     {
+        Debug.LogFormat("C28F68");
         print(this.debug("Waiting player Action"));
         yield return new WaitUntil(() => ActionInTurn == PlayerAction.SwitchTurn || isEndMatch);
-        print(this.debug("Player Action", new
-        {
-            PlayerActionName = ActionInTurn.ToString()
-        }));
+        Debug.LogFormat("C28F68 Player Action {0}", PlayerActionName = ActionInTurn.ToString());
         ActionInTurn = PlayerAction.Normal;
     }
     #endregion
@@ -860,19 +792,23 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public void SetLimitHP(int amount, CardPlayer cardPlayer)
     {
-        //Provide HP Step
+        Debug.LogFormat("C28F50");
+        Debug.LogFormat("C28F50 card player is {0}, limit hp is {1}", cardPlayer.hp.Limit);
         cardPlayer.hp.Limit = amount;
     }
 
     public void SetLimitMP(int amount, CardPlayer cardPlayer)
     {
-        //Provide HP Step
+        Debug.LogFormat("C28F51");
+        Debug.LogFormat("C28F51 card player is {0}, limit mana is {1}", cardPlayer.mana.Limit);
         cardPlayer.mana.Limit += amount;
     }
 
     void ProvideHP(int amount, CardPlayer cardPlayer)
     {
+        Debug.LogFormat("C28F43");
         cardPlayer.hp.Number += amount;
+        Debug.LogFormat("C28F43 Hp of {0} is {1}", cardPlayer, cardPlayer.hp.Number);
     }
     /// <summary>
     /// Provide MP for player
@@ -880,129 +816,185 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     void ProvideMP(int amount, CardPlayer cardPlayer)
     {
+        Debug.LogFormat("C28F44");
         cardPlayer.mana.Number = cardPlayer.mana.Limit + amount;
-
+        Debug.LogFormat("C28F44 Mana of {0} is {1}", cardPlayer, cardPlayer.mana.Number);
     }
     #endregion
 
     #region Function with resource for player
     IEnumerator ProvideReward(bool isRanked)
     {
-        print("ProvideReward");
+        Debug.LogFormat("C28F45");
         string rewardWinRankedID = "B1";
         string rewardWinNormalID = "B2";
         string rewardLoseRankedID = "B1.1";
         string rewardLoseNormalID = "B2.2";
         string rewardID = "";
 
-        print(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloBlue].ToString());
-        print(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloRed].ToString());
-
+        Debug.LogFormat("C28F45 Elo of Blue: {0}", PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloBlue].ToString());
+        Debug.LogFormat("C28F45 Elo of Red: {0}", PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloRed].ToString());
 
         int eloBlue = Int32.Parse(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloBlue].ToString());
         int eloRed = Int32.Parse(PhotonNetwork.CurrentRoom.CustomProperties[K_Player.EloRed].ToString());
 
         if(isBlueWin)
         {
-            if(localPlayerSide.Equals(K_PlayerSide.Blue)) //win
+            Debug.LogFormat("C28F45-01 Blue win");
+            if (localPlayerSide.Equals(K_PlayerSide.Blue)) //win
             {
-                switch(FindMatchSystem.instance.gameMode)
+                Debug.LogFormat("C28F45-01-01 Local Player Side is Blue Win");
+                switch (FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
+                        Debug.LogFormat("C28F45-01-01-01 Game mode is Normal");
                         rewardID = rewardWinNormalID;
+                        Debug.LogFormat("C28F45-01-01-01 rewardID is {0}", rewardID);
                         break;
                     case GameMode.Rank:
+                        Debug.LogFormat("C28F45-01-01-02 Game mode is Rank");
                         rewardID = rewardWinRankedID;
                         PlayfabManager.instance.CalElo(true, eloBlue, eloRed);
+                        Debug.LogFormat("C28F45-01-01-02 rewardID is {0}", rewardID);
                         break;
                 }
             }
             else if(localPlayerSide.Equals(K_PlayerSide.Red)) //lose
             {
-                switch(FindMatchSystem.instance.gameMode)
+                Debug.LogFormat("C28F45-01-02 Local Player Side is Red Lose");
+                switch (FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
+                        Debug.LogFormat("C28F45-01-02-01 Game mode is Normal");
                         rewardID = rewardLoseNormalID;
+                        Debug.LogFormat("C28F45-01-02-01 rewardID is {0}", rewardID);
                         break;
 
                     case GameMode.Rank:
+                        Debug.LogFormat("C28F45-01-02-02 Game mode is Rank");
                         rewardID = rewardLoseRankedID;
                         PlayfabManager.instance.CalElo(false, eloRed, eloBlue);
+                        Debug.LogFormat("C28F45-01-02-02 rewardID is {0}", rewardID);
                         break;
                 }
+            }
+            else
+            {
+                Debug.LogFormat("C28F45-01-03 Undefinition");
             }
         }
         else if(isRedWin)
         {
-            if(localPlayerSide.Equals(K_PlayerSide.Blue)) //lose
+            Debug.LogFormat("C28F45-02 Red win");
+            if (localPlayerSide.Equals(K_PlayerSide.Blue)) //lose
             {
-                switch(FindMatchSystem.instance.gameMode)
+                Debug.LogFormat("C28F45-02-01 Local Player Side is Blue Lose", localPlayerSide);
+                switch (FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
+                        Debug.LogFormat("C28F45-02-01-01 Game mode is Normal");
                         rewardID = rewardLoseNormalID;
+                        Debug.LogFormat("C28F45-02-01-01 rewardID is {0}", rewardID);
                         break;
                     case GameMode.Rank:
+                        Debug.LogFormat("C28F45-02-01-02 Game mode is Rank");
                         rewardID = rewardLoseRankedID;
                         PlayfabManager.instance.CalElo(false, eloBlue, eloRed);
+                        Debug.LogFormat("C28F45-02-01-02 rewardID is {0}", rewardID);
                         break;
                 }
             }
             else if(localPlayerSide.Equals(K_PlayerSide.Red)) //win
             {
-                switch(FindMatchSystem.instance.gameMode)
+                Debug.LogFormat("C28F45-02-02 Local Player Side is Red Win", localPlayerSide);
+                switch (FindMatchSystem.instance.gameMode)
                 {
                     case GameMode.Normal:
+                        Debug.LogFormat("C28F45-02-02-01 Game mode is Normal");
                         rewardID = rewardWinNormalID;
+                        Debug.LogFormat("C28F45-02-02-01 rewardID is {0}", rewardID);
                         break;
                     case GameMode.Rank:
+                        Debug.LogFormat("C28F45-02-02-02 Game mode is Rank");
                         rewardID = rewardWinRankedID;
                         PlayfabManager.instance.CalElo(true, eloRed, eloBlue);
+                        Debug.LogFormat("C28F45-02-02-02 rewardID is {0}", rewardID);
                         break;
                 }
             }
+            else
+            {
+                Debug.LogFormat("C28F45-02-03 Undefinition");
+            }
+        }
+        else
+        {
+            Debug.LogFormat("C28F45-03 Undefinition");
         }
 
         if(rewardID != "")
         {
+            Debug.LogFormat("C28F45-04 rewardID = {0}", rewardID);
             StartCoroutine(PlayfabManager.instance.BuyItems(catalog: "Reward", storeId: "BS1", new List<ItemPurchaseRequest>()
             {
                 new ItemPurchaseRequest() {ItemId = rewardID, Quantity = 1}
             }, currency: "MC"));
         }
+        else
+        {
+            Debug.LogFormat("C28F45-05 rewardID is null, rewardID is {0}", rewardID);
+        }
 
         //set UI
-        if(localPlayerSide.Equals(K_PlayerSide.Blue))
+        if (localPlayerSide.Equals(K_PlayerSide.Blue))
         {
+            Debug.LogFormat("C28F45-06 Set UI of Blue");
             yield return StartCoroutine(UIMatchManager.instance.setResultMatch(isBlueWin, isRanked, 2));
         }
         else if(localPlayerSide.Equals(K_PlayerSide.Red))
         {
+            Debug.LogFormat("C28F45-07 Set UI of Red");
             yield return StartCoroutine(UIMatchManager.instance.setResultMatch(isRedWin, isRanked, 2));
         }
-
+        else
+        {
+            Debug.LogFormat("C28F45-08 Undefinition");
+        }
         yield return null;
     }
     public void ResultMatch(WinCondition winCondition)
     {
+        Debug.LogFormat("C28F47");
         if(!isEndMatch)
         {
-            print("Wincondition");
+            Debug.LogFormat("C28F47-01 Wincondition is {0}", winCondition);
             isEndMatch = true;
             switch(winCondition)
             {
                 case WinCondition.EnemyLoseAllHp:
-                    if(redPlayer.hp.Number <= 0)
+                    Debug.LogFormat("C28F47-01-01 Wincondition is enemyLoseAllHp");
+                    if (redPlayer.hp.Number <= 0)
                     {
+                        Debug.LogFormat("C28F47-01-01-01 Hp of red < 0 is {0}", redPlayer.hp.Number);
                         isBlueWin = true;
                         isRedWin = false;
                     }
                     else if(bluePlayer.hp.Number <= 0)
                     {
+                        Debug.LogFormat("C28F47-01-01-02 Hp of blue < 0 is {0}", bluePlayer.hp.Number);
                         isBlueWin = false;
                         isRedWin = true;
                     }
+                    else
+                    {
+                        Debug.LogFormat("C28F47-01-01-03 Hp of blue > 0 is {0} or hp of red > 0", bluePlayer.hp.Number, redPlayer.hp.Number);
+                    }
                     break;
             }
+        }
+        else
+        {
+            Debug.LogFormat("C28F47-02 isEndMatch is {0}", isEndMatch);
         }
     }
     #endregion
@@ -1014,48 +1006,54 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <param name="obj"></param>
     private void NetworkingClient_EventReceived(EventData obj)
     {
-        //object[] datas = null;
+        Debug.LogFormat("C28F33");
         var args = obj.GetData();
-        print(this.debug("Event process", new
-        {
-            eventName = Enum.GetName(typeof(RaiseEvent), (byte)obj.Code),
-            code = obj.Code
-        }));
+        
         switch((RaiseEvent)obj.Code)
         {
             case RaiseEvent.NEXT_STEP:
                 {
-                    if(args.senderPlayerSide != localPlayerSide)
+                    Debug.LogFormat("C28F33-01 Raise Event is next step");
+                    if (args.senderPlayerSide != localPlayerSide)
                     {
+                        Debug.LogFormat("C28F33-01-01 sender Player Side != local Player Side");
                         StartCoroutine(OpponentPlayer.NextStepAction(args.isNEXT_STEP));
+                    }
+                    else
+                    {
+                        Debug.LogFormat("C28F33-01-02 sender Player Side == local Player Side");
                     }
                     break;
                 }
             case RaiseEvent.SKIP_TURN:
                 {
+                    Debug.LogFormat("C28F33-02 Raise Event is Skip turn");
                     SkipTurnAction(args.playerSide as string);
                     SwitchTurnAction();
                     break;
                 }
             case RaiseEvent.SWITCH_TURN:
                 {
+                    Debug.LogFormat("C28F33-03 Raise Event is Switch turn");
                     SwitchTurnAction();
                     break;
                 }
             case RaiseEvent.ATTACK:
                 {
+                    Debug.LogFormat("C28F33-04 Raise Event is attack");
                     StartCoroutine(AttackAction(args.playerSide as string));
-
                     break;
                 }
             case RaiseEvent.DEFENSE:
                 {
+                    Debug.LogFormat("C28F33-05 Raise Event is defense");
                     StartCoroutine(DefenseAction(args.playerSide as string));
                     break;
                 }
             case RaiseEvent.SUMMON_MONSTER:
                 {
-                    print(this.debug("Start Summon Monster Execute", new
+                    Debug.LogFormat("C28F33-06 Raise Event is Summon monster");
+                    print(this.debug("C28F33-06 Start Summon Monster Execute", new
                     {
                         args.zoneID,
                         args.cardID,
@@ -1063,22 +1061,24 @@ public class MatchManager : MonoBehaviourPunCallbacks
                         args.cardPosition,
                         args.isSpecialSummon
                     }));
-
                     var zoneRequest = args.playerSide == K_PlayerSide.Blue ? bluePlayer.summonZones.Find(a => a.photonView.ViewID.Equals(args.zoneID)) : redPlayer.summonZones.Find(a => a.photonView.ViewID.Equals(args.zoneID));
-                    print(this.debug("Zone request", new
+                    print(this.debug("C28F33-06 Zone request", new
                     {
                         zoneRequest = zoneRequest
                     }));
 
                     if(zoneRequest != null)
                     {
+                        Debug.LogFormat("C28F33-06-01 zone Request not equal null");
                         MonsterCard card = null;
                         switch((CardPosition)args.cardPosition)
                         {
                             case CardPosition.InDeck:
+                                Debug.LogFormat("C28F33-06-01-01 card position in deck");
                                 card = zoneRequest.player.deck.PeekWithPhoton(args.cardID);
                                 break;
                             case CardPosition.InHand:
+                                Debug.LogFormat("C28F33-06-01-02 card position in hand");
                                 card = zoneRequest.player.hand.PeekWithPhoton(args.cardID);
                                 break;
                             case CardPosition.InFightField:
@@ -1092,54 +1092,55 @@ public class MatchManager : MonoBehaviourPunCallbacks
                             case CardPosition.InTriggerSpellField:
                                 break;
                             default:
+                                Debug.LogFormat("C28F33-06-01-03 card position is defind");
                                 break;
                         }
 
-                        /*zoneRequest.player.hand.GetAllCardInHand().Find(a => a.photonView.ViewID.Equals(args.cardID));*/
-                        print(this.debug("Card selected", new
-                        {
-                            card
-                        }));
+                        Debug.LogFormat("C28F33-06-01 card is {0}", card);
 
-                        if(card != null)
+                        if (card != null)
                         {
-                            print(this.debug("", new
+                            print(this.debug("C28F33-06-01-04", new
                             {
                                 zoneid = zoneRequest.photonView.ViewID,
                                 nameCard = card.ToString()
                             }));
                             ExecuteSummonCardAction(zoneRequest, card, args.isSpecialSummon);
-
                         }
                         else
                         {
-                            print(this.debug("Card null", card));
+                            Debug.LogFormat("C28F33-06-01-05 Card null");
                         }
-
                     }
                     else
                     {
-                        print(this.debug("Zone null", zoneRequest));
+                        Debug.LogFormat("C28F33-06-02 Zone null, zone request is {0}", zoneRequest);
                     }
-                    print(this.debug("End Summon Monster Execute"));
                     break;
                 }
             case RaiseEvent.MoveCardInTriggerSpell:
                 {
+                    Debug.LogFormat("C28F33-07 Raise Event is Move Card in Trigger Spell");
                     CardPlayer player = args.playerSide == K_PlayerSide.Red ? redPlayer : bluePlayer;
-                    if(player != null)
+                    Debug.LogFormat("C28F33-07 player is {0}", player);
+                    if (player != null)
                     {
+                        Debug.LogFormat("C28F33-07-01 player diff null");
                         object card = player.hand.PeekWithPhoton(args.cardID);
-                        /*zoneRequest.player.hand.GetAllCardInHand().Find(a => a.photonView.ViewID.Equals(args.cardID));*/
 
                         if(card != null && card is SpellCard spellCard)
                         {
+                            Debug.LogFormat("C28F33-07-01-01 card is {0}, spellCard is {1}", card, spellCard);
                             StartCoroutine(MoveCardInTriggerSpellAction(player, spellCard));
                         }
                         else
                         {
-                            print(this.debug("Card null", card));
+                            Debug.LogFormat("C28F33-07-01-02 card is null {0}", card);
                         }
+                    }
+                    else
+                    {
+                        Debug.LogFormat("C28F33-07-02 player not diff null");
                     }
                     break;
                 }
@@ -1148,15 +1149,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public void ExecuteSummonCardAction(SummonZone zoneRequest, MonsterCard card, bool isSpecialSummon)
     {
-        print(this.debug("execute summon ", new
-        {
-            zoneRequest,
-            card,
-            card.CardPlayer.side,
-            isSpecialSummon
-        }));
+        Debug.LogFormat("C28F17");
         if(zoneRequest != null && card != null)
         {
+            Debug.LogFormat("C28F17-01 zoneRequest: {0}, card: {1}, isSpecialSummon: {2}", zoneRequest, card, isSpecialSummon);
             StartCoroutine(SummonCardAction(zoneRequest, card, isSpecialSummon));
         }
     }
@@ -1169,57 +1165,52 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     public bool SummonCardEvent(SummonArgs args)
     {
-        print(this.debug("Summon card to summon zone", new
+        Debug.LogFormat("C28F63");
+        print(this.debug("C28F63 Summon card to summon zone", new
         {
             args.card,
             isFilled = args.summonZone.isFilled(),
             args.cardPosition,
             args.isSpecialSummon
         }));
-        //player select card -> player select summon field -> invoke summon even
-        //TODO: check condition summon
-        //TODO: summon
-        //TODO: raise even for oppoence player to update UI
         if(args.card == null || args.summonZone.isFilled())
         {
-            print(this.debug("not valid card or summon zone is fill", new
+            print(this.debug("C28F63-01 not valid card or summon zone is fill", new
             {
                 card = args.card,
                 isFill = args.summonZone.isFilled()
             }));
             return false;
         }
-        print(this.debug("check enough mana to summon", new
+        else
         {
-            args.card.Cost,
-            args.summonZone.player.mana.Number
-        }));
+            print(this.debug("C28F63-02 valid card or summon zone is fill", new
+            {
+                card = args.card,
+                isFill = args.summonZone.isFilled()
+            }));
+        }
+
         //tru mana
         if(!args.isSpecialSummon && args.card.Cost > args.summonZone.player.mana.Number)
         {
-            print(this.debug("not enough mana to summon"));
+            Debug.LogFormat("C28F63-03 not enough mana to summon");
             return false;
+        }
+        else
+        {
+            Debug.LogFormat("C28F63-04 enough mana to summon");
         }
         // ID zone, ID cardTarget
         object[] datas = new object[] { args.summonZone.photonView.ViewID, args.card.photonView.ViewID, args.summonZone.player.side, (int)args.cardPosition, args.isSpecialSummon ? 1 : 0 };
-        print(this.debug("zone and target id", new
+        print(this.debug("C28F63 zone and target id", new
         {
             zoneID = args.summonZone.photonView.ViewID,
-            //args.card.photonView.ViewID,
             cardID = args.card.photonView.ViewID,
             playerSide = args.summonZone.player.side
         }));
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent((byte)RaiseEvent.SUMMON_MONSTER, datas, raiseEventOptions, SendOptions.SendUnreliable);
-
-        print(this.debug("Photon RaiseEvent SUMMON_MONSTER", new
-        {
-            args.summonZone.photonView.ViewID
-        }));
-
-
-        //await OnClickSwitchTurnCallback(false, OnClickSwitchTurn);
-
         return true;
     }
     /// <summary>
@@ -1230,25 +1221,23 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     public IEnumerator SummonCardAction(SummonZone zoneRequest, MonsterCard card, bool isSpecialSummon)
     {
-        print(this.debug());
+        Debug.LogFormat("C28F62");
         card.IsSelected = false;
-        //change card from hand to summon zone 
         card.CardPlayer.hand.RemoveCardFormHand(card);
-        //card.CardPlayer.hand.SortPostionRotationCardInHand();
 
         zoneRequest.SetMonsterCard(card);
         zoneRequest.isSelected = false;
-        if(!isSpecialSummon)
-            zoneRequest.player.mana.Number -= card.Cost;
-        /*
-         * just local player get and excute effect first, after that async player opposite
-         */
-        yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(card));
-
-        print(this.debug("End Summon Monster Action", new
+        if (!isSpecialSummon)
         {
-            card
-        }));
+            Debug.LogFormat("C28F62-01");
+            zoneRequest.player.mana.Number -= card.Cost;
+            Debug.LogFormat("C28F62-01 zoneRequest.player.mana.Number : {0} ", zoneRequest.player.mana.Number);
+        }
+        else
+        {
+            Debug.LogFormat("C28F62-02 is Special Summon is {0}", isSpecialSummon);
+        }
+        yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(card));
         SwitchTurnAction();
     }
     #endregion
@@ -1256,23 +1245,18 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region ATTACK Event - Action
     public void AttackEvent()
     {
-        print("OnclickAttack");
-        if(LocalPlayer.tokken == GameTokken.Attack)
+        Debug.Log("C28F3");
+        if (LocalPlayer.tokken == GameTokken.Attack)
         {
+            Debug.Log("C28F3-01 You can attack");
             object[] datas = new object[] { localPlayerSide };
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             PhotonNetwork.RaiseEvent((byte)RaiseEvent.ATTACK, datas, raiseEventOptions, SendOptions.SendUnreliable);
         }
         else
         {
-            print(this.debug("You can not attack", new
-            {
-                tokken = Enum.GetName(typeof(GameTokken), LocalPlayer.tokken),
-                NumberMonsterInAttackZone = LocalPlayer.fightZones.Where(zone => zone.monsterCard != null)
-            }));
-            ;
+            Debug.Log("C28F3-02 You can not attack");
         }
-        //code raise event
     }
     /// <summary>
     /// Phat dong attack
@@ -1280,7 +1264,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// <param name="playerSide"></param>
     public IEnumerator AttackAction(string playerSide)
     {
-
+        Debug.Log("C28F1");
         yield return StartCoroutine(StartAttackPhase());
         yield return StartCoroutine(EndAttackPhase());
         SwitchTurnAction();
@@ -1288,37 +1272,34 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     private IEnumerator EndAttackPhase()
     {
-        print(this.debug());
+        Debug.Log("C28F13");
         yield return null;
     }
 
     private IEnumerator StartDefendPhase()
     {
+        Debug.Log("C28F59");
         yield return null;
     }
 
     private IEnumerator StartAttackPhase()
     {
-        print(this.debug());
+        Debug.LogFormat("C28F58");
         this.gamePhase = GamePhase.Attack;
         var playerAttack = GetAttackPlayer();
         var playerDefense = GetDefensePlayer();
 
         playerAttack.playerAction = PlayerAction.Attack;
         playerAttack.isAttackAvaliable = false;
-
-        /*
-         * when attack Event have been processed 
-         * set denfense Event to local player
-         */
         if(LocalPlayer.tokken == GameTokken.Defend)
         {
-            /*
-             * Change the skip button to defense button
-             */
+            Debug.LogFormat("C28F58-01 local player token is defense");
             SetDefenseAction();
         }
-        //yield return new WaitUntil(() => gamePhase == GamePhase.Normal);
+        else 
+        {
+            Debug.LogFormat("C28F58-02 local player token is {0}", _LocalPlayer.tokken);
+        }
         yield return StartCoroutine(EffectManager.Instance.None()); //effect
         SwitchTurnEvent();
         yield return null;
@@ -1329,8 +1310,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region DEFEND Event - Action
     public void DefenseEvent()
     {
-        print("OnclickDefense");
-
+        Debug.LogFormat("C28F11");
         object[] datas = new object[] { localPlayerSide };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent((byte)RaiseEvent.DEFENSE, datas, raiseEventOptions, SendOptions.SendUnreliable);
@@ -1338,8 +1318,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     public IEnumerator DefenseAction(string playerSide)
     {
+        Debug.LogFormat("C28F10");
         yield return StartCoroutine(AttackAndDefensePhase());
-
         SetSkipAction();
     }
     #endregion
@@ -1347,7 +1327,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region SWITCH_TURN Event - Action
     private void SwitchTurnEvent()
     {
-        print(this.debug("PhotonNetwork RaiseEvent SWITCH_TURN"));
+        Debug.LogFormat("C28F65");
         object[] datas = new object[] { };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent((byte)RaiseEvent.SWITCH_TURN, datas, raiseEventOptions, SendOptions.SendUnreliable);
@@ -1357,27 +1337,22 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void SwitchTurnAction()
     {
-        print(this.debug("Before turn change", new
+        Debug.LogFormat("C28F64");
+        print(this.debug("C28F64 Before turn change", new
         {
             this.localPlayerSide,
             turnPresent,
             round
         }));
+
         turnPresent = (turnPresent == K_PlayerSide.Blue ? K_PlayerSide.Red : K_PlayerSide.Blue);
-        print(this.debug("Affter turn change", new
+        print(this.debug("C28F64 Affter turn change", new
         {
             this.localPlayerSide,
             turnPresent,
             round
         }));
 
-
-        print(this.debug(localPlayerSide, new
-        {
-            islocalPlayerSideInAttack = localPlayerSide.Equals(turnPresent),
-            turnPresent,
-            tokken = Enum.GetName(typeof(GameTokken), LocalPlayer.tokken)
-        }));
         ActionInTurn = PlayerAction.SwitchTurn;
     }
     #endregion
@@ -1385,24 +1360,29 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region SKIP_TURN Event - Action
     public void SkipTurnEvent()
     {
-        print(this.debug($"{LocalPlayer.side} click skip turn"));
+        Debug.LogFormat("C28F55");
+        Debug.LogFormat("C28F55 {0} click skip turn", LocalPlayer.side);
         object[] datas = new object[] { localPlayerSide };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent((byte)RaiseEvent.SKIP_TURN, datas, raiseEventOptions, SendOptions.SendUnreliable);
     }
     void SkipTurnAction(string playerSide)
     {
-        print(this.debug("Skip Turn", new
-        {
-            playerSide
-        }));
+        Debug.LogFormat("C28F56");
+        Debug.LogFormat("C28F56 player Side is {0}", playerSide);
         if(playerSide.Equals(K_PlayerSide.Blue))
         {
+            Debug.LogFormat("C28F56-01 player is Blue");
             bluePlayer.isSkipTurn = true;
         }
         else if(playerSide.Equals(K_PlayerSide.Red))
         {
+            Debug.LogFormat("C28F56-02 player is Red");
             redPlayer.isSkipTurn = true;
+        }
+        else
+        {
+            Debug.LogFormat("C28F56-03 player is unidentified");
         }
     }
     #endregion
@@ -1412,38 +1392,67 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region *LOCAL* Event - Action
     private void MoveCardToSummonZoneEvent(string playerSide)
     {
+        Debug.LogFormat("C28F32");
         if(playerSide.Equals(localPlayerSide))
         {
-            if(localPlayerSide.Equals(K_PlayerSide.Blue))
+            Debug.LogFormat("C28F32-01 Local Player Side is {0}", localPlayerSide);
+            if (localPlayerSide.Equals(K_PlayerSide.Blue))
             {
+                Debug.LogFormat("C28F32-01-01 local Player Side is Blue");
                 int count = bluePlayer.fightZones.FindAll(a => a.monsterCard != null).Count;
-                print("Number Card in Fight Field: " + count);
-                if(count == 0)
+                Debug.LogFormat("C28F32-01-01 Number Card in Fight Field BLUE: {0} ", count);
+                if (count == 0)
                 {
+                    Debug.LogFormat("C28F32-01-01-01 Number Card in Fight Field BLUE: 0 ");
                     SetSkipAction();
+                }
+                else
+                {
+                    Debug.LogFormat("C28F32-01-01-02 Number Card in Fight Field BLUE: {0}", count);
                 }
             }
             else if(localPlayerSide.Equals(K_PlayerSide.Red))
             {
+                Debug.LogFormat("C28F32-01-02 local Player Side is Red");
                 int count = redPlayer.fightZones.FindAll(a => a.monsterCard != null).Count;
-                print("Number Card in Fight Field: " + count);
+                Debug.LogFormat("C28F32-01-02 Number Card in Fight Field RED: {0} ", count);
                 if(count == 0)
                 {
+                    Debug.LogFormat("C28F32-01-02-01 Number Card in Fight Field RED: 0 ");
                     SetSkipAction();
                 }
+                else
+                {
+                    Debug.LogFormat("C28F32-01-02-02 Number Card in Fight Field RED: {0}", count);
+                }
             }
+            else
+            {
+                Debug.LogFormat("C28F32-01-03 local player side not equal red or blue, local player side is {0}", localPlayerSide);
+            }
+        }
+        else
+        {
+            Debug.LogFormat("C28F32-02 player side not equal local player side,player side is {0}, local player side is {1}",playerSide ,localPlayerSide);
         }
     }
 
     private void MoveCardToFightZoneEvent(string playerSide)
     {
+        Debug.LogFormat("C28F31");
         if(playerSide.Equals(localPlayerSide) && isRightToDefense(playerSide))
         {
+            Debug.LogFormat("C28F31-01 playerside is {0} defense", playerSide);
             SetDefenseAction();
         }
         else if(playerSide.Equals(localPlayerSide) && isRightToAttack(playerSide))
         {
+            Debug.LogFormat("C28F31-02 playerside is {0} attack", playerSide);
             SetAttackAction();
+        }
+        else
+        {
+            Debug.LogFormat("C28F31-03 Move Card To Fight Zone FAIL");
         }
     }
     #endregion
@@ -1451,36 +1460,53 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region Functions Check State
     public bool isPlayerTurn(string playerSide)
     {
+        Debug.LogFormat("C28F24");
         if(turnPresent.Equals(playerSide))
         {
+            Debug.LogFormat("C28F24-01 equal turnPresent: {0}, playerside: {1}", turnPresent, playerSide);
             return true;
         }
         else
+        {
+            Debug.LogFormat("C28F24-02 Not equal turnPresent: {0}, playerside: {1}", turnPresent, playerSide);
             return false;
+        }
     }
 
     public bool isRightToAttack(string playerSide)
     {
+        Debug.LogFormat("C28F25");
         if(playerSide.Equals(K_PlayerSide.Blue))
         {
+            Debug.LogFormat("C28F25-01 playSide equal blue, playside is: {0}", playerSide);
+            Debug.LogFormat("C28F25-01 bluePlayer.tokken == GameTokken.Attack is {0}, blueplayer.token is: {1}", bluePlayer.tokken == GameTokken.Attack, bluePlayer.tokken);
+            Debug.LogFormat("C28F25-01 bluePlayer.isAttackAvaliable is {0}", bluePlayer.isAttackAvaliable);
             return bluePlayer.tokken == GameTokken.Attack && bluePlayer.isAttackAvaliable;
         }
         else if(playerSide.Equals(K_PlayerSide.Red))
         {
+            Debug.LogFormat("C28F25-02 playSide equal red, playside is: {0}", playerSide);
+            Debug.LogFormat("C28F25-02 redPlayer.tokken == GameTokken.Attack is {0}, redplayer.token is: {1}", redPlayer.tokken == GameTokken.Attack, redPlayer.tokken);
+            Debug.LogFormat("C28F25-02 redPlayer.isAttackAvaliable is {0}", redPlayer.isAttackAvaliable);
             return redPlayer.tokken == GameTokken.Attack && redPlayer.isAttackAvaliable;
         }
-
         return false;
     }
 
     public bool isRightToDefense(string playerSide)
     {
-        if(playerSide.Equals(K_PlayerSide.Blue))
+        Debug.LogFormat("C28F26");
+
+        if (playerSide.Equals(K_PlayerSide.Blue))
         {
+            Debug.LogFormat("C28F26-01 playSide equal blue, playside is: {0}", playerSide);
+            Debug.LogFormat("C28F26-01 bluePlayer.tokken == GameTokken.Defend is {0}, blueplayer.token is: {1}", bluePlayer.tokken == GameTokken.Defend, bluePlayer.tokken);
             return bluePlayer.tokken == GameTokken.Defend;
         }
         else if(playerSide.Equals(K_PlayerSide.Red))
         {
+            Debug.LogFormat("C28F26-02 playSide equal red, playside is: {0}", playerSide);
+            Debug.LogFormat("C28F26-02 redPlayer.tokken == GameTokken.Defend is {0}, redplayer.token is: {1}", redPlayer.tokken == GameTokken.Defend, redPlayer.tokken);
             return redPlayer.tokken == GameTokken.Defend;
         }
 
@@ -1517,21 +1543,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// </summary>
     void SetRightToAttack()
     {
-        print(this.debug(localPlayerSide, new
-        {
-            turnPresent
-        }));
-
-        //if (turnPresent.Equals(K_PlayerSide.Red))
-        //{
-        //    rightAttackRedSide = true;
-        //}
-        //else if (turnPresent.Equals(K_PlayerSide.Blue))
-        //{
-        //    rightAttackBlueSide = true;
-        //}
-
-        print(this.debug("", new
+        Debug.LogFormat("C28F52");
+        print(this.debug("C28F52", new
         {
             turnPresent,
             localPlayerSide
@@ -1539,90 +1552,76 @@ public class MatchManager : MonoBehaviourPunCallbacks
         //UI
         if(LocalPlayer.tokken == GameTokken.Attack)
         {
-            //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Attack";
-            // SFX: Your Attack
+            Debug.LogFormat("C28F52-01 local player Attack");
             UIMatchManager.instance.RightAttack();
             UIMatchManager.instance.PrintYourAttack();
         }
         else
         {
-            //UIMatchManager.instance.RightAttack = $"{LocalPlayer.side} Your Defense";
-            // SFX: Your Defense
+            Debug.LogFormat("C28F52-02 local player Defense");
             UIMatchManager.instance.RightAttack();
             UIMatchManager.instance.PrintYourDefense();
         }
-
-        //if (localPlayerSide.Equals(K_PlayerSide.Blue))
-        //{
-        //    if (rightAttackBlueSide)
-        //    {
-        //        UIMatchManager.instance.RightAttack = "Blue Your Attack";
-        //    }
-        //    else
-        //    {
-        //        UIMatchManager.instance.RightAttack = "Blue Your Defense";
-        //    }
-        //}
-        //else if (localPlayerSide.Equals(K_PlayerSide.Red))
-        //{
-        //    if (rightAttackRedSide)
-        //    {
-        //        UIMatchManager.instance.RightAttack = "Red Your Attack";
-        //    }
-        //    else
-        //    {
-        //        UIMatchManager.instance.RightAttack = "Red Your Defense";
-        //    }
-        //}
-        print(this.debug(null, new
-        {
-            turnPresent
-        }));
     }
 
 
     IEnumerator ClearAttackField(string playerSide)
     {
+        Debug.LogFormat("C28F9");
         yield return new WaitForSeconds(3f);
 
         if(playerSide.Equals(K_PlayerSide.Blue))
         {
-            foreach(FightZone fightZone in bluePlayer.fightZones)
+            Debug.LogFormat("C28F9-01 player side is Blue");
+            foreach (FightZone fightZone in bluePlayer.fightZones)
             {
-                if(fightZone.monsterCard != null && !fightZone.monsterCard.Position.Equals(CardPosition.InGraveyard))
+                Debug.LogFormat("C28F9-01 fight zone of blue player: ", FightZone fightZone in bluePlayer.fightZones);
+                if (fightZone.monsterCard != null && !fightZone.monsterCard.Position.Equals(CardPosition.InGraveyard))
                 {
-                    //int indexFightZone = bluePlayer.fightZones.IndexOf(fightZone);
-                    //int indexSummonZone = indexFightZone;
+                    Debug.LogFormat("C28F9-01-01 BLUEPLAYER The card's fight zone is not in the grave position");
                     SummonZone summonZone = bluePlayer.summonZones.FirstOrDefault(zone => !zone.isFilled() && !zone.isSelected);
-                    if(summonZone != null)
+                    Debug.LogFormat("C28F9-01-01 summon zone of BLUEPLAYER is selected, ", summonZone);
+                    if (summonZone != null)
+                    {
+                        Debug.LogFormat("C28F9-01-01-01 summonZone of BLUEPLAYER is ", summonZone);
                         summonZone.RaiseMoveCardFromAttackFieldToSummonField(fightZone, fightZone.monsterCard);
+                    }
                     else
-                        Debug.LogError(this.debug("not any summon empty"));
-                    //fightZone.monsterCard.MoveToSummonZone(fightZone, bluePlayer.summonZones.ElementAt(indexSummonZone));
+                    {
+                        Debug.LogFormat("C28F9-01-01-02 summonZone of BLUEPLAYER isn't selected");
+                    }
                 }
                 else
                 {
-                    print(this.debug("card is null"));
+                    Debug.LogFormat("C28F9-01-02 BLUEPLAYER card is null");
                 }
             }
         }
         else if(playerSide.Equals(K_PlayerSide.Red))
         {
-            foreach(FightZone fightZone in redPlayer.fightZones)
+            Debug.LogFormat("C28F9-02 player side is Red");
+            foreach (FightZone fightZone in redPlayer.fightZones)
             {
-                if(fightZone.monsterCard != null && !fightZone.monsterCard.Position.Equals(CardPosition.InGraveyard))
+                Debug.LogFormat("C28F9-02 fight zone of red player: ", FightZone fightZone in redPlayer.fightZones);
+                if (fightZone.monsterCard != null && !fightZone.monsterCard.Position.Equals(CardPosition.InGraveyard))
                 {
-                    //int indexFightZone = redPlayer.fightZones.IndexOf(fightZone);
-                    //int indexSummonZone = indexFightZone;
+                    Debug.LogFormat("C28F9-02-01 REDPLAYER The card's fight zone is not in the grave position");
                     SummonZone summonZone = redPlayer.summonZones.FirstOrDefault(zone => !zone.isFilled() && !zone.isSelected);
-                    if(summonZone != null)
+                    Debug.LogFormat("C28F9-02-01 summon zone of REDPLAYER is selected, ", summonZone);
+
+                    if (summonZone != null)
+                    {
+                        Debug.LogFormat("C28F9-02-01-01 summonZone of REDPLAYER is ", summonZone);
                         summonZone.RaiseMoveCardFromAttackFieldToSummonField(fightZone, fightZone.monsterCard);
+                    }
                     else
-                        Debug.LogError(this.debug("not any summon empty"));
+                    {
+                        Debug.LogFormat("C28F9-02-01-02 summonZone of REDPLAYER isn't selected");
+                    }
                 }
                 else
                 {
-                    print(this.debug("card is null"));
+                    Debug.LogFormat("C28F9-02-02 REDPLAYER card is null");
                 }
             }
         }
@@ -1630,67 +1629,62 @@ public class MatchManager : MonoBehaviourPunCallbacks
 
     IEnumerator AttackZoneOpposite(List<FightZone> attackZones, List<FightZone> defenseZones)
     {
+        Debug.LogFormat("C28F4");
         foreach(FightZone attackZone in attackZones)
         {
-            if(attackZone.monsterCard != null)
+            Debug.LogFormat("C28F4 In Foreach FightZone attackZone in attackZones: {0}", FightZone attackZone in attackZones);
+            if (attackZone.monsterCard != null)
             {
+                Debug.LogFormat("C28F4-01 In if attackZone have monsterCard {0}", attackZone.monsterCard);
                 int indexAttackZone = attackZones.IndexOf(attackZone);
                 MonsterCard monsterAttack = attackZone.monsterCard;
 
                 FightZone defenseZone = defenseZones.ElementAt(indexAttackZone);
                 MonsterCard monsterDefense = defenseZone.GetMonsterCard();
 
-                //true if defense zone opposite exist monster card
                 if(monsterDefense != null)
                 {
+                    Debug.LogFormat("C28F4-01-01 In if defense zone have monster card to defense");
                     this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterDefense, monsterAttack));
                     yield return new WaitForSeconds(0.6f);
+
                     monsterAttack.attack(monsterDefense);
-
                     yield return new WaitForSeconds(0.6f);
-
 
                     this.PostEvent(EventID.OnCardAttack, new AnimationAttackArgs(monsterAttack, monsterDefense));
                     yield return new WaitForSeconds(0.6f);
                     monsterDefense.attack(monsterAttack);
                 }
-                else //attack to hp player
+                else
                 {
-                    //animation missing || attack to player
+                    Debug.LogFormat("C28F4-01-02 If denfense zone have not monster card to denfese, monsterAttack will attack player, Start attack player");
                     defenseZone.player.hp.decrease(monsterAttack.Attack);
                 }
-
+            }
+            else
+            {
+                Debug.LogFormat("C28F4-02 In if attackZone have not monsterCard {0}", attackZone.monsterCard);
             }
         }
     }
 
     void SetSkipAction()
     {
-        //UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
-        //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => SkipTurnEvent());
-        //UIMatchManager.instance.TextButton_ACT_SkipTurn = "Skip";
-
+        Debug.LogFormat("C28F53");
         UIMatchManager.instance.removeAllEventSkipTurn();
         UIMatchManager.instance.setEventSkipTurn(SkipTurnEvent);
-
     }
 
     void SetDefenseAction()
     {
-        //UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
-        //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => DefenseEvent());
-        //UIMatchManager.instance.TextButton_ACT_SkipTurn = "Defense";
-
+        Debug.LogFormat("C28F49");
         UIMatchManager.instance.removeAllEventSkipTurn();
         UIMatchManager.instance.setEventDefense(DefenseEvent);
     }
 
     void SetAttackAction()
     {
-        //UIMatchManager.instance.GetACT_SkipTurn.onClick.RemoveAllListeners();
-        //UIMatchManager.instance.GetACT_SkipTurn.onClick.AddListener(() => AttackEvent());
-        //UIMatchManager.instance.TextButton_ACT_SkipTurn = "Attack";
-
+        Debug.LogFormat("C28F48")
         UIMatchManager.instance.removeAllEventSkipTurn();
         UIMatchManager.instance.setEventAtk(AttackEvent);
     }
@@ -1699,6 +1693,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void ResetSkipTurn()
     {
+        Debug.LogFormat("C28F46");
         redPlayer.isSkipTurn = false;
         bluePlayer.isSkipTurn = false;
     }
@@ -1707,34 +1702,33 @@ public class MatchManager : MonoBehaviourPunCallbacks
     #region ObserverPattern-Register Function
     public override void OnLeftRoom()
     {
-        //UI_roomID.text = "";
-        print("LeftRoom");
+        Debug.LogFormat("C28F40");
         if(PhotonNetwork.IsConnected)
         {
-            print("Connected");
+            Debug.LogFormat("C28F40-01 Connected");
             PhotonNetwork.LoadLevel("Home");
         }
         else
         {
-            print("Not Connected");
+            Debug.LogFormat("C28F40-02 Not Connected");
         }
     }
 
     public override void OnConnectedToMaster()
     {
-        //PhotonNetwork.JoinLobby();
-        print("OnConnectedToServer");
+        Debug.LogFormat("C28F37");
     }
     #endregion
 
     public void GetPlayerInfo()
     {
-        Debug.Log(this.debug("Players", new
+        Debug.Log("C28F21");
+        Debug.Log(this.debug("C28F21 Players", new
         {
             LocalPlayer,
             OpponentPlayer
         }));
-        Debug.Log(this.debug("LocalPlayer details", new
+        Debug.Log(this.debug("C28F21 LocalPlayer details", new
         {
             LocalPlayer.tokken,
             LocalPlayer.isSkipTurn,
@@ -1743,7 +1737,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
             LocalPlayer.IsSelected,
             LocalPlayer.isNEXT_STEP
         }));
-        Debug.Log(this.debug("OpponentPlayer details", new
+        Debug.Log(this.debug("C28F21 OpponentPlayer details", new
         {
             OpponentPlayer.tokken,
             OpponentPlayer.isSkipTurn,
