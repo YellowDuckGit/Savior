@@ -145,12 +145,16 @@ public class TutorialManager : MonoBehaviour
     public MMF_Player ChooseDeckTutorial;
     public MMF_Player FindMatchTutorial;
 
+    public MMF_Player PlayWithFriend;
+    public MMF_Player PVFInHome;
+
     #endregion
 
     public bool isPlayTutorial;
     public bool isPlayTutorialChain;
     public bool isSkip;
     public bool isNewbie;
+    public bool isPVF;
 
     private void Start()
     {
@@ -395,6 +399,17 @@ public class TutorialManager : MonoBehaviour
 
 
     #region PLay Feedbacks
+    public void PlayPVFInHome()
+    {
+        PVFInHome.PlayFeedbacks();
+        print("PLAY PVF IN HOME TUTORIAL");
+    }
+    public void PlayWithFriendTutorial()
+    {
+        PlayWithFriend.PlayFeedbacks();
+        print("PLAY WITH FRIEND TUTORIAL");
+        isPVF = true;
+    }
     public void PlaySkipTutorial()
     {
         SkipTutorial.PlayFeedbacks();

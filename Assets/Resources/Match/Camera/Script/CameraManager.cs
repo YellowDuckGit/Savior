@@ -60,6 +60,7 @@ public class CameraManager : MonoBehaviour
 
     public void SwitchCamera(ChanelCamera chanel, CardBase Card = null)
     {
+        SoundManager.instance.PlaySwitchCam();
 
         //SFX: Swtich cam
         lastChannel = presentChannel;

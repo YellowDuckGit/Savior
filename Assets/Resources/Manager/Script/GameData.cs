@@ -122,7 +122,8 @@ public class GameData : MonoBehaviour
         //yield return StartCoroutine(LoadDeck());
         #endregion
 
-        UIManager.instance.UserName = ChatManager.instance.nickName;
+        UIManager.instance.UserName = PlayerPrefs.GetString("USERNAME");
+        print("nickname: "+ PlayerPrefs.GetString("USERNAME")); 
 
         yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
 
@@ -659,20 +660,11 @@ public class GameData : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log("LoadScene: " + scene.name);
-        if (scene.name.Equals("Home"))
-        {
-            StartCoroutine(LoadingGameProcess());
-        }
     }
 
     void OnSceneUnLoaded(Scene scene)
     {
         Debug.Log("UnScene: " + scene.name);
-        if (scene.name.Equals("Match"))
-        {
-            print("===================DDDDDDDDDDD+++++++++++++++");
-
-        }
     }
     #endregion
     public IEnumerator LoadDeckItems()
@@ -686,17 +678,14 @@ public class GameData : MonoBehaviour
         print("LoadDeckItem");
         if (listDeckItem.Count > 0)
         {
-            if (listDeckItem[0].transform.parent != parent.transform)
+            foreach (DeckItem deckItem in listDeckItem)
             {
-                foreach (DeckItem deckItem in listDeckItem)
-                {
-                    deckItem.gameObject.SetActive(true);
-                    deckItem.transform.parent = parent.transform;
-                    deckItem.transform.localScale = new Vector3(1f, 1f, 1f);
-                    deckItem.transform.localPosition = new Vector3(0f, 0f, 0f);
-                    deckItem.text_DeckName.text = deckItem.Data.deckName;
-                    print("LOAD DECK ITEM: " + deckItem.Data.deckName);
-                }
+                deckItem.gameObject.SetActive(true);
+                deckItem.transform.parent = parent.transform;
+                deckItem.transform.localScale = new Vector3(1f, 1f, 1f);
+                deckItem.transform.localPosition = new Vector3(0f, 0f, 0f);
+                deckItem.text_DeckName.text = deckItem.Data.deckName;
+                print("LOAD DECK ITEM: " + deckItem.Data.deckName);
             }
         }
         else
@@ -912,7 +901,7 @@ public class GameData : MonoBehaviour
 
     public void SearchByText(string text)
     {
-        if (UIManager.instance.isCollection_Cards || UIManager.instance.isStoreCards)
+        if (UIManager.instance.isCollection_Cards || UIManager.instance.isStoreCards || UIManager.instance.isCreateDeck)
         {
             print("Call");
             List<CardInInventory> listShow = listCardInInventory.Where(a => a.CardItem.cardData.Name.ToLower().Contains(text.ToLower())).ToList();

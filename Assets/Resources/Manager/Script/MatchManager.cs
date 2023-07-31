@@ -126,6 +126,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// store the current game phase
     /// </summary>
     public GamePhase gamePhase = GamePhase.Normal;
+
+    public Phase phase = Phase.None;
+
     #endregion
 
     //defind what side of local client side
@@ -182,7 +185,7 @@ public class MatchManager : MonoBehaviourPunCallbacks
         card.Position = CardPosition.InTriggerSpellField;
 
         card.RemoveCardFormParentPresent();
-        card.MoveCardIntoNewParent(player.spellZone.transform);
+        card.MoveCardIntoNewParent(player.spellZone.transform,true);
 
         yield return StartCoroutine(EffectManager.Instance.OnExecuteSpell(card));
         if(EffectManager.Instance.status == EffectManager.EffectStatus.success)
@@ -320,8 +323,11 @@ public class MatchManager : MonoBehaviourPunCallbacks
     private IEnumerator InitalGameProcess()
     {
         Debug.Log("C28F22");
+        phase = Phase.BeginMatch;
         yield return StartCoroutine(BeginMatch());
+        phase = Phase.MiddleMatch;
         yield return StartCoroutine(MiddleMatch());
+        phase = Phase.EndMatch;
         yield return StartCoroutine(EndMatch());
     }
     #region Match Process
@@ -1537,6 +1543,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
         Attack
     }
 
+    public enum Phase
+    {
+       None ,BeginMatch, MiddleMatch, EndMatch
+    }
 
     /// <summary>
     /// UI setup when player got attack tokken

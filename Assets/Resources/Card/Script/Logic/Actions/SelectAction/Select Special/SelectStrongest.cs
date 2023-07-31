@@ -78,6 +78,14 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Select
             if(Rarity != Rarity.Any)
             {
                 targets.RemoveAll(card => card.RarityCard.ToString().CompareTo(Rarity.ToString()) != 0);
+                if(targets.Count == 0)
+                {
+                    return null;
+                }
+                else if(targets.Count == 1)
+                {
+                    return targets[0] as MonsterCard;
+                }
             }
 
 
@@ -87,6 +95,14 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Select
             if(region != RegionCard.Any)
             {
                 targets.RemoveAll(card => card.RegionCard.ToString().CompareTo(region.ToString()) != 0);
+                if(targets.Count == 0)
+                {
+                    return null;
+                }
+                else if(targets.Count == 1)
+                {
+                    return targets[0] as MonsterCard;
+                }//else continue
             }
 
             var monsters = targets.Select(card => card as MonsterCard).ToList();
@@ -94,6 +110,14 @@ namespace Assets.GameComponent.Card.Logic.TargetObject.Select
             if(registor is MonsterCard regisM)
             {
                 monsters.RemoveAll(monster => monster == regisM);
+                if(monsters.Count == 0)
+                {
+                    return null;
+                }
+                else if(monsters.Count == 1)
+                {
+                    return monsters[0];
+                }//else continue
             }
 
             int strongestAttack = monsters.Max(x => x.Attack);
