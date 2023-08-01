@@ -627,12 +627,6 @@ public class PlayfabManager : MonoBehaviour
                                 print("bundle result table data: " + x); //droptable in bundle
                             }
                         }
-                        // sell card item
-                        foreach (var x in item.Bundle.BundledItems)
-                        {
-                            pack.cardItemsId.Add(x);
-                            print($"bundle({item.DisplayName}) add item data id : " + x); //card in droptable
-                        }
                     }
                     packs.Add(pack);
                 }
@@ -751,24 +745,6 @@ public class PlayfabManager : MonoBehaviour
             print(result.Items.Count);
 
             //get pack item id
-
-            if (UIManager.instance.isStorePacks || UIManager.instance.isOpenPack)
-            {
-                //analysis Pack 
-                foreach (var item in itemPurchases)
-                {
-                    List<string> array = item.ItemId.Split(':').ToList();
-                    array.ForEach(a => print(a));
-                }
-
-
-
-
-                //set list item open
-                UIManager.instance.FeedBackOpenPack.PlayFeedbacks();
-
-            }
-
             if (UIManager.instance.isStoreDecks)
             {
                 var deckData = GameData.instance.listDeckDataInStore.Find(i => i.id == itemPurchases[0].ItemId);
