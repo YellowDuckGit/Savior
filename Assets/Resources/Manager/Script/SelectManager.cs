@@ -37,14 +37,18 @@ namespace Assets.GameComponent.Manager
 
         private void Awake()
         {
-            //DontDestroyOnLoad(gameObject);
-            if(Instance != null && Instance != this)
+            Debug.LogFormat("C31F1");
+            Debug.LogFormat("C31F1 instance: {0}", Instance);
+
+            if (Instance != null && Instance != this)
             {
-                UnityEngine.Debug.LogError("SelectManager have 2");
+                Debug.LogFormat("C31F1-01 destroy gameobject: {0}", gameObject);
+                //UnityEngine.Debug.LogError("SelectManager have 2");
                 Destroy(gameObject);
             }
             else
             {
+                Debug.LogFormat("C31F1-02 instance is null or this, instance: ", Instance);
                 Instance = this;
             }
         }
@@ -77,11 +81,17 @@ namespace Assets.GameComponent.Manager
 
         private void OnLeftClickCard(CardBase cardBase)
         {
-            print(nameof(OnLeftClickCard));
+            Debug.LogFormat("C31F10");
+            if(cardBase != null)
+            {
+                Debug.LogFormat("C31F10-01 Cardbase != null");
+            }
+            else
+            {
+                Debug.LogFormat("C31F10-02 Cardbase == null");
+            }
 
-            if(cardBase != null) print("CardBase != null");
-
-            print(cardBase.IsSelectAble);
+            Debug.LogFormat("C31F10 Card base is selectable is {0}", cardBase.IsSelectAble);
             /*
              * kiểm tra có thể chọn được hay không(selectAble)
              * nếu chọn được thì đã chọn đủ chưa
@@ -91,148 +101,133 @@ namespace Assets.GameComponent.Manager
 
             if(cardBase.IsSelectAble)
             {
-                print("IsSelectAble");
+                Debug.LogFormat("C31F10-03");
+                Debug.LogFormat("C31F10-03 Is SelectAble");
 
                 if (cardBase.Position == CardPosition.InHand)
                 {
-                    print("Card In Hand");
+                    Debug.LogFormat("C31F10-03-01 cardbase position is inhand");
                     if(!cardBase.IsSelected)
                     {
+                        Debug.LogFormat("C31F10-03-01-01 cardbase isn't selected");
                         var selectedCards = cardBase.CardPlayer.hand.GetAllCardSelected();
                         if(selectedCards.Count > 0)
                         {
+                            Debug.LogFormat("C31F10-03-01-01-01 select cards count : {0}", selectedCards.Count);
                             selectedCards.ForEach(card => card.IsSelected = false);
-                            print($"Unselect {selectedCards.Count} cards");
+                            print($"C31F10-03-01-01-01 Unselect {selectedCards.Count} cards");
                         }
                         cardBase.IsSelected = true;
                     }
                     else
                     {
-                        print(this.debug($"Card {cardBase} have been selected"));
+                        Debug.LogFormat("C31F10-03-01-02 Card {0} have been selected", cardBase);
                     }
                 }
                 else if(cardBase is MonsterCard && (cardBase.Position == CardPosition.InSummonField || cardBase.Position == CardPosition.InFightField))
                 {
-                    print(this.debug("Select card on field"));
+                    Debug.LogFormat("C31F10-03-02 cardbase position is {0}", cardBase.Position);
 
                     //check if in pharse atk or defense --> user can select card in summon field to move this in action file
                     if(!cardBase.IsSelected)
                     {
+                        Debug.LogFormat("C31F10-03-02-01 card base isn't selected");
                         cardBase.IsSelected = true; //co the select nhieu monstercard trong 2 field nay 
                     }
                     else
                     {
+                        Debug.LogFormat("C31F10-03-02-02 card {0} is selected", cardBase);
                         cardBase.IsSelected = false;
                     }
                 }
             }
-       
+            else
+            {
+                Debug.LogFormat("C31F10-04 Isn't SelectAble");
+            }
         }
 
         private void ObjectSelected(object selectedTarget)
         {
-            print(this.debug());
+            Debug.LogFormat("C31F5");
             if(selectedTarget is CardBase cardBase)
             {
-                if(IsWatingPlayerSelect)
+                Debug.LogFormat("C31F5-01 select target is card base is {0}", cardBase);
+                if (IsWatingPlayerSelect)
                 {
-                    if(targetPattern.Contains(cardBase))//match pattern
+                    Debug.LogFormat("C31F5-01-01 IsWatingPlayerSelect is {0}", IsWatingPlayerSelect);
+                    if (targetPattern.Contains(cardBase))//match pattern
                     {
-                        //if (!SelectTargetQueue.Contains(cardBase))
-                        //{
                         targetSelected = cardBase;
-                        //SelectTargetQueue.Enqueue(cardBase);
-                        print(this.debug("Select card", new
+                        print(this.debug("C31F5-01-01-01 Select card", new
                         {
                             card = cardBase.ToString()
                         }));
-                        //}
-                        //else
-                        //{
-                        //    print(this.debug("You have been select this target for another effect, please choose another one"));
-                        //}
-
-                        //print(this.debug("SelectTargetQueue count", new
-                        //{
-                        //    SelectTargetQueue.Count
-                        //}));
                     }
                     else
                     {
-                        print(this.debug("Target dose not valid"));
+                        print(this.debug("C31F5-01-01-02 Target dose not valid"));
                     }
 
+                }
+                else
+                {
+                    Debug.LogFormat("C31F5-01-02 IsWatingPlayerSelect is {0}", IsWatingPlayerSelect);
                 }
             }
             else if(selectedTarget is CardPlayer cardPlayer)
             {
-                if(IsWatingPlayerSelect)
+                Debug.LogFormat("C31F5-02 select target is card player is {0}", cardPlayer);
+
+                if (IsWatingPlayerSelect)
                 {
-                    if(targetPattern.Contains(cardPlayer))//match pattern
+                    Debug.LogFormat("C31F5-02-01 IsWatingPlayerSelect is {0}", IsWatingPlayerSelect);
+                    if (targetPattern.Contains(cardPlayer))//match pattern
                     {
-                        //if (!SelectTargetQueue.Contains(cardPlayer))
-                        //{
                         targetSelected = cardPlayer;
-                        //SelectTargetQueue.Enqueue(cardPlayer);
-                        print(this.debug("Select Player", new
+                        print(this.debug("C31F5-02-01-01 Select Player", new
                         {
                             card = cardPlayer.ToString()
                         }));
-                        //}
-                        //else
-                        //{
-                        //    print(this.debug("You have been select this target for another effect, please choose another one"));
-                        //}
                     }
                     else
                     {
-                        print(this.debug("Target dose not valid"));
+                        print(this.debug("C31F5-02-01-02 Target dose not valid"));
                     }
                 }
+                else
+                {
+                    Debug.LogFormat("C31F5-02-02 IsWatingPlayerSelect is {0}", IsWatingPlayerSelect);
+                }
             }
-
+            else
+            {
+                Debug.LogFormat("C31F5-03 select target is undefined is {0}", cardPlayer);
+            }
         }
 
 
         public void CheckSelectAble(MatchManager match)
         {
-            ///cap quyen lua chon bai cho nguoi choi hien tai va revoke nguoi choi truoc
-            ///step 0: lay du lieu nguoi choi hien tai va nguoi choi truoc
-            ///step 1: revoke quyen lua chon cua nguoi choi truoc
-            ///step 2: cap quyen cho nguoi choi hien tai
-
-            print(this.debug());
-
+            Debug.LogFormat("C31F2");
             //get player
             var red = match.redPlayer;
             var blue = match.bluePlayer;
 
-            print(red != null ? "red ok" : "red error");
-            print(blue != null ? "blue ok" : "blue error");
-
+            print(red != null ? "C31F2 red ok" : "C31F2 red error");
+            print(blue != null ? "C31F2 blue ok" : "C31F2 blue error");
 
             //get the current player in turn
             var currentplayer = match.getCurrenPlayer();
-            print(this.debug(currentplayer != null ? "currentplayer ok" : "currentplayer error", new
+            print(this.debug(currentplayer != null ? "C31F2 currentplayer ok" : "C31F2 currentplayer error", new
             {
                 currentplayer.side
             }));
 
-            /*
-             * playerInturn: nguoi choi hien tai
-             * playerPassTurn: nguoi choi truoc
-             */
             (var playerInturn, var playerPassTurn) = currentplayer == red ? (red, blue) : (blue, red);
 
             revokeSelectCard(playerPassTurn);
 
-            /*
-             *provide select for current player
-             *Card in hand
-             **if the current player in defense phase, then revoke all card in hand
-             *Card in fight zone
-             *Card in summon zone
-             */
             provideSelectCard<CardBase>(playerInturn, position: CardPosition.InHand, card => card.Cost <= currentplayer.mana.Number && !(match.gamePhase == GamePhase.Attack) && card.CardPlayer == match.LocalPlayer);
             provideSelectCard<CardBase>(playerInturn, position: CardPosition.InSummonField, card => card.CardPlayer == match.LocalPlayer);
         }
@@ -243,15 +238,10 @@ namespace Assets.GameComponent.Manager
         /// <param name="position"></param>
         private void revokeSelectCard(CardPlayer player, CardPosition position = CardPosition.Any)
         {
-            /*
-             *revoke select for pass player
-             *Card in hand
-             *Card in fight zone
-             *Card in summon zone
-             */
-
+            Debug.LogFormat("C31F6");
             void revokeSelectCardOnHand()
             {
+                Debug.LogFormat("C31F6-01 revokeSelectCardOnHand");
                 player.hand.GetAllCardInHand().ForEach(card =>
                 {
                     card.IsSelected = false; //if card selected, remote selected
@@ -261,11 +251,14 @@ namespace Assets.GameComponent.Manager
 
             void revokeSelectCardOnFightZone()
             {
+                Debug.LogFormat("C31F6-02 revokeSelectCardOnFightZone");
                 player.fightZones.ForEach(zonefield =>
                 {
                     if(zonefield.monsterCard != null)
                     {
+                        Debug.LogFormat("C31F6-02-01");
                         var card = zonefield.monsterCard;
+                        Debug.LogFormat("C31F6-02-01 card is {0}", card);
                         card.IsSelected = false;  //if card selected, remote selected
                         card.IsSelectAble = false;  //revoke selectable in fight zone
                     }
@@ -274,11 +267,14 @@ namespace Assets.GameComponent.Manager
 
             void revokeSelectCardOnSummonZone()
             {
+                Debug.LogFormat("C31F6-03 revokeSelectCardOnSummonZone");
                 player.summonZones.ForEach(zonefield =>
                 {
                     if(zonefield.GetMonsterCard() != null)
                     {
+                        Debug.LogFormat("C31F6-03-01");
                         var card = zonefield.GetMonsterCard();
+                        Debug.LogFormat("C31F6-03-01 card is {0}", card);
                         card.IsSelected = false;  //if card selected, remote selected
                         card.IsSelectAble = false;  //revoke selectable in fight zone
                     }
@@ -288,23 +284,27 @@ namespace Assets.GameComponent.Manager
             switch(position)
             {
                 case CardPosition.Any:
+                    Debug.LogFormat("C31F6-04 card position is ANY");
                     revokeSelectCardOnHand();
                     revokeSelectCardOnFightZone();
                     revokeSelectCardOnSummonZone();
                     break;
 
                 case CardPosition.InFightField:
+                    Debug.LogFormat("C31F6-05 card position is InFightField");
                     revokeSelectCardOnFightZone();
                     break;
 
                 case CardPosition.InSummonField:
+                    Debug.LogFormat("C31F6-06 card position is InSummonField");
                     revokeSelectCardOnSummonZone();
                     break;
                 case CardPosition.InHand:
+                    Debug.LogFormat("C31F6-07 card position is InHand");
                     revokeSelectCardOnHand();
                     break;
             }
-            print(this.debug("Revoke select for player", new
+            print(this.debug("C31F6 Revoke select for player", new
             {
                 player.side,
                 numberCardInHand = player.hand.Count,
@@ -314,40 +314,43 @@ namespace Assets.GameComponent.Manager
 
         private int provideSelectCard<T>(CardPlayer player, CardPosition position, Func<T, bool>? filter = null) where T : CardBase
         {
+            Debug.LogFormat("C31F12");
             List<CardBase> listcard = new();
             switch(position)
             {
-                //case CardPosition.InDeck:
-                //    listcard = player.deck.cards.Where(monsterCard => monsterCard != null).Select(monsterCard => monsterCard as CardBase).ToList();
-                //    break;
                 case CardPosition.InGraveyard:
+                    Debug.LogFormat("C31F12-01 card position in graveyard");
                     break;
                 case CardPosition.InHand:
+                    Debug.LogFormat("C31F12-02 card position in hand");
                     listcard = player.hand.GetAllCardInHand().Where(monsterCard => monsterCard != null).Select(monsterCard => monsterCard as CardBase).ToList();
                     break;
                 case CardPosition.InFightField:
+                    Debug.LogFormat("C31F12-03 card position in InFightField");
                     listcard = player.fightZones.Where(zone => zone.monsterCard != null).Select(zone => zone.monsterCard as CardBase).ToList();
                     break;
                 case CardPosition.InSummonField:
+                    Debug.LogFormat("C31F12-04 card position in InSummonField");
                     listcard = player.summonZones.Where(zone => zone.GetMonsterCard() != null).Select(zone => zone.GetMonsterCard() as CardBase).ToList();
                     break;
                 default:
-                    print(this.debug("not found card position"));
+                    Debug.LogFormat("C31F12-05 not found card position");
                     break;
             }
 
             if(listcard != null && listcard.Count > 0)
             {
-                if(filter != null)
+                Debug.LogFormat("C31F12-06");
+                Debug.LogFormat("C31F12-06 list card count is : {0}", listcard.Count);
+                if (filter != null)
                 {
-                    // Get the first monster card in the list
-                    // Invoke the cardTarget method on the first card and get the return value
-                    // Do something with the result
-                    foreach(var card in listcard)
+                    Debug.LogFormat("C31F12-06-01 filter != null");
+                    foreach (var card in listcard)
                     {
+                        Debug.LogFormat("C31F12-06-01 card in list card is {0}", card);
                         card.IsSelected = false;
                         card.IsSelectAble = filter.Invoke(arg: (T)card);
-                        print(this.debug(string.Format("{0} | {1} [ID:{2}]", card.ToString(), (card.IsSelectAble ? "can  select" : "can not select"), card.photonView.ViewID), new
+                        print(this.debug(string.Format("C31F12-06-01: {0} | {1} [ID:{2}]", card.ToString(), (card.IsSelectAble ? "can  select" : "can not select"), card.photonView.ViewID), new
                         {
                             card.Cost,
                             player.mana.Number,
@@ -357,11 +360,13 @@ namespace Assets.GameComponent.Manager
                 }
                 else
                 {
-                    foreach(var card in listcard)
+                    Debug.LogFormat("C31F12-06-02 filter = null");
+                    foreach (var card in listcard)
                     {
+                        Debug.LogFormat("C31F12-06-02 card in list card is {0}", card);
                         card.IsSelected = false;
                         card.IsSelectAble = true;
-                        print(this.debug(string.Format("{0} | {1} [ID:{2}]", card.ToString(), (card.IsSelectAble ? "can  select" : "can not select"), card.photonView.ViewID), new
+                        print(this.debug(string.Format("C31F12-06-02: {0} | {1} [ID:{2}]", card.ToString(), (card.IsSelectAble ? "can  select" : "can not select"), card.photonView.ViewID), new
                         {
                             card.Cost,
                             player.mana.Number,
@@ -370,6 +375,7 @@ namespace Assets.GameComponent.Manager
                     }
                 }
             }
+            Debug.LogFormat("C31F12 list card!.count is {0}", listcard!.Count);
 
             return listcard!.Count;
         }
@@ -447,7 +453,9 @@ namespace Assets.GameComponent.Manager
 
         private IEnumerator WaitingSelectTargetAny()
         {
+            Debug.LogFormat("C31F11");
             int offset = SelectTargetQueue.Count;
+            Debug.LogFormat("C31F11 offset: {0}", offset);
             IsWatingPlayerSelect = true;
             yield return new WaitUntil(() => offset < SelectTargetQueue.Count);
             IsWatingPlayerSelect = false;
@@ -456,24 +464,36 @@ namespace Assets.GameComponent.Manager
 
         public IEnumerator SelectTargets(SelectTarget selectTargets, List<(List<AbstractEffect>, AbstractTarget, object)> result)
         {
+            Debug.LogFormat("C31F9");
             var ListTargetSelected = new List<ISelectManagerTarget>();
             var graph = GetGraphPlayerSelectTarget(selectTargets);
             if(graph != null && graph.Count > 0)
             {
-                for(int i = 0; i < selectTargets.selectTargets.Count; i++)
+                Debug.LogFormat("C31F9-01");
+                for (int i = 0; i < selectTargets.selectTargets.Count; i++)
                 {
+                    Debug.LogFormat("C31F9-01 for {0} times", ++i);
                     List<ISelectManagerTarget> targeTips = new();
-                    print(this.debug($"Path guess", new
+                    print(this.debug($"C31F9-01 Path guess", new
                     {
                         tips = string.Join("\n", graph.Select(list => string.Join("->", list)))
                     }));
                     foreach(var path in graph)
                     {
+                        Debug.LogFormat("C31F9-01-01 foreach");
                         var targetTip = path[i];
-                        if(!targeTips.Contains(targetTip))
+                        Debug.LogFormat("C31F9-01-01 targetTip is {0}", targeTip);
+                        if (!targeTips.Contains(targetTip))
+                        {
+                            Debug.LogFormat("C31F9-01-01-01");
                             targeTips.Add(targetTip);
+                        }
+                        else
+                        {
+                            Debug.LogFormat("C31F9-01-01-02");
+                        }
                     }
-                    print(this.debug($"You can select", new
+                    print(this.debug($"C31F9-01 You can select", new
                     {
                         tips = string.Join(" or ", targeTips)
                     }));
@@ -482,8 +502,9 @@ namespace Assets.GameComponent.Manager
 
                     if(ListTargetSelected.Count == i + 1)
                     {
+                        Debug.LogFormat("C31F9-01-02 ListTargetSelected. Count = {0}", ListTargetSelected);
                         var targetSelected = ListTargetSelected[i];
-                        print(this.debug("Remove path not valid", new
+                        print(this.debug("C31F9-01-02 Remove path not valid", new
                         {
                             targetSelected
                         }));
@@ -491,8 +512,12 @@ namespace Assets.GameComponent.Manager
                         var targetElement = selectTargets.selectTargets[i];
                         if(targetElement.target is AnyTarget any)
                         {
-                            if(targetSelected is CardBase card)
+                            Debug.LogFormat("C31F9-01-02-01");
+                            Debug.LogFormat("C31F9-01-02-01 target element is any, is {0}", any);
+
+                            if (targetSelected is CardBase card)
                             {
+                                Debug.LogFormat("C31F9-01-02-01-01 target selected is card base, is {0}", card);
                                 var target = new CardTarget
                                 {
                                     cardPosition = (CardPosition)card.Position,
@@ -503,17 +528,26 @@ namespace Assets.GameComponent.Manager
                                 result.Add((targetElement.Effects, target, targetSelected));
                             }
                             else
-                            if(targetSelected is CardPlayer player)
                             {
+                                Debug.LogFormat("C31F9-01-02-01-02 target selected is not card base, is {0}", card);
+                            }
+                            if (targetSelected is CardPlayer player)
+                            {
+                                Debug.LogFormat("C31F9-01-02-01-03 target selected is card player, is {0}", player);
                                 var target = new PlayerTarget
                                 {
                                     side = CardOwner.You
                                 };
                                 result.Add((targetElement.Effects, target, targetSelected));
                             }
+                            else
+                            {
+                                Debug.LogFormat("C31F9-01-02-01-04 target selected is not card player, is {0}", player);
+                            }
                         }
                         else
                         {
+                            Debug.LogFormat("C31F9-01-02-02 target element is not ANY");
                             result.Add((targetElement.Effects, targetElement.target, targetSelected));
                         }
                         //action(targetElement.Effects, targetElement.target, targetSelected);
@@ -521,153 +555,174 @@ namespace Assets.GameComponent.Manager
                     }
                     else
                     {
-                        print(this.debug("Target Selected Not store!!"));
+                        print(this.debug("C31F9-01-03 Target Selected Not store!!"));
                     }
                 }
             }
             else
             {
-                print(this.debug("does not enough condition to select all targets"));
+                print(this.debug("C31F9-02  does not enough condition to select all targets"));
             }
             yield return null;
         }
 
         public List<List<ISelectManagerTarget>> GetGraphPlayerSelectTarget(SelectTarget selectTargets)
         {
-            /*
-             * Check enough base condition for select
-             * *enough card respond to the condition 
-             * * *select how many card in your option
-             */
-            print(this.debug("Select target condition", new
+            Debug.LogFormat("C31F3");
+            print(this.debug("C31F3 Select target condition", new
             {
                 count = selectTargets.selectTargets.Count
             }));
 
-            //CheckConditionTreeNode root = new CheckConditionTreeNode("Root"); // Tạo nút gốc
             List<List<ISelectManagerTarget>> trackedNode = new List<List<ISelectManagerTarget>>(); // Tạo mảng lưu trữ các nút con
 
             for(int i = 0; i < selectTargets.selectTargets.Count; i++)
             {
                 var selectElement = selectTargets.selectTargets[i];
-                print(this.debug($"Target {i}", new
+                print(this.debug($"C31F3 Target {i}", new
                 {
                     selectElement.GetType().Name
                 }));
                 if(selectElement.target is PlayerTarget selectPlayer)
                 {
-
+                    Debug.LogFormat("C31F3-01");
+                    Debug.LogFormat("C31F3-01 select Player is {0}", selectPlayer);
                     var targets = selectPlayer.Execute(MatchManager.instance);
-                    print(this.debug($"Target {i} is target Player", new
+                    print(this.debug($"C31F3-01 Target {i} is target Player", new
                     {
                         targets.Count
                     }));
                     if(targets != null && targets.Count > 0)
                     {
+                        Debug.LogFormat("C31F3-01-01 targets not null, count is {0}", targets.Count);
                         trackedNode.Add(targets.Cast<ISelectManagerTarget>().ToList());
                     }
                     else
                     {
+                        Debug.LogFormat("C31F3-01-02 targets is {0} or count {1}", targets, targets.Count);
                         trackedNode.Add(new List<ISelectManagerTarget>());
-
                     }
                 }
                 else if(selectElement.target is CardTarget selectCard)
                 {
+                    Debug.LogFormat("C31F3-02");
+                    Debug.LogFormat("C31F3-02 select card is {0}", selectCard);
                     var targets = selectCard.Execute(MatchManager.instance);
-                    print(this.debug($"Target {i} is target Card", new
+                    print(this.debug($"C31F3-02 Target {i} is target Card", new
                     {
                         targets.Count
                     }));
                     if(targets != null && targets.Count > 0)
                     {
+                        Debug.LogFormat("C31F3-02-01 targets not null, count is {0}", targets.Count);
                         trackedNode.Add(targets.Cast<ISelectManagerTarget>().ToList());
                     }
                     else
                     {
+                        Debug.LogFormat("C31F3-02-02 targets is {0} or count {1}", targets, targets.Count);
                         trackedNode.Add(new List<ISelectManagerTarget>());
                     }
                 }
                 else if(selectElement.target is AnyTarget any)
                 {
+                    Debug.LogFormat("C31F3-03");
                     var targets = any.Execute(MatchManager.instance);
-                    print(this.debug($"Target {i} is target Card", new
+                    print(this.debug($"C31F3-03 Target {i} is target Any", new
                     {
                         targets.Count
                     }));
                     if(targets != null && targets.Count > 0)
                     {
+                        Debug.LogFormat("C31F3-03-01 targets not null, count is {0}", targets.Count);
                         trackedNode.Add(targets.Cast<ISelectManagerTarget>().ToList());
                     }
                     else
                     {
+                        Debug.LogFormat("C31F3-03-02 targets is {0} or count {1}", targets, targets.Count);
                         trackedNode.Add(new List<ISelectManagerTarget>());
                     }
                 }
+                else
+                {
+                    Debug.LogFormat("C31F3-04 target not undefined");
+                }
             }
             var result = GuessPlayerSelectTip(trackedNode);
-            print(this.debug("Guess select Path", new
-            {
-                paths = string.Join("\n", result.Select(list => string.Join("->", list)))
-            }));
             return result;
         }
 
+        //xem lại
         private List<List<ISelectManagerTarget>> GuessPlayerSelectTip(List<List<ISelectManagerTarget>> lists)
         {
+            Debug.LogFormat("C31F4");
             List<List<ISelectManagerTarget>> result = new List<List<ISelectManagerTarget>>();
             if(lists == null || lists.Count == 0 || lists.Any(sublist => sublist == null || sublist.Count == 0))
             {
-                print(this.debug("No target input"));
+                Debug.LogFormat("C31F4-01 No target input");
                 return new List<List<ISelectManagerTarget>>();
             }
             else
-            if(lists.Count == 1)
             {
-                print(this.debug("just 1 target"));
+                Debug.LogFormat("C31F4-02 have target input");
+            }
+            if (lists.Count == 1)
+            {
+                Debug.LogFormat("C31F4-03 just 1 target");
 
                 foreach(var element in lists.First())
                 {
+                    Debug.LogFormat("C31F4-03 {0}: element is {1}", lists.Count, element);
                     result.Add(new List<ISelectManagerTarget> { element });
                 }
                 return result;
             }
+            else
+            {
 
-            print(this.debug("Start"));
+                Debug.LogFormat("C31F4-04 diff 1 target, count of list: {0}", lists.Count);
+            }
+
             Queue<List<ISelectManagerTarget>> queue = new Queue<List<ISelectManagerTarget>>();
 
             foreach(var target in lists.First())
             {
+                Debug.LogFormat("C31F4 target is {0}", target);
                 queue.Enqueue(new List<ISelectManagerTarget>() { target });
             }
 
             for(int i = 1; i < lists.Count; i++)
             {
+                Debug.LogFormat("C31F4");
                 int size = queue.Count;
-                for(int j = 0; j < size; j++)
+                Debug.LogFormat("C31F4 for i, i= {0}", i);
+                Debug.LogFormat("C31F4 for i, size = {0}", size);
+                for (int j = 0; j < size; j++)
                 {
+                    Debug.LogFormat("C31F4-01 for j in for i, i= {0}, j= {1}", i, j);
                     var path = queue.Dequeue();
                     foreach(var element in lists[i])
                     {
-                        if(!path.Contains(element))
+                        Debug.LogFormat("C31F4-01-01 for each, element is {0}", element);
+                        if (!path.Contains(element))
                         {
-                            print(this.debug("New"));
-
+                            Debug.LogFormat("C31F4-01-01-01 path not exist element");
                             List<ISelectManagerTarget> newPath = new List<ISelectManagerTarget>(path)
                             {
                                 element
                             };
-                            if(i == lists.Count - 1)
+                            Debug.LogFormat("C31F4-01-01-01 i= {0}, list.Count -1 = {1}", i, lists.Count-1);
+                            if (i == lists.Count - 1)
                             {
+                                Debug.LogFormat("C31F4-01-01-01-01 i == lists.Count - 1");
                                 result.Add(newPath);
-                                print(this.debug("Found path", new
+                                print(this.debug("C31F4-01-01-01-01 Found path", new
                                 {
                                     path = string.Join("->", newPath)
                                 }));
                             }
                             else // Ngược lại, thêm bản sao vào hàng đợi để duyệt tiếp
                             {
-                                print(this.debug("Next", new
+                                print(this.debug("C31F4-01-01-01-02 Next, add a copy to the queue for further browsing", new
                                 {
                                     path = string.Join("->", newPath) + " -> ?"
                                 }));
@@ -676,15 +731,12 @@ namespace Assets.GameComponent.Manager
                         }
                         else
                         {
-                            print(this.debug("repeated"));
+                            Debug.LogFormat("C31F4-01-01-01 path exist element");
                         }
-
                     }
                 }
             }
-
             return result;
-            ;
         }
         public IEnumerator SelectAllCardInField(AbstractTarget item)
         {
@@ -743,19 +795,20 @@ namespace Assets.GameComponent.Manager
 
         public IEnumerator SelectWithPatterns<T>(List<T> targets, List<ISelectManagerTarget> result) where T : ISelectManagerTarget
         {
+            Debug.LogFormat("C31F14");
             targetPattern.Clear();
             foreach(var target in targets)
             {
+                Debug.LogFormat("C31F14");
                 target.IsSelectAble = true;
                 targetPattern.Add(target);
-                print(this.debug($"Selectable item : {target}"));
+                print(this.debug($"C31F14 Selectable item : {target}"));
             }
 
             IsWatingPlayerSelect = true;
             do
             {
-                print(this.debug("Please select target"));
-                //UIMatchManager.instance.PrintSelectTarget();
+                print(this.debug("C31F14 Please select target"));
                 yield return new WaitUntil(() => targetSelected != null);
             } while(result.Contains(targetSelected));
             result.Add(targetSelected);
