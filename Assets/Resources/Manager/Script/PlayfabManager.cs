@@ -587,7 +587,7 @@ public class PlayfabManager : MonoBehaviour
 
     #endregion
 
-    public IEnumerator GetStores(string cataLog, string storeId)
+    public IEnumerator GetStores()
     {
         bool IsApiExecuting = true;
         Debug.Log("START GET STORE");

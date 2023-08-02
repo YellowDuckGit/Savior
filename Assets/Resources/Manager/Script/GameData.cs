@@ -110,9 +110,7 @@ public class GameData : MonoBehaviour
 
         yield return StartCoroutine(LoadDeckItems());
 
-        yield return StartCoroutine(LoadPack());
-
-        yield return StartCoroutine(LoadDeck());
+        yield return StartCoroutine(LoadDataInStore());
 
         //Load Price of Card
         yield return StartCoroutine(LoadingCardPrice());
@@ -791,19 +789,11 @@ public class GameData : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator LoadDeck() //load deck in store
+    public IEnumerator LoadDataInStore()
     {
-        yield return StartCoroutine(PlayfabManager.instance.GetStores(cataLog: "Card", storeId: "DS1"));
+        yield return StartCoroutine(PlayfabManager.instance.GetStores());
         yield return StartCoroutine(InitDeck());
-    }
-    public IEnumerator LoadPack()
-    {
-        yield return StartCoroutine(PlayfabManager.instance.GetStores(cataLog: "Card", storeId: "BS1"));
         yield return StartCoroutine(InitPack());
-
-        //yield return StartCoroutine(PlayFabAuth.instance.GetDropTable());
-
-
     }
 
     public IEnumerator LoadPack(GameObject parent)
