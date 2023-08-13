@@ -867,12 +867,14 @@ public class MatchManager : MonoBehaviourPunCallbacks
     public void SetLimitHP(int amount, CardPlayer cardPlayer)
     {
         //Provide HP Step
+        if (cardPlayer.hp.Limit < maxHP)
         cardPlayer.hp.Limit = amount;
     }
 
     public void SetLimitMP(int amount, CardPlayer cardPlayer)
     {
         //Provide HP Step
+        if (cardPlayer.mana.Limit < maxMana)
         cardPlayer.mana.Limit += amount;
     }
 
