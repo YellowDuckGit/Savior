@@ -1477,7 +1477,7 @@ public class EffectManager : MonoBehaviourPun
         {
             int pitchCount = 0;
             var isPitch = false;
-            if(effect.pitch != null)
+            if(effect.pitch != null && effect.pitch.Length > 0)
             {
                 isPitch = true;
                 List<MonsterCard> cardList = new List<MonsterCard>();
