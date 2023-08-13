@@ -49,15 +49,25 @@ namespace Assets.GameComponent.Card.LogicCard
                     public AbstractTarget target = null;
                     public override int GetPitch(object register, MatchManager instance)
                     {
-                        if (target is CardTarget cardTarget)
+                        if(target is CardTarget cardTarget)
                         {
                             var cards = cardTarget.Execute(instance);
                             cards.RemoveAll(card => card == (CardBase)register);
                             return cards.Count;
                         }
-                        else if (target is PlayerTarget playerTarget)
+                        else if(target is PlayerTarget playerTarget)
                         {
                             return playerTarget.Execute(instance).Count;
+                        }
+                        else if(target is SpecifyCard specifyCard)
+                        {
+                            var cards = specifyCard.Execute(instance);
+                            return cards.Count;
+                        }
+                        else if(target is SpecifyCardPlayer specifyCardPlayer)
+                        {
+                            var players = specifyCardPlayer.Execute(instance);
+                            return players != null ? 1 : 0;
                         }
                         else
                         {
