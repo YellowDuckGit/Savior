@@ -15108,7 +15108,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -22.762}
+  m_AnchoredPosition: {x: 200, y: -22.761993}
   m_SizeDelta: {x: 400, y: 45.524}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &270531625
@@ -38834,7 +38834,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 254.55, y: -304.755}
+  m_AnchoredPosition: {x: 254.54999, y: -304.755}
   m_SizeDelta: {x: 400, y: 593.394}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &579315286
@@ -69520,7 +69520,7 @@ MonoBehaviour:
   - rid: 233948112812507162
   - rid: 233948112812507163
   - rid: 233948112812507164
-  KeepPlayModeChanges: 1
+  KeepPlayModeChanges: 0
   PerformanceMode: 0
   ForceStopFeedbacksOnDisable: 1
   PlayCount: 0
@@ -70298,9 +70298,9 @@ MonoBehaviour:
         PlayEvents:
           m_PersistentCalls:
             m_Calls:
-            - m_Target: {fileID: 0}
+            - m_Target: {fileID: 751268438}
               m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-              m_MethodName: TutorialFinished
+              m_MethodName: FinishPVFTutorial
               m_Mode: 1
               m_Arguments:
                 m_ObjectArgument: {fileID: 0}
@@ -85017,7 +85017,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -22.762}
+  m_AnchoredPosition: {x: 200, y: -22.761993}
   m_SizeDelta: {x: 400, y: 45.524}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1301710087
@@ -94251,7 +94251,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -22.762}
+  m_AnchoredPosition: {x: 200, y: -22.761993}
   m_SizeDelta: {x: 400, y: 45.524}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1424514964
@@ -101527,7 +101527,7 @@ MonoBehaviour:
   - rid: 233948112812507140
   - rid: 233948112812507141
   - rid: 233948112812507142
-  KeepPlayModeChanges: 1
+  KeepPlayModeChanges: 0
   PerformanceMode: 0
   ForceStopFeedbacksOnDisable: 1
   PlayCount: 0
@@ -102272,19 +102272,7 @@ MonoBehaviour:
         DebugActive: 0
         PlayEvents:
           m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 0}
-              m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-              m_MethodName: TutorialFinished
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
+            m_Calls: []
         StopEvents:
           m_PersistentCalls:
             m_Calls: []
@@ -122618,7 +122606,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -22.762}
+  m_AnchoredPosition: {x: 200, y: -22.761993}
   m_SizeDelta: {x: 400, y: 45.524}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2082818478

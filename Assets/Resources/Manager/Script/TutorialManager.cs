@@ -410,6 +410,12 @@ public class TutorialManager : MonoBehaviour
         print("PLAY WITH FRIEND TUTORIAL");
         isPVF = true;
     }
+
+    public void FinishPVFTutorial()
+    {
+        isPVF = false;
+    }
+
     public void PlaySkipTutorial()
     {
         SkipTutorial.PlayFeedbacks();

@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: Gloaming_Part1_M_3
   m_EditorClassIdentifier: 
   <Id>k__BackingField: Gloaming_Part1_M_3
-  <Name>k__BackingField: ' Cunning Evil'
+  <Name>k__BackingField: Cunning Evil
   <Cost>k__BackingField: 4
   <Attack>k__BackingField: 3
-  <Hp>k__BackingField: 3
-  <Description>k__BackingField: When I've seen 3+ enemies Charmed, kill me and deal
-    to enemy BackBone equal my Power
+  <Hp>k__BackingField: 2
+  <Description>k__BackingField: 'After Summoned, Grant Intervene to an enemy '
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 3
@@ -71,6 +70,7 @@ MonoBehaviour:
         pitch: []
         _Gain:
           rid: 1073283011172630571
+        InTurn: 0
     - rid: 1073283011172630571
       type: {class: Gain/GainData/GainMonsterAttribute, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
       data:

@@ -14,12 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: FrostClaw_Part2_SA_1
   <Name>k__BackingField: Roger
-  <Cost>k__BackingField: 5
-  <Attack>k__BackingField: 5
-  <Hp>k__BackingField: 5
-  <Description>k__BackingField: 'Default: Treating Abilities: 1. Grant me 0|+3 2.
-    When I''ve killed a unit, Grant me +2|0 3. When I survive damaged 4 times. After
-    that,  grant me +2|+2 when I survive damaged'
+  <Cost>k__BackingField: 7
+  <Attack>k__BackingField: 2
+  <Hp>k__BackingField: 2
+  <Description>k__BackingField: 'Default: Treating Round End: Deal 1 to all enemies
+    have  HEALTH less than 3'
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 4
   <RegionCard>k__BackingField: 1
