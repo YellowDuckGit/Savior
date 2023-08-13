@@ -126,12 +126,12 @@ public class EffectManager : MonoBehaviourPun
                     break;
                 }
             case RaiseEvent.EFFECT_UPDATE_STATUS:
-                print(this.debug("update effect status", new
-                {
-                    status = Enum.GetName(typeof(EffectStatus), args.status)
-                }));
-                this.status = args.status;
-                break;
+            print(this.debug("update effect status", new
+            {
+                status = Enum.GetName(typeof(EffectStatus), args.status)
+            }));
+            this.status = args.status;
+            break;
 
         };
     }
@@ -460,26 +460,26 @@ public class EffectManager : MonoBehaviourPun
                     switch(have.comepare)
                     {
                         case compareType.equal:
-                            isHave = players.Count == number;
-                            break;
+                        isHave = players.Count == number;
+                        break;
                         case compareType.more:
-                            isHave = players.Count > number;
-                            break;
+                        isHave = players.Count > number;
+                        break;
 
                         case compareType.moreEqual:
-                            isHave = players.Count >= number;
-                            break;
+                        isHave = players.Count >= number;
+                        break;
 
                         case compareType.less:
-                            isHave = players.Count < number;
-                            break;
+                        isHave = players.Count < number;
+                        break;
 
                         case compareType.lessEqual:
-                            isHave = players.Count <= number;
-                            break;
+                        isHave = players.Count <= number;
+                        break;
                         default:
-                            Debug.Log("Not found compare type");
-                            break;
+                        Debug.Log("Not found compare type");
+                        break;
                     }
                     if(isHave ^ have._not)
                     {
@@ -502,26 +502,26 @@ public class EffectManager : MonoBehaviourPun
                     switch(have.comepare)
                     {
                         case compareType.equal:
-                            isHave = cards.Count == number;
-                            break;
+                        isHave = cards.Count == number;
+                        break;
                         case compareType.more:
-                            isHave = cards.Count > number;
-                            break;
+                        isHave = cards.Count > number;
+                        break;
 
                         case compareType.moreEqual:
-                            isHave = cards.Count >= number;
-                            break;
+                        isHave = cards.Count >= number;
+                        break;
 
                         case compareType.less:
-                            isHave = cards.Count < number;
-                            break;
+                        isHave = cards.Count < number;
+                        break;
 
                         case compareType.lessEqual:
-                            isHave = cards.Count <= number;
-                            break;
+                        isHave = cards.Count <= number;
+                        break;
                         default:
-                            Debug.Log("Not found compare type");
-                            break;
+                        Debug.Log("Not found compare type");
+                        break;
                     }
                     print(this.debug("have action condition", new
                     {
@@ -550,26 +550,26 @@ public class EffectManager : MonoBehaviourPun
                     switch(have.comepare)
                     {
                         case compareType.equal:
-                            isHave = cards.Count == number;
-                            break;
+                        isHave = cards.Count == number;
+                        break;
                         case compareType.more:
-                            isHave = cards.Count > number;
-                            break;
+                        isHave = cards.Count > number;
+                        break;
 
                         case compareType.moreEqual:
-                            isHave = cards.Count >= number;
-                            break;
+                        isHave = cards.Count >= number;
+                        break;
 
                         case compareType.less:
-                            isHave = cards.Count < number;
-                            break;
+                        isHave = cards.Count < number;
+                        break;
 
                         case compareType.lessEqual:
-                            isHave = cards.Count <= number;
-                            break;
+                        isHave = cards.Count <= number;
+                        break;
                         default:
-                            Debug.Log("Not found compare type");
-                            break;
+                        Debug.Log("Not found compare type");
+                        break;
                     }
                     print(this.debug("have action condition", new
                     {
@@ -1046,29 +1046,29 @@ public class EffectManager : MonoBehaviourPun
                     {
                         case CardPosition.Any:
                         case CardPosition.InDeck:
-                            createdCard.Parents = CardOwner.deck;
-                            //becom children of deck
-                            createdCard.transform.parent = CardOwner.deck.transform;
+                        createdCard.Parents = CardOwner.deck;
+                        //becom children of deck
+                        createdCard.transform.parent = CardOwner.deck.transform;
 
-                            //add card to list card in deck
-                            CardOwner.deck.Add(createdCard);
-                            //set position
-                            createdCard.transform.position = CardOwner.deck.PositionInitialCardInDeck;
-                            break;
+                        //add card to list card in deck
+                        CardOwner.deck.Add(createdCard);
+                        //set position
+                        createdCard.transform.position = CardOwner.deck.PositionInitialCardInDeck;
+                        break;
                         case CardPosition.InHand:
-                            print(this.debug("check hand", new
-                            {
-                                createdCard
-                            }));
-                            createdCard.Parents = CardOwner.hand;
-                            CardOwner.hand.Add(createdCard);
-                            //createdCard.gameObject.transform.parent = CardOwner.hand.gameObject.transform;
-                            //CardOwner.hand.ScaleCardInHand();
-                            //CardOwner.hand.SortPostionRotationCardInHand();
-                            break;
+                        print(this.debug("check hand", new
+                        {
+                            createdCard
+                        }));
+                        createdCard.Parents = CardOwner.hand;
+                        CardOwner.hand.Add(createdCard);
+                        //createdCard.gameObject.transform.parent = CardOwner.hand.gameObject.transform;
+                        //CardOwner.hand.ScaleCardInHand();
+                        //CardOwner.hand.SortPostionRotationCardInHand();
+                        break;
                         case CardPosition.InFightField:
 
-                            break;
+                        break;
                         case CardPosition.InSummonField:
                             {
                                 yield return new WaitUntil(() => createdCard.IsReady);
@@ -1109,7 +1109,7 @@ public class EffectManager : MonoBehaviourPun
                             }
                             break;
                         case CardPosition.InGraveyard:
-                            break;
+                        break;
                         case CardPosition.InTriggerSpellField:
                             {
                                 yield return new WaitUntil(() => createdCard.IsReady);
@@ -1134,7 +1134,7 @@ public class EffectManager : MonoBehaviourPun
                                         spellCard.Position = CardPosition.InTriggerSpellField;
 
                                         spellCard.RemoveCardFormParentPresent();
-                                        spellCard.MoveCardIntoNewParent(zone.transform,true);
+                                        spellCard.MoveCardIntoNewParent(zone.transform, true);
 
                                         zone.SpellCard = spellCard;
                                         yield return StartCoroutine(EffectManager.Instance.OnAfterSummon(spellCard));
@@ -1176,7 +1176,7 @@ public class EffectManager : MonoBehaviourPun
                             }
                             break;
                         default:
-                            break;
+                        break;
                     }
                     SelectManager.Instance.CheckSelectAble(MatchManager.instance);
                 }
@@ -1476,8 +1476,10 @@ public class EffectManager : MonoBehaviourPun
         foreach(var effect in effects)
         {
             int pitchCount = 0;
+            var isPitch = false;
             if(effect.pitch != null)
             {
+                isPitch = true;
                 List<MonsterCard> cardList = new List<MonsterCard>();
 
                 for(int i = 0; i < effect.pitch.Length; i++)
@@ -1489,8 +1491,14 @@ public class EffectManager : MonoBehaviourPun
             {
                 pitchCount
             }));
+            ///when contain pitch execute follow pitch 
+            ///else not contain pitch execute 1 times
             do
             {
+                if(isPitch && pitchCount == 0)
+                {
+                    break;
+                }
                 if(effect is BuffStats buffStats)
                 {
                     yield return StartCoroutine(ExecuteEffectEvent(buffStats, TargetType, targetForEffect));
@@ -1515,8 +1523,6 @@ public class EffectManager : MonoBehaviourPun
                 {
                     yield return StartCoroutine(ExecuteEffectEvent(createCard, TargetType, targetForEffect));
                     print(this.debug("CREATE CARD SUCCESS"));
-                    //ExecuteEffectEvent(createCard, selectTargetObject, target);
-                    //StartCoroutine(EffectAction(effect, selectTarget, targetType, targetID));
                 }
                 else if(effect is TempStore tempStore)
                 {
@@ -1993,9 +1999,9 @@ public class EffectManager : MonoBehaviourPun
             name = typeof(AfterSummon).Name,
             register = spellCard.ToString()
         }));
-     
+
         status = EffectStatus.running;
-      
+
         if(spellCard.CardPlayer == MatchManager.instance.LocalPlayer)
         {
             print(this.debug("player is the owner of card register for Execute spell"));
@@ -2037,7 +2043,7 @@ public class EffectManager : MonoBehaviourPun
     {
         Debug.Log(this.debug("ReturnCardOnHand"));
         spellCard.RemoveCardFormParentPresent();
-        spellCard.MoveCardIntoNewParent(spellCard.CardPlayer.hand.transform,false);
+        spellCard.MoveCardIntoNewParent(spellCard.CardPlayer.hand.transform, false);
         spellCard.CardPlayer.hand.Add(spellCard);
     }
 }

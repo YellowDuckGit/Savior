@@ -507,7 +507,7 @@ namespace Assets.GameComponent.Manager
                             {
                                 var target = new PlayerTarget
                                 {
-                                    side = CardOwner.You
+                                    side = player == MatchManager.instance.LocalPlayer ? CardOwner.You : CardOwner.Opponent
                                 };
                                 result.Add((targetElement.Effects, target, targetSelected));
                             }
