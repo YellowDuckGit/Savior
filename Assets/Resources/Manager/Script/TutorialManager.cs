@@ -155,6 +155,8 @@ public class TutorialManager : MonoBehaviour
     public bool isSkip;
     public bool isNewbie;
     public bool isPVF;
+    public bool isTutorialagain;
+
 
     private void Start()
     {
@@ -170,9 +172,11 @@ public class TutorialManager : MonoBehaviour
     public void PlayTutorialChain()
     {
         print($"AMOUNT CHAIN IS {tutorialChain.Count}");
-        print($"PLAY TUTORIAL CHAIN");
-        if (isPlayTutorialChain && !isPlayTutorial && !isSkip && isNewbie)
+
+
+        if (isPlayTutorialChain && !isPlayTutorial && ((!isSkip && isNewbie) || isTutorialagain))
         {
+            print($"PLAY TUTORIAL CHAIN");
             if (tutorialCurrent == tutorial.None)
             {
                 print("None");
@@ -190,12 +194,21 @@ public class TutorialManager : MonoBehaviour
             }
         }
     }
+
+
+    public void PlayTutorialAgain()
+    {
+        isTutorialagain = true; 
+        PlayTutorial(tutorialChain[2]);
+        PlayTutorialChain();
+    }
     public void TutorialFinished()
     {
         if (isPlayTutorial)
         {
             print("TUTORIAL FINISHED");
             isPlayTutorial = false;
+            isTutorialagain = false;
         }
     }
     public void PlayTutorial(tutorial tutorialEnum)

@@ -23,12 +23,15 @@ public class Mana : MonoBehaviour
         }
         set
         {
-            //textMeshPro.text = number.ToString();
-            //StartCoroutine(IntegerLerpCoroutine(number, value, 2f));
-            print("Mana Number: " + value);
+            if(this.number <= limit && this.number < MatchManager.instance.maxMana)
+            {
+                //textMeshPro.text = number.ToString();
+                //StartCoroutine(IntegerLerpCoroutine(number, value, 2f));
+                print("Mana Number: " + value);
 
-            StartCoroutine(IntegerLerpCoroutine(number, value, 1f));
-            number = value;
+                StartCoroutine(IntegerLerpCoroutine(number, value, 1f));
+                number = value;
+            }
         }
     
     }

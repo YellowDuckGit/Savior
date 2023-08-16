@@ -784,6 +784,7 @@ public class PlayfabManager : MonoBehaviour
         yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
         yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
     }
+   
     public IEnumerator BuyItems(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
     {
         print("start buy item");

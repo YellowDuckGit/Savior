@@ -349,30 +349,49 @@ public class UIManager : MonoBehaviour
         ACT_Store_BuyPack.onClick.AddListener(() =>
         {
             print("click to buy pack");
-            StartCoroutine(PlayfabManager.instance.BuyPack(GameData.instance.itemPurchaseRequests));
             PopupPackDetailed.SetActive(false);
 
-            SoundManager.instance.PlayClick_Payment();
+            if (GameData.instance.Coin >= Int32.Parse(GameData.instance.packinCart.Data.price)) 
+            {
+                StartCoroutine(PlayfabManager.instance.BuyPack(GameData.instance.itemPurchaseRequests));
+                SoundManager.instance.PlayClick_Payment();
+            }
+            else
+            {
+                EnablePanelErrorMessage(true, "Not enough money to pay");
+            }
         });
         ACT_Store_CancelPack.onClick.AddListener(() => PopupPackDetailed.SetActive(false));
 
         ACT_Store_BuyDeck.onClick.AddListener(() =>
         {
             print("click to buy deck");
-            StartCoroutine(PlayfabManager.instance.BuyItems("Card", "DS1", GameData.instance.itemPurchaseRequests, "MC"));
             PopupDeckDetailed.SetActive(false);
-
-            SoundManager.instance.PlayClick_Payment();
+            if (GameData.instance.Coin >= Int32.Parse(GameData.instance.deckinCart.Data.price))
+            {
+                StartCoroutine(PlayfabManager.instance.BuyItems("Card", "DS1", GameData.instance.itemPurchaseRequests, "MC"));
+                SoundManager.instance.PlayClick_Payment();
+            }
+            else
+            {
+                EnablePanelErrorMessage(true, "Not enough money to pay");
+            }
         });
         ACT_Store_CancelDeck.onClick.AddListener(() => PopupDeckDetailed.SetActive(false));
 
         ACT_Store_BuyCard.onClick.AddListener(() =>
         {
             print("click to buy card");
-            StartCoroutine(PlayfabManager.instance.BuyItems("Card", "CS1", GameData.instance.itemPurchaseRequests, "MC"));
             PanelCardDetails.SetActive(false);
-
-            SoundManager.instance.PlayClick_Payment();
+            if (GameData.instance.Coin >= GameData.instance.cardinCart.price)
+            {
+                StartCoroutine(PlayfabManager.instance.BuyItems("Card", "CS1", GameData.instance.itemPurchaseRequests, "MC"));
+                SoundManager.instance.PlayClick_Payment();
+            }
+            else
+            {
+                EnablePanelErrorMessage(true, "Not enough money to pay");
+            }
         });
 
         ACT_NormalMode.onClick.AddListener(() => { FindMatchSystem.instance.gameMode = global::GameMode.Normal; GameMode = "Normal"; });
@@ -1213,6 +1232,8 @@ public class UIManager : MonoBehaviour
             ACT_Store_BuyCard.gameObject.SetActive(false);
             cardPrice.transform.parent.gameObject.SetActive(false);
         }
+        GameData.instance.cardinCart = cardItem;
+
     }
 
     public void UnLoadCardDetail()
@@ -1600,6 +1621,7 @@ public class UIManager : MonoBehaviour
         yield return StartCoroutine(GameData.instance.LoadCardInDeckStoreItem(dic));
         UIManager.instance.DeckName = item.Data.deckName;
 
+        GameData.instance.deckinCart = item;
     }
 
     public IEnumerator ShowPopupPackDetailed(PackItem item)
@@ -1640,6 +1662,8 @@ public class UIManager : MonoBehaviour
         print($"1464 {item.Data.packName}");
         packName.text = item.Data.packName;
         yield return StartCoroutine(GameData.instance.LoadCardInPackItem(matchingitems));
+
+        GameData.instance.packinCart = item;
 
     }
 

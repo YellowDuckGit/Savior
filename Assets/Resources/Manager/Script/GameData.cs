@@ -65,6 +65,8 @@ public class GameData : MonoBehaviour
 
 
 
+
+
     [Header("Choose Deck")]
     public DeckItem selectDeck;
     private bool triggerLoadingGameProcess = false;
@@ -73,6 +75,10 @@ public class GameData : MonoBehaviour
     //player information
     private int _elo;
     private int _coin;
+
+    public DeckItem deckinCart;
+    public CardItem cardinCart;
+    public PackItem packinCart;
 
     private void Awake()
     {
