@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: FrostClaw_Part1_SP_3
   <Name>k__BackingField: Unleashed Jade
-  <Cost>k__BackingField: 2
+  <Cost>k__BackingField: 3
   <SpellType>k__BackingField: 2
   <Description>k__BackingField: Summon a Guardian
   <CardType>k__BackingField: 2

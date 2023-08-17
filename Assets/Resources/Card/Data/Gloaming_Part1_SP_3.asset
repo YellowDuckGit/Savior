@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: Gloaming_Part1_SP_3
   <Name>k__BackingField: Dark Tomb
-  <Cost>k__BackingField: 5
+  <Cost>k__BackingField: 4
   <SpellType>k__BackingField: 2
   <Description>k__BackingField: Deal 4 to a unit if it's Charmed
   <CardType>k__BackingField: 2

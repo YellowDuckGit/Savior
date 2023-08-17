@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: FrostClaw_Part2_M_4
   <Name>k__BackingField: Undauted
-  <Cost>k__BackingField: 3
-  <Attack>k__BackingField: 2
+  <Cost>k__BackingField: 7
+  <Attack>k__BackingField: 0
   <Hp>k__BackingField: 1
   <Description>k__BackingField: When I'm summoned, deal 3 to enemy BackBone. Summon
     Heating amidst Frosty equal number of enemies have

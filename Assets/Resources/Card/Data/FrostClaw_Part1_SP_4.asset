@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: FrostClaw_Part1_SP_4
   <Name>k__BackingField: Vigilance
-  <Cost>k__BackingField: 6
+  <Cost>k__BackingField: 8
   <SpellType>k__BackingField: 1
-  <Description>k__BackingField: Summon Guardian with each ally that died
+  <Description>k__BackingField: Summon Guardian amount of each ally that died in
+    this round
   <CardType>k__BackingField: 2
   <RarityCard>k__BackingField: 3
   <RegionCard>k__BackingField: 1

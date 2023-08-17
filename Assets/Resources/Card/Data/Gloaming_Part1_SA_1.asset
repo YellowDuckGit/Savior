@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: Gloaming_Part1_SA_1
   <Name>k__BackingField: Ciara
-  <Cost>k__BackingField: 1
-  <Attack>k__BackingField: 2
-  <Hp>k__BackingField: 4
+  <Cost>k__BackingField: 8
+  <Attack>k__BackingField: 0
+  <Hp>k__BackingField: 1
   <Description>k__BackingField: When I'm summoned, Charming all enemies. If enemies
     have Charmed, deal 3 to it and Charming the alive enemy
   <CardType>k__BackingField: 1

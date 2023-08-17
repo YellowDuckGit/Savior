@@ -17,7 +17,7 @@ MonoBehaviour:
   <Cost>k__BackingField: 1
   <Attack>k__BackingField: 0
   <Hp>k__BackingField: 2
-  <Description>k__BackingField: 'Round End: Kill me to play Frost Blade'
+  <Description>k__BackingField: 'Round End: Kill me to play Frost Blade in hand'
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 1
   <RegionCard>k__BackingField: 1

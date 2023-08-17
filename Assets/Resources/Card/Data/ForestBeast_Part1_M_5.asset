@@ -17,15 +17,15 @@ MonoBehaviour:
   <Cost>k__BackingField: 5
   <Attack>k__BackingField: 3
   <Hp>k__BackingField: 3
-  <Description>k__BackingField: Grant Dominate. If enemy BackBone has  10 or more,
-    give me +3|0
+  <Description>k__BackingField: Dominate. If enemy BackBone has  10 or more, give
+    me +3|0
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 3
   <RegionCard>k__BackingField: 2
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 1
-  <IsBlockAttack>k__BackingField: 1
+  <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
   <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 346b517f2bb6f8b4fb2240250dd93155, type: 2}
   <InDeckAvatar>k__BackingField: {fileID: 2100000, guid: 8ebd5b6233c772947a9a6b88fcb6a4f4, type: 2}
@@ -81,7 +81,7 @@ MonoBehaviour:
       type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
-        Attack: 2
+        Attack: 3
         Hp: 0
         InTurn: 0
     - rid: 3819367381030141959

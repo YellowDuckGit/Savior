@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: FrostClaw_Part2_M_3
   <Name>k__BackingField: Soldier Lose Heart
-  <Cost>k__BackingField: 5
-  <Attack>k__BackingField: 1
-  <Hp>k__BackingField: 1
+  <Cost>k__BackingField: 3
+  <Attack>k__BackingField: 2
+  <Hp>k__BackingField: 3
   <Description>k__BackingField: Grant me +1|+1 for each FrostClaw ally you have
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 3

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: Gloaming_Part1_SP_1
   <Name>k__BackingField: Demonic Bats
-  <Cost>k__BackingField: 2
+  <Cost>k__BackingField: 4
   <SpellType>k__BackingField: 2
   <Description>k__BackingField: Deal to a unit equal number of times you've been 
     Charmed enemy in this round
