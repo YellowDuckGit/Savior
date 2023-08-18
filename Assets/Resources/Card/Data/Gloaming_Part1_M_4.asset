@@ -36,6 +36,36 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 489953792542638081
+      type: {class: AbstractEffect/EffectPitch/PitchType/PitchCount, ns: Assets.GameComponent.Card.LogicCard, asm: Assembly-CSharp}
+      data:
+        target:
+          rid: 489953792542638082
+    - rid: 489953792542638082
+      type: {class: CardTarget, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        owner: 2
+        cardPosition: 4
+        Rarity: 0
+        region: 0
+        CardType:
+          rid: 489953792542638083
+        match: {fileID: 0}
+    - rid: 489953792542638083
+      type: {class: CardTarget/TargetCardType/TargetCardMonster, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        monsterOptions:
+        - rid: 489953792542638084
+    - rid: 489953792542638084
+      type: {class: CardTarget/TargetCardType/TargetCardMonster/TargetCardMonsterOption/TargetCardMonsterOptAttribute, ns: Assets.GameComponent.Card.Logic.TargetObject.Target.CardTarget, asm: Assembly-CSharp}
+      data:
+        attributes:
+          _IsCharming: 1
+          _IsTreating: 0
+          _IsDominating: 0
+          _IsBlockAttack: 0
+          _IsBlockDefend: 0
+          _IsInTurn: 0
     - rid: 1073283011172630536
       type: {class: AfterSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
@@ -83,7 +113,9 @@ MonoBehaviour:
     - rid: 1073283011172630542
       type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
-        pitch: []
+        pitch:
+        - pitchType:
+            rid: 489953792542638081
         Attack: 1
         Hp: 1
         InTurn: 0

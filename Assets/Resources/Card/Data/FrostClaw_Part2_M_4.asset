@@ -77,7 +77,7 @@ MonoBehaviour:
         pitch:
         - pitchType:
             rid: 1073283043488169984
-        CardTarget: {fileID: 11400000, guid: ef72874406547f144a0b65fb5b6d8606, type: 2}
+        CardTarget: {fileID: 11400000, guid: 58982a56fd741164882ca136250586b5, type: 2}
         owner: 1
         CardPosition: 4
     - rid: 1073283043488169984
