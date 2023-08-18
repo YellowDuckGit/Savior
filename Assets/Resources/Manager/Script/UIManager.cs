@@ -339,6 +339,7 @@ public class UIManager : MonoBehaviour
         {
             TurnOnBackScene();
             SoundManager.instance.PlayClick_Back();
+
         }));
 
 
@@ -1035,8 +1036,14 @@ public class UIManager : MonoBehaviour
     #region Switch Scene Function
     public void TurnOnBackScene()
     {
+        if (isWatingMatch)
+        {
+            SoundManager.instance.StopBgFoundMatch();
+            SoundManager.instance.PLayBackground_Home();
+        }
         print("lastScene" + lastScence);
         TurnOn(lastScence, true);
+
     }
 
     public void TurnOnHomeScene()

@@ -90,6 +90,12 @@ public class SoundManager : MonoBehaviour
         Background_FindMatch.PlayFeedbacks();
     }
 
+    public void StopBgFoundMatch()
+    {
+        print("STOP FOUND MATCH BG");
+        Background_FindMatch.StopFeedbacks();
+    }
+
     public void PlayOpenPack()
     {
         print("PLAY OPEN PACK SOUND");
@@ -220,6 +226,12 @@ public class SoundManager : MonoBehaviour
     {
         print("PLAY BACKGROUND MATCH SOUND");
         Background_Match.PlayFeedbacks();
+    }
+
+    public void StopBgMatch()
+    {
+        print("STOP BG MATCH SOUND");
+        Background_Match.StopFeedbacks();
     }
     #endregion
 }
