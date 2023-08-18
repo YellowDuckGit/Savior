@@ -342,7 +342,7 @@ public class PlayfabManager : MonoBehaviour
                         {
                             GrantItem("Card", item.ItemId, 3);
                             int numberOutlimit = numberCard - 3;
-                            print("Number Out Limit: "+numberOutlimit);
+                            print("Number Out Limit: " + numberOutlimit);
 
                             CardItem a = GameData.instance.listCardItem.SingleOrDefault(a => a.cardData.Id.Equals(item.ItemId));
                             string itemID = "";
@@ -443,7 +443,8 @@ public class PlayfabManager : MonoBehaviour
                 Value = playerScore
             }
     }
-        }, result => {
+        }, result =>
+        {
             GameData.instance.Elo = playerScore;
             IsApiExecuting = false;
         }, (error) =>
@@ -475,7 +476,7 @@ public class PlayfabManager : MonoBehaviour
         request.StatisticNames = new List<string>() { "Rank" };
         PlayFabClientAPI.GetPlayerStatistics(request, result =>
         {
-            if(result.Statistics.Count > 0)
+            if (result.Statistics.Count > 0)
             {
                 List<PlayFab.ClientModels.StatisticValue> listStatisticValue;
                 listStatisticValue = result.Statistics;
@@ -522,14 +523,14 @@ public class PlayfabManager : MonoBehaviour
         if (win) W = 1;
         else W = 0;
 
-        We = (float)(1 / (1 + Math.Pow(10,(R0 - Rd) / C)));
-        int Rn = (int)(R0 + K * (W - We) + B*(N - 1));
+        We = (float)(1 / (1 + Math.Pow(10, (R0 - Rd) / C)));
+        int Rn = (int)(R0 + K * (W - We) + B * (N - 1));
 
-        print("We: "+We);
-        print("Rn :"+Rn);   
+        print("We: " + We);
+        print("Rn :" + Rn);
 
         //Incase Player have below 0 elo
-        if(Rn < 0)
+        if (Rn < 0)
         {
             Rn = 0;
         }
@@ -761,7 +762,7 @@ public class PlayfabManager : MonoBehaviour
                 }
             }
 
-           
+
             IsApiExecuting = false;
         }, (error) =>
         {
@@ -784,7 +785,7 @@ public class PlayfabManager : MonoBehaviour
         yield return StartCoroutine(GameData.instance.LoadCardInInventoryUser());
         yield return StartCoroutine(UIManager.instance.LoadVirtualMoney());
     }
-   
+
     public IEnumerator BuyItems(string catalog, string storeId, List<ItemPurchaseRequest> itemPurchases, string currency)
     {
         print("start buy item");
@@ -959,6 +960,7 @@ public class PlayfabManager : MonoBehaviour
         {
             UIManager.instance.AddFriendMessage.gameObject.transform.parent.gameObject.SetActive(true);
             UIManager.instance.AddFriendMessage.text = error.ErrorMessage;
+            //UIManager.instance.AddFriendMessage.text = "Please enter valid friend's username";
         });
     }
 
