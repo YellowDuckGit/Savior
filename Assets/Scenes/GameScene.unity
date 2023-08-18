@@ -11080,7 +11080,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMin.x
@@ -11088,7 +11088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_SizeDelta.x
@@ -54582,7 +54582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMin.x
@@ -54590,7 +54590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_SizeDelta.x
@@ -88493,7 +88493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMin.x
@@ -88501,7 +88501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_SizeDelta.x
@@ -96968,7 +96968,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMin.x
@@ -96976,7 +96976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4377679921278363883, guid: 6dabd4d2bb9c61f4db0747757a507fb2, type: 3}
       propertyPath: m_SizeDelta.x
@@ -108686,6 +108686,30 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 469216423}
+        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Feedbacks
+        m_MethodName: PlayFeedbacks
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 734145058}
+        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Feedbacks
+        m_MethodName: StopFeedbacks
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 363239464}
         m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Feedbacks
         m_MethodName: PlayFeedbacks
         m_Mode: 1
