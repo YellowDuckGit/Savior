@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: Gloaming_Part1_M_2
   <Name>k__BackingField: Azura's Charmed
-  <Cost>k__BackingField: 1
+  <Cost>k__BackingField: 5
   <Attack>k__BackingField: 0
-  <Hp>k__BackingField: 1
-  <Description>k__BackingField: Dominate To play me, choose an enemy Charmed. Grant
-    me enemy's power
+  <Hp>k__BackingField: 2
+  <Description>k__BackingField: Dominate. When I'm summoned, if have enemy Charmed,
+    grant me +5 | 0
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 3
@@ -78,6 +78,7 @@ MonoBehaviour:
           _IsDominating: 0
           _IsBlockAttack: 0
           _IsBlockDefend: 0
+          _IsInTurn: 0
     - rid: 1073283011172630556
       type: {class: SelectSelf, ns: Assets.GameComponent.Card.Logic.Actions.SelectAction.Select_Self, asm: Assembly-CSharp}
       data:

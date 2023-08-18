@@ -17,7 +17,7 @@ MonoBehaviour:
   <Cost>k__BackingField: 1
   <Attack>k__BackingField: 2
   <Hp>k__BackingField: 3
-  <Description>k__BackingField: When I survive damaged, grant me +0|+1
+  <Description>k__BackingField: When I survive damaged, grant me +2|+0
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 1
@@ -47,6 +47,7 @@ MonoBehaviour:
       data:
         EventID: 28
         LifeTime: 0
+        WhenDie: 0
         Actions:
         - rid: 1073282966915383362
     - rid: 1073282966915383362
@@ -62,6 +63,6 @@ MonoBehaviour:
       type: {class: BuffStats, ns: Assets.GameComponent.Card.LogicCard.ListLogic.Effect, asm: Assembly-CSharp}
       data:
         pitch: []
-        Attack: 0
-        Hp: 1
+        Attack: 2
+        Hp: 0
         InTurn: 0

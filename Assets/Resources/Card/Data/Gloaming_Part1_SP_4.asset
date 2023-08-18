@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: Gloaming_Part1_SP_4
   <Name>k__BackingField: Bitter Revenge
-  <Cost>k__BackingField: 4
+  <Cost>k__BackingField: 10
   <SpellType>k__BackingField: 1
-  <Description>k__BackingField: If have 2 allies be killed in this round, Charming
-    2 enemies
+  <Description>k__BackingField: Charming all your opponent's cards with HP equal
+    to or less than 5
   <CardType>k__BackingField: 2
   <RarityCard>k__BackingField: 3
   <RegionCard>k__BackingField: 3
@@ -69,7 +69,7 @@ MonoBehaviour:
       type: {class: AbstractTarget/AbstractTargetDataType/AbstractTargetDataTypeValue/ValueNumber, ns: Assets.GameComponent.Card.Logic.TargetObject.Target, asm: Assembly-CSharp}
       data:
         comepare: 4
-        number: 2
+        number: 5
     - rid: 1073283052834127912
       type: {class: Gain, ns: Assets.GameComponent.Card.Logic.Effect.Gain, asm: Assembly-CSharp}
       data:

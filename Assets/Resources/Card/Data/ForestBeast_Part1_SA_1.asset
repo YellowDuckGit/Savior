@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: Conal
   <Cost>k__BackingField: 6
   <Attack>k__BackingField: 3
-  <Hp>k__BackingField: 5
+  <Hp>k__BackingField: 2
   <Description>k__BackingField: When I'm summoned, grant +2|0 to all ally on summon
     field
   <CardType>k__BackingField: 1

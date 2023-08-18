@@ -23,7 +23,7 @@ MonoBehaviour:
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
   <IsTreating>k__BackingField: 0
-  <IsDominating>k__BackingField: 1
+  <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
   <NormalAvatar>k__BackingField: {fileID: 2100000, guid: 57b42b51c40dbe5479eb23441b283621, type: 2}

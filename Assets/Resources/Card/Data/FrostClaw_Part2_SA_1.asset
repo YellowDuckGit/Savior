@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: FrostClaw_Part2_SA_1
   <Name>k__BackingField: Roger
-  <Cost>k__BackingField: 7
-  <Attack>k__BackingField: 2
+  <Cost>k__BackingField: 4
+  <Attack>k__BackingField: 0
   <Hp>k__BackingField: 2
-  <Description>k__BackingField: 'Default: Treating Round End: Deal 1 to all enemies
-    have  HEALTH less than 3'
+  <Description>k__BackingField: 'Round End: Deal 1 to all enemies have HEALTH less
+    than 3'
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 4
   <RegionCard>k__BackingField: 1
   <IsCharming>k__BackingField: 0
-  <IsTreating>k__BackingField: 1
+  <IsTreating>k__BackingField: 0
   <IsDominating>k__BackingField: 0
   <IsBlockAttack>k__BackingField: 0
   <IsBlockDefend>k__BackingField: 0
