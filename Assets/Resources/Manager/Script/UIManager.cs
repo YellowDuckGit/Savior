@@ -1226,12 +1226,16 @@ public class UIManager : MonoBehaviour
                 ItemId = cardItem.cardData.Id,
                 Quantity = 1
             });
-        }
-        if (isCollection_Cards)
+        }else if (isCollection_Cards)
+        {
+            ACT_Store_BuyCard.gameObject.SetActive(false);
+            cardPrice.transform.parent.gameObject.SetActive(false);
+        }else if (isCreateDeck)
         {
             ACT_Store_BuyCard.gameObject.SetActive(false);
             cardPrice.transform.parent.gameObject.SetActive(false);
         }
+
         GameData.instance.cardinCart = cardItem;
 
     }
