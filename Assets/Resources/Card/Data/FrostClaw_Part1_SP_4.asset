@@ -31,6 +31,13 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 489953792542638080
+      type: {class: CreateCard, ns: Assets.GameComponent.Card.Logic.Effect.CreateCard, asm: Assembly-CSharp}
+      data:
+        pitch: []
+        CardTarget: {fileID: 11400000, guid: b0c84a52d1f59254a802b54e17bda2b2, type: 2}
+        owner: 1
+        CardPosition: 4
     - rid: 3530786280913240068
       type: {class: BeforeSummon, ns: Assets.GameComponent.Card.LogicCard.ConditionTrigger.Summon, asm: Assembly-CSharp}
       data:
@@ -44,6 +51,7 @@ MonoBehaviour:
           rid: 3530786280913240070
         Effects:
         - rid: 3530786280913240071
+        - rid: 489953792542638080
     - rid: 3530786280913240070
       type: {class: SpecifyAction/SpecifyType/SpecifyCardPlayer, ns: Assets.GameComponent.Card.Logic.Actions.Specify, asm: Assembly-CSharp}
       data:

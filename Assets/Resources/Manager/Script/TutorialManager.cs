@@ -155,13 +155,171 @@ public class TutorialManager : MonoBehaviour
     public bool isSkip;
     public bool isNewbie;
     public bool isPVF;
-    public bool isTutorialagain;
+    public bool isTutorialAgain;
+    public bool isStop;
 
+    public GameObject[] TutorialScreen;
 
     private void Start()
     {
     }
 
+    public void StopTutorial()
+    {
+        switch (tutorialCurrent)
+        {
+            case tutorial.WelcomeTutorial:
+                print("STOP WELCOME TUTORIAL");
+                WelcomeTutorial.StopFeedbacks();
+                break;
+            case tutorial.ProfileTutorial:
+                print("STOP PROFILE TUTORIAL");
+                ProfileTutorial.StopFeedbacks();
+                break;
+            case tutorial.CoinTutorial:
+                print("STOP COIN TUTORIAL");
+                CoinTutorial.StopFeedbacks();
+                break;
+            case tutorial.FriendTutorial:
+                print("STOP FRIEND TUTORIAL");
+                FriendTutorial.StopFeedbacks();
+                break;
+            case tutorial.MainNavInHomeTutorial:
+                print("STOP MAIN NAV IN HOME TUTORIAL");
+                MainNavInHomeTutorial.StopFeedbacks();
+                break;
+            case tutorial.StoreButtonInHome:
+                print("STOP COIN TUTORIAL");
+                StoreButtonInHome.StopFeedbacks();
+                break;
+            case tutorial.BagButtonInHome:
+                print("STOP BAG BUTTON TUTORIAL");
+                BagButtonInHome.StopFeedbacks();
+                break;
+            case tutorial.PlayButtonInHome:
+                print("STOP PLAY BUTTON TUTORIAL");
+                PlayButtonInHome.StopFeedbacks();
+                break;
+            case tutorial.DeckButtonInHome:
+                print("STOP DECK BUTTON TUTORIAL");
+                DeckButtonInHome.StopFeedbacks();
+                break;
+            case tutorial.SettingButtonInHome:
+                print("SETTING BUTTON IN HOME TUTORIAL");
+                SettingButtonInHome.StopFeedbacks();
+                break;
+
+            /* STORE TUTORIAL */
+            /* PACK */
+
+            case tutorial.ClickingStore:
+                print("CLICKING IN HOME TUTORIAL");
+                ClickingStore.StopFeedbacks();
+                break;
+            case tutorial.PackStoreTutorial:
+                print("PACK STORE TUTORIAL");
+                PackStoreTutorial.StopFeedbacks();
+                break;
+            case tutorial.NavStoreTutorial:
+                print("NAV STORE TUTORIAL");
+                NavStoreTutorial.StopFeedbacks();
+                break;
+            case tutorial.PopupPackStoreTutorial:
+                print("POPUP PACK STORE TUTORIAL");
+                PopupPackStoreTutorial.StopFeedbacks();
+                break;
+
+            /* DECK */
+
+            case tutorial.NavDeckStoreTutorial:
+                print("NAV DECK STORE TUTORIAL");
+                NavDeckStoreTutorial.StopFeedbacks();
+                break;
+            case tutorial.DeckStoreTutorial:
+                print("DECK STORE TUTORIAL");
+
+                break;
+            case tutorial.PopupDeckStoreTutorial:
+                print("POPUP DECK STORE TUTORIAL");
+                PopupDeckStoreTutorial.StopFeedbacks();
+                break;
+
+            /* COLLECTION DECK*/
+            case tutorial.CollectionDeckTutorial:
+                print("COLLECTION DECK TUTORIAL");
+                CollectionDeckTutorial.StopFeedbacks();
+                break;
+            case tutorial.ClickingDeckInBag:
+                print("CLICKING DECK IN BAG TUTORIAL");
+                ClickingDeckInBag.StopFeedbacks();
+                break;
+            case tutorial.CardInDeck:
+                print("CARD IN DECK DECK TUTORIAL");
+                CardInDeck.StopFeedbacks();
+                break;
+            case tutorial.CardNameInDeck:
+                print("CARD NAME IN DECK TUTORIAL");
+                CardNameInDeck.StopFeedbacks();
+                break;
+            case tutorial.LimitCardInDeck:
+                print("LIMIT CARD IN DECK TUTORIAL");
+                LimitCardInDeck.StopFeedbacks();
+                break;
+            case tutorial.CardCollectionInDeck:
+                print("CARD COLLECTION IN DECK TUTORIAL");
+                CardCollectionInDeck.StopFeedbacks();
+                break;
+            case tutorial.SaveDeckInDeck:
+                print("SAVE DECK IN DECK TUTORIAL");
+                SaveDeckInDeck.StopFeedbacks();
+                break;
+            case tutorial.PopupCardInfo:
+                print("POPUP CARD INFO TUTORIAL");
+                PopupCardInfo.StopFeedbacks();
+                break;
+            case tutorial.SearchCardInDeck:
+                print("SEARCH CARD IN DECK TUTORIAL");
+                SearchCardInDeck.StopFeedbacks();
+                break;
+            case tutorial.RemoveCardInDeckTutorial:
+                print("REMOVE CARD IN DECK TUTORIAL");
+                RemoveCardInDeckTutorial.StopFeedbacks();
+                break;
+            case tutorial.PutCardInDeckTutorial:
+                print("PUT CARD IN DECK TUTORIAL");
+                PutCardInDeckTutorial.StopFeedbacks();
+                break;
+            case tutorial.DeckBackToHome:
+                print("DECK BACK TO HOME TUTORIAL");
+                DeckBackToHome.StopFeedbacks();
+                break;
+
+            /* GAME MODE n PLAY*/
+            case tutorial.ClickingPlayInHome:
+                print("CLICKING PLAY IN HOME TUTORIAL");
+                ClickingPlayInHome.StopFeedbacks();
+                break;
+            case tutorial.SelectGameModeTutorial:
+                print("SELECT GAME MODE TUTORIAL");
+                SelectGameModeTutorial.StopFeedbacks();
+                break;
+            case tutorial.ChooseDeckTutorial:
+                print("CHOOSE DECK TUTORIAL");
+                ChooseDeckTutorial.StopFeedbacks();
+                break;
+            case tutorial.FindMatchTutorial:
+                print("FIND MATCH TUTORIAL");
+                FindMatchTutorial.StopFeedbacks();
+                break;
+            default:
+                print("not found to stop tutorial");
+                break;
+        }
+        foreach(GameObject obj in TutorialScreen)
+        {
+            obj.SetActive(false);
+        }
+    }
     public void Skip()
     {
         print("SKIP TUTORIAL");
@@ -173,8 +331,7 @@ public class TutorialManager : MonoBehaviour
     {
         print($"AMOUNT CHAIN IS {tutorialChain.Count}");
 
-
-        if (isPlayTutorialChain && !isPlayTutorial && ((!isSkip && isNewbie) || isTutorialagain))
+        if (isPlayTutorialChain && !isPlayTutorial && ((!isSkip && isNewbie) || isTutorialAgain))
         {
             print($"PLAY TUTORIAL CHAIN");
             if (tutorialCurrent == tutorial.None)
@@ -198,9 +355,10 @@ public class TutorialManager : MonoBehaviour
 
     public void PlayTutorialAgain()
     {
-        isTutorialagain = true; 
         PlayTutorial(tutorialChain[2]);
+        isTutorialAgain = true;
         PlayTutorialChain();
+        print($"PLAY TUTORIAL AGAIN | {isPlayTutorial} | {isTutorialAgain}");
     }
     public void TutorialFinished()
     {
@@ -208,7 +366,6 @@ public class TutorialManager : MonoBehaviour
         {
             print("TUTORIAL FINISHED");
             isPlayTutorial = false;
-            isTutorialagain = false;
         }
     }
     public void PlayTutorial(tutorial tutorialEnum)

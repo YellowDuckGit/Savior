@@ -194,23 +194,29 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         }
         set
         {
-            if(value < this._hp)
+            if(value < this._hp) // on card damage
             {
+                if(value > 0) // on live
+                {
+                    this._hp = value;
+                }
+                else
+                {
+                    this._hp = 0;
+                    MoveToGraveyard();
+                }
+
+                if(IsCharming)
+                {
+                    IsCharming = false;
+                }
                 this.PostEvent(EventID.OnCardDamaged, this);
             }
-            this._hp = value;
-            //onHpChange?.Invoke(value);
+            else //heal
+            {
+                this._hp = value;
+            }
             OnPropertyChanged(nameof(Hp));
-
-            //this.PostEvent(EventID.OnCardUpdate, this);
-            if(IsCharming)
-            {
-                IsCharming = false;
-            }
-            if(isDead())
-            {
-                MoveToGraveyard();
-            }
         }
 
     }
@@ -711,7 +717,7 @@ public class MonsterCard : CardBase, IMonsterCard, IEffectAttributes
         //this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
         this.transform.DOLocalMove(new Vector3(0f, 0f, 0f), 0.3f, false);
 
-        if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
+        if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
             transform.Rotate(0f, 180f, 0f);
     }
     #endregion

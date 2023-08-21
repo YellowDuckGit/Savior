@@ -524,6 +524,8 @@ public class MatchManager : MonoBehaviourPunCallbacks
                 break;
         }
 
+        SoundManager.instance.StopBgMatch();
+
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("GameScene");
         yield return null;

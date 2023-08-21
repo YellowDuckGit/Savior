@@ -45,7 +45,7 @@ MonoBehaviour:
     - rid: 1073282966915383360
       type: {class: RegisterLocalEvent, ns: Assets.GameComponent.Card.Logic.RegisterLocalEvent, asm: Assembly-CSharp}
       data:
-        EventID: 28
+        EventID: 27
         LifeTime: 0
         WhenDie: 0
         Actions:
