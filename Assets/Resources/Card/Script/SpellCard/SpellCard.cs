@@ -410,10 +410,36 @@ public class SpellCard : CardBase, ISpellCard
         this.transform.localScale =  new Vector3(0.065f, 0.065f, 0.0975f);
         this.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
-        if (!photonView.IsMine)
+        //if (!photonView.IsMine)
+        //{
+        //    this.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+        //}
+        if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Blue))
         {
-            this.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+            if (CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
+            {
+                this.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+            }
+            else if (CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
+            {
+                this.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+            }
+
         }
+        else if(MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
+        {
+            if (CardPlayer.side.Equals(K_Player.K_PlayerSide.Red))
+            {
+                this.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+            }
+            else if (CardPlayer.side.Equals(K_Player.K_PlayerSide.Blue))
+            {
+                this.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+            }
+        }
+    
+
+
         //if (MatchManager.instance.localPlayerSide.Equals(K_Player.K_PlayerSide.Red))
         //    transform.Rotate(0f, 180f, 0f);
 

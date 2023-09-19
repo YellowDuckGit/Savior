@@ -574,10 +574,10 @@ public class MatchManager : MonoBehaviourPunCallbacks
         }
 
         //provide Mana
-        ProvideMP(1, bluePlayer);
-        ProvideMP(1, redPlayer);
         SetLimitMP(1, bluePlayer);
         SetLimitMP(1, redPlayer);
+        ProvideMP(bluePlayer);
+        ProvideMP( redPlayer);
 
 
         print(this.debug("Change Tokken at new round", new
@@ -888,9 +888,9 @@ public class MatchManager : MonoBehaviourPunCallbacks
     /// Provide MP for player
     /// </summary>
     /// <returns></returns>
-    void ProvideMP(int amount, CardPlayer cardPlayer)
+    void ProvideMP(CardPlayer cardPlayer)
     {
-        cardPlayer.mana.Number = cardPlayer.mana.Limit + amount;
+        cardPlayer.mana.Number = cardPlayer.mana.Limit;
 
     }
     #endregion

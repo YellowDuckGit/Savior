@@ -17,7 +17,7 @@ MonoBehaviour:
   <Cost>k__BackingField: 4
   <Attack>k__BackingField: 2
   <Hp>k__BackingField: 2
-  <Description>k__BackingField: Grant me +1|+1 for each enemies Charmed in this game
+  <Description>k__BackingField: 'Round End: Grant me +1|+1 for each enemies Charmed.'
   <CardType>k__BackingField: 1
   <RarityCard>k__BackingField: 2
   <RegionCard>k__BackingField: 3

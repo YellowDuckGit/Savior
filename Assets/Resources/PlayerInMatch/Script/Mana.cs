@@ -23,7 +23,7 @@ public class Mana : MonoBehaviour
         }
         set
         {
-            if(this.number <= limit && this.number < MatchManager.instance.maxMana)
+            if(number > value ||(this.number <= limit && this.number < MatchManager.instance.maxMana && value > number))
             {
                 //textMeshPro.text = number.ToString();
                 //StartCoroutine(IntegerLerpCoroutine(number, value, 2f));

@@ -29,14 +29,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amplitude: 0.442
-    - _Freq: 14.74
+    - _Amplitude: 0.15
+    - _Freq: 8
     - _Line: 0
     - _LineSmooth: 0
     - _RimPower: 10
     m_Colors:
     - _FoamColor: {r: 0.03268242, g: 0, b: 1, a: 1}
-    - _RimColor: {r: 0.72075474, g: 0.7390659, b: 1, a: 1}
-    - _Tint: {r: 0, g: 0.0066436003, b: 0.18867922, a: 1}
-    - _TopColor: {r: 0.0009248842, g: 0, b: 0.23584908, a: 1}
+    - _RimColor: {r: 0, g: 0.7442957, b: 1.8390622, a: 1}
+    - _Tint: {r: 0, g: 0.050314523, b: 1.2075462, a: 1}
+    - _TopColor: {r: 0, g: 0, b: 0.741446, a: 1}
   m_BuildTextureStacks: []
